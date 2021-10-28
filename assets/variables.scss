@@ -1,0 +1,47 @@
+// fonts
+$font: "Open Sans", sans-serif;
+$font_secondary: 'Roboto';
+
+// paddings
+
+$baseGrid: 8px;
+
+// colors
+
+$header_primary: #2B2A29;
+
+$text_color_primary: #494949;
+$text_color_primary_hover: #3A3E46;
+
+$text_color_accent: #2B5F95;
+
+$text_secondary: #5C6270;
+$text_inverted: #FFFFFF;
+
+$text_headline: #23252A;
+
+$icon_primary: #5C6270;
+$icon_primary_hover: #3A3E46;
+
+$menu_item_primary: #FFFFFF;
+$menu_item_inverted: #FFFFFF;
+
+$background_primary: #FFFFFF;
+$background_secondary: #3D78B7;
+$background_error: #b1598d;
+$background_hover: rgba(255, 255, 255, 0.1);
+
+$background_menu: #2B5F95;
+
+$background_tabs: rgba(#E3E5E8, .8);
+$background_tabs_hover: rgba(#C7CAD1, .8);
+
+// borders
+$border_color_primary: #ffffff;
+
+$border_hover: 2px solid #C7CAD1;
+$border_active: 2px solid #3D78B7;
+
+// transitions
+
+$trs: 0.2s ease-in-out;
