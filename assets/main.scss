@@ -22,49 +22,4 @@
   }
 }
 
-@media (min-width: 761px) {
-  .desktop-only {
-    display: none;
-  }
 
-  .tablet-only {
-    display: initial;
-  }
-
-  .mobile-only {
-    display: none;
-  }
-}
-
-@media (min-width: 1025px) {
-  .desktop-only {
-    display: initial;
-  }
-
-  .tablet-only {
-    display: none;
-  }
-
-  .mobile-only {
-    display: none;
-  }
-}
-
-
-
-@include tablet() {
-  .desktop-only {
-    display: none;
-  }
-
-  .inner-page {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-}
-
-@include mobile() {
-  .desktop-only {
-    display: none;
-  }
-}
