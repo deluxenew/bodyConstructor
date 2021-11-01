@@ -51,71 +51,12 @@ export default {
     },
   },
   data() {
-    const defaultCase = {
-      id: 0,
-      angular: false,
-      translatable: false,
-      posY: 0,
-      posX: 0,
-      posZ: 0,
-      width: 40,
-      height: 60,
-      deep: 50,
-      elements: [{
-        name: 'leftWall',
-        posY: 0,
-        posX: 0,
-        posZ: 0,
-        width: 30,
-        height: 20,
-        deep: 1,
-        rotation: {
-          posY: 0,
-          posX: 0,
-          posZ: 0,
-        }
-      }],
-      doors: [
-        {
-          name: 'leftDoor',
-          opened: false,
-          posY: 0,
-          posX: 0,
-          posZ: 0,
-          width: 30,
-          height: 20,
-          deep: 1,
-          rotation: {
-            posY: 0,
-            posX: 0,
-            posZ: 0,
-          }
-        },
-        {
-          name: 'rightDoor',
-          opened: false,
-          posY: 0,
-          posX: 0,
-          posZ: 0,
-          width: 30,
-          height: 20,
-          deep: 1,
-          rotation: {
-            posY: 0,
-            posX: 0,
-            posZ: 0,
-          }
-        }
-      ]
-    }
     return {
       renderer: new WebGLRenderer({
         alpha: true,
         antialias: true,
       }),
       positionNumber: 1,
-      tableTops: [],
-      topCases: [],
       selectedCase: null,
       showSizes: false,
       scene: new Scene(),
