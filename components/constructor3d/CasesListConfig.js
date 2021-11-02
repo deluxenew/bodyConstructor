@@ -1,4 +1,7 @@
-import {BoxGeometry, CylinderGeometry, Math, Mesh, MeshStandardMaterial, Object3D, TextureLoader} from "three";
+import {BoxGeometry, CylinderGeometry,
+  ShapeGeometry,
+  Math, Mesh, MeshBasicMaterial, MeshStandardMaterial, Color , Object3D, TextureLoader, Shape, DoubleSide, Group, MeshLambertMaterial, ExtrudeBufferGeometry} from "three";
+import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
 
 const legsHeight = 1;
 const gapFacade = 0.1;
@@ -30,24 +33,110 @@ let facadeMaterials = [
   facadeMaterial,
   material,
 ];
+//  const arrow = require('./img/arrow.svg')
+// const guiData = {
+//   currentURL: arrow,
+//   drawFillShapes: true,
+//   drawStrokes: true,
+//   fillShapesWireframe: true,
+//   strokesWireframe: true
+// };
+
+let group = new Mesh();
+//
+// function loadSVG( url ) {
+//
+//   const loader = new SVGLoader();
+//
+//   loader.load( url, function ( data ) {
+//
+//     const paths = data.paths;
+//     const gr = new Group();
+//
+//     gr.scale.multiplyScalar( 10 );
+//     gr.position.x = -5;
+//     gr.position.y = 5;
+//     // gr.scale.y *= 0;
+//
+//     for ( let i = 0; i < paths.length; i ++ ) {
+//       const path = paths[ i ];
+//       const fillColor = path.userData.style.fill;
+//
+//       if ( guiData.drawFillShapes && fillColor !== undefined && fillColor !== 'none' ) {
+//         const material = new MeshBasicMaterial( {
+//           color: new Color().setStyle( fillColor ),
+//           opacity: 1,
+//           // transparent: path.userData.style.fillOpacity < 1,
+//           side: DoubleSide,
+//           depthWrite: false,
+//           wireframe: guiData.fillShapesWireframe
+//         } );
+//
+//         const shapes = SVGLoader.createShapes( path );
+//
+//         for ( let j = 0; j < shapes.length; j ++ ) {
+//           const shape = shapes[ j ];
+//           const geometry = new ShapeGeometry( shape );
+//           const mesh = new Mesh( geometry, material );
+//
+//           gr.add( mesh );
+//         }
+//       }
+//     }
+//     group.add(gr)
+//   });
+// }
+
 
 const boxControl = () => {
-  const boxMat = new MeshStandardMaterial({color: 0xffffff, opacity: 0.7});
+  function createButton() {
+    let f_rect = function roundedRect( ctx, x, y, width, height, radius ) {
+      ctx.moveTo( x, y + radius );
+      ctx.lineTo( x, y + height - radius );
+      ctx.quadraticCurveTo( x, y + height, x + radius, y + height );
+      ctx.lineTo( x + width - radius, y + height );
+      ctx.quadraticCurveTo( x + width, y + height, x + width, y + height - radius );
+      ctx.lineTo( x + width, y + radius );
+      ctx.quadraticCurveTo( x + width, y, x + width - radius, y );
+      ctx.lineTo( x + radius, y );
+      ctx.quadraticCurveTo( x, y, x, y + radius );
+    }
 
-  const materials = [boxMat,boxMat,boxMat,boxMat,boxMat,boxMat]
+    let roundedRectShape = new Shape();
+    f_rect( roundedRectShape, -15, -15, 30, 30, 10 );
 
-  const buttonWidth = 2
-  const buttonHeight = 2
-  const buttonDepth = .5
+    let material = new MeshLambertMaterial( { color: 0xffffff, side: DoubleSide } );
+    let extrudeSettings = { depth: 8, bevelEnabled: false, bevelSegments: 2, steps: 1, bevelSize: 5, bevelThickness: 5 };
+    let geometry = new ExtrudeBufferGeometry( roundedRectShape, extrudeSettings );
 
-  let buttonGeometry = new BoxGeometry(buttonWidth, buttonHeight, buttonDepth);
-  let button = new Mesh(buttonGeometry, materials);
-  button.name = 'moveLeft'
-  button.userData.width = 4
-  button.userData.depth = 4
-  button.userData.height = 4
-  button.position.set(-4,-4,5);
-  return button
+    let s = 0.1;
+    let mesh = new Mesh( geometry, material );
+
+    mesh.scale.set( s, s, s );
+
+    return mesh
+  }
+
+  // loadSVG(guiData.currentURL)
+
+  let moveLeftBtn = createButton(),
+      moveRightBtn = createButton(),
+      openDoorBtn = createButton(),
+      removeBtn = createButton()
+
+  moveLeftBtn.position.set(0, 0, 0);
+  moveRightBtn.position.set(6, 0, 0);
+  openDoorBtn.position.set(0, 5, 0);
+  removeBtn.position.set(6, 5, 0);
+
+  group.add(moveLeftBtn)
+  group.add(moveRightBtn)
+  group.add(openDoorBtn)
+  group.add(removeBtn)
+
+  group.name='control'
+
+  return group
 }
 
 const boxStandardFloor = () => {

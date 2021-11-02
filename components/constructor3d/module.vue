@@ -6,6 +6,8 @@
         | Добавить слева снизу
       button.button(@click="addCaseToScene('bottomRight')")
         | Добавить справа снизу
+      button.button(@click="addCaseToScene('controlBox')")
+        | Добавить блок контрола
       button.button(@click="openDoors") Открыть двери
       button.button(@click="swapCam") Сменить камеру
 
@@ -176,6 +178,11 @@ export default {
           }, 0)
 
           body.position.set(-(body.userData.width / 2 + gapFromWall + paddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
+        }
+          break;
+        case "controlBox" : {
+          body.rotation.y = threeMath.degToRad(-90)
+          body.position.set(-10, 10, 10)
         }
           break;
       }
