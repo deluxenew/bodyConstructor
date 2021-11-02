@@ -5,20 +5,20 @@ const gapFacade = 0.1;
 const sideDepth = .3;
 const sideTop = 1.4;
 const legsRad = 0.3;
+const legFrontMargin = 0.6;
 
 const facadeTextureLoader = new TextureLoader();
+
 const facadeMaterial = new MeshStandardMaterial({
   color: 0xffffff,
-  map: facadeTextureLoader.load('https://api1.akson.ru:8443/aws/p/18133313/d2987a01-c3d2-444f-962b-d04b7845216c/600.png'),
+  map: facadeTextureLoader.load(require('./img/wood-600.png')),
 });
 
 const material = new MeshStandardMaterial({color: 0xffffff,});
 material.roughness = 0.3;
 material.metalness = 0.05;
 
-const  legFrontMargin = 0.6;
 const legMaterial = new MeshStandardMaterial({color: 0xffffff,});
-
 legMaterial.roughness = 0.1;
 legMaterial.metalness = 0.5;
 
@@ -30,6 +30,25 @@ let facadeMaterials = [
   facadeMaterial,
   material,
 ];
+
+const boxControl = () => {
+  const boxMat = new MeshStandardMaterial({color: 0xffffff, opacity: 0.7});
+
+  const materials = [boxMat,boxMat,boxMat,boxMat,boxMat,boxMat]
+
+  const buttonWidth = 2
+  const buttonHeight = 2
+  const buttonDepth = .5
+
+  let buttonGeometry = new BoxGeometry(buttonWidth, buttonHeight, buttonDepth);
+  let button = new Mesh(buttonGeometry, materials);
+  button.name = 'moveLeft'
+  button.userData.width = 4
+  button.userData.depth = 4
+  button.userData.height = 4
+  button.position.set(-4,-4,5);
+  return button
+}
 
 const boxStandardFloor = () => {
   let bodyWidth = 10;
@@ -220,5 +239,6 @@ const boxAngularFloor = () => {
 
 export default {
   boxStandardFloor: boxStandardFloor(),
-  boxAngularFloor: boxAngularFloor()
+  boxAngularFloor: boxAngularFloor(),
+  boxControl: boxControl()
 }
