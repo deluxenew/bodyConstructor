@@ -9,7 +9,7 @@ const legsRad = 0.3;
 const facadeTextureLoader = new TextureLoader();
 const facadeMaterial = new MeshStandardMaterial({
   color: 0xffffff,
-  map: facadeTextureLoader.load('https://api1.akson.ru:8443/aws/p/18133313/d2987a01-c3d2-444f-962b-d04b7845216c/600.png'),
+  map: facadeTextureLoader.load(require('./img/wood-600.png')),
 });
 
 const material = new MeshStandardMaterial({color: 0xffffff,});

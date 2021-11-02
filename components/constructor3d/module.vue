@@ -202,8 +202,8 @@ export default {
       const wallTextureLoader = new TextureLoader();
 
 
-      const wallNormalTexture = wallTextureLoader.load('https://api1.akson.ru:8443/aws/p/31131414141/3ff01239-654f-48b9-b396-aad17cc5052b/0.jpg');
-      const floorNormalTexture = floorTextureLoader.load('https://api1.akson.ru:8443/aws/p/658666886/25b47846-0cd6-4388-a456-16a75ea1c8d4/0.jpg');
+      const wallNormalTexture = wallTextureLoader.load(require('./img/wall.jpg'));
+      const floorNormalTexture = floorTextureLoader.load(require('./img/floor.jpg'));
 
       let wallMaterial = new MeshStandardMaterial({
         color: 0xc8b7ae,
