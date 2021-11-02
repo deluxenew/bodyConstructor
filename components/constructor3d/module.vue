@@ -41,7 +41,7 @@ let sideDepth = .3;
 let gapFromWall = sideDepth;
 
 import boxes from './CasesListConfig.js'
-const { boxStandardFloor, boxAngularFloor } = boxes
+const { boxStandardFloor, boxAngularFloor, boxControl} = boxes
 
 export default {
   props: {
@@ -60,7 +60,7 @@ export default {
       selectedCase: null,
       showSizes: false,
       scene: new Scene(),
-      camera: new PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 200),
+      camera: new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 200),
     }
   },
   computed: {
@@ -70,19 +70,12 @@ export default {
     bottomLeft() {
       return this.scene.children.filter(({name, place}) => ['angularBody', 'body'].includes(name) && place === 'bottomLeft')
     },
-    tableTopsCount() {
-      return 0
-    },
-    casesCount() {
-      return 0
-    },
-    scenePosition() {
-      const posX = 0
-      const posY = 0
-      const posZ = 0
-      return {
-        posX, posY, posZ
+    controlCase() {
+      let position = { x: -2, y: 3, z: 3 }
+      if (this.selectCase) {
+        position = this.selectCase.position
       }
+      return
     },
     camPos() {
       const vm = this
@@ -93,7 +86,7 @@ export default {
         var a = Math.pow(wL,2)/g;
         var b = g - a;
         var h =  Math.sqrt(a*b);
-        var h2 = Math.tan( threeMath.degToRad(90 - camAngle/2)) * g/2 + h;
+        var h2 = Math.tan( threeMath.degToRad(90 - camAngle/2)) * g/2 + h/2;
         vm.scene.rotation.y =  alfa;
         vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
         vm.scene.position.x =  (a - b)/2;
@@ -189,8 +182,8 @@ export default {
       this.scene.add(body)
     },
     initWalls() {
-      let wallWidth = 40;
-      let wallHeight = 20;
+      let wallWidth = 60;
+      let wallHeight = 27;
       let wallGeometry = new PlaneGeometry(wallWidth, wallHeight);
       let floorGeometry = new PlaneGeometry(wallWidth, wallWidth);
       let floorMaterial = new MeshStandardMaterial({
@@ -286,7 +279,7 @@ export default {
     vm.camera.position.z = 80;
 
     let spotLight = new SpotLight(0xffffff);
-    spotLight.position.set(-38, 40, 42);
+    spotLight.position.set(-60, 55, 60);
     vm.scene.add(spotLight);
     vm.scene.add(spotLight.target);
     spotLight.target.position.set(-10, 10, 10);
