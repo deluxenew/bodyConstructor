@@ -33,7 +33,8 @@ let facadeMaterials = [
   facadeMaterial,
   material,
 ];
- const arrow = require('./img/arrow.svg')
+
+const arrow = require('./img/arrow.svg')
 const trash = require('./img/trash.svg')
 const doors = require('./img/doors.svg')
 
@@ -81,7 +82,7 @@ const boxControl = () => {
     f_rect( roundedRectShape, -15, -15, 30, 30, 10 );
 
     let material = new MeshLambertMaterial( { color: 0xffffff, side: DoubleSide } );
-    let extrudeSettings = { depth: 2, bevelEnabled: true, bevelSegments: 10, steps: 5, bevelSize: 2, bevelThickness: 2 };
+    let extrudeSettings = { depth: 1, bevelEnabled: true, bevelSegments: 0, steps: 5, bevelSize: 2, bevelThickness: 2 };
     let geometry = new ExtrudeBufferGeometry( roundedRectShape, extrudeSettings );
 
     let s = 0.1;
@@ -120,12 +121,16 @@ const boxControl = () => {
 
 
   moveLeftBtn.position.set(0, 5, 0);
+  moveLeftBtn.userData.actionName = 'moveLeft'
   moveLeftBtn.name = 'moveLeft';
   moveRightBtn.position.set(6, 5, 0);
+  moveRightBtn.userData.actionName = 'moveRight'
   moveRightBtn.name = 'moveRight';
   openDoorBtn.position.set(0, 0, 0);
-  openDoorBtn.name = 'openDoor';
+  openDoorBtn.userData.actionName = 'openDoors'
+  openDoorBtn.name = 'openDoors';
   removeBtn.position.set(6, 0, 0);
+  removeBtn.userData.actionName = 'remove'
   removeBtn.name = 'remove';
 
   let buttonsGroup = new Mesh();
@@ -324,6 +329,7 @@ const boxAngularFloor = () => {
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
+
   bodyCase.position.set(0,0,0);
 
   return bodyCase

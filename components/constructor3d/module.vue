@@ -78,22 +78,21 @@ export default {
       const vm = this
 
       function povSet(wL, wR, camAngle, camZ){
-        var alfa =  Math.atan(wL/wR);
-        var g = Math.sqrt(Math.pow(wL,2) + Math.pow(wR,2));
-        var a = Math.pow(wL,2)/g;
-        var b = g - a;
-        var h =  Math.sqrt(a*b);
-        var h2 = Math.tan( threeMath.degToRad(90 - camAngle/2)) * g/2 + h/2;
-        // vm.scene.rotation.y =  alfa;
-        // vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
-        vm.scene.position.x =  (a - b)/2;
+        let alfa =  Math.atan(wL/wR);
+        console.log(alfa, 'alfa')
+        let g = Math.sqrt(Math.pow(wL,2) + Math.pow(wR,2));
+        let a = Math.pow(wL,2)/g;
+        let b = g - a;
+        let h =  Math.sqrt(a*b);
+        let h2 = Math.tan( threeMath.degToRad(90 - camAngle/2)) * g/2 + h/2;
+
+        vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
+        vm.scene.position.x = (a - b)/2;
         if (h2 > camZ) {
           vm.camera.position.z = h2;
-          console.log(h2, 'h2')
         }
         else{
           vm.camera.position.z = camZ;
-          console.log(camZ, 'camZ')
         }
       }
 
@@ -111,6 +110,7 @@ export default {
         }
         return acc
       }, 10)
+
       povSet(wl, wr, 45, 50)
 
       const cameraPositions = {
@@ -147,12 +147,13 @@ export default {
           control.rotation.y = v.rotation.y
           const left = v.userData.left
           let x, y, z
+          const openedDoors = v.userData.openedDoors
           if (left) {
             x = v.position.x - 2.4
             y = v.position.y - 1.5
-            z = v.userData.depth + 1
+            z = v.userData.depth + 1 + (openedDoors ? 5 : 0)
           } else {
-            x = -v.userData.depth - 1
+            x = -v.userData.depth - 1 - (openedDoors ? 5 : 0)
             y = v.position.y - 1.5
             z = v.position.z - 2.4
           }
@@ -163,13 +164,22 @@ export default {
     }
   },
   methods: {
+    moveLeft() {
+
+    },
+    moveRight() {
+
+    },
+    remove() {
+
+    },
     swapCam() {
       if (this.positionNumber < 3) this.positionNumber += 1
       else this.positionNumber = 1
     },
     addCaseToScene(place = "bottomRight") {
       let body = this.bodyCase.clone();
-      body.userData.openedRoors = false
+      body.userData.openedDoors = false
       body.place = place
 
       switch (place) {
@@ -266,11 +276,17 @@ export default {
 
       this.$refs.canvas.addEventListener('pointerdown', onPointerDown);
 
-      const recursiveFind = (obj) => {
+      const recursiveFindBox = (obj) => {
         if (!obj || !obj.parent) return null
         const parent = obj.parent
         if (['angularBody', 'body'].includes(parent.name)) return parent
-        else return recursiveFind(parent)
+        else return recursiveFindBox(parent)
+      }
+
+      const findActionName = (obj) => {
+        if (obj && obj.parent && obj.parent.userData && obj.parent.userData.actionName) return obj.parent.userData.actionName
+        else if (obj && obj.parent.parent && obj.parent.parent.userData.actionName) return obj.parent.parent.userData.actionName
+        return null
       }
 
       function onPointerDown(event) {
@@ -283,8 +299,14 @@ export default {
         const intersects = raycaster.intersectObjects(vm.scene.children, true);
         if (intersects.length > 0) {
           const object = intersects[0].object;
-          // console.log(object.uuid)
-          vm.selectedCase = recursiveFind(object)
+
+          let controlActionName = findActionName(object)
+
+          if (controlActionName) {
+            vm[controlActionName]()
+          } else {
+            vm.selectedCase = recursiveFindBox(object)
+          }
         }
       }
     },
@@ -368,7 +390,7 @@ export default {
 
       vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, threeMath.degToRad(vm.camPos.y), threeMath.degToRad(2.5));
       vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPos.x, 1.57);
-      // vm.camera.position.z = fromTo(vm.camera.position.y, vm.camera.position.y, threeMath.degToRad(vm.camPos.y), threeMath.degToRad(2.5));
+       // vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, threeMath.degToRad(vm.camPos.z), threeMath.degToRad(2.5));
       // vm.scene.rotation.y = fromTo(vm.scene.rotation.y, threeMath.degToRad(vm.camPos.x), threeMath.degToRad(vm.camPos.z), 0.01)
       // if (vm.scene.rotation.y > threeMath.degToRad(10))
       // vm.scene.rotation.y -= 0.01;
