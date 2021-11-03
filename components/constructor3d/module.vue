@@ -6,8 +6,7 @@
         | Добавить слева снизу
       button.button(@click="addCaseToScene('bottomRight')")
         | Добавить справа снизу
-      button.button(@click="addCaseToScene('controlBox')")
-        | Добавить блок контрола
+
       button.button(@click="openDoors") Открыть двери
       button.button(@click="swapCam") Сменить камеру
 
@@ -73,15 +72,11 @@ export default {
       return this.scene.children.filter(({name, place}) => ['angularBody', 'body'].includes(name) && place === 'bottomLeft')
     },
     controlCase() {
-      let position = { x: -2, y: 3, z: 3 }
-      if (this.selectCase) {
-        position = this.selectCase.position
-      }
-      return
+      return boxControl
     },
     camPos() {
       const vm = this
-      let posZ = 0
+
       function povSet(wL, wR, camAngle, camZ){
         var alfa =  Math.atan(wL/wR);
         var g = Math.sqrt(Math.pow(wL,2) + Math.pow(wR,2));
@@ -89,8 +84,8 @@ export default {
         var b = g - a;
         var h =  Math.sqrt(a*b);
         var h2 = Math.tan( threeMath.degToRad(90 - camAngle/2)) * g/2 + h/2;
-        vm.scene.rotation.y =  alfa;
-        vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
+        // vm.scene.rotation.y =  alfa;
+        // vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
         vm.scene.position.x =  (a - b)/2;
         if (h2 > camZ) {
           vm.camera.position.z = h2;
@@ -141,6 +136,32 @@ export default {
      return this.caseConfig
     }
   },
+  watch: {
+    selectedCase: {
+      deep: true,
+      handler(v) {
+        const control = this.scene.children.find(el => el.name === 'control')
+        control.visible = Boolean(v)
+
+        if (v) {
+          control.rotation.y = v.rotation.y
+          const left = v.userData.left
+          let x, y, z
+          if (left) {
+            x = v.position.x - 2.4
+            y = v.position.y - 1.5
+            z = v.userData.depth + 1
+          } else {
+            x = -v.userData.depth - 1
+            y = v.position.y - 1.5
+            z = v.position.z - 2.4
+          }
+
+          control.position.set(x, y, z)
+        }
+      }
+    }
+  },
   methods: {
     swapCam() {
       if (this.positionNumber < 3) this.positionNumber += 1
@@ -164,6 +185,8 @@ export default {
           }, 0)
 
           body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + paddingRight + depth);
+          body.userData.left = false
+          body.userData.top = false
         }
           break;
         case "bottomLeft": {
@@ -178,11 +201,8 @@ export default {
           }, 0)
 
           body.position.set(-(body.userData.width / 2 + gapFromWall + paddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
-        }
-          break;
-        case "controlBox" : {
-          body.rotation.y = threeMath.degToRad(-90)
-          body.position.set(-10, 10, 10)
+          body.userData.left = true
+          body.userData.top = false
         }
           break;
       }
@@ -289,6 +309,9 @@ export default {
     spotLight.position.set(-60, 55, 60);
     vm.scene.add(spotLight);
     vm.scene.add(spotLight.target);
+
+    vm.scene.add(vm.controlCase)
+
     spotLight.target.position.set(-10, 10, 10);
 
     vm.selectCase()
@@ -326,8 +349,6 @@ export default {
 
     function render() {
       requestAnimationFrame(render);
-
-
 
       if (vm.selectedCase) {
         const group = vm.selectedCase.children.find(el => el.name === 'group')

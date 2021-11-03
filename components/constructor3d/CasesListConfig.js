@@ -33,60 +33,35 @@ let facadeMaterials = [
   facadeMaterial,
   material,
 ];
-//  const arrow = require('./img/arrow.svg')
-// const guiData = {
-//   currentURL: arrow,
-//   drawFillShapes: true,
-//   drawStrokes: true,
-//   fillShapesWireframe: true,
-//   strokesWireframe: true
-// };
+ const arrow = require('./img/arrow.svg')
+const trash = require('./img/trash.svg')
+const doors = require('./img/doors.svg')
 
-let group = new Mesh();
-//
-// function loadSVG( url ) {
-//
-//   const loader = new SVGLoader();
-//
-//   loader.load( url, function ( data ) {
-//
-//     const paths = data.paths;
-//     const gr = new Group();
-//
-//     gr.scale.multiplyScalar( 10 );
-//     gr.position.x = -5;
-//     gr.position.y = 5;
-//     // gr.scale.y *= 0;
-//
-//     for ( let i = 0; i < paths.length; i ++ ) {
-//       const path = paths[ i ];
-//       const fillColor = path.userData.style.fill;
-//
-//       if ( guiData.drawFillShapes && fillColor !== undefined && fillColor !== 'none' ) {
-//         const material = new MeshBasicMaterial( {
-//           color: new Color().setStyle( fillColor ),
-//           opacity: 1,
-//           // transparent: path.userData.style.fillOpacity < 1,
-//           side: DoubleSide,
-//           depthWrite: false,
-//           wireframe: guiData.fillShapesWireframe
-//         } );
-//
-//         const shapes = SVGLoader.createShapes( path );
-//
-//         for ( let j = 0; j < shapes.length; j ++ ) {
-//           const shape = shapes[ j ];
-//           const geometry = new ShapeGeometry( shape );
-//           const mesh = new Mesh( geometry, material );
-//
-//           gr.add( mesh );
-//         }
-//       }
-//     }
-//     group.add(gr)
-//   });
-// }
+function loadSVG( url ) {
+  let svg = new Group();
+  const loader = new SVGLoader();
 
+  loader.load( url, function ( data ) {
+    const paths = data.paths;
+    for ( let i = 0; i < paths.length; i ++ ) {
+      const path = paths[ i ];
+      const material = new MeshBasicMaterial( {
+        color: path.color,
+        side: DoubleSide,
+      } );
+
+      const shapes = SVGLoader.createShapes( path );
+      for ( let j = 0; j < shapes.length; j ++ ) {
+        const shape = shapes[ j ];
+        const geometry = new ShapeGeometry( shape );
+        const mesh = new Mesh( geometry, material );
+        mesh.scale.multiplyScalar( 0.1 );
+        svg.add( mesh );
+      }
+    }
+  });
+  return svg
+}
 
 const boxControl = () => {
   function createButton() {
@@ -106,7 +81,7 @@ const boxControl = () => {
     f_rect( roundedRectShape, -15, -15, 30, 30, 10 );
 
     let material = new MeshLambertMaterial( { color: 0xffffff, side: DoubleSide } );
-    let extrudeSettings = { depth: 8, bevelEnabled: false, bevelSegments: 2, steps: 1, bevelSize: 5, bevelThickness: 5 };
+    let extrudeSettings = { depth: 2, bevelEnabled: true, bevelSegments: 10, steps: 5, bevelSize: 2, bevelThickness: 2 };
     let geometry = new ExtrudeBufferGeometry( roundedRectShape, extrudeSettings );
 
     let s = 0.1;
@@ -114,29 +89,58 @@ const boxControl = () => {
 
     mesh.scale.set( s, s, s );
 
-    return mesh
+    let button = new Group();
+    button.add(mesh)
+    return button
   }
 
-  // loadSVG(guiData.currentURL)
+  let moveLeftSvg = loadSVG(arrow)
+  moveLeftSvg.position.set(-1.2,-1.2,0.5)
+
+  let moveRightSvg = loadSVG(arrow)
+  moveRightSvg.rotation.z = Math.degToRad(180)
+  moveRightSvg.position.set(1.2,1.2,0.5)
+
+  let openDoorSvg = loadSVG(doors)
+  openDoorSvg.rotation.z = Math.degToRad(180)
+  openDoorSvg.position.set(1.2,1.2,0.5)
+
+  let removeSvg = loadSVG(trash)
+  removeSvg.rotation.z = Math.degToRad(180)
+  removeSvg.position.set(1.2,1.2,0.5)
 
   let moveLeftBtn = createButton(),
       moveRightBtn = createButton(),
       openDoorBtn = createButton(),
       removeBtn = createButton()
+  moveLeftBtn.add(moveLeftSvg)
+  moveRightBtn.add(moveRightSvg)
+  openDoorBtn.add(openDoorSvg)
+  removeBtn.add(removeSvg)
 
-  moveLeftBtn.position.set(0, 0, 0);
-  moveRightBtn.position.set(6, 0, 0);
-  openDoorBtn.position.set(0, 5, 0);
-  removeBtn.position.set(6, 5, 0);
 
-  group.add(moveLeftBtn)
-  group.add(moveRightBtn)
-  group.add(openDoorBtn)
-  group.add(removeBtn)
+  moveLeftBtn.position.set(0, 5, 0);
+  moveLeftBtn.name = 'moveLeft';
+  moveRightBtn.position.set(6, 5, 0);
+  moveRightBtn.name = 'moveRight';
+  openDoorBtn.position.set(0, 0, 0);
+  openDoorBtn.name = 'openDoor';
+  removeBtn.position.set(6, 0, 0);
+  removeBtn.name = 'remove';
 
-  group.name='control'
+  let buttonsGroup = new Mesh();
 
-  return group
+  buttonsGroup.add(moveLeftBtn)
+  buttonsGroup.add(moveRightBtn)
+  buttonsGroup.add(openDoorBtn)
+  buttonsGroup.add(removeBtn)
+
+  buttonsGroup.name='control'
+
+  buttonsGroup.visible = false
+  buttonsGroup.scale.set( 0.8, 0.8, 0.8 )
+
+  return buttonsGroup
 }
 
 const boxStandardFloor = () => {
