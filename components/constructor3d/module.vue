@@ -15,400 +15,438 @@
 </template>
 
 <script>
-import * as Three from 'three'
-const {
-  Scene,
-  PerspectiveCamera,
-  WebGLRenderer,
-  PlaneGeometry,
-  MeshStandardMaterial,
-  TextureLoader,
-  Mesh,
-  RepeatWrapping,
-  Math: threeMath,
-  BoxGeometry,
-  CylinderGeometry,
-  Object3D,
-  SpotLight,
-  Vector2,
-  Raycaster
-} = Three
+  import * as Three from 'three'
 
-const windows = { innerHeight: 600, innerWidth: 800 }
+  const {
+    Scene,
+    PerspectiveCamera,
+    WebGLRenderer,
+    PlaneGeometry,
+    MeshStandardMaterial,
+    TextureLoader,
+    Mesh,
+    RepeatWrapping,
+    Math: threeMath,
+    BoxGeometry,
+    CylinderGeometry,
+    Object3D,
+    SpotLight,
+    Vector2,
+    Raycaster
+  } = Three
 
-let legsHeight = 1;
-let gapFacade = 0.1;
-let sideDepth = .3;
-let gapFromWall = sideDepth;
+  const windows = {innerHeight: 600, innerWidth: 800}
 
-import boxes from './CasesListConfig.js'
-const { boxStandardFloor, boxAngularFloor, boxControl} = boxes
+  let legsHeight = 1;
+  let gapFacade = 0.1;
+  let sideDepth = .3;
+  let gapFromWall = sideDepth;
 
-export default {
-  props: {
-    caseConfig: {
-      type: Object,
-      default: () => {}
-    },
-  },
-  data() {
-    return {
-      renderer: new WebGLRenderer({
-        alpha: true,
-        antialias: true,
-      }),
-      positionNumber: 1,
-      selectedCase: null,
-      showSizes: false,
-      scene: new Scene(),
-      camera: new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 200),
-    }
-  },
-  computed: {
-    bottomRight() {
-      return this.scene.children.filter(({name, place}) => ['angularBody', 'body'].includes(name) && place === 'bottomRight')
-    },
-    bottomLeft() {
-      return this.scene.children.filter(({name, place}) => ['angularBody', 'body'].includes(name) && place === 'bottomLeft')
-    },
-    controlCase() {
-      return boxControl
-    },
-    camPos() {
-      const vm = this
+  import boxes from './CasesListConfig.js'
 
-      function povSet(wL, wR, camAngle, camZ){
-        let alfa =  Math.atan(wL/wR);
-        console.log(alfa, 'alfa')
-        let g = Math.sqrt(Math.pow(wL,2) + Math.pow(wR,2));
-        let a = Math.pow(wL,2)/g;
-        let b = g - a;
-        let h =  Math.sqrt(a*b);
-        let h2 = Math.tan( threeMath.degToRad(90 - camAngle/2)) * g/2 + h/2;
+  const {boxStandardFloor, boxAngularFloor, boxControl} = boxes
 
-        vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
-        vm.scene.position.x = (a - b)/2;
-        if (h2 > camZ) {
-          vm.camera.position.z = h2;
+  export default {
+    props: {
+      caseConfig: {
+        type: Object,
+        default: () => {
         }
-        else{
-          vm.camera.position.z = camZ;
-        }
+      },
+    },
+    data() {
+      return {
+        renderer: new WebGLRenderer({
+          alpha: true,
+          antialias: true,
+        }),
+        positionNumber: 1,
+        selectedCase: null,
+        showSizes: false,
+        scene: new Scene(),
+        camera: new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 200),
       }
-
-      const wr = vm.bottomRight.reduce((acc, el) => {
-        if (el) {
-          const { userData: { width }} = el
-          acc += width
-        }
-        return acc
-      }, 10)
-      const wl = vm.bottomLeft.reduce((acc, el) => {
-        if (el) {
-          const { userData: { width }} = el
-          acc += width
-        }
-        return acc
-      }, 10)
-
-      povSet(wl, wr, 45, 50)
-
-      const cameraPositions = {
-        pos1: {
-          x: 0,
-          y: 45,
-          z: 30,
-        },
-        pos2: {
-          x: 20,
-          y: 90,
-          z: 11,
-        },
-        pos3: {
-          x: -20,
-          y: 0,
-          z: 20,
-        }
-      }
-      return cameraPositions[`pos${this.positionNumber}`]
     },
-    bodyCase() {
-     return this.caseConfig
-    }
-  },
-  watch: {
-    selectedCase: {
-      deep: true,
-      handler(v) {
-        const control = this.scene.children.find(el => el.name === 'control')
-        control.visible = Boolean(v)
-
-        if (v) {
-          control.rotation.y = v.rotation.y
-          const left = v.userData.left
-          let x, y, z
-          const openedDoors = v.userData.openedDoors
-          if (left) {
-            x = v.position.x - 2.4
-            y = v.position.y - 1.5
-            z = v.userData.depth + 1 + (openedDoors ? 5 : 0)
-          } else {
-            x = -v.userData.depth - 1 - (openedDoors ? 5 : 0)
-            y = v.position.y - 1.5
-            z = v.position.z - 2.4
+    computed: {
+      bottomRight() {
+        return this.scene.children.filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomRight')
+      },
+      bottomLeft() {
+        return this.scene.children.filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomLeft')
+      },
+      bottomAngularCaseExist() {
+        const angular = this.bottomRight.find(({name, place}) => name === 'bottomAngularBody' && place === 'bottomRight')
+        return angular ? angular.userData : null
+      },
+      bottomPaddingRight() {
+        const paddingCases = this.bottomRight.reduce((acc, el) => {
+          if (el) {
+            const {userData: {width}} = el
+            acc += width
           }
+          return acc
+        }, 0)
+        return paddingCases
+      },
+      controlCase() {
+        return boxControl
+      },
+      camPos() {
+        const vm = this
 
-          control.position.set(x, y, z)
+        function povSet(wL, wR, camAngle, camZ) {
+          let alfa = Math.atan(wL / wR);
+          let g = Math.sqrt(Math.pow(wL, 2) + Math.pow(wR, 2));
+          let a = Math.pow(wL, 2) / g;
+          let b = g - a;
+          let h = Math.sqrt(a * b);
+          let h2 = Math.tan(threeMath.degToRad(90 - camAngle / 2)) * g / 2 + h / 2;
+
+          // vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
+          // vm.scene.position.x = (a - b) / 2;
+          if (h2 > camZ) {
+            vm.camera.position.z = h2;
+          } else {
+            vm.camera.position.z = camZ;
+          }
+        }
+
+        const wr = vm.bottomRight.reduce((acc, el) => {
+          if (el) {
+            const {userData: {width}} = el
+            acc += width
+          }
+          return acc
+        }, 10)
+        const wl = vm.bottomLeft.reduce((acc, el) => {
+          if (el) {
+            const {userData: {width}} = el
+            acc += width
+          }
+          return acc
+        }, 10)
+
+        povSet(wl, wr, 45, 50)
+
+        const cameraPositions = {
+          pos1: {
+            x: 0,
+            y: 45,
+            z: 30,
+          },
+          pos2: {
+            x: 20,
+            y: 90,
+            z: 11,
+          },
+          pos3: {
+            x: -20,
+            y: 0,
+            z: 20,
+          }
+        }
+        return cameraPositions[`pos${this.positionNumber}`]
+      },
+      bodyCase() {
+        return this.caseConfig
+      }
+    },
+    watch: {
+      selectedCase: {
+        deep: true,
+        handler(v) {
+          const control = this.scene.children.find(el => el.name === 'control')
+          // control.visible = Boolean(v)
+
+          if (v) {
+            // control.rotation.y = v.rotation.y
+            // const left = v.userData.left
+            // let x, y, z
+            // const openedDoors = v.userData.openedDoors
+            // if (left) {
+            //   x = v.position.x - 2.4
+            //   y = v.position.y - 1.5
+            //   z = v.userData.depth + 1 + (openedDoors ? 5 : 0)
+            // } else {
+            //   x = -v.userData.depth - 1 - (openedDoors ? 5 : 0)
+            //   y = v.position.y - 1.5
+            //   z = v.position.z - 2.4
+            // }
+            //
+            // control.position.set(x, y, z)
+          }
         }
       }
-    }
-  },
-  methods: {
-    moveLeft() {
-
     },
-    moveRight() {
+    methods: {
+      moveLeft() {
 
-    },
-    remove() {
+      },
+      moveRight() {
 
-    },
-    swapCam() {
-      if (this.positionNumber < 3) this.positionNumber += 1
-      else this.positionNumber = 1
-    },
-    addCaseToScene(place = "bottomRight") {
-      let body = this.bodyCase.clone();
-      body.userData.openedDoors = false
-      body.place = place
+      },
+      remove() {
 
-      switch (place) {
-        case "bottomRight": {
-          body.rotation.y = threeMath.degToRad(-90)
-          const depth = this.bottomLeft[0] ? this.bottomLeft[0].userData.depth + gapFacade : 0
-          const paddingRight = this.bottomRight.reduce((acc, el) => {
-            if (el) {
-              const { userData: { width }} = el
-              acc += width
+      },
+      swapCam() {
+        if (this.positionNumber < 3) this.positionNumber += 1
+        else this.positionNumber = 1
+      },
+      addAngularCaseBottom(body) {
+        if (this.bottomAngularCaseExist) {
+          console.log('Хватит угловых шкафов снизу');
+          return
+        }
+        body.rotation.y = threeMath.degToRad(-90)
+        body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + 3.5);
+        body.userData.width += 3.5
+        body.place = 'bottomRight'
+
+        this.bottomLeft.forEach((el) => {
+          el.position.set((el.position.x - body.userData.depth), el.userData.height / 2 - legsHeight / 2, el.userData.depth / 2 + gapFromWall);
+        })
+
+        this.bottomRight.forEach((el) => {
+          el.position.set(-(el.userData.depth / 2 + gapFromWall), el.userData.height / 2 - legsHeight / 2, el.position.z + body.userData.width);
+        })
+
+        this.scene.add(body)
+      },
+      addCaseToScene(place = "bottomRight") {
+        let body = this.bodyCase.clone();
+        body.userData.openedDoors = false
+        body.place = place
+
+        if (body.name === 'bottomAngularBody') {
+
+          this.addAngularCaseBottom(body)
+          return
+        }
+
+        switch (place) {
+
+          case "bottomRight": {
+            if (this.bottomLeft.length > 0 && !this.bottomAngularCaseExist) {
+              let angular = boxAngularFloor
+              this.addAngularCaseBottom(angular)
             }
-            return acc
-          }, 0)
-
-          body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + paddingRight + depth);
-          body.userData.left = false
-          body.userData.top = false
-        }
-          break;
-        case "bottomLeft": {
-          body.rotation.y = threeMath.degToRad(0)
-          const depth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + gapFacade : 0
-          const paddingLeft = this.bottomLeft.reduce((acc, el) => {
-            if (el) {
-              const { userData: { width }} = el
-              acc += width
+            body.rotation.y = threeMath.degToRad(-90)
+            body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + this.bottomPaddingRight);
+            body.userData.left = false
+            body.userData.top = false
+          }
+            break;
+          case "bottomLeft": {
+            if (this.bottomRight.length > 0 && !this.bottomAngularCaseExist) {
+              let angular = boxAngularFloor
+              this.addAngularCaseBottom(angular)
             }
-            return acc
-          }, 0)
+            body.rotation.y = threeMath.degToRad(0)
+            const depth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + gapFacade : 0
+            const paddingLeft = this.bottomLeft.reduce((acc, el) => {
+              if (el) {
+                const {userData: {width}} = el
+                acc += width
+              }
+              return acc
+            }, 0)
 
-          body.position.set(-(body.userData.width / 2 + gapFromWall + paddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
-          body.userData.left = true
-          body.userData.top = false
+            body.position.set(-(body.userData.width / 2 + gapFromWall + paddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
+            body.userData.left = true
+            body.userData.top = false
+          }
+            break;
         }
-          break;
+        this.scene.add(body)
+      },
+      initWalls() {
+        let wallWidth = 60;
+        let wallHeight = 27;
+        let wallGeometry = new PlaneGeometry(wallWidth, wallHeight);
+        let floorGeometry = new PlaneGeometry(wallWidth, wallWidth);
+        let floorMaterial = new MeshStandardMaterial({
+          color: 0xaf9182,
+        });
+        floorMaterial.roughness = 0.3;
+        floorMaterial.metalness = 0.05;
+        const floorTextureLoader = new TextureLoader();
+        const wallTextureLoader = new TextureLoader();
+
+        const wallNormalTexture = wallTextureLoader.load(require('./img/wall.jpg'));
+        const floorNormalTexture = floorTextureLoader.load(require('./img/floor.jpg'));
+
+        let wallMaterial = new MeshStandardMaterial({
+          color: 0xc8b7ae,
+        });
+        wallMaterial.roughness = 1;
+        wallMaterial.metalness = 0;
+        wallMaterial.normalMap = wallNormalTexture;
+
+        floorMaterial.normalMap = floorNormalTexture;
+        //facadeMaterial.normalMap = facadeNormalTexture;
+
+        const wall = new Mesh(wallGeometry, wallMaterial);
+        const wallR = new Mesh(wallGeometry, wallMaterial);
+        const floor = new Mesh(floorGeometry, floorMaterial);
+
+        wall.material.normalMap.repeat.set(8, 4);
+        wall.material.needsUpdate = true;
+        wall.material.normalMap.wrapS = wall.material.normalMap.wrapT = RepeatWrapping;
+        wall.name = "wall"
+
+        wallR.name = "wallR"
+
+        floor.material.normalMap.repeat.set(3, 3);
+        floor.material.needsUpdate = true;
+        floor.material.normalMap.wrapS = floor.material.normalMap.wrapT = RepeatWrapping;
+
+        wall.position.set(-wallWidth / 2, wallHeight / 2, 0);
+        wallR.position.set(0, wallHeight / 2, wallWidth / 2);
+        floor.position.set(-wallWidth / 2, 0, wallWidth / 2);
+        wallR.rotation.y = threeMath.degToRad(-90);
+        floor.rotation.x = threeMath.degToRad(-90);
+        this.scene.add(floor);
+        this.scene.add(wallR);
+        this.scene.add(wall);
+      },
+      selectCase() {
+        const vm = this
+        const mouse = new Vector2();
+        const raycaster = new Raycaster();
+
+        this.$refs.canvas.addEventListener('pointerdown', onPointerDown);
+
+        const recursiveFindBox = (obj) => {
+          if (!obj || !obj.parent) return null
+          const parent = obj.parent
+          if (['bottomAngularBody', 'body'].includes(parent.name)) return parent
+          else return recursiveFindBox(parent)
+        }
+
+        const findActionName = (obj) => {
+          if (obj && obj.parent && obj.parent.userData && obj.parent.userData.actionName) return obj.parent.userData.actionName
+          else if (obj && obj.parent.parent && obj.parent.parent.userData.actionName) return obj.parent.parent.userData.actionName
+          return null
+        }
+
+        function onPointerDown(event) {
+          const canvasPos = vm.$refs.canvas.getBoundingClientRect()
+          mouse.x = ((event.clientX - canvasPos.x) / 800) * 2 - 1;
+          mouse.y = -((event.clientY - canvasPos.y) / 600) * 2 + 1;
+
+          raycaster.setFromCamera(mouse, vm.camera);
+
+          const intersects = raycaster.intersectObjects(vm.scene.children, true);
+          if (intersects.length > 0) {
+            const object = intersects[0].object;
+
+            let controlActionName = findActionName(object)
+
+            if (controlActionName) {
+              vm[controlActionName]()
+            } else {
+              vm.selectedCase = recursiveFindBox(object)
+            }
+          }
+        }
+      },
+      openDoors() {
+        if (this.selectedCase) {
+          const {userData: {openedDoors}} = this.selectedCase
+          if (this.selectedCase) this.selectedCase.userData.openedDoors = !openedDoors
+        }
       }
-      this.scene.add(body)
     },
-    initWalls() {
-      let wallWidth = 60;
-      let wallHeight = 27;
-      let wallGeometry = new PlaneGeometry(wallWidth, wallHeight);
-      let floorGeometry = new PlaneGeometry(wallWidth, wallWidth);
-      let floorMaterial = new MeshStandardMaterial({
-        color: 0xaf9182,
-      });
-      floorMaterial.roughness = 0.3;
-      floorMaterial.metalness = 0.05;
-      const floorTextureLoader = new TextureLoader();
-      const wallTextureLoader = new TextureLoader();
-
-
-      const wallNormalTexture = wallTextureLoader.load(require('./img/wall.jpg'));
-      const floorNormalTexture = floorTextureLoader.load(require('./img/floor.jpg'));
-
-      let wallMaterial = new MeshStandardMaterial({
-        color: 0xc8b7ae,
-      });
-      wallMaterial.roughness = 1;
-      wallMaterial.metalness = 0;
-      wallMaterial.normalMap = wallNormalTexture;
-
-      floorMaterial.normalMap = floorNormalTexture;
-      //facadeMaterial.normalMap = facadeNormalTexture;
-
-      const wall = new Mesh(wallGeometry, wallMaterial);
-      const wallR = new Mesh(wallGeometry, wallMaterial);
-      const floor = new Mesh(floorGeometry, floorMaterial);
-
-      wall.material.normalMap.repeat.set(8, 4);
-      wall.material.needsUpdate = true;
-      wall.material.normalMap.wrapS = wall.material.normalMap.wrapT = RepeatWrapping;
-      wall.name = "wall"
-
-      wallR.name = "wallR"
-
-      floor.material.normalMap.repeat.set(3, 3);
-      floor.material.needsUpdate = true;
-      floor.material.normalMap.wrapS = floor.material.normalMap.wrapT = RepeatWrapping;
-
-      wall.position.set(-wallWidth / 2, wallHeight / 2, 0);
-      wallR.position.set(0, wallHeight / 2, wallWidth / 2);
-      floor.position.set(-wallWidth / 2, 0, wallWidth / 2);
-      wallR.rotation.y = threeMath.degToRad(-90);
-      floor.rotation.x = threeMath.degToRad(-90);
-      this.scene.add(floor);
-      this.scene.add(wallR);
-      this.scene.add(wall);
-    },
-    selectCase() {
+    mounted() {
       const vm = this
-      const mouse = new Vector2();
-      const raycaster = new Raycaster();
+      vm.renderer.shadowMap.enabled = true;
+      vm.renderer.setSize(windows.innerWidth, windows.innerHeight);
+      this.$refs.canvas.appendChild(vm.renderer.domElement);
 
-      this.$refs.canvas.addEventListener('pointerdown', onPointerDown);
+      this.initWalls()
 
-      const recursiveFindBox = (obj) => {
-        if (!obj || !obj.parent) return null
-        const parent = obj.parent
-        if (['angularBody', 'body'].includes(parent.name)) return parent
-        else return recursiveFindBox(parent)
-      }
+      vm.camera.position.z = 80;
 
-      const findActionName = (obj) => {
-        if (obj && obj.parent && obj.parent.userData && obj.parent.userData.actionName) return obj.parent.userData.actionName
-        else if (obj && obj.parent.parent && obj.parent.parent.userData.actionName) return obj.parent.parent.userData.actionName
-        return null
-      }
+      let spotLight = new SpotLight(0xffffff);
+      spotLight.position.set(-60, 55, 60);
+      vm.scene.add(spotLight);
+      vm.scene.add(spotLight.target);
 
-      function onPointerDown(event) {
-        const canvasPos = vm.$refs.canvas.getBoundingClientRect()
-        mouse.x = ((event.clientX - canvasPos.x) / 800) * 2 - 1;
-        mouse.y = -((event.clientY - canvasPos.y) / 600) * 2 + 1;
+      vm.camera.add(vm.controlCase)
 
-        raycaster.setFromCamera(mouse, vm.camera);
+      spotLight.target.position.set(-10, 10, 10);
 
-        const intersects = raycaster.intersectObjects(vm.scene.children, true);
-        if (intersects.length > 0) {
-          const object = intersects[0].object;
+      vm.selectCase()
 
-          let controlActionName = findActionName(object)
+      vm.scene.rotation.y = threeMath.degToRad(26);
 
-          if (controlActionName) {
-            vm[controlActionName]()
-          } else {
-            vm.selectedCase = recursiveFindBox(object)
+      vm.camera.position.set(-4, 16, 50);
+      vm.camera.rotation.x = threeMath.degToRad(-20);
+
+      spotLight.intensity = 1.5
+
+      function fromTo(value, from, to, step) {
+        if (value === to) return value;
+        if (from < to) {
+          if (value < to) {
+            if (value + step < to) {
+              return value + step;
+            } else {
+              return to;
+            }
+          }
+        } else if (from > to) {
+          if (value > to) {
+            if (value - step > to) {
+              return value - step;
+
+            } else {
+              return to;
+            }
           }
         }
       }
-    },
-    openDoors() {
-      if (this.selectedCase) {
-        const { userData : { openedDoors } } = this.selectedCase
-        if (this.selectedCase) this.selectedCase.userData.openedDoors = !openedDoors
-      }
-    }
-  },
-  mounted() {
-    const vm = this
-    vm.renderer.shadowMap.enabled = true;
-    vm.renderer.setSize(windows.innerWidth, windows.innerHeight);
-    this.$refs.canvas.appendChild(vm.renderer.domElement);
 
-    this.initWalls()
 
-    vm.camera.position.z = 80;
+      function render() {
+        requestAnimationFrame(render);
 
-    let spotLight = new SpotLight(0xffffff);
-    spotLight.position.set(-60, 55, 60);
-    vm.scene.add(spotLight);
-    vm.scene.add(spotLight.target);
+        vm.scene.children.filter((it) => !!it.userData.openedDoors).forEach((it) => {
+          const group = it.children.find(el => el.name === 'group')
+          const leftDoor = group.children.find(el => el.name === 'leftDoor')
+          const rightDoor = group.children.find(el => el.name === 'rightDoor')
+          const {userData: {openedDoors}} = it
 
-    vm.scene.add(vm.controlCase)
-
-    spotLight.target.position.set(-10, 10, 10);
-
-    vm.selectCase()
-
-    vm.scene.rotation.y = threeMath.degToRad(26);
-
-    vm.camera.position.set(-4, 16, 50);
-    vm.camera.rotation.x = threeMath.degToRad(-20);
-
-    spotLight.intensity = 1.5
-
-    function fromTo(value, from, to, step) {
-      if (value === to) return value;
-      if (from < to) {
-        if (value < to) {
-          if (value + step < to) {
-            return value + step;
+          if (openedDoors) {
+            if (leftDoor) leftDoor.rotation.y = fromTo(leftDoor.rotation.y, 0, threeMath.degToRad(-90), threeMath.degToRad(2.5));
+            if (rightDoor) rightDoor.rotation.y = fromTo(rightDoor.rotation.y, 0, threeMath.degToRad(90), threeMath.degToRad(2.5));
           } else {
-            return to;
+            if (leftDoor) leftDoor.rotation.y = fromTo(leftDoor.rotation.y, threeMath.degToRad(-90), 0, threeMath.degToRad(2.5));
+            if (rightDoor) rightDoor.rotation.y = fromTo(rightDoor.rotation.y, threeMath.degToRad(90), 0, threeMath.degToRad(2.5));
           }
-        }
-      } else if (from > to) {
-        if (value > to) {
-          if (value - step > to) {
-            return value - step;
+        })
 
-          } else {
-            return to;
-          }
-        }
-      }
-    }
+        vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, threeMath.degToRad(vm.camPos.y), threeMath.degToRad(2.5));
+        vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPos.x, 1.57);
+        // vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, threeMath.degToRad(vm.camPos.z), threeMath.degToRad(2.5));
+        // vm.scene.rotation.y = fromTo(vm.scene.rotation.y, threeMath.degToRad(vm.camPos.x), threeMath.degToRad(vm.camPos.z), 0.01)
+        // if (vm.scene.rotation.y > threeMath.degToRad(10))
+        // vm.scene.rotation.y -= 0.01;
 
-
-
-    function render() {
-      requestAnimationFrame(render);
-
-      if (vm.selectedCase) {
-        const group = vm.selectedCase.children.find(el => el.name === 'group')
-        const leftDoor = group.children.find(el => el.name === 'leftDoor')
-        const rightDoor = group.children.find(el => el.name === 'rightDoor')
-        const { userData : { openedDoors } } = vm.selectedCase
-
-        if (openedDoors) {
-
-          leftDoor.rotation.y = fromTo(leftDoor.rotation.y, 0, threeMath.degToRad(-90), threeMath.degToRad(2.5));
-          rightDoor.rotation.y = fromTo(rightDoor.rotation.y, 0, threeMath.degToRad(90), threeMath.degToRad(2.5));
-        } else {
-          leftDoor.rotation.y = fromTo(leftDoor.rotation.y, threeMath.degToRad(-90), 0, threeMath.degToRad(2.5));
-          rightDoor.rotation.y = fromTo(rightDoor.rotation.y, threeMath.degToRad(90), 0, threeMath.degToRad(2.5));
-        }
+        vm.renderer.render(vm.scene, vm.camera);
       }
 
-      vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, threeMath.degToRad(vm.camPos.y), threeMath.degToRad(2.5));
-      vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPos.x, 1.57);
-       // vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, threeMath.degToRad(vm.camPos.z), threeMath.degToRad(2.5));
-      // vm.scene.rotation.y = fromTo(vm.scene.rotation.y, threeMath.degToRad(vm.camPos.x), threeMath.degToRad(vm.camPos.z), 0.01)
-      // if (vm.scene.rotation.y > threeMath.degToRad(10))
-      // vm.scene.rotation.y -= 0.01;
-
-      vm.renderer.render(vm.scene, vm.camera);
+      render();
     }
-
-    render();
   }
-}
 </script>
 
 <style lang="scss">
-.buttons {
-  padding-top: 20px;
-}
+  .buttons {
+    padding-top: 20px;
+  }
 
-.button + .button {
-  margin-left: 8px;
-}
+  .button + .button {
+    margin-left: 8px;
+  }
 </style>
