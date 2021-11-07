@@ -36,9 +36,6 @@
     Mesh,
     RepeatWrapping,
     Math: threeMath,
-    BoxGeometry,
-    CylinderGeometry,
-    Object3D,
     SpotLight,
     Vector2,
     Raycaster
@@ -53,7 +50,7 @@
 
   import boxes from './CasesListConfig.js'
 
-  const {boxStandardFloor, boxAngularFloor, boxControl} = boxes
+  const {boxAngularFloor, boxControl} = boxes
 
   export default {
     props: {

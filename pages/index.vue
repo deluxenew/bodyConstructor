@@ -7,6 +7,7 @@
           module(
             ref="module"
             :caseConfig="caseConfig"
+            @selectCase="selectCase"
           )
         div.column.config
           select-elements(
@@ -41,6 +42,11 @@
         }
         return result.filter(el => el.name)
       }
+    },
+    methods: {
+      selectCase(val) {
+        console.log(val);
+      },
     },
 
   }
