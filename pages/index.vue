@@ -5,12 +5,15 @@
       div.constructor
         div.column.preview
           module(
+            ref="module"
             :caseConfig="caseConfig"
           )
         div.column.config
           select-elements(
             v-model="caseConfig"
+            title="шкаф"
             :elementVariants="boxes"
+            @remove="$refs.module.removeCase()"
           )
 </template>
 
@@ -38,7 +41,8 @@
         }
         return result.filter(el => el.name)
       }
-    }
+    },
+
   }
 </script>
 

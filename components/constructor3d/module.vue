@@ -1,15 +1,27 @@
 <template lang="pug">
   div
-    div(ref="canvas")
+    div.canvas(ref="canvas")
+      div.controls
+        div.button.camera(@click="swapCam")
+          img(:src="require('./img/eye.svg')")
+          div.camera__variants
+            div.item(v-for="item in 3")
+              svg(width="7" height="4" viewBox="0 0 7 4" fill="none")
+                path(d="M0 2C0 0.895431 0.89543 0 2 0H4.66667C5.77124 0 6.66667 0.895431 6.66667 2C6.66667 3.10457 5.77124 4 4.66667 4H2C0.895429 4 0 3.10457 0 2Z" :fill="item <= positionNumber ? '#5C6270' : '#E3E5E8'")
+        div.box-control
+          button.button.left(:disabled="!selectedCase")
+            img(:src="require('./img/arrow.svg')")
+          button.button.right(:disabled="!selectedCase")
+            img(:src="require('./img/arrow.svg')")
+          button.button.open(:disabled="!selectedCase" @click.stop="openDoors")
+            img(:src="require('./img/doors.svg')")
+          button.button.remove(:disabled="!selectedCase" @click="removeCase")
+            img(:src="require('./img/trash.svg')")
     div.buttons
       button.button(@click="addCaseToScene('bottomLeft')")
         | Добавить слева снизу
       button.button(@click="addCaseToScene('bottomRight')")
         | Добавить справа снизу
-
-      button.button(@click="openDoors") Открыть двери
-      button.button(@click="swapCam") Сменить камеру
-
       div(v-if="selectedCase && selectedCase.name")
         | {{selectedCase ? selectedCase.name : ''}}
 </template>
@@ -185,8 +197,12 @@
       moveRight() {
 
       },
-      remove() {
-
+      removeCase() {
+        const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedCase.uuid);
+        if (selectedObject && this.selectedCase) {
+          if (this.selectedCase.name === 'bottomAngularBody' && this.bottomLeft.length) return
+          this.scene.remove(selectedObject);
+        }
       },
       swapCam() {
         if (this.positionNumber < 3) this.positionNumber += 1
@@ -330,6 +346,7 @@
         }
 
         function onPointerDown(event) {
+          if (event.target.className !== "controls") return
           const canvasPos = vm.$refs.canvas.getBoundingClientRect()
           mouse.x = ((event.clientX - canvasPos.x) / 800) * 2 - 1;
           mouse.y = -((event.clientY - canvasPos.y) / 600) * 2 + 1;
@@ -345,6 +362,7 @@
             if (controlActionName) {
               vm[controlActionName]()
             } else {
+
               vm.selectedCase = recursiveFindBox(object)
             }
           }
@@ -411,7 +429,7 @@
       function render() {
         requestAnimationFrame(render);
 
-        vm.scene.children.filter((it) => !!it.userData.openedDoors).forEach((it) => {
+        vm.scene.children.filter((it) => it.userData.openedDoors !== undefined).forEach((it) => {
           const group = it.children.find(el => el.name === 'group')
           const leftDoor = group.children.find(el => el.name === 'leftDoor')
           const rightDoor = group.children.find(el => el.name === 'rightDoor')
@@ -448,5 +466,80 @@
 
   .button + .button {
     margin-left: 8px;
+  }
+
+  .canvas {
+    position: relative;
+  }
+
+  .controls {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 6px;
+      width: 48px;
+      height: 48px;
+      background: #FFFFFF;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: .2s ease-in-out;
+      border: none;
+      outline: none;
+
+      &:disabled {
+        opacity: .4;
+      }
+
+      &:hover:not(:disabled) {
+        background-color: #E3E5E8;
+      }
+
+    }
+
+    .camera {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+
+      &__variants {
+        height: 4px;
+        display: flex;
+        justify-content: center;
+
+        .item + .item {
+          padding-left: 4px;
+        }
+
+        .item {
+          display: flex;
+          height: 4px;
+
+          svg path {
+            transition: .3s ease-in-out;
+          }
+        }
+      }
+    }
+    .box-control {
+      position: absolute;
+      display: flex;
+      bottom: 10px;
+      left: calc(50% - 108px);
+
+      .left {
+
+      }
+
+      .right {
+        transform: rotateY(180deg);
+      }
+    }
   }
 </style>

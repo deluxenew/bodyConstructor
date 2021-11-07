@@ -1,6 +1,6 @@
 <template lang="pug">
   div.select-elements
-    div.select-elements__title Выберите шкаф
+    div.select-elements__title {{title}}
     div.select-elements__list
       div.select-elements__item(
         v-for="item in elementVariants"
@@ -13,6 +13,10 @@
 export default {
   name: "SelectElements",
   props: {
+    title: {
+      type: String,
+      default: ''
+    },
     elementVariants: {
       type: Array,
       default: () => []
