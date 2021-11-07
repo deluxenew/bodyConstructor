@@ -9,9 +9,9 @@
               svg(width="7" height="4" viewBox="0 0 7 4" fill="none")
                 path(d="M0 2C0 0.895431 0.89543 0 2 0H4.66667C5.77124 0 6.66667 0.895431 6.66667 2C6.66667 3.10457 5.77124 4 4.66667 4H2C0.895429 4 0 3.10457 0 2Z" :fill="item <= positionNumber ? '#5C6270' : '#E3E5E8'")
         div.box-control
-          button.button.left(:disabled="!selectedCase" @click="moveLeft")
+          button.button.left(:disabled="!selectedCase || !isMoveLeftActive || isAngularIsSelected" @click="moveLeft")
             img(:src="require('./img/arrow.svg')")
-          button.button.right(:disabled="!selectedCase" @click="moveRight")
+          button.button.right(:disabled="!selectedCase || !isMoveRightActive || isAngularIsSelected" @click="moveRight")
             img(:src="require('./img/arrow.svg')")
           button.button.open(:disabled="!selectedCase" @click="openDoors")
             img(:src="require('./img/doors.svg')")
@@ -80,8 +80,11 @@
       bottomRight() {
         return this.scene.children.filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomRight')
       },
+      bottomRightWhiteoutAngular() {
+        return this.scene.children.filter(({name, place}) => ['body'].includes(name) && place === 'bottomRight')
+      },
       bottomLeft() {
-        return this.scene.children.filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomLeft')
+        return this.scene.children.filter(({name, place}) => ['body'].includes(name) && place === 'bottomLeft')
       },
       bottomAngularCaseExist() {
         const angular = this.bottomRight.find(({name, place}) => name === 'bottomAngularBody' && place === 'bottomRight')
@@ -179,20 +182,43 @@
         addBottomLeft.name = 'addBottomLeft'
         addBottomLeft.userData.actionName = 'addBottomLeftToScene'
         return addBottomLeft
-      }
+      },
+      isMoveRightActive() {
+        const currentUuid = this.selectedCase?.uuid
+        if (!currentUuid) return false
+        const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentUuid)
+        const rightIdx = this.bottomRightWhiteoutAngular.findIndex(({uuid}) => uuid === currentUuid)
+        return (leftIdx > 0 && this.bottomLeft.length > 1) || (rightIdx > -1 && rightIdx < this.bottomRightWhiteoutAngular.length - 1 && this.bottomRightWhiteoutAngular.length > 1)
+      },
+      isMoveLeftActive() {
+        const currentUuid = this.selectedCase?.uuid
+        if (!currentUuid) return false
+        const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentUuid)
+        const rightIdx = this.bottomRightWhiteoutAngular.findIndex(({uuid}) => uuid === currentUuid)
+        return (rightIdx > 0 && this.bottomRightWhiteoutAngular.length > 1) || (leftIdx > -1 && leftIdx < this.bottomLeft.length - 1 && this.bottomLeft.length > 1)
+      },
+      isAngularIsSelected() {
+        return this.selectedCase?.name === 'bottomAngularBody'
+      },
+      isMaxRightPadding() {
+        return this.bottomPaddingRight > 42
+      },
+      isMaxLeftPadding() {
+        return this.bottomPaddingLeft > 40
+      },
     },
     watch: {
-      bottomPaddingRight(v) {
+      bottomPaddingRight() {
         const button = this.scene.children.find(({name}) => name === 'addBottomRight')
-        if (v > 42) {
+        if (this.isMaxRightPadding) {
           this.scene.remove(button)
         } else if (!button) {
           this.scene.add(this.addBottomRight)
         }
       },
-      bottomPaddingLeft(v) {
+      bottomPaddingLeft() {
         const button = this.scene.children.find(({name}) => name === 'addBottomLeft')
-        if (v > 40) {
+        if (this.isMaxLeftPadding) {
           this.scene.remove(button)
         } else if (!button) {
           this.scene.add(this.addBottomLeft)
@@ -233,8 +259,21 @@
         const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedCase.uuid);
         if (selectedObject && this.selectedCase) {
           if (this.selectedCase.name === 'bottomAngularBody' && this.bottomLeft.length) return
+          const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === selectedObject.uuid)
+          const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === selectedObject.uuid)
+          if (leftIdx > -1) {
+            this.bottomLeft.filter((el, index) => index > leftIdx).forEach((el) => {
+              el.position.set((el.position.x + selectedObject.userData.width), el.position.y, el.position.z);
+            })
+          }
+          if (rightIdx > -1) {
+            this.bottomRight.filter((el, index) => index > rightIdx).forEach((el) => {
+              el.position.set(el.position.x, el.position.y, el.position.z - selectedObject.userData.width - (selectedObject.userData.padding ? selectedObject.userData.padding : 0));
+            })
+          }
           this.scene.remove(selectedObject);
         }
+
       },
       swapCam() {
         if (this.positionNumber < 3) this.positionNumber += 1
