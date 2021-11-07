@@ -78,7 +78,13 @@
     },
     computed: {
       bottomRight() {
-        return this.scene.children.filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomRight')
+        return this.scene.children
+            .filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomRight')
+            .sort((a, b) => {
+             if ( a.name < b.name) return 1
+             if ( a.name > b.name) return -1
+              return 0
+            })
       },
       bottomRightWhiteoutAngular() {
         return this.scene.children.filter(({name, place}) => ['body'].includes(name) && place === 'bottomRight')
@@ -258,22 +264,37 @@
       removeCase() {
         const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedCase.uuid);
         if (selectedObject && this.selectedCase) {
-          if (this.selectedCase.name === 'bottomAngularBody' && this.bottomLeft.length) return
+          if (this.selectedCase.name === 'bottomAngularBody' && this.bottomLeft.length && this.bottomRightWhiteoutAngular.length) return
           const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === selectedObject.uuid)
           const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === selectedObject.uuid)
+          const { width, padding, depth } = selectedObject.userData
           if (leftIdx > -1) {
-            this.bottomLeft.filter((el, index) => index > leftIdx).forEach((el) => {
-              el.position.set((el.position.x + selectedObject.userData.width), el.position.y, el.position.z);
+            this.bottomLeft
+                .filter((el, index) => index > leftIdx)
+                .forEach((el) => {
+                  const { x, y, z } = el.position
+                  el.position.set(x + width, y, z);
             })
           }
           if (rightIdx > -1) {
-            this.bottomRight.filter((el, index) => index > rightIdx).forEach((el) => {
-              el.position.set(el.position.x, el.position.y, el.position.z - selectedObject.userData.width - (selectedObject.userData.padding ? selectedObject.userData.padding : 0));
+            this.bottomRight
+                .filter((el, index) => index > rightIdx)
+                .forEach((el) => {
+                  const { x, y, z } = el.position
+                  el.position.set(x, y, z - width - (padding ? padding : 0));
             })
+            if (selectedObject.name === 'bottomAngularBody') {
+              this.bottomLeft
+                  .filter((el, index) => index > leftIdx)
+                  .forEach((el) => {
+                    const { x, y, z } = el.position
+                    el.position.set(x + depth, y, z);
+                  })
+            }
           }
           this.scene.remove(selectedObject);
+          this.selectedCase = null
         }
-
       },
       swapCam() {
         if (this.positionNumber < 3) this.positionNumber += 1
@@ -285,16 +306,19 @@
           return
         }
         body.rotation.y = threeMath.degToRad(-90)
-        body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + 3.5);
+        const { depth, height, width, padding } =  body.userData
+        body.position.set(-(depth / 2 + gapFromWall), height / 2 - legsHeight / 2, width / 2 + gapFromWall + 3.5);
 
         body.place = 'bottomRight'
 
         this.bottomLeft.forEach((el) => {
-          el.position.set((el.position.x - body.userData.depth), el.userData.height / 2 - legsHeight / 2, el.userData.depth / 2 + gapFromWall);
+          const { x, y, z } = el.position
+          el.position.set(x - body.userData.depth, y, z);
         })
 
         this.bottomRight.forEach((el) => {
-          el.position.set(-(el.userData.depth / 2 + gapFromWall), el.userData.height / 2 - legsHeight / 2, el.position.z + body.userData.width + body.userData.padding);
+          const { x, y, z } = el.position
+          el.position.set(x, y, z + width + padding);
         })
 
         this.scene.add(body)
@@ -322,6 +346,7 @@
       },
       addBottomLeftToScene() {
         let body = this.bodyCase.clone();
+        const { depth, height, width } =  body.userData
         body.userData.openedDoors = false
         body.place = 'bottomLeft'
 
@@ -332,13 +357,12 @@
         }
 
         if (this.bottomRight.length > 0 && !this.bottomAngularCaseExist) {
-          let angular = boxAngularFloor
-          this.addAngularCaseBottom(angular)
+          this.addAngularCaseBottom(boxAngularFloor)
         }
         body.rotation.y = threeMath.degToRad(0)
-        const depth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + gapFacade : 0
+        const needDepth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + gapFacade : 0
 
-        body.position.set(-(body.userData.width / 2 + gapFromWall + this.bottomPaddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
+        body.position.set(-(width / 2 + gapFromWall + this.bottomPaddingLeft + needDepth), height / 2 - legsHeight / 2, depth / 2 + gapFromWall);
         body.userData.left = true
         body.userData.top = false
         this.scene.add(body)
