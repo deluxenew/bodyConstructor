@@ -18,10 +18,7 @@
           button.button.remove(:disabled="!selectedCase" @click="removeCase")
             img(:src="require('./img/trash.svg')")
     div.buttons
-      button.button(@click="addCaseToScene('bottomLeft')")
-        | Добавить слева снизу
-      button.button(@click="addCaseToScene('bottomRight')")
-        | Добавить справа снизу
+
       div(v-if="selectedCase && selectedCase.name")
         | {{selectedCase ? selectedCase.name : ''}}
 </template>
@@ -174,16 +171,33 @@
         let addBottomRight = boxControl.clone()
         addBottomRight.name = 'addBottomRight'
         addBottomRight.rotation.y = threeMath.degToRad(-90);
+        addBottomRight.userData.actionName = 'addBottomRightToScene'
         return addBottomRight
       },
       addBottomLeft() {
         let addBottomLeft = boxControl.clone()
         addBottomLeft.name = 'addBottomLeft'
-        addBottomLeft.position.set(-10,5,1)
+        addBottomLeft.userData.actionName = 'addBottomLeftToScene'
         return addBottomLeft
       }
     },
     watch: {
+      bottomPaddingRight(v) {
+        const button = this.scene.children.find(({name}) => name === 'addBottomRight')
+        if (v > 42) {
+          this.scene.remove(button)
+        } else if (!button) {
+          this.scene.add(this.addBottomRight)
+        }
+      },
+      bottomPaddingLeft(v) {
+        const button = this.scene.children.find(({name}) => name === 'addBottomLeft')
+        if (v > 40) {
+          this.scene.remove(button)
+        } else if (!button) {
+          this.scene.add(this.addBottomLeft)
+        }
+      }
       // selectedCase: {
       //   deep: true,
       //   handler(v) {
@@ -233,7 +247,7 @@
         }
         body.rotation.y = threeMath.degToRad(-90)
         body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + 3.5);
-        body.userData.padding += 3.5
+
         body.place = 'bottomRight'
 
         this.bottomLeft.forEach((el) => {
@@ -241,15 +255,15 @@
         })
 
         this.bottomRight.forEach((el) => {
-          el.position.set(-(el.userData.depth / 2 + gapFromWall), el.userData.height / 2 - legsHeight / 2, el.position.z + body.userData.width);
+          el.position.set(-(el.userData.depth / 2 + gapFromWall), el.userData.height / 2 - legsHeight / 2, el.position.z + body.userData.width + body.userData.padding);
         })
 
         this.scene.add(body)
       },
-      addCaseToScene(place = "bottomRight") {
+      addBottomRightToScene() {
         let body = this.bodyCase.clone();
         body.userData.openedDoors = false
-        body.place = place
+        body.place = 'bottomRight'
 
         if (body.name === 'bottomAngularBody') {
 
@@ -257,33 +271,37 @@
           return
         }
 
-        switch (place) {
-
-          case "bottomRight": {
-            if (this.bottomLeft.length > 0 && !this.bottomAngularCaseExist) {
-              let angular = boxAngularFloor
-              this.addAngularCaseBottom(angular)
-            }
-            body.rotation.y = threeMath.degToRad(-90)
-            body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + this.bottomPaddingRight);
-            body.userData.left = false
-            body.userData.top = false
-          }
-            break;
-          case "bottomLeft": {
-            if (this.bottomRight.length > 0 && !this.bottomAngularCaseExist) {
-              let angular = boxAngularFloor
-              this.addAngularCaseBottom(angular)
-            }
-            body.rotation.y = threeMath.degToRad(0)
-            const depth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + gapFacade : 0
-
-            body.position.set(-(body.userData.width / 2 + gapFromWall + this.bottomPaddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
-            body.userData.left = true
-            body.userData.top = false
-          }
-            break;
+        if (this.bottomLeft.length > 0 && !this.bottomAngularCaseExist) {
+          let angular = boxAngularFloor
+          this.addAngularCaseBottom(angular)
         }
+        body.rotation.y = threeMath.degToRad(-90)
+        body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + this.bottomPaddingRight);
+        body.userData.left = false
+        body.userData.top = false
+        this.scene.add(body)
+      },
+      addBottomLeftToScene() {
+        let body = this.bodyCase.clone();
+        body.userData.openedDoors = false
+        body.place = 'bottomLeft'
+
+        if (body.name === 'bottomAngularBody') {
+
+          this.addAngularCaseBottom(body)
+          return
+        }
+
+        if (this.bottomRight.length > 0 && !this.bottomAngularCaseExist) {
+          let angular = boxAngularFloor
+          this.addAngularCaseBottom(angular)
+        }
+        body.rotation.y = threeMath.degToRad(0)
+        const depth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + gapFacade : 0
+
+        body.position.set(-(body.userData.width / 2 + gapFromWall + this.bottomPaddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
+        body.userData.left = true
+        body.userData.top = false
         this.scene.add(body)
       },
       initWalls() {
@@ -351,9 +369,10 @@
         }
 
         const findActionName = (obj) => {
-          if (obj && obj.parent && obj.parent.userData && obj.parent.userData.actionName) return obj.parent.userData.actionName
-          else if (obj && obj.parent.parent && obj.parent.parent.userData.actionName) return obj.parent.parent.userData.actionName
-          return null
+          if (!obj || !obj.parent) return null
+          const parent = obj.parent
+          if (parent && parent.userData && parent.userData.actionName) return parent.userData.actionName
+          else return findActionName(parent)
         }
 
         function onPointerDown(event) {
@@ -391,9 +410,9 @@
       },
       setControlBoxesPosition() {
         const addBottomLeft = this.scene.getObjectByName('addBottomLeft')
-        addBottomLeft.position.set(-6 - this.bottomPaddingLeft - (this.bottomRight[0] ? this.bottomRight[0].userData.depth : 0 ),5,1)
+        if (addBottomLeft) addBottomLeft.position.set(-6 - this.bottomPaddingLeft - (this.bottomRight[0] ? this.bottomRight[0].userData.depth : 0 ),5,1)
         const addBottomRight = this.scene.children.find(({name}) => name === 'addBottomRight')
-        addBottomRight.position.set(-1,5, 6 + this.bottomPaddingRight)
+        if (addBottomRight)  addBottomRight.position.set(-1,5, 6 + this.bottomPaddingRight +(this.bottomLeft[0] && !this.bottomRight[0] ? this.bottomLeft[0].userData.depth : 0 ))
       }
     },
     mounted() {
@@ -447,10 +466,13 @@
         }
       }
 
-
       function render() {
         requestAnimationFrame(render);
+
         vm.setControlBoxesPosition()
+
+
+
         vm.scene.children.filter((it) => it.userData.openedDoors !== undefined).forEach((it) => {
           const group = it.children.find(el => el.name === 'group')
           const leftDoor = group.children.find(el => el.name === 'leftDoor')
