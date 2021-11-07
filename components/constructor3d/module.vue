@@ -9,11 +9,11 @@
               svg(width="7" height="4" viewBox="0 0 7 4" fill="none")
                 path(d="M0 2C0 0.895431 0.89543 0 2 0H4.66667C5.77124 0 6.66667 0.895431 6.66667 2C6.66667 3.10457 5.77124 4 4.66667 4H2C0.895429 4 0 3.10457 0 2Z" :fill="item <= positionNumber ? '#5C6270' : '#E3E5E8'")
         div.box-control
-          button.button.left(:disabled="!selectedCase")
+          button.button.left(:disabled="!selectedCase" @click="moveLeft")
             img(:src="require('./img/arrow.svg')")
-          button.button.right(:disabled="!selectedCase")
+          button.button.right(:disabled="!selectedCase" @click="moveRight")
             img(:src="require('./img/arrow.svg')")
-          button.button.open(:disabled="!selectedCase" @click.stop="openDoors")
+          button.button.open(:disabled="!selectedCase" @click="openDoors")
             img(:src="require('./img/doors.svg')")
           button.button.remove(:disabled="!selectedCase" @click="removeCase")
             img(:src="require('./img/trash.svg')")
@@ -93,15 +93,23 @@
       bottomPaddingRight() {
         const paddingCases = this.bottomRight.reduce((acc, el) => {
           if (el) {
-            const {userData: {width}} = el
+            const {userData: {width, padding}} = el
+            if (padding)  acc += padding
             acc += width
           }
           return acc
         }, 0)
         return paddingCases
       },
-      controlCase() {
-        return boxControl
+      bottomPaddingLeft() {
+         const paddingLeft = this.bottomLeft.reduce((acc, el) => {
+          if (el) {
+            const {userData: {width}} = el
+            acc += width
+          }
+          return acc
+        }, 0)
+        return paddingLeft
       },
       camPos() {
         const vm = this
@@ -161,34 +169,44 @@
       },
       bodyCase() {
         return this.caseConfig
+      },
+      addBottomRight() {
+        let addBottomRight = boxControl.clone()
+        addBottomRight.name = 'addBottomRight'
+        addBottomRight.rotation.y = threeMath.degToRad(-90);
+        return addBottomRight
+      },
+      addBottomLeft() {
+        let addBottomLeft = boxControl.clone()
+        addBottomLeft.name = 'addBottomLeft'
+        addBottomLeft.position.set(-10,5,1)
+        return addBottomLeft
       }
     },
     watch: {
-      selectedCase: {
-        deep: true,
-        handler(v) {
-          const control = this.scene.children.find(el => el.name === 'control')
-          // control.visible = Boolean(v)
-
-          if (v) {
-            // control.rotation.y = v.rotation.y
-            // const left = v.userData.left
-            // let x, y, z
-            // const openedDoors = v.userData.openedDoors
-            // if (left) {
-            //   x = v.position.x - 2.4
-            //   y = v.position.y - 1.5
-            //   z = v.userData.depth + 1 + (openedDoors ? 5 : 0)
-            // } else {
-            //   x = -v.userData.depth - 1 - (openedDoors ? 5 : 0)
-            //   y = v.position.y - 1.5
-            //   z = v.position.z - 2.4
-            // }
-            //
-            // control.position.set(x, y, z)
-          }
-        }
-      }
+      // selectedCase: {
+      //   deep: true,
+      //   handler(v) {
+      //     const control = this.scene.children.find(el => el.name === 'control')
+      //
+      //     if (v) {
+      //       control.rotation.y = v.rotation.y
+      //       const left = v.userData.left
+      //       let x, y, z
+      //       if (left) {
+      //         x = v.position.x - 2.4 + this.bottomPaddingRight
+      //         y = 5
+      //         z = 0
+      //       } else {
+      //         x = 0
+      //         y = 5
+      //         z = this.bottomPaddingRight
+      //       }
+      //
+      //       control.position.set(x, y, z)
+      //     }
+      //   }
+      // }
     },
     methods: {
       moveLeft() {
@@ -215,7 +233,7 @@
         }
         body.rotation.y = threeMath.degToRad(-90)
         body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + 3.5);
-        body.userData.width += 3.5
+        body.userData.padding += 3.5
         body.place = 'bottomRight'
 
         this.bottomLeft.forEach((el) => {
@@ -259,15 +277,8 @@
             }
             body.rotation.y = threeMath.degToRad(0)
             const depth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + gapFacade : 0
-            const paddingLeft = this.bottomLeft.reduce((acc, el) => {
-              if (el) {
-                const {userData: {width}} = el
-                acc += width
-              }
-              return acc
-            }, 0)
 
-            body.position.set(-(body.userData.width / 2 + gapFromWall + paddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
+            body.position.set(-(body.userData.width / 2 + gapFromWall + this.bottomPaddingLeft + depth), body.userData.height / 2 - legsHeight / 2, body.userData.depth / 2 + gapFromWall);
             body.userData.left = true
             body.userData.top = false
           }
@@ -373,6 +384,16 @@
           const {userData: {openedDoors}} = this.selectedCase
           if (this.selectedCase) this.selectedCase.userData.openedDoors = !openedDoors
         }
+      },
+      addControlBoxes() {
+        this.scene.add(this.addBottomRight)
+        this.scene.add(this.addBottomLeft)
+      },
+      setControlBoxesPosition() {
+        const addBottomLeft = this.scene.getObjectByName('addBottomLeft')
+        addBottomLeft.position.set(-6 - this.bottomPaddingLeft - (this.bottomRight[0] ? this.bottomRight[0].userData.depth : 0 ),5,1)
+        const addBottomRight = this.scene.children.find(({name}) => name === 'addBottomRight')
+        addBottomRight.position.set(-1,5, 6 + this.bottomPaddingRight)
       }
     },
     mounted() {
@@ -390,7 +411,8 @@
       vm.scene.add(spotLight);
       vm.scene.add(spotLight.target);
 
-      vm.camera.add(vm.controlCase)
+
+      vm.addControlBoxes()
 
       spotLight.target.position.set(-10, 10, 10);
 
@@ -428,7 +450,7 @@
 
       function render() {
         requestAnimationFrame(render);
-
+        vm.setControlBoxesPosition()
         vm.scene.children.filter((it) => it.userData.openedDoors !== undefined).forEach((it) => {
           const group = it.children.find(el => el.name === 'group')
           const leftDoor = group.children.find(el => el.name === 'leftDoor')

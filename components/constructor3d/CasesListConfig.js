@@ -34,6 +34,7 @@ let facadeMaterials = [
   material,
 ];
 
+const add = require('./img/add.svg')
 const arrow = require('./img/arrow.svg')
 const trash = require('./img/trash.svg')
 const doors = require('./img/doors.svg')
@@ -63,6 +64,8 @@ function loadSVG( url ) {
   });
   return svg
 }
+
+
 
 const boxControl = () => {
   function createButton() {
@@ -95,56 +98,57 @@ const boxControl = () => {
     return button
   }
 
-  let moveLeftSvg = loadSVG(arrow)
-  moveLeftSvg.position.set(-1.2,-1.2,0.5)
+  // let moveLeftSvg = loadSVG(arrow)
+  // moveLeftSvg.position.set(-1.2,-1.2,0.5)
+  //
+  // let moveRightSvg = loadSVG(arrow)
+  // moveRightSvg.rotation.z = Math.degToRad(180)
+  // moveRightSvg.position.set(1.2,1.2,0.5)
+  //
+  // let openDoorSvg = loadSVG(doors)
+  // openDoorSvg.rotation.z = Math.degToRad(180)
+  // openDoorSvg.position.set(1.2,1.2,0.5)
 
-  let moveRightSvg = loadSVG(arrow)
-  moveRightSvg.rotation.z = Math.degToRad(180)
-  moveRightSvg.position.set(1.2,1.2,0.5)
+  let addSvg = loadSVG(add)
+  addSvg.rotation.z = Math.degToRad(180)
+  addSvg.position.set(1.2,1.2,0.5)
 
-  let openDoorSvg = loadSVG(doors)
-  openDoorSvg.rotation.z = Math.degToRad(180)
-  openDoorSvg.position.set(1.2,1.2,0.5)
-
-  let removeSvg = loadSVG(trash)
-  removeSvg.rotation.z = Math.degToRad(180)
-  removeSvg.position.set(1.2,1.2,0.5)
-
-  let moveLeftBtn = createButton(),
-      moveRightBtn = createButton(),
-      openDoorBtn = createButton(),
-      removeBtn = createButton()
-  moveLeftBtn.add(moveLeftSvg)
-  moveRightBtn.add(moveRightSvg)
-  openDoorBtn.add(openDoorSvg)
-  removeBtn.add(removeSvg)
+  let
+    // moveLeftBtn = createButton(),
+    //   moveRightBtn = createButton(),
+    //   openDoorBtn = createButton(),
+      addBtn = createButton()
+  // moveLeftBtn.add(moveLeftSvg)
+  // moveRightBtn.add(moveRightSvg)
+  // openDoorBtn.add(openDoorSvg)
+  addBtn.add(addSvg)
 
 
-  moveLeftBtn.position.set(0, 5, 0);
-  moveLeftBtn.userData.actionName = 'moveLeft'
-  moveLeftBtn.name = 'moveLeft';
-  moveRightBtn.position.set(6, 5, 0);
-  moveRightBtn.userData.actionName = 'moveRight'
-  moveRightBtn.name = 'moveRight';
-  openDoorBtn.position.set(0, 0, 0);
-  openDoorBtn.userData.actionName = 'openDoors'
-  openDoorBtn.name = 'openDoors';
-  removeBtn.position.set(6, 0, 0);
-  removeBtn.userData.actionName = 'remove'
-  removeBtn.name = 'remove';
+  // moveLeftBtn.position.set(0, 5, 0);
+  // moveLeftBtn.userData.actionName = 'moveLeft'
+  // moveLeftBtn.name = 'moveLeft';
+  // moveRightBtn.position.set(6, 5, 0);
+  // moveRightBtn.userData.actionName = 'moveRight'
+  // moveRightBtn.name = 'moveRight';
+  // openDoorBtn.position.set(0, 0, 0);
+  // openDoorBtn.userData.actionName = 'openDoors'
+  // openDoorBtn.name = 'openDoors';
+  addBtn.position.set(0, 0, 0);
+  addBtn.userData.actionName = 'add'
+  addBtn.name = 'add';
 
   let buttonsGroup = new Mesh();
 
-  buttonsGroup.add(moveLeftBtn)
-  buttonsGroup.add(moveRightBtn)
-  buttonsGroup.add(openDoorBtn)
-  buttonsGroup.add(removeBtn)
+  // buttonsGroup.add(moveLeftBtn)
+  // buttonsGroup.add(moveRightBtn)
+  // buttonsGroup.add(openDoorBtn)
+  buttonsGroup.add(addBtn)
 
   buttonsGroup.name='control'
 
   // buttonsGroup.visible = false
   buttonsGroup.scale.set( 0.8, 0.8, 0.8 )
-
+  // buttonsGroup.rotation.y = Math.degToRad(90);
   return buttonsGroup
 }
 
