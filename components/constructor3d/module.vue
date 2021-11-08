@@ -49,8 +49,11 @@
   let GAP_FROM_WALL = SIDE_DEPTH;
 
   import boxes from './CasesListConfig.js'
+  const { boxAngularFloor, boxControl } = boxes
 
-  const {boxAngularFloor, boxControl} = boxes
+  import tableTop from './TableTopList.js'
+
+  const { getTableTop } = tableTop
 
   export default {
     props: {
@@ -123,6 +126,12 @@
           return acc
         }, 0)
         return paddingLeft
+      },
+      tableTopsRight() {
+        return this.scene.children.filter(({name}) => name === 'tableTopRight')
+      },
+      tableTopsLeft() {
+        return this.scene.children.filter(({name}) => name === 'tableTopLeft')
       },
       camPos() {
         const vm = this
@@ -319,13 +328,13 @@
             const rightBoxInScene = this.scene.children.find(({ uuid }) => uuid === rightBox.uuid)
 
             const { x: curX, y: curY, z: curZ } = currentBox.position
-            const { x: leftX, y: leftY, z: leftZ } = rightBoxInScene.position
+            const { x: rightX, y: rightY, z: rightZ } = rightBoxInScene.position
 
             currentBox.userData.sort -= 1
             rightBoxInScene.userData.sort += 1
 
-            currentBox.position.set(leftX, curY, curZ)
-            rightBoxInScene.position.set(leftX - currentWidth, leftY, leftZ)
+            currentBox.position.set(rightX, curY, curZ)
+            rightBoxInScene.position.set(rightX - currentWidth, rightY, rightZ)
           }
         }
 
@@ -336,13 +345,13 @@
             const rightBoxInScene = this.scene.children.find(({ uuid }) => uuid === rightBox.uuid)
 
             const { x: curX, y: curY, z: curZ } = currentBox.position
-            const { x: leftX, y: leftY, z: leftZ } = rightBoxInScene.position
+            const { x: rightX, y: rightY, z: rightZ } = rightBoxInScene.position
 
             currentBox.userData.sort += 1
             rightBoxInScene.userData.sort -= 1
 
-            currentBox.position.set(curX, curY, leftZ)
-            rightBoxInScene.position.set(leftX, leftY, leftZ - currentWidth)
+            currentBox.position.set(curX, curY, rightZ)
+            rightBoxInScene.position.set(rightX, rightY, rightZ - currentWidth)
           }
         }
       },
@@ -440,6 +449,8 @@
         body.userData.sort = count
 
         this.scene.add(body)
+
+        this.addTableTopRight()
       },
       addBottomLeftToScene() {
         let body = this.bodyCase.clone();
@@ -467,6 +478,27 @@
         body.userData.sort = count
 
         this.scene.add(body)
+
+        this.addTableTopLeft()
+      },
+      addTableTopRight() {
+
+
+        const tableTop = getTableTop({ width: this.bottomPaddingRight + GAP_FROM_WALL, height: 0.38 })
+
+        tableTop.position.set(-(6 / 2), 10 + 0.38 / 2,  (this.bottomPaddingRight + GAP_FROM_WALL) / 2)
+        tableTop.rotation.y = threeMath.degToRad(-90);
+        tableTop.name = 'tableTopRight'
+
+        this.scene.add(tableTop)
+      },
+      addTableTopLeft() {
+        const tableTop = getTableTop({ width: this.bottomPaddingLeft + GAP_FROM_WALL, height: 0.38 })
+
+        tableTop.position.set(-((this.bottomPaddingLeft + GAP_FROM_WALL) / 2), 10 + 0.38 / 2, 6 / 2 )
+        tableTop.name = 'tableTopLeft'
+
+        this.scene.add(tableTop)
       },
       initWalls() {
         let wallWidth = 60;
