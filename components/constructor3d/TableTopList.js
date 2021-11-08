@@ -23,12 +23,13 @@ const getTableTop = ({width, height, type, color}) => {
 
   tableTop.name = 'tableTop'
 
-  tableTop.userData.width = width
-  tableTop.userData.height = height
-  tableTop.userData.depth = depth
-  tableTop.userData.maxWidth = getMaxWidth(type)
+
   const tableTopGroup = new Group()
   tableTopGroup.add(tableTop)
+  tableTopGroup.userData.width = width
+  tableTopGroup.userData.height = height
+  tableTopGroup.userData.depth = depth
+  tableTopGroup.userData.maxWidth = getMaxWidth(type)
 
   // tableTopGroup.position.set(-depth / 2, paddingBottom + height / 2, width / 2 )
   return tableTopGroup
