@@ -9,6 +9,7 @@
             v-model="kitchen"
             :caseConfig="caseConfig"
             @selectCase="selectCase"
+            @removeItem="removeItem"
           )
         div.column.config
           select-elements(
@@ -18,7 +19,7 @@
             @remove="$refs.module.removeCase()"
           )
       calculate-order(
-        v-model="kitchen"
+        :kitchen="kitchen"
         @removeItem="removeItem"
       )
 
@@ -41,7 +42,11 @@
       return {
         caseConfig: null,
         kitchen: {
-          currentConfig: null,
+          currentConfig: {
+            caseConfig: null,
+            tableTopConfig: null,
+            facadeConfig: null,
+          },
           order: {
             cases: [],
             facades: [],
@@ -60,8 +65,11 @@
       }
     },
     methods: {
-      removeItem(uuid) {
-        this.$refs.kitchen.removeItem(uuid)
+      removeItem({uuid, type}) {
+        this.$refs.kitchen.removeItem({uuid, type})
+        const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
+        if (idx > -1) this.kitchen.order[type].splice(idx, 1)
+
       },
       selectCase(val) {
         console.log(val);

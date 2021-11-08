@@ -6,7 +6,7 @@
         .calc-form__table(v-if="cases.length")
           .calc-form__row.calc-form__row_header
             .calc-form__col.calc-form__col_number №
-            .calc-form__col Форма
+            .calc-form__col.calc-form__col_name Форма
             .calc-form__col Материал
             .calc-form__col Размер
             .calc-form__col Цвет
@@ -20,15 +20,15 @@
             .calc-form__col {{item.size}}
             .calc-form__col {{item.color}}
             .calc-form__col {{item.value}}
-            .calc-form__col {{item.unit}}
+            .calc-form__col {{item.price }}
             .calc-form__col.calc-form__col_button
-              img.delete(:src="require('./img/delete.svg')" @click="removeItem(item.uuid)")
+              img.delete(:src="require('./img/delete.svg')" @click="removeItem({uuid: item.uuid, type: 'cases'})")
 
         .calc-form__subtitle(v-if="facades.length") Фасады
         .calc-form__table(v-if="facades.length")
           .calc-form__row.calc-form__row_header
             .calc-form__col.calc-form__col_number №
-            .calc-form__col Форма
+            .calc-form__col.calc-form__col_name Форма
             .calc-form__col Материал
             .calc-form__col Размер
             .calc-form__col Цвет
@@ -42,15 +42,15 @@
             .calc-form__col {{item.size}}
             .calc-form__col {{item.color}}
             .calc-form__col {{item.value}}
-            .calc-form__col {{item.unit}}
+            .calc-form__col {{item.price}}
             .calc-form__col.calc-form__col_button
-              img.delete(:src="require('./img/delete.svg')" @click="removeItem(item.uuid)")
+              img.delete(:src="require('./img/delete.svg')" @click="removeItem({uuid: item.uuid, type: 'facades'})")
 
         .calc-form__subtitle(v-if="tableTops.length") Столешницы
         .calc-form__table(v-if="tableTops.length")
           .calc-form__row.calc-form__row_header
             .calc-form__col.calc-form__col_number №
-            .calc-form__col Форма
+            .calc-form__col.calc-form__col_name Форма
             .calc-form__col Материал
             .calc-form__col Размер
             .calc-form__col Цвет
@@ -64,16 +64,16 @@
             .calc-form__col {{item.size}}
             .calc-form__col {{item.color}}
             .calc-form__col {{item.value}}
-            .calc-form__col {{item.unit}}
+            .calc-form__col {{item.price}}
             .calc-form__col.calc-form__col_button
-              img.delete(:src="require('./img/delete.svg')" @click="removeItem(item.uuid)")
+              img.delete(:src="require('./img/delete.svg')" @click="removeItem({uuid: item.uuid, type: 'tableTops'})")
 </template>
 
 <script>
   export default {
     name: "CalculateOrder",
     props: {
-      value: {
+      kitchen: {
         type: Object,
         default: () => ({
           currentConfig: null,
@@ -87,13 +87,13 @@
     },
     computed: {
       cases() {
-        return this.value?.cases || []
+        return this.kitchen?.order?.cases || []
       },
       facades() {
-        return this.value?.facades || []
+        return this.kitchen?.order?.facades || []
       },
       tableTops() {
-        return this.value?.tableTops || []
+        return this.kitchen?.order?.tableTops || []
       }
 
     },
@@ -167,7 +167,7 @@
     }
 
     &_name {
-      flex: 0 0 auto;
+      flex: 1 1 100%;
     }
 
     &_button {

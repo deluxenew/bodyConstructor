@@ -74,6 +74,21 @@
           color: ''
         })
       },
+      value: {
+        type: Object,
+        default: () => ({
+          currentConfig: {
+            caseConfig: null,
+            tableTopConfig: null,
+            facadeConfig: null,
+          },
+          order: {
+            cases: [],
+            facades: [],
+            tableTops: []
+          }
+        })
+      }
     },
     data() {
       return {
@@ -89,6 +104,36 @@
       }
     },
     computed: {
+      cases: {
+        get() {
+          return this.value?.order?.cases
+        },
+        set(v) {
+          let kitchen = this.value
+          if (kitchen && kitchen.order && kitchen.order.cases) {
+            const mapped = v.map(({uuid, userData: { form, material, size, color, value, price, sort }}) => {
+              return {
+                uuid,
+                form,
+                material,
+                size,
+                color,
+                value,
+                price,
+                sort
+              }
+            })|| []
+            mapped.forEach((el) => {
+              const { uuid } = el
+              const idx = kitchen.order.cases.findIndex((it) => uuid === it.uuid)
+              if (idx > -1) kitchen.order.cases.splice(idx, 1, el)
+              else kitchen.order.cases.push(el)
+            })
+
+            this.$emit('input', kitchen)
+          }
+        },
+      },
       bottomRight() {
         return this.scene.children
             .filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomRight')
@@ -248,6 +293,24 @@
       },
     },
     watch: {
+      bottomRight: {
+        deep: true,
+        handler(v) {
+          this.cases = v
+        }
+      },
+      bottomLeft: {
+        deep: true,
+        handler(v) {
+          this.cases = v
+        }
+      },
+      // bottomRight: {
+      //   deep: true,
+      //   handler(v) {
+      //     this.cases = v
+      //   }
+      // },
       'tableTopConfig.showTableTop'(v) {
         this.toggleTableTops(v)
       },
@@ -374,11 +437,16 @@
           }
         }
       },
-      removeItem(uuid) {
+      removeItem({uuid, type}) {
         const vm = this
         const removeItem = (uuid) => {
           const obj = vm.scene.getObjectByProperty('uuid', uuid)
-          if (obj) vm.scene.remove(obj)
+          if (obj) {
+            if (type === 'cases') {
+              vm.selectedCase = obj
+              vm.removeCase()
+            }
+          }
         }
         removeItem(uuid)
       },
@@ -416,6 +484,7 @@
                   })
             }
           }
+          this.$emit('removeItem', {uuid: this.selectedCase.uuid, type: 'cases'})
           this.scene.remove(selectedObject);
           this.selectedCase = null
 
@@ -501,7 +570,6 @@
               addNewTableTop(tableTopsCount * this.tableTopConfig.maxWidth, fraction, this.tableTopConfig.height, this.tableTopConfig.type, this.tableTopConfig.color)
             }
           }
-
         }
       },
       swapCam() {

@@ -201,6 +201,14 @@ const boxStandardFloor = () => {
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
+
+  bodyCase.userData.form = 'Нижний шкаф'
+  bodyCase.userData.material = 'деревянный'
+  bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
+  bodyCase.userData.color = 'Белый'
+  bodyCase.userData.value = 1
+  bodyCase.userData.price = 1500
+
   bodyCase.position.set(0,0,0);
 
   return bodyCase
@@ -297,6 +305,13 @@ const boxAngularFloor = () => {
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
   bodyCase.userData.padding = 3.5
+
+  bodyCase.userData.form = 'Нижний угловой шкаф'
+  bodyCase.userData.material = 'деревянный'
+  bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
+  bodyCase.userData.color = 'Белый'
+  bodyCase.userData.value = 1
+  bodyCase.userData.price = 2100
 
 
   bodyCase.position.set(0,0,0);
