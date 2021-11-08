@@ -87,7 +87,18 @@
     },
     computed: {
       cases() {
-        return this.kitchen?.order?.cases || []
+        return this.kitchen?.order?.cases.map(({uuid, userData: { form, material, size, color, value, price, sort }}) => {
+          return {
+            uuid,
+            form,
+            material,
+            size,
+            color,
+            value,
+            price,
+            sort
+          }
+        }) || []
       },
       facades() {
         return this.kitchen?.order?.facades || []
@@ -173,6 +184,16 @@
     &_button {
       flex: 0 0 24px;
       justify-content: center;
+
+      .delete {
+        cursor: pointer;
+        border-radius: 50%;
+        transition: .2s ease-in-out;
+
+        &:hover {
+          transform: scale(1.2)
+        }
+      }
     }
   }
 

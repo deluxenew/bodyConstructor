@@ -50,8 +50,11 @@
   let TABLE_TOP_PADDING_BOTTOM = 10
   let GAP_FROM_WALL = SIDE_DEPTH;
 
+  import controls from './ControlBoxConfig.js'
+  const { boxControl } = controls
+
   import boxes from './CasesListConfig.js'
-  const { boxAngularFloor, boxControl } = boxes
+  const { boxAngularFloor,  } = boxes
 
   import tableTop from './TableTopList.js'
 
@@ -123,7 +126,7 @@
                 sort
               }
             })|| []
-            mapped.forEach((el) => {
+            v.forEach((el) => {
               const { uuid } = el
               const idx = kitchen.order.cases.findIndex((it) => uuid === it.uuid)
               if (idx > -1) kitchen.order.cases.splice(idx, 1, el)
@@ -462,8 +465,9 @@
             this.bottomLeft
                 .filter((el, index) => index > leftIdx)
                 .forEach((el) => {
-                  const { x, y, z } = el.position
-                  el.position.set(x + width, y, z);
+                  console.log(el.position);
+                  let { x, y, z } = el.position
+                  el.position.set(el.position.x + width + (padding ? padding : 0), y, z);
                   el.userData.sort -= 1
             })
           }
@@ -484,13 +488,14 @@
                   })
             }
           }
-          this.$emit('removeItem', {uuid: this.selectedCase.uuid, type: 'cases'})
+
           this.scene.remove(selectedObject);
           this.selectedCase = null
+          this.$emit('removeItem', {uuid: selectedObject.uuid, type: 'cases'})
 
           const removeTableTop = (uuid) => {
-            const tableTopObj = vm.scene.getObjectByProperty('uuid', uuid)
-            if (tableTopObj) vm.scene.remove(tableTopObj)
+            const tableTopObj = this.scene.getObjectByProperty('uuid', uuid)
+            if (tableTopObj) this.scene.remove(tableTopObj)
           }
 
           if (left) {
