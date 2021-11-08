@@ -5,7 +5,8 @@
       div.constructor
         div.column.preview
           module(
-            ref="module"
+            ref="kitchen"
+            v-model="kitchen"
             :caseConfig="caseConfig"
             @selectCase="selectCase"
           )
@@ -16,6 +17,11 @@
             :elementVariants="boxes"
             @remove="$refs.module.removeCase()"
           )
+      calculate-order(
+        v-model="kitchen"
+        @removeItem="removeItem"
+      )
+
 </template>
 
 <script>
@@ -23,15 +29,25 @@
   import boxes from '~/components/constructor3d/CasesListConfig.js'
   import Module from '~/components/constructor3d/module'
   import SelectElements from '~/components/constructor3d/SelectElements.vue'
+  import CalculateOrder from "../components/constructor3d/CalculateOrder";
 
   export default {
     components: {
+      CalculateOrder,
       Module,
       SelectElements
     },
     data() {
       return {
-        caseConfig: null
+        caseConfig: null,
+        kitchen: {
+          currentConfig: null,
+          order: {
+            cases: [],
+            facades: [],
+            tableTops: []
+          }
+        }
       }
     },
     computed: {
@@ -44,6 +60,9 @@
       }
     },
     methods: {
+      removeItem(uuid) {
+        this.$refs.kitchen.removeItem(uuid)
+      },
       selectCase(val) {
         console.log(val);
       },

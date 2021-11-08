@@ -374,6 +374,14 @@
           }
         }
       },
+      removeItem(uuid) {
+        const vm = this
+        const removeItem = (uuid) => {
+          const obj = vm.scene.getObjectByProperty('uuid', uuid)
+          if (obj) vm.scene.remove(obj)
+        }
+        removeItem(uuid)
+      },
       removeCase() {
         const vm = this
         const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedCase.uuid);
