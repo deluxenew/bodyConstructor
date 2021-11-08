@@ -126,7 +126,7 @@
                 sort
               }
             })|| []
-            v.forEach((el) => {
+            mapped.forEach((el) => {
               const { uuid } = el
               const idx = kitchen.order.cases.findIndex((it) => uuid === it.uuid)
               if (idx > -1) kitchen.order.cases.splice(idx, 1, el)

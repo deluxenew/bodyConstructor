@@ -87,18 +87,7 @@
     },
     computed: {
       cases() {
-        return this.kitchen?.order?.cases.map(({uuid, userData: { form, material, size, color, value, price, sort }}) => {
-          return {
-            uuid,
-            form,
-            material,
-            size,
-            color,
-            value,
-            price,
-            sort
-          }
-        }) || []
+        return this.kitchen?.order?.cases || []
       },
       facades() {
         return this.kitchen?.order?.facades || []
