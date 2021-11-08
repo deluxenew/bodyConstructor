@@ -149,15 +149,19 @@
         const vm = this
 
         function povSet(wL, wR, camAngle, camZ) {
+          wL += 3
+          wR += 3
+          const heightForCam = 20
           let alfa = Math.atan(wL / wR);
           let g = Math.sqrt(Math.pow(wL, 2) + Math.pow(wR, 2));
           let a = Math.pow(wL, 2) / g;
           let b = g - a;
           let h = Math.sqrt(a * b);
           let h2 = Math.tan(threeMath.degToRad(90 - camAngle / 2)) * g / 2 + h / 2;
-
-          // vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
-          // vm.scene.position.x = (a - b) / 2;
+          vm.camera.rotation.x = threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
+          vm.camera.position.y = 16;
+          vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
+          vm.scene.position.x = (a - b) / 2;
           if (h2 > camZ) {
             vm.camera.position.z = h2;
           } else {
@@ -742,8 +746,8 @@
         }
       },
       initWalls() {
-        let wallWidth = 60;
-        let wallHeight = 27;
+        let wallWidth = 60 * 2;
+        let wallHeight = 27 * 2;
         let wallGeometry = new PlaneGeometry(wallWidth, wallHeight);
         let floorGeometry = new PlaneGeometry(wallWidth, wallWidth);
         let floorMaterial = new MeshStandardMaterial({
@@ -771,14 +775,17 @@
         const wallR = new Mesh(wallGeometry, wallMaterial);
         const floor = new Mesh(floorGeometry, floorMaterial);
 
-        wall.material.normalMap.repeat.set(8, 4);
+        wall.material.normalMap.repeat.set(8 * 2, 4 * 2);
         wall.material.needsUpdate = true;
+        wallR.material.normalMap.repeat.set(4 * 2, 8 * 2);
+        wallR.material.needsUpdate = true;
         wall.material.normalMap.wrapS = wall.material.normalMap.wrapT = RepeatWrapping;
+        wallR.material.normalMap.wrapS = wallR.material.normalMap.wrapT = RepeatWrapping;
         wall.name = "wall"
 
         wallR.name = "wallR"
 
-        floor.material.normalMap.repeat.set(3, 3);
+        floor.material.normalMap.repeat.set(3 * 2, 3 * 2);
         floor.material.needsUpdate = true;
         floor.material.normalMap.wrapS = floor.material.normalMap.wrapT = RepeatWrapping;
 
@@ -876,8 +883,8 @@
 
       vm.scene.rotation.y = threeMath.degToRad(26);
 
-      vm.camera.position.set(-4, 16, 50);
-      vm.camera.rotation.x = threeMath.degToRad(-20);
+      // vm.camera.position.set(-4, 16, 50);
+      // vm.camera.rotation.x = threeMath.degToRad(-20);
 
       spotLight.intensity = 1.5
 
