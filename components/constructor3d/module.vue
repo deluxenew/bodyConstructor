@@ -43,10 +43,10 @@
 
   const windows = {innerHeight: 600, innerWidth: 800}
 
-  let legsHeight = 1;
-  let gapFacade = 0.1;
-  let sideDepth = .3;
-  let gapFromWall = sideDepth;
+  let LEGS_HEIGHT = 1;
+  let GAP_FACADE = 0.1;
+  let SIDE_DEPTH = .3;
+  let GAP_FROM_WALL = SIDE_DEPTH;
 
   import boxes from './CasesListConfig.js'
 
@@ -78,16 +78,26 @@
         return this.scene.children
             .filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomRight')
             .sort((a, b) => {
-             if ( a.name < b.name) return 1
-             if ( a.name > b.name) return -1
+             if ( a.userData.sort > b.userData.sort) return 1
+             if ( a.userData.sort < b.userData.sort) return -1
               return 0
             })
       },
       bottomRightWhiteoutAngular() {
         return this.scene.children.filter(({name, place}) => ['body'].includes(name) && place === 'bottomRight')
+          .sort((a, b) => {
+            if ( a.userData.sort > b.userData.sort) return 1
+            if ( a.userData.sort < b.userData.sort) return -1
+            return 0
+          })
       },
       bottomLeft() {
         return this.scene.children.filter(({name, place}) => ['body'].includes(name) && place === 'bottomLeft')
+          .sort((a, b) => {
+            if ( a.userData.sort > b.userData.sort) return 1
+            if ( a.userData.sort < b.userData.sort) return -1
+            return 0
+          })
       },
       bottomAngularCaseExist() {
         const angular = this.bottomRight.find(({name, place}) => name === 'bottomAngularBody' && place === 'bottomRight')
@@ -191,14 +201,16 @@
         if (!currentUuid) return false
         const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentUuid)
         const rightIdx = this.bottomRightWhiteoutAngular.findIndex(({uuid}) => uuid === currentUuid)
-        return (leftIdx > 0 && this.bottomLeft.length > 1) || (rightIdx > -1 && rightIdx < this.bottomRightWhiteoutAngular.length - 1 && this.bottomRightWhiteoutAngular.length > 1)
+        return (leftIdx > 0 && this.bottomLeft.length > 1)
+          || (rightIdx > -1 && rightIdx < this.bottomRightWhiteoutAngular.length - 1 && this.bottomRightWhiteoutAngular.length > 1)
       },
       isMoveLeftActive() {
         const currentUuid = this.selectedCase?.uuid
         if (!currentUuid) return false
         const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentUuid)
         const rightIdx = this.bottomRightWhiteoutAngular.findIndex(({uuid}) => uuid === currentUuid)
-        return (rightIdx > 0 && this.bottomRightWhiteoutAngular.length > 1) || (leftIdx > -1 && leftIdx < this.bottomLeft.length - 1 && this.bottomLeft.length > 1)
+        return (rightIdx > 0 && this.bottomRightWhiteoutAngular.length > 1)
+          || (leftIdx > -1 && leftIdx < this.bottomLeft.length - 1 && this.bottomLeft.length > 1)
       },
       isAngularIsSelected() {
         return this.selectedCase?.name === 'bottomAngularBody'
@@ -253,10 +265,86 @@
     },
     methods: {
       moveLeft() {
+        const currentBox = this.scene.children.find(({uuid}) => this.selectedCase.uuid === uuid)
+        const { userData: { sort: currentSort, width: currentWidth } } = currentBox
 
+        const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentBox.uuid)
+        const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === currentBox.uuid)
+
+        if (leftIdx > -1) {
+          const leftBox = this.bottomLeft.find(({ userData: { sort } }) => sort === currentSort + 1)
+
+          if (leftBox) {
+            const leftBoxInScene = this.scene.children.find(({ uuid }) => uuid === leftBox.uuid)
+
+            const { x: curX, y: curY, z: curZ } = currentBox.position
+            const { x: leftX, y: leftY, z: leftZ } = leftBoxInScene.position
+
+            currentBox.userData.sort += 1
+            leftBoxInScene.userData.sort -= 1
+
+            currentBox.position.set(leftX, curY, curZ)
+            leftBoxInScene.position.set(leftX + currentWidth, leftY, leftZ)
+          }
+        }
+
+        if (rightIdx > -1) {
+          const leftBox = this.bottomRightWhiteoutAngular.find(({ userData: { sort } }) => sort === currentSort - 1)
+
+          if (leftBox) {
+            const leftBoxInScene = this.scene.children.find(({ uuid }) => uuid === leftBox.uuid)
+
+            const { x: curX, y: curY, z: curZ } = currentBox.position
+            const { x: leftX, y: leftY, z: leftZ } = leftBoxInScene.position
+
+            currentBox.userData.sort -= 1
+            leftBoxInScene.userData.sort += 1
+
+            currentBox.position.set(curX, curY, leftZ)
+            leftBoxInScene.position.set(leftX, leftY, leftZ + currentWidth)
+          }
+        }
       },
       moveRight() {
+        const currentBox = this.scene.children.find(({uuid}) => this.selectedCase.uuid === uuid)
+        const { userData: { sort: currentSort, width: currentWidth } } = currentBox
 
+        const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentBox.uuid)
+        const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === currentBox.uuid)
+
+        if (leftIdx > -1) {
+          const rightBox = this.bottomLeft.find(({ userData: { sort } }) => sort === currentSort - 1)
+
+          if (rightBox) {
+            const rightBoxInScene = this.scene.children.find(({ uuid }) => uuid === rightBox.uuid)
+
+            const { x: curX, y: curY, z: curZ } = currentBox.position
+            const { x: leftX, y: leftY, z: leftZ } = rightBoxInScene.position
+
+            currentBox.userData.sort -= 1
+            rightBoxInScene.userData.sort += 1
+
+            currentBox.position.set(leftX, curY, curZ)
+            rightBoxInScene.position.set(leftX - currentWidth, leftY, leftZ)
+          }
+        }
+
+        if (rightIdx > -1) {
+          const rightBox = this.bottomRightWhiteoutAngular.find(({ userData: { sort } }) => sort === currentSort + 1)
+
+          if (rightBox) {
+            const rightBoxInScene = this.scene.children.find(({ uuid }) => uuid === rightBox.uuid)
+
+            const { x: curX, y: curY, z: curZ } = currentBox.position
+            const { x: leftX, y: leftY, z: leftZ } = rightBoxInScene.position
+
+            currentBox.userData.sort += 1
+            rightBoxInScene.userData.sort -= 1
+
+            currentBox.position.set(curX, curY, leftZ)
+            rightBoxInScene.position.set(leftX, leftY, leftZ - currentWidth)
+          }
+        }
       },
       removeCase() {
         const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedCase.uuid);
@@ -271,6 +359,7 @@
                 .forEach((el) => {
                   const { x, y, z } = el.position
                   el.position.set(x + width, y, z);
+                  el.userData.sort -= 1
             })
           }
           if (rightIdx > -1) {
@@ -279,6 +368,7 @@
                 .forEach((el) => {
                   const { x, y, z } = el.position
                   el.position.set(x, y, z - width - (padding ? padding : 0));
+                  el.userData.sort -= 1
             })
             if (selectedObject.name === 'bottomAngularBody') {
               this.bottomLeft
@@ -304,7 +394,7 @@
         }
         body.rotation.y = threeMath.degToRad(-90)
         const { depth, height, width, padding } =  body.userData
-        body.position.set(-(depth / 2 + gapFromWall), height / 2 - legsHeight / 2, width / 2 + gapFromWall + 3.5);
+        body.position.set(-(depth / 2 + GAP_FROM_WALL), height / 2 - LEGS_HEIGHT / 2, width / 2 + GAP_FROM_WALL + 3.5);
 
         body.place = 'bottomRight'
 
@@ -318,6 +408,12 @@
           el.position.set(x, y, z + width + padding);
         })
 
+        body.userData.sort = 0
+
+        this.bottomRight
+          .forEach((el) => {
+            el.userData.sort += 1
+          })
         this.scene.add(body)
       },
       addBottomRightToScene() {
@@ -336,9 +432,13 @@
           this.addAngularCaseBottom(angular)
         }
         body.rotation.y = threeMath.degToRad(-90)
-        body.position.set(-(body.userData.depth / 2 + gapFromWall), body.userData.height / 2 - legsHeight / 2, body.userData.width / 2 + gapFromWall + this.bottomPaddingRight);
+        body.position.set(-(body.userData.depth / 2 + GAP_FROM_WALL), body.userData.height / 2 - LEGS_HEIGHT / 2, body.userData.width / 2 + GAP_FROM_WALL + this.bottomPaddingRight);
         body.userData.left = false
         body.userData.top = false
+
+        const count = this.bottomRight.length
+        body.userData.sort = count
+
         this.scene.add(body)
       },
       addBottomLeftToScene() {
@@ -357,11 +457,15 @@
           this.addAngularCaseBottom(boxAngularFloor)
         }
         body.rotation.y = threeMath.degToRad(0)
-        const needDepth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + gapFacade : 0
+        const needDepth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + GAP_FACADE : 0
 
-        body.position.set(-(width / 2 + gapFromWall + this.bottomPaddingLeft + needDepth), height / 2 - legsHeight / 2, depth / 2 + gapFromWall);
+        body.position.set(-(width / 2 + GAP_FROM_WALL + this.bottomPaddingLeft + needDepth), height / 2 - LEGS_HEIGHT / 2, depth / 2 + GAP_FROM_WALL);
         body.userData.left = true
         body.userData.top = false
+
+        const count = this.bottomLeft.length
+        body.userData.sort = count
+
         this.scene.add(body)
       },
       initWalls() {

@@ -82,7 +82,7 @@ const boxControl = () => {
     f_rect( roundedRectShape, -15, -15, 30, 30, 10 );
 
     let material = new MeshLambertMaterial( { color: 0xffffff, side: DoubleSide } );
-    let extrudeSettings = { depth: 1, bevelEnabled: true, bevelSegments: 0, steps: 5, bevelSize: 2, bevelThickness: 2 };
+    let extrudeSettings = { depth: 1, bevelEnabled: false, bevelSegments: 0, steps: 5, bevelSize: 2, bevelThickness: 2 };
     let geometry = new ExtrudeBufferGeometry( roundedRectShape, extrudeSettings );
 
     let s = 0.1;
@@ -109,7 +109,7 @@ const boxControl = () => {
   buttonsGroup.add(addBtn)
   buttonsGroup.name='control'
 
-  buttonsGroup.scale.set( 0.8, 0.8, 0.8 )
+  buttonsGroup.scale.set( 1, 1, 1 )
   return buttonsGroup
 }
 
