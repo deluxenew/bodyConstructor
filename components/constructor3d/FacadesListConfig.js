@@ -30,14 +30,13 @@ const colors = [
     type: 'laminate'
   },
 ]
+
 const sideDepth = .3;
-
-
 
 const getMaterial = (url) => {
   const facadeTextureLoader = new TextureLoader();
 
- const facadeMaterial = new MeshStandardMaterial({
+  const facadeMaterial = new MeshStandardMaterial({
     color: 0xffffff,
     map: facadeTextureLoader.load(url),
   });
@@ -86,19 +85,50 @@ const getFacade = (colorId, width, height) => {
 
 const ldsp = (colorId, width, height) => {
   const facade = getFacade(colorId, width, height)
-  facade.userData.type = 'ldsp'
-
- return facade
-}
-
-const mdf = (colorId, width, height) => {
-  const facade = getFacade(colorId, width, height)
-  facade.userData.type = 'mdf'
+  facade.userData.facade = 'ldsp'
+  facade.userData.facadeName = 'ЛДСП'
+  facade.userData.facadeDescription = 'Ламинированная древесно - стружечная плита. Кромка 0,4 мм со всех сторон. Качественное покрытие. Устойчивость к температурным воздействиям. Упаковка: стрейч плёнка.'
+  facade.userData.types = [{
+    id: 'laminate',
+    name: 'Ламинированный',
+    description: 'Фасад с ламинированной пленкой на 5 граней'
+  },
+    {
+      id: 'lacquered',
+      name: 'Лакированный',
+      description: 'Фасад с покраской и нанесением лака'
+    }
+  ]
 
   return facade
 }
 
+const mdf = (colorId, width, height) => {
+  const facade = getFacade(colorId, width, height)
+  facade.userData.facade = 'mdf'
+  facade.userData.facadeName = 'МДФ'
+  facade.userData.facadeDescription = 'Покрытие - пленка ПВХ. Высокая устойчивость к УФ - лучам, сколам, истиранию, воздействию чистящих средств, изменениям влажности и высоким температурам. Упаковка: стрейч плёнка.'
+  facade.userData.types = [{
+    id: 'milled',
+    name: 'Фрезерованный',
+    description: 'Фасад с фрезерованными гранями и внутренним рельефом'
+  },
+    {
+      id: 'lacquered',
+      name: 'Лакированный',
+      description: 'Фасад с покраской и нанесением лака'
+    }
+  ]
+  return facade
+}
+
+const getFacadeByColorId = (colorId) => {
+  const color = colors.find(({id}) => colorId === id)
+  if (color) return color
+}
+
 export default {
-  ldsp: ldsp(),
-  mdf: mdf()
+  getFacadeByColorId,
+  ldsp,
+  mdf
 }

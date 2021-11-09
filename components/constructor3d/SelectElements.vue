@@ -20,8 +20,8 @@
           :class="{active: item.name === model.name}"
           @click="currentItem = item"
         )
-          img.select-elements__img(:src="item.userData.img")
-          | {{item ? item.userData.form : ''}}
+          img.select-elements__img(v-if="item.userData" :src="item.userData.img")
+          | {{item && item.userData ? item.userData.form : ''}}
 </template>
 
 <script>

@@ -1,35 +1,16 @@
-import {BoxGeometry, CylinderGeometry, Math, Mesh, MeshStandardMaterial , Object3D, TextureLoader} from "three";
+import {BoxGeometry, Group, CylinderGeometry, Math, Mesh, MeshStandardMaterial , Object3D} from "three";
 
 const legsHeight = 1;
-const gapFacade = 0.1;
 const sideDepth = .3;
 const sideTop = 1.4;
 const legsRad = 0.3;
 const legFrontMargin = 0.6;
 
-const facadeTextureLoader = new TextureLoader();
+const material = new MeshStandardMaterial({transparent: true});
 
-const facadeMaterial = new MeshStandardMaterial({
-  color: 0xffffff,
-  map: facadeTextureLoader.load(require('./img/wood-600.png')),
-});
-
-const material = new MeshStandardMaterial({color: 0xffffff,});
-material.roughness = 0.3;
-material.metalness = 0.05;
-
-const legMaterial = new MeshStandardMaterial({color: 0xffffff,});
+const legMaterial = new MeshStandardMaterial({color: 0xffffff});
 legMaterial.roughness = 0.1;
 legMaterial.metalness = 0.5;
-
-let facadeMaterials = [
-  facadeMaterial,
-  facadeMaterial,
-  facadeMaterial,
-  facadeMaterial,
-  facadeMaterial,
-  material,
-];
 
 const boxStandardFloor = () => {
   let bodyWidth = 10;
@@ -44,7 +25,6 @@ const boxStandardFloor = () => {
   let gSideBack = new BoxGeometry(boxWidth - sideDepth * 2, boxHeight, sideDepth);
   let gSideBottom = new BoxGeometry(boxWidth - sideDepth * 2, boxDepth, sideDepth);
   let gSideTop = new BoxGeometry(boxWidth - sideDepth * 2, sideTop, sideDepth);
-  let gFacade = new BoxGeometry(boxWidth / 2 - gapFacade / 2, boxHeight, sideDepth);
   let gLegFront = new BoxGeometry(boxWidth, legsHeight, sideDepth);
   let gLegs = new CylinderGeometry(
     legsRad, legsRad, legsHeight, 16);
@@ -56,25 +36,26 @@ const boxStandardFloor = () => {
   let sideShelf = new Mesh(gSideBottom, material);
   let sideTopFront = new Mesh(gSideTop, material);
   let sideTopBack = new Mesh(gSideTop, material);
-  let facedeLeft = new Mesh(gFacade, facadeMaterials);
-  let facedeRight = new Mesh(gFacade, facadeMaterials);
+  let facadeLeft = new Group()
+  let facadeRight = new Group();
   let legFront = new Mesh(gLegFront, material);
   let legLeft = new Mesh(gLegs, legMaterial);
 
-  let objFacedeLeft = new Object3D();
-  objFacedeLeft.add(facedeLeft);
-  facedeLeft.position.x = boxWidth / 4 - sideDepth / 2;
-  objFacedeLeft.position.x = -boxWidth / 2 + sideDepth / 2;
-  objFacedeLeft.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacedeLeft.name = 'leftDoor'
+  let objFacadeLefteRight = new Group();
+  objFacadeLefteRight.add(facadeLeft);
+  facadeLeft.name = 'doorBox'
+  facadeLeft.position.x = boxWidth / 4 - sideDepth / 2;
+  objFacadeLefteRight.position.x = -boxWidth / 2 + sideDepth / 2;
+  objFacadeLefteRight.position.z = boxDepth / 2 + sideDepth / 2;
+  objFacadeLefteRight.name = 'leftDoor'
 
-  let objFacedeRight = new Object3D();
-  objFacedeRight.add(facedeRight);
-  facedeRight.position.x = -boxWidth / 4 + sideDepth / 2;
-  objFacedeRight.position.x = boxWidth / 2 - sideDepth / 2;
-  objFacedeRight.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacedeRight.name = 'rightDoor'
-
+  let objFacadeRight = new Group();
+  objFacadeRight.add(facadeRight);
+  facadeRight.name = 'doorBox'
+  facadeRight.position.x = -boxWidth / 4 + sideDepth / 2;
+  objFacadeRight.position.x = boxWidth / 2 - sideDepth / 2;
+  objFacadeRight.position.z = boxDepth / 2 + sideDepth / 2;
+  objFacadeRight.name = 'rightDoor'
   let group = new Mesh();
   let bodyCase = new Mesh();
 
@@ -100,14 +81,14 @@ const boxStandardFloor = () => {
   group.add(sideShelf);
   group.add(sideTopFront)
   group.add(sideTopBack)
-  group.add(objFacedeLeft)
-  group.add(objFacedeRight)
+  group.add(objFacadeLefteRight)
+  group.add(objFacadeRight)
   group.name = "group"
 
   bodyCase.add(group);
   bodyCase.add(legFront)
   bodyCase.add(legLeft)
-  bodyCase.name = "body"
+  bodyCase.name = "body_800_1000_2"
 
   group.position.y = legsHeight;
   legFront.position.y = -bodyHeight / 2 + legsHeight;
@@ -120,6 +101,7 @@ const boxStandardFloor = () => {
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
 
+  bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Нижний шкаф'
   bodyCase.userData.material = 'Деревянный'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
@@ -127,6 +109,9 @@ const boxStandardFloor = () => {
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
   bodyCase.userData.img = '/img/cases/body.png'
+
+  bodyCase.userData.variants = ['body_800_1000_1']
+  bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']
 
   bodyCase.position.set(0,0,0);
 
@@ -147,7 +132,6 @@ const boxAngularFloor = () => {
   let gSideBack = new BoxGeometry(boxWidth - sideDepth * 2, boxHeight, sideDepth);
   let gSideBottom = new BoxGeometry(boxWidth - sideDepth * 2, boxDepth, sideDepth);
   let gSideTop = new BoxGeometry(boxWidth - sideDepth * 2, sideTop, sideDepth);
-  let gFacade = new BoxGeometry(facadeWidth - gapFacade / 2, boxHeight, sideDepth);
   let gLegFront = new BoxGeometry(boxWidth, legsHeight, sideDepth);
   let gLegFrontMini = new BoxGeometry(legFrontMargin + sideDepth, legsHeight, sideDepth);
 
@@ -161,18 +145,19 @@ const boxAngularFloor = () => {
   let sideShelf = new Mesh(gSideBottom, material);
   let sideTopFront = new Mesh(gSideTop, material);
   let sideTopBack = new Mesh(gSideTop, material);
-  let facedeLeft = new Mesh(gFacade, facadeMaterials);
+  let facadeLeft = new Group()
   let legFront = new Mesh(gLegFront, material);
   let legFrontMini = new Mesh(gLegFrontMini, material);
 
   let legLeft = new Mesh(gLegs, legMaterial);
 
-  let objFacedeLeft = new Object3D();
-  objFacedeLeft.add(facedeLeft);
-  facedeLeft.position.x = boxWidth - facadeWidth - sideDepth ;
-  objFacedeLeft.position.x = boxWidth / 2 - facadeWidth - sideDepth;
-  objFacedeLeft.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacedeLeft.name = 'leftDoor'
+  let objFacadeLeftRight = new Object3D();
+  objFacadeLeftRight.add(facadeLeft);
+  facadeLeft.name = 'doorBox'
+  facadeLeft.position.x = boxWidth - facadeWidth - sideDepth ;
+  objFacadeLeftRight.position.x = boxWidth / 2 - facadeWidth - sideDepth;
+  objFacadeLeftRight.position.z = boxDepth / 2 + sideDepth / 2;
+  objFacadeLeftRight.name = 'leftDoor'
 
   let group = new Mesh();
   let bodyCase = new Mesh();
@@ -200,7 +185,7 @@ const boxAngularFloor = () => {
   group.add(sideShelf);
   group.add(sideTopFront)
   group.add(sideTopBack)
-  group.add(objFacedeLeft)
+  group.add(objFacadeLeftRight)
   group.name = "group"
 
   bodyCase.add(group);
@@ -233,6 +218,8 @@ const boxAngularFloor = () => {
   bodyCase.userData.price = 2100
   bodyCase.userData.img = '/img/cases/angular.png'
 
+  bodyCase.userData.variants = []
+  bodyCase.userData.availableColors = ['dub_votan', 'listvennica', 'orex_mramornyi']
 
   bodyCase.position.set(0,0,0);
 

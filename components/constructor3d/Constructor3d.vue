@@ -22,7 +22,7 @@
           select-elements(
             v-model="kitchen.currentConfig.facadeConfig"
             title="Фасад"
-            :elementVariants="[]"
+            :elementVariants="facades"
             @remove="$refs.kitchen.removeCase()"
           )
           select-elements(
@@ -40,100 +40,120 @@
 
 <script>
 
-import boxes from './CasesListConfig.js'
-import Module from './module'
-import SelectElements from './SelectElements.vue'
-import CalculateOrder from "./CalculateOrder";
+  import boxes from './CasesListConfig.js'
+  import facades from './FacadesListConfig'
+  import Module from './module'
+  import SelectElements from './SelectElements.vue'
+  import CalculateOrder from "./CalculateOrder";
 
-export default {
-  name: 'constructor3d',
-  components: {
-    CalculateOrder,
-    Module,
-    SelectElements
-  },
-  data() {
-    return {
-      caseConfig: null,
-      kitchen: {
-        currentConfig: {
-          caseConfig: '',
-          tableTopConfig: '',
-          facadeConfig: '',
-        },
-        order: {
-          cases: [],
-          facades: [],
-          tableTops: []
+  export default {
+    name: 'constructor3d',
+    components: {
+      CalculateOrder,
+      Module,
+      SelectElements
+    },
+    data() {
+      return {
+        caseConfig: null,
+        kitchen: {
+          currentConfig: {
+            caseConfig: '',
+            tableTopConfig: '',
+            facadeConfig: '',
+          },
+          order: {
+            cases: [],
+            facades: [],
+            tableTops: []
+          }
         }
       }
-    }
-  },
-  computed: {
-    boxes() {
-      let result = []
-      for (let i = 0; i < Object.keys(boxes).length; i++) {
-        result.push(boxes[Object.keys(boxes)[i]])
+    },
+    computed: {
+      boxes() {
+        let result = []
+        for (let i = 0; i < Object.keys(boxes).length; i++) {
+          result.push(boxes[Object.keys(boxes)[i]])
+        }
+        return result.filter(el => el.name)
+      },
+      facades() {
+        const {getFacadeByColorId} = facades
+        const caseConfig = this.caseConfig
+        if (caseConfig && this.kitchen.currentConfig.caseConfig) {
+          const {name, userData: {variants, availableColors, img}} = caseConfig
+
+          let result = []
+
+          availableColors.forEach((el) => {
+            result.push(getFacadeByColorId(el))
+          })
+
+          return result
+        }
+        return []
       }
-      return result.filter(el => el.name)
-    }
-  },
-  methods: {
-
-    removeItem({uuid, type}) {
-      this.$refs.kitchen.removeItem({uuid, type})
-      const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
-      if (idx > -1) this.kitchen.order[type].splice(idx, 1)
-
     },
-    selectCase(val) {
-      console.log(val);
-    },
-    selectCaseConfig(v) {
-      this.caseConfig = v
-    }
-  },
+    methods: {
 
-}
+      removeItem({uuid, type}) {
+        this.$refs.kitchen.removeItem({uuid, type})
+        const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
+        if (idx > -1) this.kitchen.order[type].splice(idx, 1)
+
+      },
+      selectCase(val) {
+        console.log(val);
+      },
+      selectCaseConfig(v) {
+        this.caseConfig = v
+      }
+    },
+    mounted() {
+      console.log(facades);
+    }
+
+  }
 </script>
 
 <style lang="scss">
 
-.column {
-  display: flex;
-  flex-direction: column;
+  .column {
+    display: flex;
+    flex-direction: column;
 
-}
-
-.constructor {
-  padding-top: 24px;
-  padding-bottom: 24px;
-}
-
-.preview {
-  width: 70%;
-}
-
-.config {
-  width: 30%;
-}
-
-.page {
-  width: 1200px;
-  margin: 0 auto;
-
-  .title {
-    font-weight: bold;
-    font-size: 32px;
-    line-height: 48px;
-    letter-spacing: 0.4px;
-    color: #23252A;
   }
 
   .constructor {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
-}
+
+  .preview {
+    width: 70%;
+  }
+
+  .config {
+    width: 30%;
+  }
+
+  .page {
+    width: 1200px;
+    margin: 0 auto;
+
+    .title {
+      font-weight: bold;
+      font-size: 32px;
+      line-height: 48px;
+      letter-spacing: 0.4px;
+      color: #23252A;
+    }
+
+    .constructor {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+  }
 </style>

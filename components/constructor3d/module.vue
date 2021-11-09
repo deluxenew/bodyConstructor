@@ -147,7 +147,7 @@
       },
       bottomRight() {
         return this.scene.children
-            .filter(({name, place}) => ['bottomAngularBody', 'body'].includes(name) && place === 'bottomRight')
+            .filter(({name, place}) => ['bottomAngularBody', 'body_800_1000_2'].includes(name) && place === 'bottomRight')
             .sort((a, b) => {
              if ( a.userData.sort > b.userData.sort) return 1
              if ( a.userData.sort < b.userData.sort) return -1
@@ -155,7 +155,7 @@
             })
       },
       bottomRightWhiteoutAngular() {
-        return this.scene.children.filter(({name, place}) => ['body'].includes(name) && place === 'bottomRight')
+        return this.scene.children.filter(({name, place}) => ['body_800_1000_2'].includes(name) && place === 'bottomRight')
           .sort((a, b) => {
             if ( a.userData.sort > b.userData.sort) return 1
             if ( a.userData.sort < b.userData.sort) return -1
@@ -163,7 +163,7 @@
           })
       },
       bottomLeft() {
-        return this.scene.children.filter(({name, place}) => ['body'].includes(name) && place === 'bottomLeft')
+        return this.scene.children.filter(({name, place}) => ['body_800_1000_2'].includes(name) && place === 'bottomLeft')
           .sort((a, b) => {
             if ( a.userData.sort > b.userData.sort) return 1
             if ( a.userData.sort < b.userData.sort) return -1
@@ -913,7 +913,7 @@
         const recursiveFindBox = (obj) => {
           if (!obj || !obj.parent) return null
           const parent = obj.parent
-          if (['bottomAngularBody', 'body'].includes(parent.name)) return parent
+          if (['bottomAngularBody', 'body_800_1000_2'].includes(parent.name)) return parent
           else return recursiveFindBox(parent)
         }
 
