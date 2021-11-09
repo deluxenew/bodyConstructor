@@ -1,6 +1,12 @@
 <template lang="pug">
   div.select-elements
-    div.select-elements__title {{title}}
+    div.select-elements__header
+      div.select-elements__title {{title}}
+        img.select-elements__chevron(:src="require('./img/chevron.svg')" @click="toggleOpen")
+      div.select-elements__remove
+        span Убрать
+        img(:src="require('./img/close.svg')")
+
     div.select-elements__list
       div.select-elements__item(
         v-for="item in elementVariants"
@@ -29,6 +35,7 @@ export default {
   data() {
     return {
       currentItem: null,
+
     }
   },
   watch:{
@@ -46,6 +53,11 @@ export default {
       }
     }
   },
+  methods: {
+    toggleOpen() {
+
+    }
+  },
   mounted() {
     this.$emit('input', this.elementVariants[0])
   }
@@ -55,9 +67,21 @@ export default {
 <style lang="scss" scoped>
   .select-elements {
 
+    &__header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     &__title {
       font-size: 18px;
       font-weight: bold;
+    }
+
+    &__remove {
+      display: flex;
+      align-items: center;
     }
 
     &__list {

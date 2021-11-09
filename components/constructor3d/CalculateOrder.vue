@@ -147,9 +147,12 @@
     width: 100%;
     padding: 8px 0;
 
-    .calc-form__col {
-      color: #9DA2AE;
+    &_header {
+      .calc-form__col {
+        color: #9DA2AE;
+      }
     }
+
   }
 
   &__col {
