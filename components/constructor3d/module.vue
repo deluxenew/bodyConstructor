@@ -17,10 +17,6 @@
             img(:src="require('./img/doors.svg')")
           button.button.remove(:disabled="!selectedCase" @click="removeCase")
             img(:src="require('./img/trash.svg')")
-    div.buttons
-
-      div(v-if="selectedCase && selectedCase.name")
-        | {{selectedCase ? selectedCase.name : ''}}
 </template>
 
 <script>
