@@ -8,3 +8,8 @@ const ldsp = [
   {
 
   }]
+
+export default {
+  post,
+  ldsp
+}

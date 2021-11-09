@@ -19,7 +19,9 @@
           v-for="item in elementVariants"
           :class="{active: item.name === model.name}"
           @click="currentItem = item"
-        ) {{item ? item.name : ''}}
+        )
+          img.select-elements__img(:src="item.userData.img")
+          | {{item ? item.userData.form : ''}}
 </template>
 
 <script>
@@ -37,8 +39,8 @@ export default {
       default: () => []
     },
     value: {
-      type: Object,
-      default: () => {}
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -49,19 +51,23 @@ export default {
   },
   watch:{
     currentItem(v) {
-      this.$emit('input', v)
+       this.$emit('selectItem', v)
+    },
+    value(v) {
+      const item = this.elementVariants.find((el) => el.name === v)
+      if (item) this.currentItem = item
     }
   },
   computed: {
     selectedCase() {
-      return this.value?.selectedCase
+      return this.value
     },
     model: {
       get() {
         return this.currentItem || this.elementVariants[0]
       },
       set(v) {
-        this.$emit('input', v)
+         this.$emit('selectItem', v)
       }
     }
   },
@@ -70,11 +76,11 @@ export default {
       this.opened = !this.opened
     },
     removeItem () {
-      if (this.value?.selectedCase) this.$emit('remove')
+      if (this.value) this.$emit('remove')
     },
   },
   mounted() {
-    this.$emit('input', this.elementVariants[0])
+     this.$emit('selectItem', this.elementVariants[0])
   }
 }
 </script>
@@ -115,8 +121,13 @@ export default {
       display: flex;
       align-items: center;
       cursor: pointer;
+      transition: .3s ease-in-out;
 
-      &:hover {
+      &.disabled {
+        opacity: .5;
+      }
+
+      &:hover:not(&.disabled) {
         text-decoration: underline;
       }
     }
@@ -138,15 +149,22 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
+      flex-direction: column;
       width: 150px;
       height: 150px;
       cursor: pointer;
       transition: .3s ease-in-out;
+      user-select: none;
 
 
       &.active {
         background-color: #ccc;
       }
+    }
+    &__img {
+      width: 100px;
+      padding-bottom: 20px;
     }
   }
 </style>

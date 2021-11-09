@@ -103,13 +103,25 @@
         selectedCase: null,
         showSizes: false,
         scene: new Scene(),
-        camera: new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 200),
+        camera: new PerspectiveCamera(45, 800 / 600, 1, 200),
       }
     },
     computed: {
+      caseConfigModel: {
+        get() {
+          return this.value?.currentConfig?.caseConfig || null
+        },
+        set(v) {
+          let kitchen = this.value
+          if (kitchen && kitchen.currentConfig) {
+            kitchen.currentConfig.caseConfig = v ? v.name : ''
+            this.$emit('input', kitchen)
+          }
+        },
+      },
       cases: {
         get() {
-          return this.value?.order?.cases
+          return this.value?.order?.cases || []
         },
         set(v) {
           let kitchen = this.value
@@ -197,8 +209,8 @@
         const vm = this
 
         function povSet(wL, wR, camAngle, camZ, pos) {
-          wL += 3
-          wR += 3
+          //wL += 3
+          //wR += 3
           const heightForCam = 20
           let alfa = Math.atan(wL / wR);
           let g = Math.sqrt(Math.pow(wL, 2) + Math.pow(wR, 2));
@@ -206,17 +218,18 @@
           let b = g - a;
           let h = Math.sqrt(a * b);
           let h2 = Math.tan(threeMath.degToRad(90 - camAngle / 2)) * g / 2 + h / 2;
-          // vm.camera.rotation.x = threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
-          vm.camera.position.y = 16;
-          // vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
-          //  vm.scene.position.x = (a - b) / 2;
+          vm.camera.rotation.x = threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
+          vm.camera.position.y = 14;
+          //vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
+          vm.scene.position.x = (a - b) /2;
           if (h2 > camZ) {
             vm.camera.position.z = h2;
           } else {
             vm.camera.position.z = camZ;
           }
 
-          return threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */ - (a - b) / 2
+          return  threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
+
         }
 
         const wr = vm.bottomRight.reduce((acc, el) => {
@@ -234,7 +247,6 @@
           }
           return acc
         }, 10)
-
 
         const rotat = (pos, wl, wr) => {
           switch (pos) {
@@ -324,12 +336,12 @@
           this.cases = v
         }
       },
-      // bottomRight: {
-      //   deep: true,
-      //   handler(v) {
-      //     this.cases = v
-      //   }
-      // },
+      selectedCase: {
+        deep: true,
+        handler(v) {
+          this.caseConfigModel = v
+        }
+      },
       'tableTopConfig.showTableTop'(v) {
         this.toggleTableTops(v)
       },
@@ -967,7 +979,8 @@
       vm.camera.position.z = 80;
 
       let spotLight = new SpotLight(0xffffff);
-      spotLight.position.set(-60, 55, 60);
+      let n = 1.6;
+      spotLight.position.set(-60*n, 55*n, 60*n);
       vm.scene.add(spotLight);
       vm.scene.add(spotLight.target);
 
@@ -978,12 +991,12 @@
 
       vm.selectCase()
 
-      vm.scene.rotation.y = threeMath.degToRad(26);
+      vm.scene.rotation.y = threeMath.degToRad(45);
 
       // vm.camera.position.set(-4, 16, 50);
       // vm.camera.rotation.x = threeMath.degToRad(-20);
 
-      spotLight.intensity = 1.5
+      spotLight.intensity = 1.6
 
       function fromTo(value, from, to, step) {
         if (value === to) return value;

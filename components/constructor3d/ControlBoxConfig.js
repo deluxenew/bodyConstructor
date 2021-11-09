@@ -1,35 +1,16 @@
 import {
-  ShapeGeometry,
-  Math, Mesh, MeshBasicMaterial, Shape, DoubleSide, Group, MeshLambertMaterial, ExtrudeBufferGeometry} from "three";
-import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader";
+  Mesh,
+  Shape,
+  DoubleSide,
+  Group,
+  TextureLoader,
+  MeshLambertMaterial,
+  ExtrudeBufferGeometry,
+  MeshStandardMaterial, BoxGeometry
+} from 'three'
+const facadeTextureLoader = new TextureLoader();
 
-const add = require('./img/add.svg')
-
-function loadSVG( url ) {
-  let svg = new Group();
-  const loader = new SVGLoader();
-
-  loader.load( url, function ( data ) {
-    const paths = data.paths;
-    for ( let i = 0; i < paths.length; i ++ ) {
-      const path = paths[ i ];
-      const material = new MeshBasicMaterial( {
-        color: path.color,
-        side: DoubleSide,
-      } );
-
-      const shapes = SVGLoader.createShapes( path );
-      for ( let j = 0; j < shapes.length; j ++ ) {
-        const shape = shapes[ j ];
-        const geometry = new ShapeGeometry( shape );
-        const mesh = new Mesh( geometry, material );
-        mesh.scale.multiplyScalar( 0.1 );
-        svg.add( mesh );
-      }
-    }
-  });
-  return svg
-}
+const add = require('./img/add.png')
 
 const boxControl = () => {
   function createButton() {
@@ -62,17 +43,22 @@ const boxControl = () => {
     return button
   }
 
-  let addSvg = loadSVG(add)
-  addSvg.rotation.z = Math.degToRad(180)
-  addSvg.position.set(1.2,1.2,0.5)
+  const geometry =  new BoxGeometry(2, 2, 0.01)
+  const material = new MeshStandardMaterial({
+    color: 0xffffff,
+    map: facadeTextureLoader.load(add),
+  });
+
+  const addSvg = new Mesh( geometry, material )
+  addSvg.position.set(0,0,0.1)
 
   let addBtn = createButton()
   addBtn.add(addSvg)
 
   addBtn.position.set(0, 0, 0);
-  addBtn.name = 'add';
+  addBtn.name = 'control';
 
-  let buttonsGroup = new Mesh();
+  let buttonsGroup = new Group();
   buttonsGroup.add(addBtn)
   buttonsGroup.name='control'
 
