@@ -14,9 +14,21 @@
         div.column.config
           select-elements(
             v-model="caseConfig"
-            title="шкаф"
+            title="Шкаф"
             :elementVariants="boxes"
-            @remove="$refs.module.removeCase()"
+            @remove="$refs.kitchen.removeCase()"
+          )
+          select-elements(
+            v-model="caseConfig"
+            title="Фасад"
+            :elementVariants="boxes"
+            @remove="$refs.kitchen.removeCase()"
+          )
+          select-elements(
+            v-model="caseConfig"
+            title="Столешница"
+            :elementVariants="boxes"
+            @remove="$refs.kitchen.removeCase()"
           )
       calculate-order(
         :kitchen="kitchen"

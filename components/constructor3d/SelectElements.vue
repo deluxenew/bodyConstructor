@@ -2,22 +2,31 @@
   div.select-elements
     div.select-elements__header
       div.select-elements__title {{title}}
-        img.select-elements__chevron(:src="require('./img/chevron.svg')" @click="toggleOpen")
-      div.select-elements__remove
+        img.select-elements__chevron(
+          :src="require('./img/chevron.svg')"
+          :class="{reverse: !opened}"
+          @click="toggleOpen"
+        )
+      div.select-elements__remove(
+        :class="{disabled: !selectedCase}"
+        @click="removeItem"
+      )
         span Убрать
         img(:src="require('./img/close.svg')")
-
-    div.select-elements__list
-      div.select-elements__item(
-        v-for="item in elementVariants"
-        :class="{active: item.name === model.name}"
-        @click="currentItem = item"
-      ) {{item ? item.name : ''}}
+    transition-expand
+      div.select-elements__list(v-show="opened")
+        div.select-elements__item(
+          v-for="item in elementVariants"
+          :class="{active: item.name === model.name}"
+          @click="currentItem = item"
+        ) {{item ? item.name : ''}}
 </template>
 
 <script>
+import TransitionExpand from './TransitionExpand.vue'
 export default {
   name: "SelectElements",
+  components: {TransitionExpand},
   props: {
     title: {
       type: String,
@@ -35,7 +44,7 @@ export default {
   data() {
     return {
       currentItem: null,
-
+      opened: true
     }
   },
   watch:{
@@ -44,6 +53,9 @@ export default {
     }
   },
   computed: {
+    selectedCase() {
+      return this.value?.selectedCase
+    },
     model: {
       get() {
         return this.currentItem || this.elementVariants[0]
@@ -55,8 +67,11 @@ export default {
   },
   methods: {
     toggleOpen() {
-
-    }
+      this.opened = !this.opened
+    },
+    removeItem () {
+      if (this.value?.selectedCase) this.$emit('remove')
+    },
   },
   mounted() {
     this.$emit('input', this.elementVariants[0])
@@ -65,30 +80,53 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .select-elements+ .select-elements {
+    padding-top: 24px;
+  }
+
   .select-elements {
+    width: 100%;
 
     &__header {
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding-bottom: 16px;
     }
 
     &__title {
       font-size: 18px;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    &__chevron {
+      transition: .2s ease-in-out;
+      cursor: pointer;
+
+      &.reverse {
+        transform: rotate(180deg);
+      }
     }
 
     &__remove {
       display: flex;
       align-items: center;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     &__list {
-      padding-top: 24px;
+      width: 100%;
       display: flex;
       align-items: flex-start;
-      justify-content: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
     }
 
     &__item + &__item {

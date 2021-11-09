@@ -206,17 +206,17 @@
           let b = g - a;
           let h = Math.sqrt(a * b);
           let h2 = Math.tan(threeMath.degToRad(90 - camAngle / 2)) * g / 2 + h / 2;
-          vm.camera.rotation.x = threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
+          // vm.camera.rotation.x = threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
           vm.camera.position.y = 16;
           // vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
-          vm.scene.position.x = (a - b) / 2;
+          //  vm.scene.position.x = (a - b) / 2;
           if (h2 > camZ) {
             vm.camera.position.z = h2;
           } else {
             vm.camera.position.z = camZ;
           }
 
-          return  threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
+          return threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */ - (a - b) / 2
         }
 
         const wr = vm.bottomRight.reduce((acc, el) => {
@@ -226,6 +226,7 @@
           }
           return acc
         }, 10)
+
         const wl = vm.bottomLeft.reduce((acc, el) => {
           if (el) {
             const {userData: {width}} = el
@@ -233,7 +234,6 @@
           }
           return acc
         }, 10)
-
 
 
         const rotat = (pos, wl, wr) => {
