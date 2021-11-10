@@ -224,7 +224,10 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_1.png')
 
   bodyCase.userData.type = 'bottom'
-  bodyCase.userData.variants = ['body_800_1000_1']
+   bodyCase.userData.parent = {
+     id: 'bottom_1000_800'
+   }
+  bodyCase.userData.variants = []
   bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']
 
   bodyCase.position.set(0,0,0);
@@ -330,7 +333,10 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_2.png')
 
   bodyCase.userData.type = 'bottom'
-  bodyCase.userData.variants = ['body_800_1000_1']
+  bodyCase.userData.parent = {
+    id: 'bottom_1000_800'
+  }
+  bodyCase.userData.variants = []
   bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']
 
   bodyCase.position.set(0,0,0);
@@ -549,6 +555,9 @@ const boxAngularFloor = () => {
   bodyCase.userData.img = require('./img/cases/bottom/boxAngularFloor_1.png')
 
   bodyCase.userData.type = 'bottom'
+   bodyCase.userData.parent = {
+     id: 'boxAngularFloor'
+   }
   bodyCase.userData.variants = []
   bodyCase.userData.availableColors = ['dub_votan', 'listvennica', 'orex_mramornyi']
 

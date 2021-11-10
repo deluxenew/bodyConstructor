@@ -27,6 +27,8 @@
             :parentVariants="parentVariants"
             :elementVariants="facades"
             @remove="$refs.kitchen.removeCase()"
+            @selectItem="selectFacadeConfig"
+            @selectParent="selectCaseConfig"
           )
           select-elements(
             v-model="kitchen.currentConfig.tableTopConfig"
@@ -67,6 +69,7 @@
               name: ''
             },
             facadeConfig: {
+              caseId: '',
               width: 0,
               height: 0,
               colorId: ''
@@ -89,7 +92,23 @@
         return cases
       },
       parentVariants() {
+
         const variants = this.caseConfig?.userData?.variants
+        const parentId = this.caseConfig?.userData?.parent?.id
+
+        if (parentId) {
+          let result = []
+          const parent =  boxes[parentId]
+          if (parent) {
+            const parentVariants = parent.userData.variants
+
+            parentVariants.forEach((el) => {
+              const fn = boxes[el.id]
+              result.push(fn)
+            })
+            return result
+          }
+        }
 
         if (variants && variants.length) {
           let result = []
@@ -98,7 +117,6 @@
             result.push(fn)
           })
           return result
-
         }
 
         return []
@@ -121,6 +139,10 @@
       },
       selectCaseConfig(v) {
         this.caseConfig = v
+        if (v.userData.parent) this.kitchen.currentConfig.facadeConfig.caseId = v.name
+      },
+      selectFacadeConfig(v) {
+        this.facadeConfig = v
       }
     },
     mounted() {
