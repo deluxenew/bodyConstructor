@@ -93,7 +93,7 @@ export default {
     value: {
       deep: true,
       handler(v) {
-        const item = this.elementVariants.find((el) => el.name === v)
+        const item = this.currentTypeModel.items.find((el) => el.name === v.name)
         if (item) this.currentItem = item
       }
     }

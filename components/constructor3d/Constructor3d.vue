@@ -10,6 +10,8 @@
             :caseConfig="caseConfig"
             @selectCase="selectCase"
             @removeItem="removeItem"
+            @setCases="kitchen.order.cases = $event"
+            @setConfigName="kitchen.currentConfig.name = $event"
           )
         div.column.config
           select-elements(

@@ -113,11 +113,11 @@
     computed: {
       caseConfigModel: {
         get() {
-          return this.value?.currentConfig?.caseConfig.name || null
+          return this.value?.currentConfig?.caseConfig?.name || null
         },
         set(v) {
           let kitchen = this.value
-          if (kitchen && kitchen.currentConfig && kitchen.currentConfig.caseConfig) {
+          if (kitchen && kitchen.currentConfig && kitchen.currentConfig && v && kitchen.currentConfig.caseConfig.name !== v.name) {
             kitchen.currentConfig.caseConfig.name = v ? v.name : ''
             this.$emit('input', kitchen)
           }
@@ -329,19 +329,19 @@
     },
     watch: {
       bottomRight: {
-        deep: true,
+        deep: false,
         handler(v) {
           this.cases = v
         }
       },
       bottomLeft: {
-        deep: true,
+        deep: false,
         handler(v) {
           this.cases = v
         }
       },
       selectedCase: {
-        deep: true,
+        deep: false,
         handler(v) {
           this.caseConfigModel = v
         }
