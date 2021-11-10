@@ -14,14 +14,44 @@
         span Убрать
         img(:src="require('./img/close.svg')")
     transition-expand
-      div.select-elements__list(v-show="opened")
-        div.select-elements__item(
-          v-for="item in elementVariants"
-          :class="{active: item.name === model.name}"
-          @click="currentItem = item"
-        )
-          img.select-elements__img(v-if="item.userData" :src="item.userData.img")
-          | {{item && item.userData ? item.userData.form : ''}}
+      div.select-elements__group(v-show="opened")
+        div.select-elements__tabs
+          div.select-elements__tabs-item(
+            v-for="item in elementVariants"
+            :class="{active: item.type === currentTypeModel.type}"
+            @click="selectCurrentType(item)"
+          )
+            div.tab__title {{item.typeName}}
+        div.select-elements__list(v-if="currentParentVariantModel")
+          div.select-elements__item(
+            v-for="item in parentVariants"
+            :class="{active: item.name === currentParentVariantModel.name}"
+            @click="selectParentVariant(item)"
+          )
+            img.select-elements__img(v-if="item.userData" :src="item.userData.img")
+            | {{item && item.userData ? item.userData.form : ''}}
+
+
+        div.select-elements__list(v-if="currentTypeModel && currentTypeModel.items")
+          div.select-elements__item(
+            v-for="item in currentTypeModel.items"
+            :class="{active: item.name === currentItemModel.name}"
+            @click="currentItem = item"
+          )
+            img.select-elements__img(v-if="item.url" :src="item.url")
+            div.select-elements__name {{item.name ? item.name : ''}}
+
+        div.select-elements__tabs(v-if="currentTypeModel && currentTypeModel.variants")
+          div.select-elements__tabs-item(v-for="variant in currentTypeModel.variants" @click="selectCurrentVariant(variant)")
+
+        div.select-elements__list(v-if="currentVariant && currentVariant.items && currentVariant.items.length")
+          div.select-elements__item(
+            v-for="color in currentVariant.items"
+            :class="{active: color.name === currentItemModel.name}"
+            @click="currentItem = color"
+          )
+            img.select-elements__img(v-if="item.userData" :src="item.userData.img")
+            | {{item && item.userData ? item.userData.form : ''}}
 </template>
 
 <script>
@@ -34,17 +64,24 @@ export default {
       type: String,
       default: ''
     },
+    parentVariants: {
+      type: Array,
+      default: () => []
+    },
     elementVariants: {
       type: Array,
       default: () => []
     },
     value: {
-      type: String,
-      default: ''
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
+      currentType: null,
+      currentVariant: null,
+      currentParentVariant: null,
       currentItem: null,
       opened: true
     }
@@ -53,18 +90,49 @@ export default {
     currentItem(v) {
        this.$emit('selectItem', v)
     },
-    value(v) {
-      const item = this.elementVariants.find((el) => el.name === v)
-      if (item) this.currentItem = item
+    value: {
+      deep: true,
+      handler(v) {
+        const item = this.elementVariants.find((el) => el.name === v)
+        if (item) this.currentItem = item
+      }
     }
   },
   computed: {
     selectedCase() {
-      return this.value
+      return this.value.name
     },
-    model: {
+    // значение первой вкладки
+    currentTypeModel: {
       get() {
-        return this.currentItem || this.elementVariants[0]
+        return this.currentType || this.elementVariants[0]
+      },
+      set(v) {
+        this.currentType = v
+      }
+    },
+    // значение второй вкладки
+    currentVariantModel: {
+      get() {
+        return this.currentVariant || this.currentTypeModel?.variants[0]
+      },
+      set(v) {
+        this.currentVariant = v
+      }
+    },
+    // значение варианта выбора фасада
+    currentParentVariantModel: {
+      get() {
+        return this.currentParentVariant || this.parentVariants[0]
+      },
+      set(v) {
+        this.$emit('selectItem', v)
+      }
+    },
+    // выбранный вариант конфига
+    currentItemModel: {
+      get() {
+        return this.currentItem || (this.currentTypeModel?.items && this.currentTypeModel?.items[0]) || this.currentVariantModel?.items[0]
       },
       set(v) {
          this.$emit('selectItem', v)
@@ -78,9 +146,18 @@ export default {
     removeItem () {
       if (this.value) this.$emit('remove')
     },
+    selectCurrentType(item) {
+      this.currentTypeModel = item
+    },
+    selectCurrentVariant(variant) {
+      this.currentVariantModel = variant
+    },
+    selectParentVariant(item) {
+      this.currentParentVariant = item
+    },
   },
   mounted() {
-     this.$emit('selectItem', this.elementVariants[0])
+     this.$emit('selectItem', this.currentItemModel)
   }
 }
 </script>
@@ -131,8 +208,47 @@ export default {
         text-decoration: underline;
       }
     }
+    &__group {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+    }
+
+    &__tabs {
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+
+      &-item {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-bottom: 2px solid #D5D7DC;
+        transition: .3s ease-in-out;
+
+        &.active {
+          border-bottom: 2px solid #0099DC;
+        }
+      }
+    }
+
+    &__name {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: center;
+      letter-spacing: 0.2px;
+      color: #454A54;
+    }
 
     &__list {
+      padding-top: 16px;
       width: 100%;
       display: flex;
       align-items: flex-start;
@@ -145,7 +261,8 @@ export default {
     }
 
     &__item {
-      border: 1px solid rgba(#000000, 0.6);
+      border: 1px solid #D5D7DC;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -159,7 +276,7 @@ export default {
 
 
       &.active {
-        background-color: #ccc;
+        border: 2px solid #0099DC;
       }
     }
     &__img {

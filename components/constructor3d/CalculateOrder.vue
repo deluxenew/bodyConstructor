@@ -76,7 +76,19 @@
       kitchen: {
         type: Object,
         default: () => ({
-          currentConfig: null,
+          currentConfig: {
+            caseConfig: {
+              name: ''
+            },
+            facadeConfig: {
+              width: 0,
+              height: 0,
+              colorId: ''
+            },
+            tableTopConfig: {
+
+            },
+          },
           order: {
             cases: [],
             facades: [],

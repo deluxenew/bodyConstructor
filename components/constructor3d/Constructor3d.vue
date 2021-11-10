@@ -22,6 +22,7 @@
           select-elements(
             v-model="kitchen.currentConfig.facadeConfig"
             title="Фасад"
+            :parentVariants="parentVariants"
             :elementVariants="facades"
             @remove="$refs.kitchen.removeCase()"
           )
@@ -56,11 +57,21 @@
     data() {
       return {
         caseConfig: null,
+        facadeConfig: null,
+        tableTopConfig: null,
         kitchen: {
           currentConfig: {
-            caseConfig: '',
-            tableTopConfig: '',
-            facadeConfig: '',
+            caseConfig: {
+              name: ''
+            },
+            facadeConfig: {
+              width: 0,
+              height: 0,
+              colorId: ''
+            },
+            tableTopConfig: {
+
+            },
           },
           order: {
             cases: [],
@@ -72,31 +83,31 @@
     },
     computed: {
       boxes() {
-        let result = []
-        for (let i = 0; i < Object.keys(boxes).length; i++) {
-          result.push(boxes[Object.keys(boxes)[i]])
+        const { cases } = boxes
+        return cases
+      },
+      parentVariants() {
+        const variants = this.caseConfig?.userData?.variants
+
+        if (variants && variants.length) {
+          let result = []
+          variants.forEach((el) => {
+            const fn = boxes[el.id]
+            result.push(fn)
+          })
+          return result
+
         }
-        return result.filter(el => el.name)
+
+        return []
       },
       facades() {
-        const {getFacadeByColorId} = facades
-        const caseConfig = this.caseConfig
-        if (caseConfig && this.kitchen.currentConfig.caseConfig) {
-          const {name, userData: {variants, availableColors, img}} = caseConfig
+        const { colors } = facades
 
-          let result = []
-
-          availableColors.forEach((el) => {
-            result.push(getFacadeByColorId(el))
-          })
-
-          return result
-        }
-        return []
+        return colors
       }
     },
     methods: {
-
       removeItem({uuid, type}) {
         this.$refs.kitchen.removeItem({uuid, type})
         const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)

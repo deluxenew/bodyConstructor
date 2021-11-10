@@ -77,9 +77,17 @@
         type: Object,
         default: () => ({
           currentConfig: {
-            caseConfig: null,
-            tableTopConfig: null,
-            facadeConfig: null,
+            caseConfig: {
+              name: ''
+            },
+            facadeConfig: {
+              width: 0,
+              height: 0,
+              colorId: ''
+            },
+            tableTopConfig: {
+
+            },
           },
           order: {
             cases: [],
@@ -105,12 +113,12 @@
     computed: {
       caseConfigModel: {
         get() {
-          return this.value?.currentConfig?.caseConfig || null
+          return this.value?.currentConfig?.caseConfig.name || null
         },
         set(v) {
           let kitchen = this.value
-          if (kitchen && kitchen.currentConfig) {
-            kitchen.currentConfig.caseConfig = v ? v.name : ''
+          if (kitchen && kitchen.currentConfig && kitchen.currentConfig.caseConfig) {
+            kitchen.currentConfig.caseConfig.name = v ? v.name : ''
             this.$emit('input', kitchen)
           }
         },
@@ -147,7 +155,7 @@
       },
       bottomRight() {
         return this.scene.children
-            .filter(({name, place}) => ['bottomAngularBody', 'body_800_1000_2'].includes(name) && place === 'bottomRight')
+            .filter(({name, place}) => [...Object.keys(boxes)].includes(name) && place === 'bottomRight')
             .sort((a, b) => {
              if ( a.userData.sort > b.userData.sort) return 1
              if ( a.userData.sort < b.userData.sort) return -1
@@ -155,7 +163,7 @@
             })
       },
       bottomRightWhiteoutAngular() {
-        return this.scene.children.filter(({name, place}) => ['body_800_1000_2'].includes(name) && place === 'bottomRight')
+        return this.scene.children.filter(({name, place}) => ['boxAngularFloor', 'boxAngularFloor_1'].includes(name) && place === 'bottomRight')
           .sort((a, b) => {
             if ( a.userData.sort > b.userData.sort) return 1
             if ( a.userData.sort < b.userData.sort) return -1
@@ -163,7 +171,7 @@
           })
       },
       bottomLeft() {
-        return this.scene.children.filter(({name, place}) => ['body_800_1000_2'].includes(name) && place === 'bottomLeft')
+        return this.scene.children.filter(({name, place}) => [...Object.keys(boxes)].includes(name) && place === 'bottomLeft')
           .sort((a, b) => {
             if ( a.userData.sort > b.userData.sort) return 1
             if ( a.userData.sort < b.userData.sort) return -1
@@ -171,7 +179,7 @@
           })
       },
       bottomAngularCaseExist() {
-        const angular = this.bottomRight.find(({name, place}) => name === 'bottomAngularBody' && place === 'bottomRight')
+        const angular = this.bottomRight.find(({name, place}) =>['boxAngularFloor', 'boxAngularFloor_1'].includes(name) && place === 'bottomRight')
         return angular ? angular.userData : null
       },
       bottomPaddingRight() {
@@ -310,7 +318,7 @@
           || (leftIdx > -1 && leftIdx < this.bottomLeft.length - 1 && this.bottomLeft.length > 1)
       },
       isAngularIsSelected() {
-        return this.selectedCase?.name === 'bottomAngularBody'
+        return ['boxAngularFloor', 'boxAngularFloor_1'].includes(this.selectedCase?.name)
       },
       isMaxRightPadding() {
         return this.bottomPaddingRight > 42
@@ -481,7 +489,7 @@
         const vm = this
         const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedCase.uuid);
         if (selectedObject && this.selectedCase) {
-          if (this.selectedCase.name === 'bottomAngularBody' && this.bottomLeft.length && this.bottomRightWhiteoutAngular.length) return
+          if (['boxAngularFloor', 'boxAngularFloor_1'].includes(this.selectedCase.name) && this.bottomLeft.length && this.bottomRightWhiteoutAngular.length) return
           const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === selectedObject.uuid)
           const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === selectedObject.uuid)
           const { width, padding, depth, left } = selectedObject.userData
@@ -503,7 +511,7 @@
                   el.position.set(x, y, z - width - (padding ? padding : 0));
                   el.userData.sort -= 1
             })
-            if (selectedObject.name === 'bottomAngularBody') {
+            if (['boxAngularFloor', 'boxAngularFloor_1'].includes(selectedObject.name)) {
               this.bottomLeft
                   .filter((el, index) => index > leftIdx)
                   .forEach((el) => {
@@ -574,7 +582,7 @@
               this.scene.add(tableTop)
             }
 
-            if (selectedObject.name === 'bottomAngularBody') {
+            if (['boxAngularFloor', 'boxAngularFloor_1'].includes(selectedObject.name)) {
               this.tableTopsLeft.forEach((el) => {
                 const { x, y, z } = el.position
                 el.position.set(x + depth, y, z);
@@ -692,7 +700,7 @@
         body.userData.openedDoors = false
         body.place = 'bottomRight'
 
-        if (body.name === 'bottomAngularBody') {
+        if (['boxAngularFloor', 'boxAngularFloor_1'].includes(body.name)) {
 
           this.addAngularCaseBottom(body)
           return
@@ -722,7 +730,7 @@
         body.userData.openedDoors = false
         body.place = 'bottomLeft'
 
-        if (body.name === 'bottomAngularBody') {
+        if (['boxAngularFloor', 'boxAngularFloor_1'].includes(body.name)) {
 
           this.addAngularCaseBottom(body)
           return
@@ -913,7 +921,7 @@
         const recursiveFindBox = (obj) => {
           if (!obj || !obj.parent) return null
           const parent = obj.parent
-          if (['bottomAngularBody', 'body_800_1000_2'].includes(parent.name)) return parent
+          if ([... new Set(Object.keys(boxes))].includes(parent.name)) return parent
           else return recursiveFindBox(parent)
         }
 
@@ -941,7 +949,6 @@
             if (controlActionName) {
               vm[controlActionName]()
             } else {
-
               vm.selectedCase = recursiveFindBox(object)
             }
           }
