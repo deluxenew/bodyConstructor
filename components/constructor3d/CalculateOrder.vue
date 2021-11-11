@@ -81,7 +81,7 @@
               name: ''
             },
             facadeConfig: {
-              caseId: '',
+              name: '',
               width: 0,
               height: 0,
               colorId: ''

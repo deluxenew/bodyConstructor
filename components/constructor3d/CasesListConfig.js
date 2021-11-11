@@ -213,6 +213,8 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
+  bodyCase.userData.doorWidth = boxWidth / 2 - sideDepth / 2
+   bodyCase.userData.doorHeight = bodyHeight
 
   bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Один фасад'

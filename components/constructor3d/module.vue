@@ -81,7 +81,7 @@
               name: ''
             },
             facadeConfig: {
-              caseId: '',
+              name: '',
               width: 0,
               height: 0,
               colorId: ''
@@ -118,8 +118,9 @@
         },
         set(v) {
           let kitchen = this.value
-          if (kitchen && kitchen.currentConfig && kitchen.currentConfig && v && kitchen.currentConfig.caseConfig.name !== v.name) {
+          if (kitchen && kitchen.currentConfig && kitchen.currentConfig && kitchen.currentConfig.caseConfig.name !== v?.name) {
             kitchen.currentConfig.caseConfig.name = v ? v.name : ''
+            kitchen.currentConfig.facadeConfig.name = v ? v.name : ''
             this.$emit('input', kitchen)
           }
         },
@@ -498,7 +499,7 @@
             this.bottomLeft
                 .filter((el, index) => index > leftIdx)
                 .forEach((el) => {
-                  console.log(el.position);
+
                   let { x, y, z } = el.position
                   el.position.set(el.position.x + width + (padding ? padding : 0), y, z);
                   el.userData.sort -= 1

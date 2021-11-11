@@ -1,7 +1,7 @@
 <template lang="pug">
   div.select-elements
     div.select-elements__header
-      div.select-elements__title {{title}}
+      div.select-elements__title Шкаф
         img.select-elements__chevron(
           :src="require('./img/chevron.svg')"
           :class="{reverse: !opened}"
@@ -22,55 +22,27 @@
             @click="selectCurrentType(item)"
           )
             div.tab__title {{item.typeName}}
-        div.select-elements__list(v-if="currentParentVariantModel")
-          div.select-elements__item(
-            v-for="item in parentVariants"
-            :class="{active: item.name === currentParentVariantModel.name}"
-            @click="selectParentVariant(item)"
-          )
-            img.select-elements__img(v-if="item.userData" :src="item.userData.img")
-            | {{item && item.userData ? item.userData.form : ''}}
-
 
         div.select-elements__list(v-if="currentTypeModel && currentTypeModel.items")
           div.select-elements__item(
             v-for="item in currentTypeModel.items"
             :class="{active: item.name === currentItemModel.name}"
-            @click="currentItem = item"
+            @click="selectItem(item)"
           )
             img.select-elements__img(v-if="item.userData" :src="item.userData.img")
             | {{item && item.userData ? item.userData.form : ''}}
 
-        div.select-elements__tabs.pt-16(v-if="currentTypeModel && currentTypeModel.variants")
-          div.select-elements__tabs-item(
-            v-for="variant in currentTypeModel.variants"
-            :class="{active: variant.type === currentVariantModel.type}"
-            @click="selectCurrentVariant(variant)"
-          )
-            div.tab__title {{variant.typeName}}
-        div.select-elements__list(v-if="currentVariantModel && currentVariantModel.items && currentVariantModel.items.length")
-          div.select-elements__item(
-            v-for="color in currentVariantModel.items"
-            :class="{active: color.name === currentItemModel.name}"
-            @click="currentItem = color"
-          )
-            img.select-elements__img(v-if="color" :src="color.url")
-            | {{color && color.name ? color.name : ''}}
 </template>
 
 <script>
 import TransitionExpand from './TransitionExpand.vue'
 export default {
-  name: "SelectElements",
+  name: "SelectCase",
   components: {TransitionExpand},
   props: {
     title: {
       type: String,
       default: ''
-    },
-    parentVariants: {
-      type: Array,
-      default: () => []
     },
     elementVariants: {
       type: Array,
@@ -84,37 +56,19 @@ export default {
   data() {
     return {
       currentType: null,
-      currentVariant: null,
-      currentParentVariant: null,
       currentItem: null,
       opened: true
     }
   },
   watch:{
-    parentVariants() {
-      this.currentParentVariant = this.parentVariants[0] || null
-      if (this.currentItemModel) this.currentItemModel = this.currentVariantModel.items[0] || null
-      if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
-    },
     currentItem(v) {
-      const item = {
-        ...v,
-        boxId: this.currentParentVariantModel?.name,
-        type: this.currentTypeModel?.type,
-        variant: this.currentVariantModel?.type
-      }
-      this.$emit('selectItem', item)
+
     },
     value: {
       deep: true,
       handler(v) {
-        const item = this.currentTypeModel.items && this.currentTypeModel.items.find((el) => el.name === v.name)
+        const item = this.currentTypeModel.items && this.currentTypeModel.items.find((el) => el.userData.variants.map(({id}) => id).includes(v.name) || el.name === v.name)
         if (item) this.currentItem = item
-        if (v.caseId) {
-          const caseBox = this.parentVariants.find((el) => v.caseId === el.name)
-          console.log(caseBox, 'caseBox');
-          if (caseBox) this.currentParentVariantModel = caseBox
-        }
       }
     }
   },
@@ -131,37 +85,12 @@ export default {
         this.currentType = v
       }
     },
-    // значение второй вкладки
-    currentVariantModel: {
-      get() {
-        return this.currentVariant || (this.currentTypeModel?.variants && this.currentTypeModel?.variants[0]) || null
-      },
-      set(v) {
-        this.currentVariant = v
-      }
-    },
-    // значение варианта выбора фасада
-    currentParentVariantModel: {
-      get() {
-        return this.currentParentVariant || this.parentVariants[0]
-      },
-      set(v) {
-        this.$emit('selectParent', v)
-      }
-    },
-    // выбранный вариант конфига
     currentItemModel: {
       get() {
-        return this.currentItem || (this.currentTypeModel?.items && this.currentTypeModel?.items[0]) || this.currentVariantModel?.items[0] || null
+        return this.currentItem || this.currentTypeModel?.items[0] || null
       },
       set(v) {
-        const item = {
-          ...v,
-          boxId: this.currentParentVariantModel?.name,
-          type: this.currentTypeModel?.type,
-          variant: this.currentVariantModel?.type
-        }
-         this.$emit('selectItem', item)
+        this.currentItem = v
       }
     }
   },
@@ -170,22 +99,16 @@ export default {
       this.opened = !this.opened
     },
     removeItem () {
-      if (this.value) this.$emit('remove')
+      if (this.value.name) this.$emit('remove')
     },
     selectCurrentType(item) {
       this.currentTypeModel = item
-      if (this.currentVariantModel) this.currentVariantModel = this.currentTypeModel.variants[0]
       if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
     },
-    selectCurrentVariant(variant) {
-      this.currentVariantModel = variant
-      if (this.currentItemModel) this.currentItemModel = this.currentVariantModel.items[0]
-      if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
-    },
-    selectParentVariant(item) {
-       this.currentParentVariant = item
-      // this.currentParentVariantModel = item
-    },
+    selectItem(item) {
+      this.currentItemModel = item
+      this.$emit('selectItem', this.currentItemModel)
+    }
   },
   mounted() {
      this.$emit('selectItem', this.currentItemModel)

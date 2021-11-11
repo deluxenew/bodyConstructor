@@ -8,31 +8,28 @@
             ref="kitchen"
             v-model="kitchen"
             :caseConfig="caseConfig"
-            @selectCase="selectCase"
             @removeItem="removeItem"
             @setCases="kitchen.order.cases = $event"
             @setConfigName="kitchen.currentConfig.name = $event"
           )
         div.column.config
-          select-elements(
+          select-case(
             v-model="kitchen.currentConfig.caseConfig"
-            title="Шкаф"
             :elementVariants="boxes"
             @selectItem="selectCaseConfig"
             @remove="$refs.kitchen.removeCase()"
           )
-          select-elements(
+          select-facade(
             v-model="kitchen.currentConfig.facadeConfig"
-            title="Фасад"
             :parentVariants="parentVariants"
             :elementVariants="facades"
             @remove="$refs.kitchen.removeCase()"
             @selectItem="selectFacadeConfig"
-            @selectParent="selectCaseConfig"
+            @selectColor="selectFacadeColor"
+            @selectChildConfig="selectChildConfig"
           )
-          select-elements(
+          select-table-top(
             v-model="kitchen.currentConfig.tableTopConfig"
-            title="Столешница"
             :elementVariants="[]"
             @remove="$refs.kitchen.removeCase()"
           )
@@ -48,7 +45,9 @@
   import boxes from './CasesListConfig.js'
   import facades from './FacadesListConfig'
   import Module from './module'
-  import SelectElements from './SelectElements.vue'
+  import SelectCase from './SelectCase.vue'
+  import SelectFacade from './SelectFacade.vue'
+  import SelectTableTop from './SelectTableTop.vue'
   import CalculateOrder from "./CalculateOrder";
 
   export default {
@@ -56,7 +55,9 @@
     components: {
       CalculateOrder,
       Module,
-      SelectElements
+      SelectCase,
+      SelectFacade,
+      SelectTableTop
     },
     data() {
       return {
@@ -69,7 +70,7 @@
               name: ''
             },
             facadeConfig: {
-              caseId: '',
+              name: '',
               width: 0,
               height: 0,
               colorId: ''
@@ -92,7 +93,6 @@
         return cases
       },
       parentVariants() {
-
         const variants = this.caseConfig?.userData?.variants
         const parentId = this.caseConfig?.userData?.parent?.id
 
@@ -127,28 +127,32 @@
         return colors
       }
     },
+    watch: {
+      'kitchen.currentConfig.caseConfig.name'(v) {
+        this.caseConfig = boxes[v]
+      },
+    },
     methods: {
       removeItem({uuid, type}) {
         this.$refs.kitchen.removeItem({uuid, type})
         const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
         if (idx > -1) this.kitchen.order[type].splice(idx, 1)
-
       },
-      selectCase(val) {
-        console.log(val);
+      selectChildConfig(v) {
+        this.caseConfig = v
+        this.kitchen.currentConfig.facadeConfig.name = v && v.userData && v.userData.parent ? v.name : ''
       },
       selectCaseConfig(v) {
         this.caseConfig = v
-        if (v.userData.parent) this.kitchen.currentConfig.facadeConfig.caseId = v.name
+
       },
       selectFacadeConfig(v) {
-        this.facadeConfig = v
+        // this.facadeConfig = v
+      },
+      selectFacadeColor() {
+
       }
     },
-    mounted() {
-      console.log(facades);
-    }
-
   }
 </script>
 
