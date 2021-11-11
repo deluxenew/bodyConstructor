@@ -1,5 +1,5 @@
 import {BoxGeometry, Group, CylinderGeometry, Math, Mesh, MeshStandardMaterial , Object3D} from "three";
-const vm = this
+
 const legsHeight = 1;
 const sideDepth = .3;
 const sideTop = 1.4;
@@ -550,6 +550,8 @@ const boxAngularFloor = () => {
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
   bodyCase.userData.padding = 3.5
+   bodyCase.userData.doorWidth = facadeWidth - sideDepth / 2
+   bodyCase.userData.doorHeight = boxHeight
 
   bodyCase.userData.form = 'Один фасад'
   bodyCase.userData.material = 'деревянный'

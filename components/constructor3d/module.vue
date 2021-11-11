@@ -330,6 +330,17 @@
       },
     },
     watch: {
+      bodyCase(v) {
+        // console.log(newCase, oldCase)
+        if (v && this.selectedCase) {
+          console.log(v.uuid)
+
+          const idx = this.scene.children.findIndex(({uuid}) => this.selectedCase.uuid === uuid)
+
+          this.scene.children[idx].children = v.children
+          console.log(idx)
+        }
+      },
       bottomRight: {
         deep: false,
         handler(v) {

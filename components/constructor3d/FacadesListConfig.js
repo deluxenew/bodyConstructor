@@ -49,12 +49,12 @@ const colors = [
         items: [
           {
             id: 'listvennica',
-            url: require('./img/facades/mdf/listvennica.png'),
+            url: require('./img/facades/mdf/listvennica.webp'),
             name: 'Лиственница',
           },
           {
             id: 'orex_mramornyi',
-            url: require('./img/facades/mdf/orex_mramornyi.png'),
+            url: require('./img/facades/mdf/orex_mramornyi.webp'),
             name: 'Орех мраморный',
           },
         ]
