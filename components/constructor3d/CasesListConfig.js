@@ -41,13 +41,13 @@ legMaterial.metalness = 0.5;
   let legFront = new Mesh(gLegFront, material);
   let legLeft = new Mesh(gLegs, legMaterial);
 
-  let objFacadeLefteRight = new Group();
-  objFacadeLefteRight.add(facadeLeft);
+  let objFacadeLeft = new Group();
+  objFacadeLeft.add(facadeLeft);
   facadeLeft.name = 'doorBox'
   facadeLeft.position.x = boxWidth / 4 - sideDepth / 2;
-  objFacadeLefteRight.position.x = -boxWidth / 2 + sideDepth / 2;
-  objFacadeLefteRight.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacadeLefteRight.name = 'leftDoor'
+  objFacadeLeft.position.x = -boxWidth / 2 + sideDepth / 2;
+  objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2;
+  objFacadeLeft.name = 'leftDoor'
 
   let objFacadeRight = new Group();
   objFacadeRight.add(facadeRight);
@@ -81,7 +81,7 @@ legMaterial.metalness = 0.5;
   group.add(sideShelf);
   group.add(sideTopFront)
   group.add(sideTopBack)
-  group.add(objFacadeLefteRight)
+  group.add(objFacadeLeft)
   group.add(objFacadeRight)
   group.name = "group"
 
@@ -154,18 +154,18 @@ legMaterial.metalness = 0.5;
   let legFront = new Mesh(gLegFront, material);
   let legLeft = new Mesh(gLegs, legMaterial);
 
-  let objFacadeLefteRight = new Group();
-  objFacadeLefteRight.add(facadeLeft);
-  facadeLeft.name = 'doorBox'
-  facadeLeft.position.x = boxWidth / 4 - sideDepth / 2;
-  objFacadeLefteRight.position.x = -boxWidth / 2 + sideDepth / 2;
-  objFacadeLefteRight.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacadeLefteRight.name = 'leftDoor'
+  let objFacadeLeft = new Group();
+  objFacadeLeft.add(facadeLeft);
+  facadeLeft.name = 'doorBox1'
+  facadeLeft.position.x = boxWidth / 4 - sideDepth / 3;
+  objFacadeLeft.position.x = -boxWidth / 2 + sideDepth / 2;
+  objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2;
+  objFacadeLeft.name = 'leftDoor'
 
   let objFacadeRight = new Group();
   objFacadeRight.add(facadeRight);
-  facadeRight.name = 'doorBox'
-  facadeRight.position.x = -boxWidth / 4 + sideDepth / 2;
+  facadeRight.name = 'doorBox2'
+  facadeRight.position.x = -boxWidth / 4 + sideDepth / 3;
   objFacadeRight.position.x = boxWidth / 2 - sideDepth / 2;
   objFacadeRight.position.z = boxDepth / 2 + sideDepth / 2;
   objFacadeRight.name = 'rightDoor'
@@ -194,7 +194,7 @@ legMaterial.metalness = 0.5;
   group.add(sideShelf);
   group.add(sideTopFront)
   group.add(sideTopBack)
-  group.add(objFacadeLefteRight)
+  group.add(objFacadeLeft)
   group.add(objFacadeRight)
   group.name = "group"
 
@@ -213,8 +213,8 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
-  bodyCase.userData.doorWidth = boxWidth / 2 - sideDepth / 2
-   bodyCase.userData.doorHeight = bodyHeight
+  bodyCase.userData.doorWidth = boxWidth / 2 - sideDepth / 3
+   bodyCase.userData.doorHeight = boxHeight
 
   bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Один фасад'
@@ -265,13 +265,13 @@ legMaterial.metalness = 0.5;
   let legFront = new Mesh(gLegFront, material);
   let legLeft = new Mesh(gLegs, legMaterial);
 
-  let objFacadeLefteRight = new Group();
-  objFacadeLefteRight.add(facadeLeft);
+  let objFacadeLeft = new Group();
+  objFacadeLeft.add(facadeLeft);
   facadeLeft.name = 'doorBox'
   facadeLeft.position.x = boxWidth / 4 - sideDepth / 2;
-  objFacadeLefteRight.position.x = -boxWidth / 2 + sideDepth / 2;
-  objFacadeLefteRight.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacadeLefteRight.name = 'leftDoor'
+  objFacadeLeft.position.x = -boxWidth / 2 + sideDepth / 2;
+  objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2;
+  objFacadeLeft.name = 'leftDoor'
 
   let objFacadeRight = new Group();
   objFacadeRight.add(facadeRight);
@@ -280,6 +280,7 @@ legMaterial.metalness = 0.5;
   objFacadeRight.position.x = boxWidth / 2 - sideDepth / 2;
   objFacadeRight.position.z = boxDepth / 2 + sideDepth / 2;
   objFacadeRight.name = 'rightDoor'
+
   let group = new Mesh();
   let bodyCase = new Mesh();
 
@@ -305,7 +306,7 @@ legMaterial.metalness = 0.5;
   group.add(sideShelf);
   group.add(sideTopFront)
   group.add(sideTopBack)
-  group.add(objFacadeLefteRight)
+  group.add(objFacadeLeft)
   group.add(objFacadeRight)
   group.name = "group"
 
@@ -324,6 +325,8 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
+   bodyCase.userData.doorWidth = boxWidth / 2 - sideDepth / 2
+   bodyCase.userData.doorHeight = boxHeight
 
   bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Два фасада'

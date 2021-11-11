@@ -195,7 +195,13 @@ export default {
     },
     selectCurrentColor(color) {
       this.currentItem = color
-      this.$emit('selectColor', color)
+      const item = {
+        ...color,
+        boxId: this.currentParentVariantModel?.name,
+        type: this.currentTypeModel?.type,
+        variant: this.currentVariantModel?.type
+      }
+      this.$emit('selectColor', item)
     },
   },
   mounted() {

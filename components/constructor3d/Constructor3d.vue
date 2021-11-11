@@ -149,8 +149,15 @@
       selectFacadeConfig(v) {
         // this.facadeConfig = v
       },
-      selectFacadeColor() {
-
+      selectFacadeColor(color) {
+        const { boxId, id, type, url } = color
+        const objCase = boxes[boxId]
+        const { userData: {doorWidth, doorHeight} } = objCase
+        const group = this.caseConfig.children.find(({name}) => name === 'group')
+        const doors = group.children.filter(({name}) => name === 'leftDoor' || name === 'rightDoor')
+        doors.forEach((el) => {
+          el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
+        })
       }
     },
   }

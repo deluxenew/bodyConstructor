@@ -49,12 +49,12 @@ const colors = [
         items: [
           {
             id: 'listvennica',
-            url: require('./img/facades/mdf/listvennica.webp'),
+            url: require('./img/facades/mdf/listvennica.png'),
             name: 'Лиственница',
           },
           {
             id: 'orex_mramornyi',
-            url: require('./img/facades/mdf/orex_mramornyi.webp'),
+            url: require('./img/facades/mdf/orex_mramornyi.png'),
             name: 'Орех мраморный',
           },
         ]
@@ -98,14 +98,8 @@ const getMaterial = (url) => {
   return facadeMaterials
 }
 
-const getColorById = (colorId) => {
-  const color = colors.find(({id}) => colorId === id)
-  if (color) return color.url
-  return ''
-}
+const getFacade = (colorId, width, height, url) => {
 
-const getFacade = (colorId, width, height) => {
-  const url = getColorById(colorId)
   const material = getMaterial(url)
 
   const geometry = new BoxGeometry(width, height, sideDepth);
@@ -123,8 +117,9 @@ const getFacade = (colorId, width, height) => {
   return group
 }
 
-const ldsp = (colorId, width, height) => {
-  const facade = getFacade(colorId, width, height)
+const ldsp = (colorId, width, height, url) => {
+  const facade = getFacade(colorId, width, height, url)
+  // facade.position.set(0,0,0)
   facade.userData.facade = 'ldsp'
   facade.userData.facadeName = 'ЛДСП'
   facade.userData.facadeDescription = 'Ламинированная древесно - стружечная плита. Кромка 0,4 мм со всех сторон. Качественное покрытие. Устойчивость к температурным воздействиям. Упаковка: стрейч плёнка.'
@@ -143,8 +138,8 @@ const ldsp = (colorId, width, height) => {
   return facade
 }
 
-const mdf = (colorId, width, height) => {
-  const facade = getFacade(colorId, width, height)
+const mdf = (colorId, width, height, url) => {
+  const facade = getFacade(colorId, width, height, url)
   facade.userData.facade = 'mdf'
   facade.userData.facadeName = 'МДФ'
   facade.userData.facadeDescription = 'Покрытие - пленка ПВХ. Высокая устойчивость к УФ - лучам, сколам, истиранию, воздействию чистящих средств, изменениям влажности и высоким температурам. Упаковка: стрейч плёнка.'
