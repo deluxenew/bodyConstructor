@@ -129,7 +129,7 @@
     },
     watch: {
       'kitchen.currentConfig.caseConfig.name'(v) {
-        this.caseConfig = boxes[v]
+        // this.caseConfig = boxes[v]
       },
     },
     methods: {
@@ -138,9 +138,20 @@
         const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
         if (idx > -1) this.kitchen.order[type].splice(idx, 1)
       },
-      selectChildConfig(v) {
-        this.caseConfig = v
-        this.kitchen.currentConfig.facadeConfig.name = v && v.userData && v.userData.parent ? v.name : ''
+      selectChildConfig({config, color}) {
+        const { id, type, url } = color
+
+        const { userData: {doorWidth, doorHeight} } = config
+
+        const group = config.children.find(({name}) => name === 'group')
+        const doors = group.children.filter(({name}) => name === 'leftDoor' || name === 'rightDoor')
+
+        doors.forEach((el) => {
+          el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
+        })
+
+        this.caseConfig = config
+        this.kitchen.currentConfig.facadeConfig.name = config && config.userData && config.userData.parent ? config.name : ''
       },
       selectCaseConfig(v) {
         this.caseConfig = v
@@ -152,12 +163,17 @@
       selectFacadeColor(color) {
         const { boxId, id, type, url } = color
         const objCase = boxes[boxId]
-        const { userData: {doorWidth, doorHeight} } = objCase
+        const { userData: {doorWidth, doorHeight} } = this.caseConfig
+
         const group = this.caseConfig.children.find(({name}) => name === 'group')
         const doors = group.children.filter(({name}) => name === 'leftDoor' || name === 'rightDoor')
+
         doors.forEach((el) => {
           el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
         })
+
+        const temp = this.caseConfig.clone()
+        this.caseConfig = temp
       }
     },
   }

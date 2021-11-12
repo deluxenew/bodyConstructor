@@ -1,6 +1,4 @@
-import {BoxGeometry, CylinderGeometry,
-  ShapeGeometry,
-  Math, Mesh, MeshBasicMaterial, MeshStandardMaterial, Color , Object3D, TextureLoader, Shape, DoubleSide, Group, MeshLambertMaterial, ExtrudeBufferGeometry} from "three";
+import {BoxGeometry, Mesh, MeshStandardMaterial, Group} from "three";
 
 const height26 = 0.26;
 const height38 = 0.38;
@@ -32,10 +30,14 @@ const getTableTop = ({width, height, type, color}) => {
   tableTopGroup.userData.maxWidth = getMaxWidth(type)
 
   // tableTopGroup.position.set(-depth / 2, paddingBottom + height / 2, width / 2 )
+
+  material.dispose()
+  tableTopBox.dispose()
+
   return tableTopGroup
 }
 
 export default {
-  getTableTop: getTableTop,
+  getTableTop,
 }
 

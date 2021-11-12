@@ -122,6 +122,16 @@ legMaterial.metalness = 0.5;
 
   // bodyCase.position.set(0,0,0);
 
+   material.dispose()
+   legMaterial.dispose()
+    gSideLR.dispose()
+    gSideBack.dispose()
+   gSideBottom.dispose()
+  gSideTop.dispose()
+  gLegFront.dispose()
+    gLegs.dispose()
+
+
   return bodyCase
 }
 
@@ -233,6 +243,14 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']
 
   // bodyCase.position.set(0,0,0);
+   material.dispose()
+   legMaterial.dispose()
+   gSideLR.dispose()
+   gSideBack.dispose()
+   gSideBottom.dispose()
+   gSideTop.dispose()
+   gLegFront.dispose()
+   gLegs.dispose()
 
   return bodyCase
 }
@@ -346,6 +364,14 @@ legMaterial.metalness = 0.5;
 
   // bodyCase.position.set(0,0,0);
 
+   material.dispose()
+   legMaterial.dispose()
+   gSideLR.dispose()
+   gSideBack.dispose()
+   gSideBottom.dispose()
+   gSideTop.dispose()
+   gLegFront.dispose()
+   gLegs.dispose()
   return bodyCase
 }
 const boxAngularFloor = () => {

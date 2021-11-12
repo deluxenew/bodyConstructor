@@ -94,6 +94,9 @@ const getMaterial = (url) => {
     facadeMaterial,
     material,
   ];
+  // facadeTextureLoader.dispose()
+  facadeMaterial.dispose()
+  material.dispose()
 
   return facadeMaterials
 }
@@ -113,6 +116,8 @@ const getFacade = (colorId, width, height, url) => {
   group.userData.width = width
   group.userData.height = height
   group.userData.colorId = colorId
+
+  geometry.dispose()
 
   return group
 }
