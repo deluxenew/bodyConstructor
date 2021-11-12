@@ -215,8 +215,23 @@
         const vm = this
 
         function povSet(wL, wR, camAngle, camZ, pos) {
-          //wL += 3
-          //wR += 3
+          wL += 3
+          wR += 3
+          switch (pos) {
+            case 1: {
+              wL += 3
+              wR += 3
+              break
+            }
+            case 2: {
+              wL = 3
+              break
+            }
+            case 3: {
+              wR = 3
+              break
+            }
+          }
           const heightForCam = 20
           let alfa = Math.atan(wL / wR);
           let g = Math.sqrt(Math.pow(wL, 2) + Math.pow(wR, 2));
@@ -224,17 +239,23 @@
           let b = g - a;
           let h = Math.sqrt(a * b);
           let h2 = Math.tan(threeMath.degToRad(90 - camAngle / 2)) * g / 2 + h / 2;
-          vm.camera.rotation.x = threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
+          //vm.camera.rotation.x = threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
           vm.camera.position.y = 14;
           //vm.scene.rotation.y = threeMath.degToRad(90) - alfa;
-          vm.scene.position.x = (a - b) /2;
+          //vm.scene.position.x = (a - b) /2;
+          let cPz = 0;
           if (h2 > camZ) {
-            vm.camera.position.z = h2;
+            cPz = h2;
           } else {
-            vm.camera.position.z = camZ;
+            cPz = camZ;
           }
 
-          return  threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */;
+          return  {
+            x: threeMath.degToRad(45*2) - Math.atan(Math.sqrt(Math.pow(h2 + h,2) + Math.pow(heightForCam, 2)) / (h2 + h))*2 /*- threeMath.degToRad(18) */,
+            y: threeMath.degToRad(90) - alfa,
+            sPx: (a - b) /2,
+            cPz: cPz,
+          };
 
         }
 
@@ -254,36 +275,13 @@
           return acc
         }, 10)
 
-        const rotat = (pos, wl, wr) => {
-          switch (pos) {
-            case 2: {
-              wl = 5
-              break
-            }
-            case 3: {
-              wr = 5
-              break
-            }
-          }
-
-          let alfa = Math.atan(wl / wr);
-
-          return threeMath.degToRad(90) - alfa
-        }
-
         const cameraPositions = {
-          pos1: {
+          pos1: povSet(wl, wr, 45, 50, this.positionNumber)/*{
             x: povSet(wl, wr, 45, 50, this.positionNumber),
             y: rotat(this.positionNumber, wl, wr),
-          },
-          pos2: {
-            x: povSet(wl, wr, 45, 50, this.positionNumber),
-            y: rotat(this.positionNumber, wl, wr),
-          },
-          pos3: {
-            x: povSet(wl, wr, 45, 50, this.positionNumber),
-            y: rotat(this.positionNumber, wl, wr),
-          }
+          }*/,
+          pos2: povSet(wl, wr, 45, 50, this.positionNumber),
+          pos3: povSet(wl, wr, 45, 50, this.positionNumber)
         }
         return cameraPositions[`pos${this.positionNumber}`]
       },
@@ -1047,12 +1045,11 @@
           }
         })
 
-        vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, vm.camPos.y, threeMath.degToRad(2.5));
-        vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPos.x, 1.57);
-        // vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, threeMath.degToRad(vm.camPos.z), threeMath.degToRad(2.5));
-        // vm.scene.rotation.y = fromTo(vm.scene.rotation.y, threeMath.degToRad(vm.camPos.x), threeMath.degToRad(vm.camPos.z), 0.01)
-        // if (vm.scene.rotation.y > threeMath.degToRad(10))
-        // vm.scene.rotation.y -= 0.01;
+        let step = 5;
+        vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, vm.camPos.y, step);
+        vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPos.x, step);
+        vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPos.cPz, step);
+        vm.scene.position.x = fromTo(vm.scene.position.x, vm.scene.position.x, vm.camPos.sPx, step);
 
         vm.renderer.render(vm.scene, vm.camera);
       }
