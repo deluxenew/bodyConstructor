@@ -92,20 +92,20 @@ export default {
   },
   watch:{
     parentVariants() {
-      this.currentParentVariant = this.currentParentVariant ? this.parentVariants[0] : null
+      // this.currentParentVariant = this.currentParentVariant ? this.parentVariants[0] : null
       // if (this.currentItemModel) this.currentItemModel = this.currentVariantModel.items[0] || null
     },
     currentParentVariant(v) {
       if (!this.currentItemModel) this.currentItem = this.currentVariantModel.items[0]
     },
     currentItem(v) {
-      const item = {
-        ...v,
-        boxId: this.currentParentVariantModel?.name,
-        type: this.currentTypeModel?.type,
-        variant: this.currentVariantModel?.type
-      }
-      this.$emit('selectItem', item)
+      // const item = {
+      //   ...v,
+      //   boxId: this.currentParentVariantModel?.name,
+      //   type: this.currentTypeModel?.type,
+      //   variant: this.currentVariantModel?.type
+      // }
+      // this.$emit('selectItem', item)
     },
     value: {
       deep: true,
@@ -187,9 +187,17 @@ export default {
       this.currentVariantModel = variant
       if (this.currentItemModel) this.currentItem = this.currentVariantModel.items[0]
     },
-    selectParentVariant(item) {
+    selectParentVariant(config, ) {
+
+      const item = this.currentItem ? this.currentItem : this.currentVariantModel.items[0]
+      const color = {
+        ...item,
+        boxId: this.currentParentVariantModel?.name,
+        type: this.currentTypeModel?.type,
+        variant: this.currentVariantModel?.type
+      }
        this.currentParentVariant = item
-       this.$emit('selectChildConfig', item)
+       this.$emit('selectChildConfig', {config, color})
 
       // this.currentParentVariantModel = item
     },
@@ -202,6 +210,7 @@ export default {
         variant: this.currentVariantModel?.type
       }
       this.$emit('selectColor', item)
+
     },
   },
   mounted() {

@@ -26,7 +26,7 @@
         div.select-elements__list(v-if="currentTypeModel && currentTypeModel.items")
           div.select-elements__item(
             v-for="item in currentTypeModel.items"
-            :class="{active: item.name === currentItemModel.name}"
+            :class="{active: item.name === currentItemModel.name, disabled: value.name}"
             @click="selectItem(item)"
           )
             img.select-elements__img(v-if="item.userData" :src="item.userData.img")
@@ -106,8 +106,10 @@ export default {
       if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
     },
     selectItem(item) {
-      this.currentItemModel = item
-      this.$emit('selectItem', this.currentItemModel)
+      if (!this.value.name) {
+        this.currentItemModel = item
+        this.$emit('selectItem', this.currentItemModel)
+      }
     }
   },
   mounted() {
@@ -235,6 +237,10 @@ export default {
 
       &.active {
         border: 2px solid #0099DC;
+      }
+
+      &.disabled:not(&.active) {
+        opacity: 0.5;
       }
     }
     &__img {
