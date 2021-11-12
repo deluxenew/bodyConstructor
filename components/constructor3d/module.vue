@@ -328,6 +328,19 @@
       },
     },
     watch: {
+      bodyCase(v) {
+        if (v && this.selectedCase) {
+          console.log(v.uuid)
+
+          const idx = this.scene.children.findIndex(({uuid}) => this.selectedCase.uuid === uuid)
+          const { x, y ,z } = this.scene.children[idx].position
+          const {_x: q, _y: w, _z:e } =this.scene.children[idx].rotation
+          v.position.set(x,y,z)
+
+          this.scene.children.splice(idx, 1, v)
+          console.log(idx)
+        }
+      },
       bottomRight: {
         deep: false,
         handler(v) {

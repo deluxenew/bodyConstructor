@@ -1,5 +1,5 @@
 import {BoxGeometry, Group, CylinderGeometry, Math, Mesh, MeshStandardMaterial , Object3D} from "three";
-const vm = this
+
 const legsHeight = 1;
 const sideDepth = .3;
 const sideTop = 1.4;
@@ -120,7 +120,7 @@ legMaterial.metalness = 0.5;
     }]
   bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']
 
-  bodyCase.position.set(0,0,0);
+  // bodyCase.position.set(0,0,0);
 
   return bodyCase
 }
@@ -232,7 +232,7 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.variants = []
   bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']
 
-  bodyCase.position.set(0,0,0);
+  // bodyCase.position.set(0,0,0);
 
   return bodyCase
 }
@@ -344,7 +344,7 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.variants = []
   bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']
 
-  bodyCase.position.set(0,0,0);
+  // bodyCase.position.set(0,0,0);
 
   return bodyCase
 }
@@ -454,7 +454,7 @@ const boxAngularFloor = () => {
   }]
   bodyCase.userData.availableColors = ['dub_votan', 'listvennica', 'orex_mramornyi']
 
-  bodyCase.position.set(0,0,0);
+  // bodyCase.position.set(0,0,0);
 
   return bodyCase
 }
@@ -550,6 +550,8 @@ const boxAngularFloor = () => {
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
   bodyCase.userData.padding = 3.5
+   bodyCase.userData.doorWidth = facadeWidth - sideDepth / 2
+   bodyCase.userData.doorHeight = boxHeight
 
   bodyCase.userData.form = 'Один фасад'
   bodyCase.userData.material = 'деревянный'
