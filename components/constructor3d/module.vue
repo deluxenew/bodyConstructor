@@ -82,8 +82,8 @@
             },
             facadeConfig: {
               name: '',
-              width: 0,
-              height: 0,
+              type: '',
+              variant: '',
               colorId: ''
             },
             tableTopConfig: {
@@ -114,13 +114,20 @@
     computed: {
       caseConfigModel: {
         get() {
-          return this.value?.currentConfig?.caseConfig?.name || null
+          return this.caseConfig || null
         },
         set(v) {
           let kitchen = this.value
-          if (kitchen && kitchen.currentConfig && kitchen.currentConfig && kitchen.currentConfig.caseConfig.name !== v?.name) {
+          if (kitchen && kitchen.currentConfig && kitchen.currentConfig ) {
             kitchen.currentConfig.caseConfig.name = v ? v.name : ''
             kitchen.currentConfig.facadeConfig.name = v ? v.name : ''
+            if (v) {
+              const { userData: { facadeColorId, facadeType, facadeVariantType } } = v
+              kitchen.currentConfig.facadeConfig.colorId = facadeColorId
+              kitchen.currentConfig.facadeConfig.type = facadeType
+              kitchen.currentConfig.facadeConfig.variant = facadeVariantType
+            }
+
             this.$emit('input', kitchen)
           }
         },
@@ -288,18 +295,18 @@
       bodyCase() {
         return this.caseConfig
       },
-      addBottomRight() {
-        let addBottomRight = boxControl.clone()
-        addBottomRight.name = 'addBottomRight'
-        addBottomRight.rotation.y = threeMath.degToRad(-90);
-        addBottomRight.userData.actionName = 'addBottomRightToScene'
-        return addBottomRight
+      addBottomRightButton() {
+        let addBottomRightButton = boxControl.clone()
+        addBottomRightButton.name = 'addBottomRightButton'
+        addBottomRightButton.rotation.y = threeMath.degToRad(-90);
+        addBottomRightButton.userData.actionName = 'addBottomRightButtonToScene'
+        return addBottomRightButton
       },
-      addBottomLeft() {
-        let addBottomLeft = boxControl.clone()
-        addBottomLeft.name = 'addBottomLeft'
-        addBottomLeft.userData.actionName = 'addBottomLeftToScene'
-        return addBottomLeft
+      addBottomLeftButton() {
+        let addBottomLeftButton = boxControl.clone()
+        addBottomLeftButton.name = 'addBottomLeftButton'
+        addBottomLeftButton.userData.actionName = 'addBottomLeftButtonToScene'
+        return addBottomLeftButton
       },
       isMoveRightActive() {
         const currentUuid = this.selectedCase?.uuid
@@ -330,14 +337,14 @@
     watch: {
       bodyCase(v) {
         if (v && this.selectedCase) {
-
-          const { position: {x, y, z }, userData: {sort, openedDoors}} = this.selectedCase
+          const { position: {x, y, z }, userData: {sort, openedDoors}, place} = this.selectedCase
            v.position.set(x,y,z)
           v.userData.sort = sort
           v.userData.openedDoors = openedDoors
           this.removeCase(true)
-          this.addBottomRightToScene(true)
-          const newCase = this.scene.children.find(({userData: {sort: findSort}}) => findSort === sort)
+          if (place === 'bottomRight') this.addBottomRightButtonToScene(true)
+          if (place === 'bottomLeft') this.addBottomLeftButtonToScene(true)
+          const newCase = this.scene.children.find(({userData: {sort: findSort}, place: findPlace}) => findSort === sort && findPlace === place)
           this.selectedCase = newCase
         }
       },
@@ -363,19 +370,19 @@
         this.toggleTableTops(v)
       },
       bottomPaddingRight() {
-        const button = this.scene.children.find(({name}) => name === 'addBottomRight')
+        const button = this.scene.children.find(({name}) => name === 'addBottomRightButton')
         if (this.isMaxRightPadding) {
           this.scene.remove(button)
         } else if (!button) {
-          this.scene.add(this.addBottomRight)
+          this.scene.add(this.addBottomRightButton)
         }
       },
       bottomPaddingLeft() {
-        const button = this.scene.children.find(({name}) => name === 'addBottomLeft')
+        const button = this.scene.children.find(({name}) => name === 'addBottomLeftButton')
         if (this.isMaxLeftPadding) {
           this.scene.remove(button)
         } else if (!button) {
-          this.scene.add(this.addBottomLeft)
+          this.scene.add(this.addBottomLeftButton)
         }
       }
       // selectedCase: {
@@ -405,7 +412,7 @@
     methods: {
       moveLeft() {
         const currentBox = this.scene.children.find(({uuid}) => this.selectedCase.uuid === uuid)
-        const { userData: { sort: currentSort, width: currentWidth } } = currentBox
+        const { userData: { sort: currentSort } } = currentBox
 
         const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentBox.uuid)
         const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === currentBox.uuid)
@@ -434,7 +441,7 @@
       },
       moveRight() {
         const currentBox = this.scene.children.find(({uuid}) => this.selectedCase.uuid === uuid)
-        const { userData: { sort: currentSort, width: currentWidth } } = currentBox
+        const { userData: { sort: currentSort } } = currentBox
 
         const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentBox.uuid)
         const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === currentBox.uuid)
@@ -716,7 +723,7 @@
           }
         }
       },
-      addBottomRightToScene(isReplace) {
+      addBottomRightButtonToScene(isReplace) {
         let body = this.bodyCase.clone();
         body.userData.openedDoors = false
         body.place = 'bottomRight'
@@ -745,7 +752,7 @@
 
         if (this.tableTopConfig.showTableTop) this.addTableTopRight(width)
       },
-      addBottomLeftToScene(isReplace) {
+      addBottomLeftButtonToScene(isReplace) {
         let body = this.bodyCase.clone();
         const { depth, height, width } =  body.userData
         body.userData.openedDoors = false
@@ -768,7 +775,7 @@
         body.userData.top = false
 
         const count = this.bottomLeft.length
-        body.userData.sort = count
+        if (!isReplace) body.userData.sort = count
 
         this.scene.add(body)
 
@@ -989,14 +996,14 @@
         }
       },
       addControlBoxes() {
-        this.scene.add(this.addBottomRight)
-        this.scene.add(this.addBottomLeft)
+        this.scene.add(this.addBottomRightButton)
+        this.scene.add(this.addBottomLeftButton)
       },
       setControlBoxesPosition() {
-        const addBottomLeft = this.scene.getObjectByName('addBottomLeft')
-        if (addBottomLeft) addBottomLeft.position.set(-6 - this.bottomPaddingLeft - (this.bottomRight[0] ? this.bottomRight[0].userData.depth : 0 ),5,1)
-        const addBottomRight = this.scene.children.find(({name}) => name === 'addBottomRight')
-        if (addBottomRight)  addBottomRight.position.set(-1,5, 6 + this.bottomPaddingRight +(this.bottomLeft[0] && !this.bottomRight[0] ? this.bottomLeft[0].userData.depth : 0 ))
+        const addBottomLeftButton = this.scene.getObjectByName('addBottomLeftButton')
+        if (addBottomLeftButton) addBottomLeftButton.position.set(-6 - this.bottomPaddingLeft - (this.bottomRight[0] ? this.bottomRight[0].userData.depth : 0 ),5,1)
+        const addBottomRightButton = this.scene.children.find(({name}) => name === 'addBottomRightButton')
+        if (addBottomRightButton)  addBottomRightButton.position.set(-1,5, 6 + this.bottomPaddingRight +(this.bottomLeft[0] && !this.bottomRight[0] ? this.bottomLeft[0].userData.depth : 0 ))
       }
     },
     mounted() {

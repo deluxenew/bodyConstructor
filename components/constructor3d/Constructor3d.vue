@@ -71,8 +71,8 @@
             },
             facadeConfig: {
               name: '',
-              width: 0,
-              height: 0,
+              type: '',
+              variant: '',
               colorId: ''
             },
             tableTopConfig: {
@@ -139,7 +139,7 @@
         if (idx > -1) this.kitchen.order[type].splice(idx, 1)
       },
       selectChildConfig({config, color}) {
-        const { id, type, url } = color
+        const { id, type, typeName, url, name, variantType, variantTypeName } = color
 
         const { userData: {doorWidth, doorHeight} } = config
 
@@ -151,6 +151,15 @@
         })
 
         this.caseConfig = config
+
+        this.caseConfig.userData.facadeCount = doors.length
+        this.caseConfig.userData.facadeColorName = name
+        this.caseConfig.userData.facadeColorId = id
+        this.caseConfig.userData.facadeType = type
+        this.caseConfig.userData.facadeTypeName = typeName
+        this.caseConfig.userData.facadeVariantType = variantType
+        this.caseConfig.userData.facadeVariantTypeName = variantTypeName
+
         this.kitchen.currentConfig.facadeConfig.name = config && config.userData && config.userData.parent ? config.name : ''
       },
       selectCaseConfig(v) {
@@ -161,8 +170,7 @@
         // this.facadeConfig = v
       },
       selectFacadeColor(color) {
-        const { boxId, id, type, url } = color
-        const objCase = boxes[boxId]
+        const { id, type, typeName, url, name, variantType, variantTypeName } = color
         const { userData: {doorWidth, doorHeight} } = this.caseConfig
 
         const group = this.caseConfig.children.find(({name}) => name === 'group')
@@ -174,6 +182,16 @@
 
         const temp = this.caseConfig.clone()
         this.caseConfig = temp
+
+        this.caseConfig.userData.facadeCount = doors.length
+        this.caseConfig.userData.facadeColorName = name
+        this.caseConfig.userData.facadeColorId = id
+        this.caseConfig.userData.facadeType = type
+        this.caseConfig.userData.facadeTypeName = typeName
+        this.caseConfig.userData.facadeVariantType = variantType
+        this.caseConfig.userData.facadeVariantTypeName = variantTypeName
+
+
       }
     },
   }
