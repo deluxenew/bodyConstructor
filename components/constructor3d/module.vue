@@ -1085,16 +1085,18 @@
           const rightDoor = group.children.find(el => el.name === 'rightDoor')
           const {userData: {openedDoors}} = it
 
+          const speedOpen = 15
+
           if (openedDoors) {
-            if (leftDoor) leftDoor.rotation.y = fromTo(leftDoor.rotation.y, 0, threeMath.degToRad(-90), threeMath.degToRad(2.5));
-            if (rightDoor) rightDoor.rotation.y = fromTo(rightDoor.rotation.y, 0, threeMath.degToRad(90), threeMath.degToRad(2.5));
+            if (leftDoor) leftDoor.rotation.y = fromTo(leftDoor.rotation.y, 0, threeMath.degToRad(-90), speedOpen);
+            if (rightDoor) rightDoor.rotation.y = fromTo(rightDoor.rotation.y, 0, threeMath.degToRad(90), speedOpen);
           } else {
-            if (leftDoor) leftDoor.rotation.y = fromTo(leftDoor.rotation.y, threeMath.degToRad(-90), 0, threeMath.degToRad(2.5));
-            if (rightDoor) rightDoor.rotation.y = fromTo(rightDoor.rotation.y, threeMath.degToRad(90), 0, threeMath.degToRad(2.5));
+            if (leftDoor) leftDoor.rotation.y = fromTo(leftDoor.rotation.y, threeMath.degToRad(-90), 0, speedOpen);
+            if (rightDoor) rightDoor.rotation.y = fromTo(rightDoor.rotation.y, threeMath.degToRad(90), 0, speedOpen);
           }
         })
 
-        let step = 5;
+        let step = 13;
         vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, vm.camPos.y, step);
         vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPos.x, step);
         vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPos.cPz, step);

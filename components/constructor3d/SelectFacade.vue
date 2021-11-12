@@ -28,8 +28,8 @@
             :class="{active: currentParentVariant && item.name === currentParentVariant.name}"
             @click="selectParentVariant(item)"
           )
-            //- img.select-elements__img(v-if="item.userData" :src="item.userData.img")
-            //- | {{item && item.userData ? item.userData.form : ''}}
+            img.select-elements__img(v-if="item.userData" :src="item.userData.img")
+            | {{item && item.userData ? item.userData.form : ''}}
 
         div.select-elements__tabs.pt-16(v-if="currentParentVariant && currentTypeModel && currentTypeModel.variants")
           div.select-elements__tabs-item(
@@ -99,19 +99,14 @@ export default {
       if (!this.currentItemModel) this.currentItem = this.currentVariantModel.items[0]
     },
     currentItem(v) {
-      // const item = {
-      //   ...v,
-      //   boxId: this.currentParentVariantModel?.name,
-      //   type: this.currentTypeModel?.type,
-      //   variant: this.currentVariantModel?.type
-      // }
-      // this.$emit('selectItem', item)
+
     },
     value: {
       deep: true,
       handler(v) {
-        if (!!v?.name) {
+        if (!!v.name) {
           const caseBox = this.parentVariants.find((el) => v.name === el.name)
+          this.currentParentVariantModel  = caseBox || null
         }
         if (!!v.type) {
           const typeObj = this.elementVariants.find(({type}) => v.type === type)
@@ -231,7 +226,6 @@ export default {
     },
   },
   mounted() {
-     this.$emit('selectItem', this.currentItemModel)
   }
 }
 </script>

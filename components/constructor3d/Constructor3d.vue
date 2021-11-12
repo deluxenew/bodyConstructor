@@ -139,7 +139,7 @@
         if (idx > -1) this.kitchen.order[type].splice(idx, 1)
       },
       selectChildConfig({config, color}) {
-        const { id, type, typeName, url, name, variantType, variantTypeName } = color
+        const {boxId, id, type, typeName, url, name, variantType, variantTypeName } = color
 
         const { userData: {doorWidth, doorHeight} } = config
 
@@ -151,6 +151,7 @@
         })
 
         this.caseConfig = config
+
 
         this.caseConfig.userData.facadeCount = doors.length
         this.caseConfig.userData.facadeColorName = name
