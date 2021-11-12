@@ -82,8 +82,8 @@
             },
             facadeConfig: {
               name: '',
-              width: 0,
-              height: 0,
+              type: '',
+              variant: '',
               colorId: ''
             },
             tableTopConfig: {

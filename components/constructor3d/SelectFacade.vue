@@ -112,7 +112,18 @@ export default {
       handler(v) {
         if (!!v?.name) {
           const caseBox = this.parentVariants.find((el) => v.name === el.name)
-          this.currentParentVariant = caseBox || null
+        }
+        if (!!v.type) {
+          const typeObj = this.elementVariants.find(({type}) => v.type === type)
+          this.currentTypeModel = typeObj || null
+        }
+        if (!!v.variant) {
+          const variantObj = this.currentTypeModel?.variants.find(({ type }) => v.variant === type)
+          this.currentVariantModel = variantObj || null
+        }
+        if (!!v.colorId) {
+          const colorObj = this.currentVariantModel?.items.find(({ id }) => v.colorId === id)
+          this.currentItemModel = colorObj || null
         }
       }
     }
@@ -194,6 +205,9 @@ export default {
         ...item,
         boxId: this.currentParentVariantModel?.name,
         type: this.currentTypeModel?.type,
+        typeName: this.currentTypeModel?.typeName,
+        variantType: this.currentVariantModel?.type,
+        variantTypeName: this.currentVariantModel?.typeName,
         variant: this.currentVariantModel?.type
       }
        this.currentParentVariant = item
@@ -207,6 +221,9 @@ export default {
         ...color,
         boxId: this.currentParentVariantModel?.name,
         type: this.currentTypeModel?.type,
+        typeName: this.currentTypeModel?.typeName,
+        variantType: this.currentVariantModel?.type,
+        variantTypeName: this.currentVariantModel?.typeName,
         variant: this.currentVariantModel?.type
       }
       this.$emit('selectColor', item)
