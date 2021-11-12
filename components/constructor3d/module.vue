@@ -32,6 +32,7 @@
     Mesh,
     RepeatWrapping,
     Math: threeMath,
+    RectAreaLight,
     SpotLight,
     Vector2,
     Raycaster
@@ -1014,6 +1015,16 @@
       spotLight.position.set(-60*n, 55*n, 60*n);
       vm.scene.add(spotLight);
       vm.scene.add(spotLight.target);
+      spotLight.intensity =1.5
+
+      const color = 0xFFFFFF;
+      const intensity = 0.2;
+      const width = 100;
+      const height = 100;
+      const light = new RectAreaLight(color, intensity, width, height);
+      light.position.set(-20, 27 * 2, 20);
+      light.rotation.x = threeMath.degToRad(-90);
+      vm.scene.add(light);
 
 
       vm.addControlBoxes()
@@ -1027,12 +1038,14 @@
       // vm.camera.position.set(-4, 16, 50);
       // vm.camera.rotation.x = threeMath.degToRad(-20);
 
-      spotLight.intensity = 1.6
 
-      function fromTo(value, from, to, step) {
+
+      function fromTo(value, from, to, steps) {
+        let step = 0;
         if (value === to) return value;
         if (from < to) {
           if (value < to) {
+            step = (to - from) / steps;
             if (value + step < to) {
               return value + step;
             } else {
@@ -1041,6 +1054,7 @@
           }
         } else if (from > to) {
           if (value > to) {
+            step = (from - to) / steps;
             if (value - step > to) {
               return value - step;
 

@@ -598,7 +598,7 @@ const boxAngularFloor = () => {
 
   return bodyCase
 }
-const boxAngularTop = () => {
+/*const boxAngularTop = () => {
   let bodyWidth = 8;
   let bodyHeight = 10;
   let bodyDepth = 6;
@@ -707,9 +707,9 @@ const boxAngularTop = () => {
   // bodyCase.position.set(0,0,0);
 
   return bodyCase
-}
+}*/
 
-const boxAngularTop_1 = () => {
+const boxAngularTop = () => {
   let bodyWidth = 8;
   let bodyHeight = 8;
   let bodyDepth = 6;
@@ -737,6 +737,7 @@ const boxAngularTop_1 = () => {
   //let facedeLeft = new Mesh(gFacade, facadeMaterials);
 
   let facadeLeft = new Group()
+  facadeLeft.name = 'doorBox';
   let objFacedeLeft = new Object3D();
   objFacedeLeft.add(facadeLeft);
   facadeLeft.position.x = boxWidth - facadeWidth - sideDepth ;
@@ -744,7 +745,7 @@ const boxAngularTop_1 = () => {
   //objFacedeLeft.position.z = boxDepth / 2 + sideDepth / 2;
   objFacedeLeft.position.z = boxWidth / 2;
   objFacedeLeft.position.x = boxDepth / 2 + sideDepth / 2;
-  objFacedeLeft.name = 'angDoor'
+  objFacedeLeft.name = 'leftDoor'
 
   objFacedeLeft.rotation.y = Math.degToRad(45);
 
@@ -753,7 +754,7 @@ const boxAngularTop_1 = () => {
 
   sideLeft.rotation.y = Math.degToRad(-90);
   sideLeft.position.x = -(boxWidth / 2 - sideDepth / 2);
-  sideRight.rotation.y = Math.degToRad(90);
+  sideRight.rotation.y = Math.degToRad(90);   
   sideRight.position.x = (boxWidth / 2 - sideDepth / 2);
   sideBack.position.z = -(boxDepth / 2 - sideDepth / 2);
   sideBottom.rotation.x = Math.degToRad(-90);
@@ -832,14 +833,14 @@ const cases = [
     typeDescription: '',
     additional: null,
     variants: null,
-    items: []
+    items: [boxAngularTop()]
   }
 ]
 
 export default {
   cases,
   boxAngularTop: boxAngularTop(),
-  boxAngularTop_1: boxAngularTop_1(),
+  //boxAngularTop_1: boxAngularTop_1(),
   bottom_1000_800:  bottom_1000_800(),
   bottom_1000_800_1: bottom_1000_800_1(),
   bottom_1000_800_2: bottom_1000_800_2(),
