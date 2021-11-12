@@ -1085,7 +1085,6 @@
         vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPos.x, step);
         vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPos.cPz, step);
         vm.scene.position.x = fromTo(vm.scene.position.x, vm.scene.position.x, vm.camPos.sPx, step);
-
         vm.renderer.render(vm.scene, vm.camera);
       }
 
