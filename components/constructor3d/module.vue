@@ -264,7 +264,6 @@
             sPx: (a - b) /2,
             cPz: cPz,
           };
-
         }
 
         const wr = vm.bottomRight.reduce((acc, el) => {
@@ -284,10 +283,7 @@
         }, 10)
 
         const cameraPositions = {
-          pos1: povSet(wl, wr, 45, 50, this.positionNumber)/*{
-            x: povSet(wl, wr, 45, 50, this.positionNumber),
-            y: rotat(this.positionNumber, wl, wr),
-          }*/,
+          pos1: povSet(wl, wr, 45, 50, this.positionNumber),
           pos2: povSet(wl, wr, 45, 50, this.positionNumber),
           pos3: povSet(wl, wr, 45, 50, this.positionNumber)
         }
@@ -486,15 +482,17 @@
       calcCasePosition(place, caseSort) {
         switch (place) {
           case 'bottomRight': {
-            const items = this.bottomRightWhiteoutAngular
+
+            const items = this.bottomRight
+            const angularPadding = this.bottomRight[0]?.userData?.padding || 0
             const paddingLeft = this.bottomLeft.length ? this.bottomLeft[0].userData.depth : 0
             const z = items
               .filter(({ userData: { sort }}) => sort < caseSort)
               .reduce((acc, {userData: {width}}) => {
                 acc += width
                 return acc
-              }, 0) + paddingLeft
-            return z
+              }, 0)
+            return z + (angularPadding ? angularPadding : paddingLeft)
           }
           case 'bottomLeft': {
             const items = this.bottomLeft
@@ -519,7 +517,7 @@
       removeCase(isReplace) {
         const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedCase.uuid);
         if (selectedObject && this.selectedCase) {
-          if (['boxAngularFloor', 'boxAngularFloor_1'].includes(this.selectedCase.name) && this.bottomLeft.length && this.bottomRightWhiteoutAngular.length) return
+          // if (['boxAngularFloor', 'boxAngularFloor_1'].includes(this.selectedCase.name) && this.bottomLeft.length && this.bottomRightWhiteoutAngular.length) return
           const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === selectedObject.uuid)
           const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === selectedObject.uuid)
           const { width, padding, depth, left } = selectedObject.userData
@@ -651,25 +649,15 @@
       },
       addAngularCaseBottom(body, isReplace) {
         const vm = this
-        if (this.bottomAngularCaseExist) {
+        if (this.bottomAngularCaseExist && !isReplace) {
           console.log('Хватит угловых шкафов снизу');
           return
         }
         body.rotation.y = threeMath.degToRad(-90)
-        const { depth, height, width, padding } =  body.userData
+        const { depth, height, width } =  body.userData
         body.position.set(-(depth / 2 + GAP_FROM_WALL), height / 2 - LEGS_HEIGHT / 2, width / 2 + GAP_FROM_WALL + 3.5);
 
         body.place = 'bottomRight'
-
-        this.bottomLeft.forEach((el) => {
-          const { x, y, z } = el.position
-          if (!isReplace) el.position.set(x - body.userData.depth, y, z);
-        })
-
-        this.bottomRight.forEach((el) => {
-          const { x, y, z } = el.position
-          if (!isReplace)  el.position.set(x, y, z + width + padding);
-        })
 
         body.userData.sort = 0
 
@@ -731,14 +719,10 @@
 
         if (['boxAngularFloor', 'boxAngularFloor_1'].includes(body.name)) {
 
-          this.addAngularCaseBottom(body)
+          this.addAngularCaseBottom(body, isReplace)
           return
         }
 
-        // if (this.bottomLeft.length > 0 && !this.bottomAngularCaseExist) {
-        //   let angular = boxAngularFloor
-        //   this.addAngularCaseBottom(angular)
-        // }
         const { userData: { depth, height, width }} = body
 
         body.rotation.y = threeMath.degToRad(-90)
@@ -761,13 +745,10 @@
 
         if (['boxAngularFloor', 'boxAngularFloor_1'].includes(body.name)) {
 
-          this.addAngularCaseBottom(body)
+          this.addAngularCaseBottom(body, isReplace)
           return
         }
 
-        // if (this.bottomRight.length > 0 && !this.bottomAngularCaseExist) {
-        //   this.addAngularCaseBottom(boxAngularFloor)
-        // }
         body.rotation.y = threeMath.degToRad(0)
         const needDepth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + GAP_FACADE : 0
 
@@ -911,7 +892,6 @@
         wallMaterial.normalMap = wallNormalTexture;
 
         floorMaterial.normalMap = floorNormalTexture;
-        //facadeMaterial.normalMap = facadeNormalTexture;
 
         const wall = new Mesh(wallGeometry, wallMaterial);
         const wallR = new Mesh(wallGeometry, wallMaterial);
@@ -1045,8 +1025,6 @@
       // vm.camera.position.set(-4, 16, 50);
       // vm.camera.rotation.x = threeMath.degToRad(-20);
 
-
-
       function fromTo(value, from, to, steps) {
         let step = 0;
         if (value === to) return value;
@@ -1078,7 +1056,6 @@
         vm.setControlBoxesPosition()
         vm.setCasesPosition()
 
-
         vm.scene.children.filter((it) => it.userData.openedDoors !== undefined).forEach((it) => {
           const group = it.children.find(el => el.name === 'group')
           const leftDoor = group.children.find(el => el.name === 'leftDoor')
@@ -1101,9 +1078,9 @@
         vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPos.x, step);
         vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPos.cPz, step);
         vm.scene.position.x = fromTo(vm.scene.position.x, vm.scene.position.x, vm.camPos.sPx, step);
+
         vm.renderer.render(vm.scene, vm.camera);
       }
-
       render();
     }
   }
