@@ -82,7 +82,6 @@ const getMaxWidth = (type) => {
 }
 
 const getTableTop = ({width, height, type, url}) => {
-  // console.log({width, height, type, url})
 
   let tableTopBox = new BoxGeometry(width, height, depth);
   let tableTop = new Mesh(tableTopBox, getMaterial(url));

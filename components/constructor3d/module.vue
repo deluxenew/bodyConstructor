@@ -221,6 +221,35 @@
         }, 0)
         return paddingLeft
       },
+      topRight() {
+        return this.scene.children.filter(({place}) => place === 'topRight')
+      },
+      topLeft() {
+        return this.scene.children.filter(({place}) => place === 'topLeft')
+      },
+      topPaddingRight() {
+        const angularPadding = this.topRight[0]?.userData?.padding || 0
+        const paddingLeft = this.topLeft.length ? this.topLeft[0].userData.depth : 0
+        const paddingCases = this.topRight.reduce((acc, el) => {
+          if (el) {
+            const {userData: {width, padding}} = el
+            if (padding)  acc += padding
+            acc += width
+          }
+          return acc
+        }, 0)
+        return paddingCases + (angularPadding ? angularPadding : paddingLeft)
+      },
+      topPaddingLeft() {
+        const paddingLeft = this.topLeft.reduce((acc, el) => {
+          if (el) {
+            const {userData: {width}} = el
+            acc += width
+          }
+          return acc
+        }, 0)
+        return paddingLeft
+      },
       tableTopsRight() {
         return this.scene.children.filter(({name}) => name === 'tableTopRight')
       },
@@ -304,22 +333,28 @@
         let addBottomRightButton = boxControl.clone()
         addBottomRightButton.name = 'addBottomRightButton'
         addBottomRightButton.rotation.y = threeMath.degToRad(-90);
-        addBottomRightButton.userData.actionName = 'addBottomRightButtonToScene'
+        addBottomRightButton.userData.actionName = 'addBottomRightToScene'
         return addBottomRightButton
       },
       addBottomLeftButton() {
         let addBottomLeftButton = boxControl.clone()
         addBottomLeftButton.name = 'addBottomLeftButton'
-        addBottomLeftButton.userData.actionName = 'addBottomLeftButtonToScene'
+        addBottomLeftButton.userData.actionName = 'addBottomLeftToScene'
         return addBottomLeftButton
       },
       addTopRightButton() {
         let addTopRightButton = boxControl.clone()
-        return
+        addTopRightButton.name = 'addTopRightButton'
+        addTopRightButton.rotation.y = threeMath.degToRad(-90);
+        addTopRightButton.userData.actionName = 'addTopRightToScene'
+
+        return addTopRightButton
       },
       addTopLeftButton() {
         let addTopLeftButton = boxControl.clone()
-        return
+        addTopLeftButton.name = 'addTopLeftButton'
+        addTopLeftButton.userData.actionName = 'addTopLeftToScene'
+        return addTopLeftButton
       },
       isMoveRightActive() {
         const currentUuid = this.selectedCase?.uuid
@@ -359,8 +394,8 @@
           v.userData.sort = sort
           v.userData.openedDoors = openedDoors
           this.removeCase(true)
-          if (place === 'bottomRight') this.addBottomRightButtonToScene(true)
-          if (place === 'bottomLeft') this.addBottomLeftButtonToScene(true)
+          if (place === 'bottomRight') this.addBottomRightToScene(true)
+          if (place === 'bottomLeft') this.addBottomLeftToScene(true)
           const newCase = this.scene.children.find(({userData: {sort: findSort}, place: findPlace}) => findSort === sort && findPlace === place)
           this.selectedCase = newCase
         }
@@ -528,6 +563,29 @@
               }, 0) + paddingLeft)
             return x
           }
+          case 'topRight': {
+            const items = this.topRight
+            const angularPadding = this.topRight[0]?.userData?.padding || 0
+            const paddingLeft = this.topLeft.length ? this.topLeft[0].userData.depth : 0
+            const z = items
+              .filter(({ userData: { sort }}) => sort < caseSort)
+              .reduce((acc, {userData: {width}}) => {
+                acc += width
+                return acc
+              }, 0)
+            return z + (angularPadding ? angularPadding : paddingLeft)
+          }
+          case 'topLeft': {
+            const items = this.topLeft
+            const paddingLeft = this.topRight.length ? this.topRight[0].userData.depth : 0
+            const x = -(items
+              .filter(({ userData: { sort }}) => sort < caseSort)
+              .reduce((acc, {userData: {width}}) => {
+                acc += width
+                return acc
+              }, 0) + paddingLeft)
+            return x
+          }
         }
       },
       setCasesPosition() {
@@ -535,16 +593,19 @@
             const { position: {x, y, z}, place, userData: {sort, width}} = el
             if (place === 'bottomRight') el.position.set(x,y, this.calcCasePosition(place, sort) + width /2)
             if (place === 'bottomLeft') el.position.set(this.calcCasePosition(place, sort) - width /2, y, z)
+
+          if (place === 'topRight') el.position.set(x,y, this.calcCasePosition(place, sort) + width /2)
+          if (place === 'topLeft') el.position.set(this.calcCasePosition(place, sort) - width /2, y, z)
         })
       },
       calcTableTopsPosition(name, sort) {
         switch (name) {
           case 'tableTopRight': {
-            const paddingRight = this.tableTopsRight.reduce((acc, {userData: {width, sort: minSort}}) => {
+            const paddingRight = this.tableTopsRight.reduce((acc, {userData: {width, maxWidth, sort: minSort}}) => {
               if (minSort < sort) acc +=width
               return acc
             },0)
-            return paddingRight * sort
+            return sort ? paddingRight : 0
           }
           case 'tableTopLeft' : {
             const paddingRight = this.tableTopsLeft.reduce((acc, {userData: {width, sort: minSort}}) => {
@@ -616,7 +677,6 @@
         }
       },
       addAngularCaseBottom(body, isReplace) {
-        const vm = this
         if (this.bottomAngularCaseExist && !isReplace) {
           console.log('Хватит угловых шкафов снизу');
           return
@@ -637,7 +697,7 @@
 
         this.addTableTop()
       },
-      addBottomRightButtonToScene(isReplace) {
+      addBottomRightToScene(isReplace) {
         let body = this.bodyCase.clone();
         body.userData.openedDoors = false
         body.place = 'bottomRight'
@@ -663,7 +723,7 @@
         // добавляем столешницу
         this.addTableTop()
       },
-      addBottomLeftButtonToScene(isReplace) {
+      addBottomLeftToScene(isReplace) {
         let body = this.bodyCase.clone();
         const { depth, height, width } =  body.userData
         body.userData.openedDoors = false
@@ -689,6 +749,42 @@
 
         // добавляем столешницу
         this.addTableTop()
+      },
+      addTopRightToScene(isReplace) {
+        let body = this.bodyCase.clone();
+        body.userData.openedDoors = false
+        body.place = 'topRight'
+
+        const { userData: { depth, height, width }} = body
+
+        body.rotation.y = threeMath.degToRad(-90)
+        body.position.set(-(depth / 2 + GAP_FROM_WALL), height / 2 - LEGS_HEIGHT / 2 + 15, width / 2 + GAP_FROM_WALL + this.topPaddingRight);
+        body.userData.left = false
+        body.userData.top = true
+
+        const count = this.bottomRight.length
+        if (!isReplace) body.userData.sort = count
+
+        this.scene.add(body)
+        console.log('шкафффчик справа')
+      },
+      addTopLeftToScene(isReplace) {
+        let body = this.bodyCase.clone();
+        body.userData.openedDoors = false
+        body.place = 'topLeft'
+
+        const { userData: { depth, height, width }} = body
+        const needDepth = this.topRight[0] ? this.topRight[0].userData.depth + GAP_FACADE : 0
+
+        body.position.set(-(width / 2 + GAP_FROM_WALL + this.topPaddingLeft + needDepth), height / 2 - LEGS_HEIGHT / 2 + 15, depth / 2 + GAP_FROM_WALL);
+        body.userData.left = true
+        body.userData.top = true
+
+        const count = this.bottomRight.length
+        if (!isReplace) body.userData.sort = count
+
+        this.scene.add(body)
+        console.log('шкафффчик слева')
       },
       addTableTop() {
         const vm = this
@@ -752,7 +848,7 @@
           return acc
         } , 0)
 
-        const rightCount = Math.trunc(rightWidth / maxWidth) || 0
+        const rightCount = Math.trunc(rightWidth / maxWidth)
         const fractionRight = rightWidth - maxWidth * rightCount
         console.log( rightWidth, maxWidth , rightCount)
 
@@ -893,14 +989,20 @@
       addControlBoxes() {
         this.scene.add(this.addBottomRightButton)
         this.scene.add(this.addBottomLeftButton)
-        // this.scene.add(this.addTopRightButton)
-        // this.scene.add(this.addTopLeftButton)
+        this.scene.add(this.addTopRightButton)
+        this.scene.add(this.addTopLeftButton)
       },
       setControlBoxesPosition() {
         const addBottomLeftButton = this.scene.getObjectByName('addBottomLeftButton')
         if (addBottomLeftButton) addBottomLeftButton.position.set(-6 - this.bottomPaddingLeft - (this.bottomRight[0] ? this.bottomRight[0].userData.depth : 0 ),5,1)
         const addBottomRightButton = this.scene.children.find(({name}) => name === 'addBottomRightButton')
         if (addBottomRightButton)  addBottomRightButton.position.set(-1,5, 6 + this.bottomPaddingRight +(this.bottomLeft[0] && !this.bottomRight[0] ? this.bottomLeft[0].userData.depth : 0 ))
+
+        const addTopLeftButton = this.scene.getObjectByName('addTopLeftButton')
+        if (addTopLeftButton) addTopLeftButton.position.set(-6 - this.topPaddingLeft - (this.topRight[0] ? this.topRight[0].userData.depth : 0 ),20,1)
+        const addTopRightButton = this.scene.children.find(({name}) => name === 'addTopRightButton')
+        if (addTopRightButton)  addTopRightButton.position.set(-1,20, 6 + this.topPaddingRight +(this.topLeft[0] && !this.topRight[0] ? this.topLeft[0].userData.depth : 0 ))
+
       }
     },
     mounted() {
@@ -928,27 +1030,11 @@
       vm.scene.add(spotLight_2);
       vm.scene.add(spotLight_2.target);
 
-
-      /*const color = 0xFFFFFF;
-      const intensity = 1.6;
-      const width = 100;
-      const height = 100;
-      const light = new RectAreaLight(color, intensity, width, height);
-      light.position.set(-20, 40, 20);
-      light.rotation.x = threeMath.degToRad(-100);
-      vm.scene.add(light);*/
-
-
       vm.addControlBoxes()
-
-
 
       vm.selectCase()
 
       vm.scene.rotation.y = threeMath.degToRad(45);
-
-      // vm.camera.position.set(-4, 16, 50);
-      // vm.camera.rotation.x = threeMath.degToRad(-20);
 
       function fromTo(value, from, to, steps) {
         let step = 0;
