@@ -197,7 +197,9 @@ const top_400_800_1 = () => {
   bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800.png')
 
   bodyCase.userData.type = 'top'
-  bodyCase.userData.parent = 'top_400_800'
+  bodyCase.userData.parent = {
+    id: 'top_400_800'
+  }
 
   bodyCase.userData.variants = []
   bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']

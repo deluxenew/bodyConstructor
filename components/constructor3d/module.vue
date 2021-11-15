@@ -35,9 +35,17 @@
     RectAreaLight,
     SpotLight,
     Vector2,
-    Raycaster
+    Raycaster,
+    BufferGeometry,
+      Line,
+    ShapeGeometry,
+    LineBasicMaterial,
+    MeshBasicMaterial,
+    DoubleSide,
+    Object3D
   } = Three
-
+  import {FontLoader} from "./FontLoader.js";
+  import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
   const windows = {innerHeight: 600, innerWidth: 800}
 
   let LEGS_HEIGHT = 1;
@@ -54,8 +62,10 @@
   const { boxAngularFloor,  } = boxes
 
   import tableTop from './TableTopList.js'
-
   const { getTableTop } = tableTop
+
+  import text from './TextSizesConfig'
+  const { getText } = text
 
   export default {
     props: {
@@ -223,9 +233,19 @@
       },
       topRight() {
         return this.scene.children.filter(({place}) => place === 'topRight')
+            .sort((a, b) => {
+              if ( a.userData.sort > b.userData.sort) return 1
+              if ( a.userData.sort < b.userData.sort) return -1
+              return 0
+            })
       },
       topLeft() {
         return this.scene.children.filter(({place}) => place === 'topLeft')
+            .sort((a, b) => {
+              if ( a.userData.sort > b.userData.sort) return 1
+              if ( a.userData.sort < b.userData.sort) return -1
+              return 0
+            })
       },
       topPaddingRight() {
         const angularPadding = this.topRight[0]?.userData?.padding || 0
@@ -303,7 +323,7 @@
           };
         }
 
-        const wr = vm.bottomRight.reduce((acc, el) => {
+        const wrb = vm.bottomRight.reduce((acc, el) => {
           if (el) {
             const {userData: {width}} = el
             acc += width
@@ -311,13 +331,33 @@
           return acc
         }, 10)
 
-        const wl = vm.bottomLeft.reduce((acc, el) => {
+        const wlb = vm.bottomLeft.reduce((acc, el) => {
           if (el) {
             const {userData: {width}} = el
             acc += width
           }
           return acc
         }, 10)
+
+        const wrt = vm.topRight.reduce((acc, el) => {
+          if (el) {
+            const {userData: {width}} = el
+            acc += width
+          }
+          return acc
+        }, 10)
+
+        const wlt = vm.topLeft.reduce((acc, el) => {
+          if (el) {
+            const {userData: {width}} = el
+            acc += width
+          }
+          return acc
+        }, 10)
+
+        const wr = Math.max(wrb, wrt)
+        const wl = Math.max(wlb, wlt)
+
 
         const cameraPositions = {
           pos1: povSet(wl, wr, 45, 50, this.positionNumber),
@@ -381,6 +421,12 @@
       isMaxLeftPadding() {
         return this.bottomPaddingLeft > 40
       },
+      isMaxRightTopPadding() {
+        return this.topPaddingRight > 42
+      },
+      isMaxLeftTopPadding() {
+        return this.topPaddingRight > 40
+      },
       paddingTableTopRight() {
         const paddingLeft = this.bottomRight.length ? this.bottomRight[0].userData.depth : 0
         return paddingLeft
@@ -411,7 +457,6 @@
         deep: false,
         handler(v) {
           this.cases = v
-          // this.addTableTopLeft()
         }
       },
       selectedCase: {
@@ -439,6 +484,23 @@
           this.scene.add(this.addBottomLeftButton)
         }
       },
+      topPaddingRight() {
+        const button = this.scene.children.find(({name}) => name === 'addTopRightButton')
+        if (this.isMaxRightTopPadding) {
+          this.scene.remove(button)
+        } else if (!button) {
+          this.scene.add(this.addTopRightButton)
+        }
+      },
+      topPaddingLeft() {
+        const button = this.scene.children.find(({name}) => name === 'adTopLeftButton')
+        if (this.isMaxLeftTopPadding) {
+          this.scene.remove(button)
+        } else if (!button) {
+          this.scene.add(this.addTopLeftButton)
+        }
+      },
+
 
       // selectedCase: {
       //   deep: true,
@@ -734,6 +796,7 @@
           this.addAngularCaseBottom(body, isReplace)
           return
         }
+        this.setLeftBottomText()
 
         body.rotation.y = threeMath.degToRad(0)
         const needDepth = this.bottomRight[0] ? this.bottomRight[0].userData.depth + GAP_FACADE : 0
@@ -762,7 +825,8 @@
         body.userData.left = false
         body.userData.top = true
 
-        const count = this.bottomRight.length
+        const count = this.topRight.length
+        body.userData.sort = count
         if (!isReplace) body.userData.sort = count
 
         this.scene.add(body)
@@ -780,8 +844,8 @@
         body.userData.left = true
         body.userData.top = true
 
-        const count = this.bottomRight.length
-        if (!isReplace) body.userData.sort = count
+        const count = this.topLeft.length
+        body.userData.sort = count
 
         this.scene.add(body)
         console.log('шкафффчик слева')
@@ -1003,6 +1067,86 @@
         const addTopRightButton = this.scene.children.find(({name}) => name === 'addTopRightButton')
         if (addTopRightButton)  addTopRightButton.position.set(-1,20, 6 + this.topPaddingRight +(this.topLeft[0] && !this.topRight[0] ? this.topLeft[0].userData.depth : 0 ))
 
+      },
+      setLeftBottomText() {
+        const helvetiker = './font/font.typeface.json'
+        const loader = new FontLoader();
+        loader.load(helvetiker, function (font) {
+
+          const color = 0x006699;
+
+          const matDark = new LineBasicMaterial({
+            color: color,
+            side: DoubleSide
+          });
+
+          const matLite = new MeshBasicMaterial({
+            color: color,
+            transparent: true,
+            opacity: 0.4,
+            side: DoubleSide
+          });
+
+          const message = "   Three.js\nSimple text.";
+
+          const shapes = font.generateShapes(message, 100);
+
+          const geometry = new ShapeGeometry(shapes);
+
+          geometry.computeBoundingBox();
+
+          const xMid = -0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x);
+
+          geometry.translate(xMid, 0, 0);
+
+          // make shape ( N.B. edge view not visible )
+
+          const text = new Mesh(geometry, matLite);
+          text.position.z = 10;
+          this.scene.add(text);
+
+          // make line shape ( N.B. edge view remains visible )
+
+          const holeShapes = [];
+
+          for (let i = 0; i < shapes.length; i++) {
+
+            const shape = shapes[i];
+
+            if (shape.holes && shape.holes.length > 0) {
+
+              for (let j = 0; j < shape.holes.length; j++) {
+
+                const hole = shape.holes[j];
+                holeShapes.push(hole);
+
+              }
+
+            }
+
+          }
+
+          shapes.push.apply(shapes, holeShapes);
+
+          const lineText = new Object3D();
+
+          for (let i = 0; i < shapes.length; i++) {
+
+            const shape = shapes[i];
+
+            const points = shape.getPoints();
+            const geometry = new BufferGeometry().setFromPoints(points);
+
+            geometry.translate(xMid, 0, 0);
+
+            const lineMesh = new Line(geometry, matDark);
+            lineText.add(lineMesh);
+
+          }
+
+          this.scene.add(lineText);
+
+        }); //end lo
       }
     },
     mounted() {

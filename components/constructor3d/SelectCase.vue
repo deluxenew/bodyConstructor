@@ -104,6 +104,7 @@ export default {
     selectCurrentType(item) {
       this.currentTypeModel = item
       if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
+      this.$emit('selectType')
     },
     selectItem(item) {
       if (!this.value.name) {

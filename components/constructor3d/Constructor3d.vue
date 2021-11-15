@@ -19,6 +19,7 @@
             :elementVariants="boxes"
             @selectItem="selectCaseConfig"
             @remove="$refs.kitchen.removeCase()"
+          @selectType="selectType"
           )
           select-facade(
             v-model="kitchen.currentConfig.facadeConfig"
@@ -140,6 +141,9 @@
       },
     },
     methods: {
+      selectType() {
+        this.caseConfig = null
+      },
       removeItem({uuid, type}) {
         this.$refs.kitchen.removeItem({uuid, type})
         const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
