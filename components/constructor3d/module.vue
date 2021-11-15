@@ -1020,26 +1020,35 @@
 
       vm.camera.position.z = 80;
 
-      let spotLight = new SpotLight(0xffffff);
       let n = 1.6;
+      let spotLight = new SpotLight(0xffffff);
       spotLight.position.set(-60*n, 55*n, 60*n);
+      spotLight.target.position.set(-10, 10, 10);
+      spotLight.intensity = 1.6
       vm.scene.add(spotLight);
       vm.scene.add(spotLight.target);
-      spotLight.intensity =1.5
+      
+      let spotLight_2 = new SpotLight(0xffffff);
+      spotLight_2.position.set(0, 0, 0);
+      spotLight_2.target.position.set(-60*n, 55*n, 60*n);
+      spotLight_2.intensity = 0.6
+      vm.scene.add(spotLight_2);
+      vm.scene.add(spotLight_2.target);
 
-      const color = 0xFFFFFF;
-      const intensity = 0.2;
+
+      /*const color = 0xFFFFFF;
+      const intensity = 1.6;
       const width = 100;
       const height = 100;
       const light = new RectAreaLight(color, intensity, width, height);
-      light.position.set(-20, 27 * 2, 20);
-      light.rotation.x = threeMath.degToRad(-90);
-      vm.scene.add(light);
+      light.position.set(-20, 40, 20);
+      light.rotation.x = threeMath.degToRad(-100);
+      vm.scene.add(light);*/
 
 
       vm.addControlBoxes()
 
-      spotLight.target.position.set(-10, 10, 10);
+
 
       vm.selectCase()
 
