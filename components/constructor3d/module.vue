@@ -537,7 +537,7 @@
               if (minSort < sort) acc +=width
               return acc
             },0)
-            return -paddingRight * sort
+            return -paddingRight * sort - (this.bottomRight[0] ? this.bottomRight[0].userData.depth : 0)
           }
         }
       },
@@ -587,89 +587,7 @@
           if (!isReplace) this.selectedCase = null
           this.$emit('removeItem', {uuid: selectedObject.uuid, type: 'cases'})
 
-          const removeTableTop = (uuid) => {
-            const tableTopObj = this.scene.getObjectByProperty('uuid', uuid)
-            if (tableTopObj) this.scene.remove(tableTopObj)
-          }
-
-          if (left) {
-            const addNewTableTop = (padding, width, height, type, color) => {
-              const tableTop = getTableTop({ width, height, type, color })
-              const angularPadding = this.bottomAngularCaseExist ? this.bottomAngularCaseExist.depth : 0
-
-              // // const x = -(padding + angularPadding + GAP_FROM_WALL + width / 2)
-              // const y = TABLE_TOP_PADDING_BOTTOM + height / 2
-              // const z = TABLE_TOP_DEPTH / 2
-
-              // tableTop.position.set(x, y, z)
-              tableTop.name = 'tableTopLeft'
-
-              this.scene.add(tableTop)
-            }
-
-            this.tableTopsLeft.forEach((el) => {
-              const { uuid } = el
-              removeTableTop(uuid)
-            })
-
-            const bottomPaddingLeft = this.bottomLeft
-              .reduce((acc, {userData: {width}}) => {
-                acc += width
-                return acc
-              }, 0)
-            const tableTopsCount = Math.trunc(bottomPaddingLeft / this.tableTopConfig.maxWidth)
-            const fraction = bottomPaddingLeft - this.tableTopConfig.maxWidth * tableTopsCount
-
-            if (tableTopsCount) {
-              for (let i = 0; i < tableTopsCount; i++) {
-                addNewTableTop(i * this.tableTopConfig.maxWidth, this.tableTopConfig.maxWidth, this.tableTopConfig.height, this.tableTopConfig.type, this.tableTopConfig.color)
-              }
-            }
-
-            if (fraction) {
-              addNewTableTop(tableTopsCount * this.tableTopConfig.maxWidth, fraction, this.tableTopConfig.height, this.tableTopConfig.type, this.tableTopConfig.color)
-            }
-
-          } else {
-            const addNewTableTop = (padding, width, height, type, color) => {
-              const tableTop = getTableTop({ width, height, type, color })
-
-              const x = -(TABLE_TOP_DEPTH / 2)
-              const y = TABLE_TOP_PADDING_BOTTOM + height / 2
-              const z = padding + GAP_FROM_WALL + width / 2
-
-              tableTop.position.set(x, y, z)
-              tableTop.rotation.y = threeMath.degToRad(-90);
-              tableTop.name = 'tableTopRight'
-
-              this.scene.add(tableTop)
-            }
-
-            if (['boxAngularFloor', 'boxAngularFloor_1'].includes(selectedObject.name)) {
-              this.tableTopsLeft.forEach((el) => {
-                const { x, y, z } = el.position
-                el.position.set(x + depth, y, z);
-              })
-            }
-
-            this.tableTopsRight.forEach((el) => {
-              const { uuid } = el
-              removeTableTop(uuid)
-            })
-
-            const tableTopsCount = Math.trunc(this.bottomPaddingRight / this.tableTopConfig.maxWidth)
-            const fraction = this.bottomPaddingRight - this.tableTopConfig.maxWidth * tableTopsCount
-
-            if (tableTopsCount) {
-              for (let i = 0; i < tableTopsCount; i++) {
-                addNewTableTop(i * this.tableTopConfig.maxWidth, this.tableTopConfig.maxWidth, this.tableTopConfig.height, this.tableTopConfig.type, this.tableTopConfig.color)
-              }
-            }
-
-            if (fraction) {
-              addNewTableTop(tableTopsCount * this.tableTopConfig.maxWidth, fraction, this.tableTopConfig.height, this.tableTopConfig.type, this.tableTopConfig.color)
-            }
-          }
+          this.addTableTop()
         }
       },
       swapCam() {
@@ -703,50 +621,7 @@
           })
         this.scene.add(body)
 
-        const removeTableTop = (uuid) => {
-          const tableTopObj = vm.scene.getObjectByProperty('uuid', uuid)
-          if (tableTopObj) vm.scene.remove(tableTopObj)
-        }
-
-        const addNewTableTop = (padding, width, height, type, color) => {
-          const tableTop = getTableTop({ width, height, type, color })
-
-          const x = -(TABLE_TOP_DEPTH / 2)
-          const y = TABLE_TOP_PADDING_BOTTOM + height / 2
-          const z = padding + GAP_FROM_WALL + width / 2
-
-          tableTop.position.set(x, y, z)
-          tableTop.rotation.y = threeMath.degToRad(-90);
-          tableTop.name = 'tableTopRight'
-
-          this.scene.add(tableTop)
-        }
-
-        if (this.tableTopConfig.showTableTop) {
-          this.tableTopsLeft.forEach((el) => {
-            const { x, y, z } = el.position
-            el.position.set(x - depth, y, z);
-          })
-
-          this.tableTopsRight.forEach((el) => {
-            const { uuid } = el
-            removeTableTop(uuid)
-          })
-
-
-          const tableTopsCount = Math.trunc(this.bottomPaddingRight / this.tableTopConfig.maxWidth)
-          const fraction = this.bottomPaddingRight - this.tableTopConfig.maxWidth * tableTopsCount
-
-          if (tableTopsCount) {
-            for (let i = 0; i < tableTopsCount; i++) {
-              addNewTableTop(i * this.tableTopConfig.maxWidth, this.tableTopConfig.maxWidth, this.tableTopConfig.height, this.tableTopConfig.type, this.tableTopConfig.color)
-            }
-          }
-
-          if (fraction) {
-            addNewTableTop(tableTopsCount * this.tableTopConfig.maxWidth, fraction, this.tableTopConfig.height, this.tableTopConfig.type, this.tableTopConfig.color)
-          }
-        }
+        this.addTableTop()
       },
       addBottomRightButtonToScene(isReplace) {
         let body = this.bodyCase.clone();
@@ -770,7 +645,6 @@
         if (!isReplace) body.userData.sort = count
 
         this.scene.add(body)
-
 
         // добавляем столешницу
         this.addTableTop()
@@ -799,10 +673,6 @@
 
         this.scene.add(body)
 
-        const padding = this.bottomLeft.reduce((acc, {userData: {width}}) => {
-          acc +=width
-          return acc
-        } , 0)
         // добавляем столешницу
         this.addTableTop()
       },
@@ -825,14 +695,19 @@
         }
 
         const paddingRight = this.bottomRight.length ? this.bottomRight[0].userData.depth : 0
+
+        const paddingLeft = this.bottomLeft.length ? this.bottomLeft[0].userData.depth : 0
+
         const addNewTableTopLeft = (padding, width, height, type, color, sort) => {
           const tableTop = getTableTop({ width, height, type, color })
-          const angularPadding = this.bottomAngularCaseExist ? this.bottomAngularCaseExist.depth : paddingRight
-          const x = -(padding + angularPadding + GAP_FROM_WALL + width / 2)
+
+          // const x = -(padding + angularPadding + GAP_FROM_WALL + width / 2)
           const y = TABLE_TOP_PADDING_BOTTOM + height / 2
           const z = TABLE_TOP_DEPTH / 2
 
-          tableTop.position.set(x, y, z)
+          // tableTop.position.set(x, y, z)
+          tableTop.position.z = z
+          tableTop.position.y = y
           tableTop.name = 'tableTopLeft'
           tableTop.userData.sort = sort
 
@@ -859,7 +734,7 @@
         const rightWidth = this.bottomRight.reduce((acc, {userData: {width, padding}}) => {
           acc +=width + (padding ? padding : 0)
           return acc
-        } , 0)
+        } , 0) + ( this.bottomAngularCaseExist ? 0 : paddingLeft)
 
         const leftWidth =  this.bottomLeft.reduce((acc, {userData: {width}}) => {
           acc +=width
@@ -877,7 +752,6 @@
         } else {
           if (fractionRight) addNewTableTopRight(0, fractionRight, height, type, color, 0)
         }
-
 
         const leftCount = Math.trunc(leftWidth / maxWidth)
         const fractionLeft = leftWidth - maxWidth * leftCount
@@ -1027,7 +901,7 @@
       spotLight.intensity = 1.6
       vm.scene.add(spotLight);
       vm.scene.add(spotLight.target);
-      
+
       let spotLight_2 = new SpotLight(0xffffff);
       spotLight_2.position.set(0, 0, 0);
       spotLight_2.target.position.set(-60*n, 55*n, 60*n);
