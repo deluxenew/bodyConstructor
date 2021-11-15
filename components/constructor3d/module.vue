@@ -771,7 +771,7 @@
         let wallGeometry = new PlaneGeometry(wallWidth, wallHeight);
         let floorGeometry = new PlaneGeometry(wallWidth, wallWidth);
         let floorMaterial = new MeshStandardMaterial({
-          color: 0xaf9182,
+          color: 0xe3b791/*af9182*/,
         });
         floorMaterial.roughness = 0.3;
         floorMaterial.metalness = 0.05;
@@ -782,7 +782,7 @@
         const floorNormalTexture = floorTextureLoader.load(require('./img/floor.jpg'));
 
         let wallMaterial = new MeshStandardMaterial({
-          color: 0xc8b7ae,
+          color: 0xf2d6be/*c8b7ae*/,
         });
         wallMaterial.roughness = 1;
         wallMaterial.metalness = 0;
@@ -898,7 +898,7 @@
       let spotLight = new SpotLight(0xffffff);
       spotLight.position.set(-60*n, 55*n, 60*n);
       spotLight.target.position.set(-10, 10, 10);
-      spotLight.intensity = 1.6
+      spotLight.intensity = 1.5
       vm.scene.add(spotLight);
       vm.scene.add(spotLight.target);
 
