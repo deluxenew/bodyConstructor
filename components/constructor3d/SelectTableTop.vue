@@ -22,55 +22,34 @@
             @click="selectCurrentType(item)"
           )
             div.tab__title {{item.typeName}}
-        div.select-elements__list(v-if="parentVariants.length")
-          div.select-elements__item(
-            v-for="item in parentVariants"
-            :class="{active: currentParentVariantModel && item.name === currentParentVariantModel.name}"
-            @click="selectParentVariant(item)"
-          )
-            img.select-elements__img(v-if="item.userData" :src="item.userData.img")
-            | {{item && item.userData ? item.userData.form : ''}}
-
-
-        div.select-elements__list(v-if="currentTypeModel && currentTypeModel.items")
-          div.select-elements__item(
-            v-for="item in currentTypeModel.items"
-            :class="{active: item.name === currentItemModel.name}"
-            @click="currentItem = item"
-          )
-            img.select-elements__img(v-if="item.userData" :src="item.userData.img")
-            | {{item && item.userData ? item.userData.form : ''}}
-
-        div.select-elements__tabs.pt-16(v-if="currentParentVariantModel && currentTypeModel && currentTypeModel.variants")
+        div.select-elements__tabs.pt-16(v-if="currentTypeModel && currentTypeModel.items")
           div.select-elements__tabs-item(
-            v-for="variant in currentTypeModel.variants"
-            :class="{active: variant.type === currentVariantModel.type}"
+            v-for="variant in currentTypeModel.items"
+            :class="{active: variant === currentVariantModel}"
             @click="selectCurrentVariant(variant)"
           )
-            div.tab__title {{variant.typeName}}
-        div.select-elements__list(v-if="currentParentVariantModel && currentVariantModel && currentVariantModel.items && currentVariantModel.items.length")
+            div.tab__title {{variant}}
+        div.select-elements__list(v-if="currentTypeModel && currentTypeModel.variants && currentTypeModel.variants.length")
           div.select-elements__item(
-            v-for="color in currentVariantModel.items"
-            :class="{active: color.name === currentItemModel.name}"
-            @click="currentItem = color"
+            v-for="color in currentTypeModel.variants"
+            :class="{active: currentItemModel && color.name === currentItemModel.name}"
+            @click="selectCurrentColor(color)"
           )
             img.select-elements__img(v-if="color" :src="color.url")
             | {{color && color.name ? color.name : ''}}
 </template>
 
 <script>
+import UiInputCheckbox from './UiInputCheckbox.vue'
 import TransitionExpand from './TransitionExpand.vue'
+
 export default {
-  name: "SelectTableTop",
-  components: {TransitionExpand},
+  name: "SelectTabletop",
+  components: {TransitionExpand, UiInputCheckbox},
   props: {
     title: {
       type: String,
       default: ''
-    },
-    parentVariants: {
-      type: Array,
-      default: () => []
     },
     elementVariants: {
       type: Array,
@@ -85,38 +64,28 @@ export default {
     return {
       currentType: null,
       currentVariant: null,
-      currentParentVariant: null,
       currentItem: null,
       opened: true
     }
   },
   watch:{
-    parentVariants() {
-      // this.currentParentVariant = this.currentParentVariantModel || this.parentVariants[0] || null
-      if (this.currentItemModel) this.currentItemModel = this.currentVariantModel.items[0] || null
-      if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
-    },
-    currentParentVariant(v) {
-      this.$emit('selectParent', v)
-    },
     currentItem(v) {
-      const item = {
-        ...v,
-        boxId: this.currentParentVariantModel?.name,
-        type: this.currentTypeModel?.type,
-        variant: this.currentVariantModel?.type
-      }
-      this.$emit('selectItem', item)
+
     },
     value: {
       deep: true,
       handler(v) {
-        const item = this.currentTypeModel.items && this.currentTypeModel.items.find((el) => el.name === v.name)
-        if (item) this.currentItem = item
-        if (!!v.name) {
-          const caseBox = this.parentVariants.find((el) => v.name === el.name)
-
-          this.currentParentVariantModel = caseBox || null
+        if (!!v.type) {
+          const typeObj = this.elementVariants.find(({type}) => v.type === type)
+          this.currentTypeModel = typeObj || null
+        }
+        if (!!v.variant) {
+          const variantObj = this.currentTypeModel?.items.find((el) => v.variant === el)
+          this.currentVariantModel = variantObj || null
+        }
+        if (!!v.colorId) {
+          const colorObj = this.currentVariantModel?.variants.find(({ id }) => v.colorId === id)
+          this.currentItemModel = colorObj || null
         }
       }
     }
@@ -137,193 +106,189 @@ export default {
     // значение второй вкладки
     currentVariantModel: {
       get() {
-        return this.currentVariant || (this.currentTypeModel?.variants && this.currentTypeModel?.variants[0]) || null
+        return this.currentVariant || (this.currentTypeModel && this.currentTypeModel?.items[0]) || null
       },
       set(v) {
         this.currentVariant = v
       }
     },
-    // значение варианта выбора фасада
-    currentParentVariantModel: {
-      get() {
-        return this.currentParentVariant
-      },
-      set(v) {
-        this.$emit('selectParent', v)
-      }
-    },
     // выбранный вариант конфига
     currentItemModel: {
       get() {
-        return this.currentItem || (this.currentTypeModel?.items && this.currentTypeModel?.items[0]) || this.currentVariantModel?.items[0] || null
+        return this.currentItem || this.currentTypeModel?.variants[0] || null
       },
       set(v) {
-        const item = {
-          ...v,
-          boxId: this.currentParentVariantModel?.name,
-          type: this.currentTypeModel?.type,
-          variant: this.currentVariantModel?.type
-        }
-         this.$emit('selectItem', item)
+        this.currentItem = v
       }
-    }
+    },
+    valueModel: {
+      get() {
+        return this.value || null
+      },
+      set(v) {
+        this.$emit('input', v)
+      }
+    },
   },
   methods: {
     toggleOpen() {
       this.opened = !this.opened
     },
-    removeItem () {
-      if (this.value.name && !this.currentParentVariantModel) this.$emit('remove')
-      if (this.currentParentVariantModel) {
-        const parent = this.currentParentVariantModel.userData.parent.id
-        this.$emit('input', {name: parent})
-      }
+    removeItem() {
+      this.currentItem = null
     },
     selectCurrentType(item) {
       this.currentTypeModel = item
-      if (this.currentVariantModel) this.currentVariantModel = this.currentTypeModel.variants[0]
-      if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
+      this.selectCurrentVariant(this.currentTypeModel.items[0], true)
     },
-    selectCurrentVariant(variant) {
+    selectCurrentVariant(variant, newColor) {
       this.currentVariantModel = variant
-      if (this.currentItemModel) this.currentItemModel = this.currentVariantModel.items[0]
-      if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
+      if (!newColor) this.selectCurrentColor(this.currentItem)
+      else this.selectCurrentColor(this.currentTypeModel.variants[0])
+
     },
-    selectParentVariant(item) {
-       this.currentParentVariant = item
-      // this.currentParentVariantModel = item
+    selectCurrentColor(color) {
+      this.currentItem = color
+      const item = {
+        ...color,
+        type: this.currentTypeModel?.type,
+        typeName: this.currentTypeModel?.typeName,
+        variant: this.currentVariantModel,
+        maxWidth: this.currentTypeModel?.maxWidth
+      }
+      this.$emit('selectColor', item)
     },
   },
   mounted() {
-     this.$emit('selectItem', this.currentItemModel)
+    this.selectCurrentColor(this.currentTypeModel.variants[0])
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .select-elements+ .select-elements {
-    padding-top: 24px;
+.select-elements+ .select-elements {
+  padding-top: 24px;
+}
+
+.select-elements {
+  width: 100%;
+
+  &__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
   }
 
-  .select-elements {
+  &__title {
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+
+  &__chevron {
+    transition: .2s ease-in-out;
+    cursor: pointer;
+
+    &.reverse {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__remove {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+
+    &.disabled {
+      opacity: .5;
+    }
+
+    &:hover:not(&.disabled) {
+      text-decoration: underline;
+    }
+  }
+  &__group {
     width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
 
-    &__header {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 16px;
-    }
+  &__tabs {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 
-    &__title {
-      font-size: 18px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-    }
-
-    &__chevron {
-      transition: .2s ease-in-out;
-      cursor: pointer;
-
-      &.reverse {
-        transform: rotate(180deg);
-      }
-    }
-
-    &__remove {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      transition: .3s ease-in-out;
-
-      &.disabled {
-        opacity: .5;
-      }
-
-      &:hover:not(&.disabled) {
-        text-decoration: underline;
-      }
-    }
-    &__group {
-      width: 100%;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      flex-direction: column;
-    }
-
-    &__tabs {
-      width: 100%;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-
-      &-item {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        padding: 4px 8px;
-        border-bottom: 2px solid #D5D7DC;
-        transition: .3s ease-in-out;
-
-        &.active {
-          border-bottom: 2px solid #0099DC;
-        }
-      }
-
-      &.pt-16 {
-        padding-top: 16px;
-      }
-    }
-
-    &__name {
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 16px;
-      text-align: center;
-      letter-spacing: 0.2px;
-      color: #454A54;
-    }
-
-    &__list {
-      padding-top: 16px;
-      width: 100%;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-    }
-
-    &__item + &__item {
-      margin-left: 8px;
-    }
-
-    &__item {
-      border: 1px solid #D5D7DC;
-      border-radius: 4px;
+    &-item {
+      flex-grow: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      flex-direction: column;
-      width: 150px;
-      height: 150px;
       cursor: pointer;
+      padding: 4px 8px;
+      border-bottom: 2px solid #D5D7DC;
       transition: .3s ease-in-out;
-      user-select: none;
-
 
       &.active {
-        border: 2px solid #0099DC;
+        border-bottom: 2px solid #0099DC;
       }
     }
-    &__img {
-      width: 100px;
-      padding-bottom: 20px;
+
+    &.pt-16 {
+      padding-top: 16px;
     }
   }
+
+  &__name {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #454A54;
+  }
+
+  &__list {
+    padding-top: 16px;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  &__item + &__item {
+    margin-left: 8px;
+  }
+
+  &__item {
+    border: 1px solid #D5D7DC;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+    user-select: none;
+
+
+    &.active {
+      border: 2px solid #0099DC;
+    }
+  }
+  &__img {
+    width: 100px;
+    padding-bottom: 20px;
+  }
+}
 </style>

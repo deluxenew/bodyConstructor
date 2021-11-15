@@ -102,14 +102,14 @@ const bottom_400_800 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
 
   bodyCase.userData.form = '400 * 800'
-  bodyCase.userData.material = 'Деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -171,7 +171,7 @@ const bottom_400_800_1 = () => {
   /*let objFacadeLeft = new Group();
   objFacadeLeft.add(facadeLeft);
   facadeLeft.name = 'doorBox1'
-  facadeLeft.position.x = boxWidth / 4 - sideDepth / 3; 
+  facadeLeft.position.x = boxWidth / 4 - sideDepth / 3;
   objFacadeLeft.position.x = -boxWidth / 2 + sideDepth / 2;
   objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2;
   objFacadeLeft.name = 'leftDoor'*/
@@ -227,7 +227,7 @@ const bottom_400_800_1 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
@@ -237,7 +237,7 @@ const bottom_400_800_1 = () => {
 
   bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Один фасад'
-  bodyCase.userData.material = 'Деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -353,14 +353,14 @@ const bottom_600_800 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
   bodyCase.userData.height = bodyHeight
 
   bodyCase.userData.form = '600 * 800'
-  bodyCase.userData.material = 'Деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -426,7 +426,7 @@ const bottom_600_800_1 = () => {
   /*let objFacadeLeft = new Group();
   objFacadeLeft.add(facadeLeft);
   facadeLeft.name = 'doorBox1'
-  facadeLeft.position.x = boxWidth / 4 - sideDepth / 3; 
+  facadeLeft.position.x = boxWidth / 4 - sideDepth / 3;
   objFacadeLeft.position.x = -boxWidth / 2 + sideDepth / 2;
   objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2;
   objFacadeLeft.name = 'leftDoor'*/
@@ -482,7 +482,7 @@ const bottom_600_800_1 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
@@ -492,7 +492,7 @@ const bottom_600_800_1 = () => {
 
   bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Один фасад'
-  bodyCase.userData.material = 'Деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -608,7 +608,7 @@ const bottom_600_800_2 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
@@ -618,7 +618,7 @@ const bottom_600_800_2 = () => {
 
   bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Два фасада'
-  bodyCase.userData.material = 'Деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -734,7 +734,7 @@ const bottom_1000_800 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
@@ -804,12 +804,12 @@ const bottom_1000_800 = () => {
   let legFront = new Mesh(gLegFront, material);
   let legLeft = new Mesh(gLegs, legMaterial);
   let legRight = new Mesh(gLegs, legMaterial);
-  
+
 
   /*let objFacadeLeft = new Group();
   objFacadeLeft.add(facadeLeft);
   facadeLeft.name = 'doorBox1'
-  facadeLeft.position.x = boxWidth / 4 - sideDepth / 3; 
+  facadeLeft.position.x = boxWidth / 4 - sideDepth / 3;
   objFacadeLeft.position.x = -boxWidth / 2 + sideDepth / 2;
   objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2;
   objFacadeLeft.name = 'leftDoor'*/
@@ -865,7 +865,7 @@ const bottom_1000_800 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
@@ -991,7 +991,7 @@ const bottom_1000_800 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
@@ -1118,7 +1118,7 @@ const boxAngularFloor = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
@@ -1235,7 +1235,7 @@ const boxAngularFloor = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
@@ -1350,7 +1350,7 @@ const boxAngularFloor = () => {
   legLeft.position.y = -bodyHeight / 2 + legsHeight;
   legLeft.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legLeft.position.x = -bodyWidth / 2 + legsRad + legFrontMargin;
-  
+
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
