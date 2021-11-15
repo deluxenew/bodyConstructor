@@ -102,7 +102,7 @@ legMaterial.metalness = 0.5;
   bodyCase.userData.height = bodyHeight
 
   bodyCase.userData.form = '1000 * 800'
-  bodyCase.userData.material = 'Деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -228,7 +228,7 @@ legMaterial.metalness = 0.5;
 
   bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Один фасад'
-  bodyCase.userData.material = 'Деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -348,7 +348,7 @@ legMaterial.metalness = 0.5;
 
   bodyCase.userData.type = 'Напольный'
   bodyCase.userData.form = 'Два фасада'
-  bodyCase.userData.material = 'Деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -467,7 +467,7 @@ const boxAngularFloor = () => {
   bodyCase.userData.padding = 3.5
 
   bodyCase.userData.form = 'Нижний угловой шкаф'
-  bodyCase.userData.material = 'деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -580,7 +580,7 @@ const boxAngularFloor = () => {
    bodyCase.userData.doorHeight = boxHeight
 
   bodyCase.userData.form = 'Один фасад'
-  bodyCase.userData.material = 'деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -691,7 +691,7 @@ const boxAngularFloor = () => {
   bodyCase.userData.padding = 3.5
 
   bodyCase.userData.form = 'Нижний угловой шкаф'
-  bodyCase.userData.material = 'деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
@@ -754,7 +754,7 @@ const boxAngularTop = () => {
 
   sideLeft.rotation.y = Math.degToRad(-90);
   sideLeft.position.x = -(boxWidth / 2 - sideDepth / 2);
-  sideRight.rotation.y = Math.degToRad(90);   
+  sideRight.rotation.y = Math.degToRad(90);
   sideRight.position.x = (boxWidth / 2 - sideDepth / 2);
   sideBack.position.z = -(boxDepth / 2 - sideDepth / 2);
   sideBottom.rotation.x = Math.degToRad(-90);
@@ -801,7 +801,7 @@ const boxAngularTop = () => {
   //bodyCase.userData.padding = 3.5
 
   bodyCase.userData.form = 'Верхний угловой шкаф'
-  bodyCase.userData.material = 'деревянный'
+  bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
