@@ -71,6 +71,7 @@
           type: 'post',
           height: 0.26,
           maxWidth: 30,
+          url: '',
           color: ''
         })
       },
@@ -88,7 +89,12 @@
               colorId: ''
             },
             tableTopConfig: {
-
+              showTableTop: true,
+              type: 'post',
+              height: 0.26,
+              maxWidth: 30,
+              colorId: '',
+              url: ''
             },
           },
           order: {
@@ -307,6 +313,14 @@
         addBottomLeftButton.userData.actionName = 'addBottomLeftButtonToScene'
         return addBottomLeftButton
       },
+      addTopRightButton() {
+        let addTopRightButton = boxControl.clone()
+        return
+      },
+      addTopLeftButton() {
+        let addTopLeftButton = boxControl.clone()
+        return
+      },
       isMoveRightActive() {
         const currentUuid = this.selectedCase?.uuid
         if (!currentUuid) return false
@@ -371,8 +385,8 @@
           this.caseConfigModel = v
         }
       },
-      'tableTopConfig.showTableTop'(v) {
-        this.toggleTableTops(v)
+      tableTopConfig() {
+        this.addTableTop()
       },
       bottomPaddingRight() {
         const button = this.scene.children.find(({name}) => name === 'addBottomRightButton')
@@ -679,8 +693,8 @@
       addTableTop() {
         const vm = this
 
-        const addNewTableTopRight = (padding, width, height, type, color, sort) => {
-          const tableTop = getTableTop({ width, height, type, color })
+        const addNewTableTopRight = (padding, width, height, type, url, sort) => {
+          const tableTop = getTableTop({ width, height, type, url })
 
           const x = -(TABLE_TOP_DEPTH / 2)
           const y = TABLE_TOP_PADDING_BOTTOM + height / 2
@@ -694,14 +708,11 @@
           this.scene.add(tableTop)
         }
 
-        const paddingRight = this.bottomRight.length ? this.bottomRight[0].userData.depth : 0
-
         const paddingLeft = this.bottomLeft.length ? this.bottomLeft[0].userData.depth : 0
 
-        const addNewTableTopLeft = (padding, width, height, type, color, sort) => {
-          const tableTop = getTableTop({ width, height, type, color })
+        const addNewTableTopLeft = (padding, width, height, type, url, sort) => {
+          const tableTop = getTableTop({ width, height, type, url })
 
-          // const x = -(padding + angularPadding + GAP_FROM_WALL + width / 2)
           const y = TABLE_TOP_PADDING_BOTTOM + height / 2
           const z = TABLE_TOP_DEPTH / 2
 
@@ -719,7 +730,7 @@
           if (tableTopObj) vm.scene.remove(tableTopObj)
         }
 
-        const { height, type, color, maxWidth } = this.tableTopConfig
+        const { height, type, color, maxWidth, url } = this.tableTopConfig
 
         this.tableTopsRight.forEach((el) => {
           const { uuid } = el
@@ -741,16 +752,22 @@
           return acc
         } , 0)
 
-        const rightCount = Math.trunc(rightWidth / maxWidth)
+        const rightCount = Math.trunc(rightWidth / maxWidth) || 0
         const fractionRight = rightWidth - maxWidth * rightCount
+        console.log( rightWidth, maxWidth , rightCount)
 
         if (rightCount) {
+
           for (let i = 0; i <= rightCount -1; i++) {
-            addNewTableTopRight(0, maxWidth,  height, type, color, i)
+            addNewTableTopRight(0, maxWidth,  height, type, url, i)
           }
-          if (fractionRight) addNewTableTopRight(0, fractionRight, height, type, color, rightCount)
+          if (fractionRight) addNewTableTopRight(0, fractionRight, height, type, url, rightCount)
         } else {
-          if (fractionRight) addNewTableTopRight(0, fractionRight, height, type, color, 0)
+          if (fractionRight) {
+            console.log({fractionRight, height, type, url})
+            addNewTableTopRight(0, fractionRight, height, type, url, 0)
+          }
+
         }
 
         const leftCount = Math.trunc(leftWidth / maxWidth)
@@ -758,11 +775,11 @@
 
         if (leftCount) {
           for (let i = 0; i <= leftCount -1; i++) {
-            addNewTableTopLeft(0, maxWidth,  height, type, color, i)
+            addNewTableTopLeft(0, maxWidth,  height, type, url, i)
           }
-          if (fractionLeft) addNewTableTopLeft(0, fractionLeft, height, type, color, leftCount)
+          if (fractionLeft) addNewTableTopLeft(0, fractionLeft, height, type, url, leftCount)
         } else {
-          if (fractionLeft) addNewTableTopLeft(0, fractionLeft, height, type, color, 0)
+          if (fractionLeft) addNewTableTopLeft(0, fractionLeft, height, type, url, 0)
         }
       },
       initWalls() {
@@ -876,6 +893,8 @@
       addControlBoxes() {
         this.scene.add(this.addBottomRightButton)
         this.scene.add(this.addBottomLeftButton)
+        // this.scene.add(this.addTopRightButton)
+        // this.scene.add(this.addTopLeftButton)
       },
       setControlBoxesPosition() {
         const addBottomLeftButton = this.scene.getObjectByName('addBottomLeftButton')

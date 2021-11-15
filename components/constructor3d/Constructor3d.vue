@@ -8,6 +8,7 @@
             ref="kitchen"
             v-model="kitchen"
             :caseConfig="caseConfig"
+            :tableTopConfig="tableTopConfig"
             @removeItem="removeItem"
             @setCases="kitchen.order.cases = $event"
             @setConfigName="kitchen.currentConfig.name = $event"
@@ -30,8 +31,8 @@
           )
           select-table-top(
             v-model="kitchen.currentConfig.tableTopConfig"
-            :elementVariants="[]"
-            @remove="$refs.kitchen.removeCase()"
+            :elementVariants="tableTops"
+            @selectColor="selectTableTopConfig"
           )
       calculate-order(
         :kitchen="kitchen"
@@ -42,8 +43,10 @@
 
 <script>
 
-  import boxes from './CasesListConfig.js'
+  import boxes from './CasesListConfig'
   import facades from './FacadesListConfig'
+  import tableTops from './TableTopList'
+
   import Module from './module'
   import SelectCase from './SelectCase.vue'
   import SelectFacade from './SelectFacade.vue'
@@ -125,7 +128,11 @@
         const { colors } = facades
 
         return colors
-      }
+      },
+      tableTops() {
+        const { colors } = tableTops
+        return colors
+      },
     },
     watch: {
       'kitchen.currentConfig.caseConfig.name'(v) {
@@ -152,7 +159,6 @@
 
         this.caseConfig = config
 
-
         this.caseConfig.userData.facadeCount = doors.length
         this.caseConfig.userData.facadeColorName = name
         this.caseConfig.userData.facadeColorId = id
@@ -172,7 +178,7 @@
       },
       selectFacadeColor(color) {
         const { id, type, typeName, url, name, variantType, variantTypeName } = color
-        const { userData: {doorWidth, doorHeight} } = this.caseConfig
+        const { userData: { doorWidth, doorHeight } } = this.caseConfig
 
         const group = this.caseConfig.children.find(({name}) => name === 'group')
         const doors = group.children.filter(({name}) => name === 'leftDoor' || name === 'rightDoor')
@@ -191,7 +197,15 @@
         this.caseConfig.userData.facadeTypeName = typeName
         this.caseConfig.userData.facadeVariantType = variantType
         this.caseConfig.userData.facadeVariantTypeName = variantTypeName
-
+      },
+      selectTableTopConfig(color) {
+        const { id, type, maxWidth, typeName, url, name, variantType, variant } = color
+        this.tableTopConfig = {}
+        this.tableTopConfig.type = type
+        this.tableTopConfig.height = variant
+        this.tableTopConfig.color = id
+        this.tableTopConfig.url = url
+        this.tableTopConfig.maxWidth = maxWidth
 
       }
     },
