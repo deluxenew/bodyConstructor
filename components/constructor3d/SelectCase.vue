@@ -68,7 +68,8 @@ export default {
       deep: true,
       handler(v) {
         const item = this.currentTypeModel.items && this.currentTypeModel.items.find((el) => el.userData.variants.map(({id}) => id).includes(v.name) || el.name === v.name)
-        if (item) this.currentItem = item
+        if (item) this.currentItemModel = item
+        this.$emit('sceneChange', item)
       }
     }
   },

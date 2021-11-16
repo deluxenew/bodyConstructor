@@ -12,6 +12,7 @@
             @removeItem="removeItem"
             @setCases="kitchen.order.cases = $event"
             @setConfigName="kitchen.currentConfig.caseConfig.name = $event"
+
           )
         div.column.config
           select-case(
@@ -19,7 +20,8 @@
             :elementVariants="boxes"
             @selectItem="selectCaseConfig"
             @remove="$refs.kitchen.removeCase()"
-          @selectType="selectType"
+            @selectType="selectType"
+
           )
           select-facade(
             v-model="kitchen.currentConfig.facadeConfig"

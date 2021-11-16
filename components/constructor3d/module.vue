@@ -1040,17 +1040,21 @@
 
             let controlActionName = findActionName(object)
 
+            const obj = vm.scene.children.filter(({name}) => name === 'selectBox')
+            if (obj && obj.length) {
+              obj.forEach((el) => vm.scene.remove(el))
+            }
+
+            vm.$emit('setConfigName',  '')
             if (controlActionName) {
               vm[controlActionName]()
+
             } else {
               vm.selectedCase = recursiveFindBox(object)
 
-              vm.$emit('setConfigName', vm.selectedCase.name)
+              vm.$emit('setConfigName', vm.selectedCase?.name )
 
-              const obj = vm.scene.children.filter(({name}) => name === 'selectBox')
-              if (obj && obj.length) {
-                obj.forEach((el) => vm.scene.remove(el))
-              }
+
               if (recursiveFindBox(object)) {
                 const { userData: {width, height, depth}, position: {x,y,z}, rotation: {y: rotate} } = vm.selectedCase
                 const leftTop = selectBox({width, height, depth, x,y,z, rotate})
@@ -1230,7 +1234,7 @@
       spotLight.target.position.set(-10, 10, 10);
       spotLight.intensity = 0.8
       vm.scene.add(spotLight);
-      vm.scene.add(spotLight.target); 
+      vm.scene.add(spotLight.target);
 
       let spotLight_1 = new SpotLight(0xffffff);
       spotLight_1.position.set(-20, 60*n, 20);
