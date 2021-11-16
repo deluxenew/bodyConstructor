@@ -13,7 +13,7 @@ legMaterial.roughness = 0.1;
 legMaterial.metalness = 0.5;
 
 const boxAngularTop = () => {
-  let bodyWidth = 6.4;
+  let bodyWidth = 4.2*2;
   let bodyHeight = 8;
   let bodyDepth = bodyWidth;
 
@@ -21,18 +21,19 @@ const boxAngularTop = () => {
   let boxHeight = bodyHeight;
   let boxDepth = bodyDepth;
 
-  let gSideLR = new BoxGeometry(boxDepth, boxHeight, sideDepth);
+  let gSideLR = new BoxGeometry(boxDepth/2, boxHeight, sideDepth);
   let gSideBack = new BoxGeometry(boxWidth - sideDepth * 2, boxHeight, sideDepth);
   let gSideBottom = new BoxGeometry(boxWidth - sideDepth * 2, boxDepth, sideDepth);
 
   let sideLeft = new Mesh(gSideLR, material);
   let sideRight = new Mesh(gSideLR, material);
-  let sideBack = new Mesh(gSideBack, material);
+  let sideBackR = new Mesh(gSideBack, material);
+  let sideBackL = new Mesh(gSideBack, material);
   let sideBottom = new Mesh(gSideBottom, material);
   let sideBTop = new Mesh(gSideBottom, material);
   let sideShelf = new Mesh(gSideBottom, material);
   let facadeLeft = new Group()
-  let facadeRight = new Group();
+  //let facadeRight = new Group();
 
   let objFacadeLeft = new Group();
   objFacadeLeft.add(facadeLeft);
@@ -42,22 +43,26 @@ const boxAngularTop = () => {
   objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2;
   objFacadeLeft.name = 'leftDoor'
 
-  let objFacadeRight = new Group();
+  /*let objFacadeRight = new Group();
   objFacadeRight.add(facadeRight);
   facadeRight.name = 'doorBox'
   facadeRight.position.x = -boxWidth / 4 + sideDepth / 2;
   objFacadeRight.position.x = boxWidth / 2 - sideDepth / 2;
   objFacadeRight.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacadeRight.name = 'rightDoor'
+  objFacadeRight.name = 'rightDoor'*/
 
   let group = new Mesh();
   let bodyCase = new Mesh();
 
-  sideLeft.rotation.y = Math.degToRad(-90);
-  sideLeft.position.x = -(boxWidth / 2 - sideDepth / 2);
+  //sideLeft.rotation.y = Math.degToRad(-90);
+  sideLeft.position.z = (boxDepth/2 - sideDepth / 2);
+  sideLeft.position.x = -(boxDepth/4 - sideDepth / 2);
   sideRight.rotation.y = Math.degToRad(90);
   sideRight.position.x = (boxWidth / 2 - sideDepth / 2);
-  sideBack.position.z = -(boxDepth / 2 - sideDepth / 2);
+  sideRight.position.z = -(boxDepth/4 - sideDepth / 2);
+  sideBackR.position.z = -(boxDepth / 2 - sideDepth / 2);
+  sideBackL.position.x = -(boxWidth / 2 - sideDepth / 2);
+  sideBackL.rotation.y = Math.degToRad(90);
   sideBottom.rotation.x = Math.degToRad(-90);
   sideShelf.rotation.x = Math.degToRad(-90);
   sideBottom.position.y = -(boxHeight / 2 - sideDepth / 2);
@@ -67,12 +72,13 @@ const boxAngularTop = () => {
 
   group.add(sideLeft);
   group.add(sideRight);
-  group.add(sideBack);
+  group.add(sideBackR);
+  group.add(sideBackL);
   group.add(sideBottom);
   group.add(sideShelf);
   group.add(sideBTop)
   group.add(objFacadeLeft)
-  group.add(objFacadeRight)
+  //group.add(objFacadeRight)
   group.name = "group"
 
   bodyCase.add(group);
