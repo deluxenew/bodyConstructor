@@ -15,7 +15,7 @@ legMaterial.metalness = 0.5;
 const boxAngularTop = () => {
   let bodyWidth = 6.4;
   let bodyHeight = 8;
-  let bodyDepth = 6;
+  let bodyDepth = bodyWidth;
 
   let boxWidth = bodyWidth;
   let boxHeight = bodyHeight;
@@ -94,9 +94,9 @@ const boxAngularTop = () => {
 
   bodyCase.userData.type = 'top'
   bodyCase.userData.variants = [
-    {
-      id: 'top_400_800_1'
-    }]
+    /*{
+      id: 'boxAngularTop_1'
+    }*/]
   bodyCase.userData.availableColors = ['dub_votan', 'yasen_ankor_sseryi', 'orex_mramornyi']
 
   // bodyCase.position.set(0,0,0);
@@ -114,7 +114,7 @@ const boxAngularTop = () => {
 const top_400_800 = () => {
   let bodyWidth = 6.4;
   let bodyHeight = 8;
-  let bodyDepth = 6;
+  let bodyDepth = 4.2;
 
   let boxWidth = bodyWidth;
   let boxHeight = bodyHeight;
@@ -212,8 +212,8 @@ const top_400_800 = () => {
 
 const top_400_800_1 = () => {
   let bodyWidth = 6.4;
-  let bodyHeight = 10;
-  let bodyDepth = 6;
+  let bodyHeight = 8;
+  let bodyDepth = 4.2;
 
   let boxWidth = bodyWidth;
   let boxHeight = bodyHeight - legsHeight;
@@ -1580,7 +1580,7 @@ const cases = [
     typeDescription: '',
     additional: null,
     variants: null,
-    items: [top_400_800()]
+    items: [top_400_800(), boxAngularTop()]
   }
 ]
 

@@ -1155,9 +1155,9 @@
 
       let n = 2;
       let spotLight = new SpotLight(0xffffff);
-      spotLight.position.set(-60 * n, 40 * n, 60 * n);
+      spotLight.position.set(-60 * n, 55 * n, 60 * n);
       spotLight.target.position.set(-10, 10, 10);
-      spotLight.intensity = 1.0
+      spotLight.intensity = 1
       vm.scene.add(spotLight);
       vm.scene.add(spotLight.target);
 
