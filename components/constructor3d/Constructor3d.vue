@@ -11,7 +11,7 @@
             :tableTopConfig="tableTopConfig"
             @removeItem="removeItem"
             @setCases="kitchen.order.cases = $event"
-            @setConfigName="kitchen.currentConfig.name = $event"
+            @setConfigName="kitchen.currentConfig.caseConfig.name = $event"
           )
         div.column.config
           select-case(

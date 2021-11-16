@@ -36,16 +36,16 @@
     SpotLight,
     Vector2,
     Raycaster,
-    BufferGeometry,
-    Line,
-    ShapeGeometry,
-    LineBasicMaterial,
-    MeshBasicMaterial,
-    DoubleSide,
-    Object3D
+    // BufferGeometry,
+    // Line,
+    // ShapeGeometry,
+    // LineBasicMaterial,
+    // MeshBasicMaterial,
+    // DoubleSide,
+    // Object3D
   } = Three
-  import {FontLoader} from "./FontLoader.js";
-  import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
+  // import {FontLoader} from "./FontLoader.js";
+  // import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
 
   const windows = {innerHeight: 600, innerWidth: 800}
 
@@ -585,6 +585,11 @@
           }
         }
         removeItem(uuid)
+        vm.selectedCase = null
+        const obj = vm.scene.children.filter(({name}) => name === 'selectBox')
+        if (obj && obj.length) {
+          obj.forEach((el) => vm.scene.remove(el))
+        }
       },
       calcCasePosition(place, caseSort) {
         switch (place) {
@@ -639,12 +644,16 @@
       },
       setCasesPosition() {
         this.scene.children.forEach((el) => {
-          const {position: {x, y, z}, place, userData: {sort, width}} = el
+          const {position: {x, y, z}, place, userData: {sort, width}, name} = el
           if (place === 'bottomRight') el.position.set(x, y, this.calcCasePosition(place, sort) + width / 2)
           if (place === 'bottomLeft') el.position.set(this.calcCasePosition(place, sort) - width / 2, y, z)
 
           if (place === 'topRight') el.position.set(x, y, this.calcCasePosition(place, sort) + width / 2)
           if (place === 'topLeft') el.position.set(this.calcCasePosition(place, sort) - width / 2, y, z)
+         if (this.selectedCase) {
+           const {position: {x: curx, y: cury, z: curz}} = this.selectedCase
+           if (name === 'selectBox') el.position.set(curx, cury, curz)
+         }
         })
       },
       calcTableTopsPosition(name, sort) {
@@ -726,6 +735,7 @@
         }
       },
       addAngularCaseBottom(body, isReplace) {
+        if (body.userData.type !== 'bottom') return;
         if (this.bottomAngularCaseExist && !isReplace) {
           console.log('Хватит угловых шкафов снизу');
           return
@@ -749,6 +759,7 @@
       addBottomRightToScene(isReplace) {
         let body = this.bodyCase.clone();
         body.userData.openedDoors = false
+        if (body.userData.type !== 'bottom') return;
         body.place = 'bottomRight'
 
         if (['boxAngularFloor', 'boxAngularFloor_1'].includes(body.name)) {
@@ -775,8 +786,11 @@
       addBottomLeftToScene(isReplace) {
         let body = this.bodyCase.clone();
         const {depth, height, width} = body.userData
+
+        if (body.userData.type !== 'bottom') return;
         body.userData.openedDoors = false
         body.place = 'bottomLeft'
+
 
         if (['boxAngularFloor', 'boxAngularFloor_1'].includes(body.name)) {
 
@@ -802,6 +816,7 @@
       },
       addTopRightToScene(isReplace) {
         let body = this.bodyCase.clone();
+        if (body.userData.type !== 'top') return;
         body.userData.openedDoors = false
         body.place = 'topRight'
 
@@ -822,6 +837,7 @@
       addTopLeftToScene(isReplace) {
         let body = this.bodyCase.clone();
         body.userData.openedDoors = false
+        if (body.userData.type !== 'top') return;
         body.place = 'topLeft'
 
         const {userData: {depth, height, width}} = body
@@ -1027,10 +1043,21 @@
               vm[controlActionName]()
             } else {
               vm.selectedCase = recursiveFindBox(object)
+
+              vm.$emit('setConfigName', vm.selectedCase.name)
+
+              const obj = vm.scene.children.filter(({name}) => name === 'selectBox')
+              if (obj && obj.length) {
+                obj.forEach((el) => vm.scene.remove(el))
+              }
               if (recursiveFindBox(object)) {
-                vm.scene.add(selectBox())
+                const { userData: {width, height, depth}, position: {x,y,z}, rotation: {y: rotate} } = vm.selectedCase
+                const leftTop = selectBox({width, height, depth, x,y,z, rotate})
+                vm.scene.add(leftTop)
+                leftTop.position.set(x, y, z )
+                leftTop.rotation.y = rotate
               } else {
-                const obj = vm.scene.getObjectByName('selectBox')
+                const obj = vm.scene.children.find(({name}) => name === 'selectBox')
                 vm.scene.remove(obj)
               }
             }
