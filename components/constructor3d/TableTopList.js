@@ -10,13 +10,13 @@ const colors = [
     variants: [
           {
             id: 'winter_berg_1',
-            url: require('./img/tableTop/post/winter_berg.png'),
+            url: require('./img/facades/ldsp/dub_votan.webp'),
             name: 'Дуб вотан',
           },
           {
             id: 'winter_berg_2',
-            url: require('./img/tableTop/post/winter_berg.png'),
-            name: 'Ясень Анкор серый',
+            url: require('./img/tableTop/ldsp/atelie_soft.webp'),
+            name: 'Ателье светлый',
           }
     ]
   },
@@ -31,12 +31,12 @@ const colors = [
           {
             id: 'dark_venge_2',
             url: require('./img/tableTop/ldsp/dark_venge.png'),
-            name: 'Лиственница',
+            name: 'Венге темный',
           },
           {
             id: 'dark_venge_2',
-            url: require('./img/tableTop/ldsp/dark_venge.png'),
-            name: 'Орех мраморный',
+            url: require('./img/tableTop/ldsp/yasen_shimo_soft.webp'),
+            name: 'Ясень шимо светлый',
           },
         ]
 
