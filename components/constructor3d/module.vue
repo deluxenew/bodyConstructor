@@ -34,6 +34,7 @@
     Math: threeMath,
     RectAreaLight,
     SpotLight,
+    PointLight,
     Vector2,
     Raycaster,
     BufferGeometry,
@@ -935,9 +936,9 @@
         let wallGeometry = new PlaneGeometry(wallWidth, wallHeight);
         let floorGeometry = new PlaneGeometry(wallWidth, wallWidth);
         let floorMaterial = new MeshStandardMaterial({
-          color: 0xe3b791/*af9182*/,
+          color: 0xd2b8a3/*af9182*/,
         });
-        floorMaterial.roughness = 0.6;
+        floorMaterial.roughness = 0.8;
         floorMaterial.metalness = 0.1;
         const floorTextureLoader = new TextureLoader();
         const wallTextureLoader = new TextureLoader();
@@ -1152,7 +1153,51 @@
 
       vm.camera.position.z = 80;
 
-      let n = 1.6;
+      let n = 2;
+      let spotLight = new SpotLight(0xffffff);
+      spotLight.position.set(-60 * n, 40 * n, 60 * n);
+      spotLight.target.position.set(-10, 10, 10);
+      spotLight.intensity = 1.0
+      vm.scene.add(spotLight);
+      vm.scene.add(spotLight.target);
+
+      let spotLight_1 = new PointLight(0xffffff);
+      spotLight_1.position.set(-20, 10, 20);
+      spotLight_1.intensity = 0.2
+      vm.scene.add(spotLight_1);
+
+      let spotLight_3 = new PointLight(0xffffff);
+      spotLight_3.position.set(-80, 10, 5);
+      spotLight_3.intensity = 0.2
+      vm.scene.add(spotLight_3);
+
+      let spotLight_4 = new PointLight(0xffffff);
+      spotLight_4.position.set(-5, 10, 80);
+      spotLight_4.intensity = 0.2
+      vm.scene.add(spotLight_4);
+
+      let spotLight_2 = new SpotLight(0xffffff);
+      spotLight_2.position.set(0, 0, 0);
+      spotLight_2.target.position.set(-60 * n, 55 * n, 60 * n);
+      spotLight_2.intensity = 0.6
+      vm.scene.add(spotLight_2);
+      vm.scene.add(spotLight_2.target);
+
+      const color = 0xFFFFFF;
+      const intensity = 0.1;
+      const width = 100;
+      const height = 100;
+      /*const light = new RectAreaLight(color, intensity, width, height);
+      light.position.set(-50, 36, 50);
+      light.rotation.x = threeMath.degToRad(-90);
+      vm.scene.add(light);*/
+
+      /*const light1 = new RectAreaLight(color, intensity, width, height);
+      light1.position.set(-50, -1, 50);
+      light1.rotation.x = threeMath.degToRad(90);
+      vm.scene.add(light1);*/
+
+      /*let n = 1.6;
       let spotLight = new SpotLight(0xffffff);
       spotLight.position.set(-60*n, 40, 60*n);
       spotLight.target.position.set(-10, 10, 10);
@@ -1186,7 +1231,7 @@
       const light1 = new RectAreaLight(color, intensity, width, height);
       light1.position.set(-50, -41, 50);
       light1.rotation.x = threeMath.degToRad(80);
-      vm.scene.add(light1);
+      vm.scene.add(light1);*/
 
       vm.addControlBoxes()
 

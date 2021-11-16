@@ -14,11 +14,11 @@ legMaterial.metalness = 0.5;
 
 const boxAngularTop = () => {
   let bodyWidth = 6.4;
-  let bodyHeight = 10;
+  let bodyHeight = 8;
   let bodyDepth = 6;
 
   let boxWidth = bodyWidth;
-  let boxHeight = bodyHeight - legsHeight;
+  let boxHeight = bodyHeight;
   let boxDepth = bodyDepth;
 
   let gSideLR = new BoxGeometry(boxDepth, boxHeight, sideDepth);
@@ -78,7 +78,7 @@ const boxAngularTop = () => {
   bodyCase.add(group);
   bodyCase.name = "boxAngularTop"
 
-  group.position.y = legsHeight;
+  group.position.y = boxHeight / 4;
 
   bodyCase.userData.width = bodyWidth
   bodyCase.userData.depth = bodyDepth
