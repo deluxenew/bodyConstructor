@@ -11,7 +11,7 @@
             :tableTopConfig="tableTopConfig"
             @removeItem="removeItem"
             @setCases="kitchen.order.cases = $event"
-            @setConfigName="kitchen.currentConfig.caseConfig.name = $event"
+            @setConfigName="setConfigName"
 
           )
         div.column.config
@@ -21,7 +21,7 @@
             @selectItem="selectCaseConfig"
             @remove="$refs.kitchen.removeCase()"
             @selectType="selectType"
-
+            @sceneChange="caseConfig = $event"
           )
           select-facade(
             v-model="kitchen.currentConfig.facadeConfig"
@@ -102,9 +102,21 @@
         const variants = this.caseConfig?.userData?.variants
         const parentId = this.caseConfig?.userData?.parent?.id
 
+
+
+        if (variants && variants.length) {
+          let result = []
+          variants.forEach((el) => {
+            const fn = boxes[el.id]
+            result.push(fn)
+          })
+          return result
+        }
+
         if (parentId) {
           let result = []
           const parent =  boxes[parentId]
+
           if (parent) {
             const parentVariants = parent.userData.variants
 
@@ -114,15 +126,6 @@
             })
             return result
           }
-        }
-
-        if (variants && variants.length) {
-          let result = []
-          variants.forEach((el) => {
-            const fn = boxes[el.id]
-            result.push(fn)
-          })
-          return result
         }
 
         return []
@@ -143,6 +146,10 @@
       },
     },
     methods: {
+      setConfigName(v) {
+        this.kitchen.currentConfig.caseConfig.name = v
+        if (v) this.caseConfig = boxes[v]
+      },
       selectType() {
         this.caseConfig = null
       },

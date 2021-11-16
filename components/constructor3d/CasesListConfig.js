@@ -287,13 +287,13 @@ const top_400_800_1 = () => {
   bodyCase.userData.doorWidth = bodyWidth - sideDepth / 2
   bodyCase.userData.doorHeight = boxHeight
 
-  bodyCase.userData.form = 'Навесной 400 * 800'
+  bodyCase.userData.form = 'Один фасад'
   bodyCase.userData.material = 'ЛДСП'
   bodyCase.userData.size = `${bodyWidth*100}*${bodyDepth*100}*${bodyHeight*100}`
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800.png')
+  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_1.png')
 
   bodyCase.userData.type = 'top'
   bodyCase.userData.parent = {
@@ -1586,7 +1586,7 @@ const cases = [
     typeDescription: '',
     additional: null,
     variants: null,
-    items: [top_400_800(), boxAngularTop()]
+    items: [top_400_800()]
   }
 ]
 

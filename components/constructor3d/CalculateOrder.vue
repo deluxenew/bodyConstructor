@@ -6,7 +6,7 @@
         .calc-form__table(v-if="cases.length")
           .calc-form__row.calc-form__row_header
             .calc-form__col.calc-form__col_number №
-            .calc-form__col.calc-form__col_name Форма
+            .calc-form__col.calc-form__col_name Название
             .calc-form__col Материал
             .calc-form__col Размер
             .calc-form__col Цвет
@@ -28,7 +28,7 @@
         .calc-form__table(v-if="facades.length")
           .calc-form__row.calc-form__row_header
             .calc-form__col.calc-form__col_number №
-            .calc-form__col.calc-form__col_name Форма
+            .calc-form__col.calc-form__col_name Название
             .calc-form__col Материал
             .calc-form__col Размер
             .calc-form__col Цвет
@@ -50,7 +50,7 @@
         .calc-form__table(v-if="tableTops.length")
           .calc-form__row.calc-form__row_header
             .calc-form__col.calc-form__col_number №
-            .calc-form__col.calc-form__col_name Форма
+            .calc-form__col.calc-form__col_name Название
             .calc-form__col Материал
             .calc-form__col Размер
             .calc-form__col Цвет
@@ -100,7 +100,13 @@
     },
     computed: {
       cases() {
-        return this.kitchen?.order?.cases || []
+        return this.kitchen?.order?.cases
+          .reduce((acc, el) => {
+            const existId = acc.findIndex((it) => it.form === el.form)
+            if (existId > -1) acc[existId].value += 1
+            else acc.push(el)
+          return acc
+        }, []) || []
       },
       facades() {
         return this.kitchen?.order?.facades || []

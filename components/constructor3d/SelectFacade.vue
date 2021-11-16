@@ -47,12 +47,12 @@
             img.select-elements__img(v-if="color" :src="color.url")
             | {{color && color.name ? color.name : ''}}
 
-        div.select-elements__list
-          ui-input-checkbox(
-            v-if="currentItem"
-            v-model="applyForAllCases"
-            label="Применить изменения для всех шкафов"
-          )
+        //div.select-elements__list
+        //  ui-input-checkbox(
+        //    v-if="currentItem"
+        //    v-model="applyForAllCases"
+        //    label="Применить изменения для всех шкафов"
+        //  )
 </template>
 
 <script>
@@ -193,7 +193,7 @@ export default {
       this.currentVariantModel = variant
       if (this.currentItemModel) this.currentItem = this.currentVariantModel.items[0]
     },
-    selectParentVariant(config, ) {
+    selectParentVariant(config ) {
 
       const item = this.currentItem ? this.currentItem : this.currentVariantModel.items[0]
       const color = {

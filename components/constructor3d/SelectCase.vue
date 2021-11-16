@@ -68,8 +68,12 @@ export default {
       deep: true,
       handler(v) {
         const item = this.currentTypeModel.items && this.currentTypeModel.items.find((el) => el.userData.variants.map(({id}) => id).includes(v.name) || el.name === v.name)
-        if (item) this.currentItemModel = item
-        this.$emit('sceneChange', item)
+        if (item) {
+          this.currentItemModel = item
+          // this.$emit('sceneChange', item)
+        }
+        const parent = this.currentTypeModel.items.find(({name}) => v.name === name)
+        // if (parent)  this.$emit('sceneChange', item)
       }
     }
   },
@@ -105,7 +109,8 @@ export default {
     selectCurrentType(item) {
       this.currentTypeModel = item
       if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
-      this.$emit('selectType')
+      this.$emit('selectType', item.type)
+      this.$emit('selectItem', this.currentItemModel)
     },
     selectItem(item) {
       if (!this.value.name) {
@@ -218,11 +223,12 @@ export default {
       flex-wrap: wrap;
     }
 
-    &__item + &__item {
-      margin-left: 8px;
+    &__item + &__item +  &__item{
+      margin-top: 8px;
     }
 
     &__item {
+      margin-left: 8px;
       border: 1px solid #D5D7DC;
       border-radius: 4px;
       display: flex;

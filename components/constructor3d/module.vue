@@ -155,36 +155,7 @@
           }
         },
       },
-      cases: {
-        get() {
-          return this.value?.order?.cases || []
-        },
-        set(v) {
-          let kitchen = this.value
-          if (kitchen && kitchen.order && kitchen.order.cases) {
-            const mapped = v.map(({uuid, userData: {form, material, size, color, value, price, sort}}) => {
-              return {
-                uuid,
-                form,
-                material,
-                size,
-                color,
-                value,
-                price,
-                sort
-              }
-            }) || []
-            mapped.forEach((el) => {
-              const {uuid} = el
-              const idx = kitchen.order.cases.findIndex((it) => uuid === it.uuid)
-              if (idx > -1) kitchen.order.cases.splice(idx, 1, el)
-              else kitchen.order.cases.push(el)
-            })
 
-            this.$emit('input', kitchen)
-          }
-        },
-      },
       bottomRight() {
         return this.scene.children
             .filter(({name, place}) => [...Object.keys(boxes)].includes(name) && place === 'bottomRight')
@@ -436,6 +407,42 @@
       paddingTableTopRight() {
         const paddingLeft = this.bottomRight.length ? this.bottomRight[0].userData.depth : 0
         return paddingLeft
+      },
+      cases: {
+        get() {
+          return this.value?.order?.cases || []
+        },
+        set(v) {
+          let kitchen = this.value
+          if (kitchen && kitchen.order && kitchen.order.cases) {
+            const mapped = v.map(({uuid, userData: {form, material, size, color, value, price, sort}}) => {
+              return {
+                uuid,
+                form,
+                material,
+                size,
+                color,
+                value,
+                price,
+                sort
+              }
+            }) || []
+            mapped.forEach((el) => {
+              const {uuid} = el
+              const idx = kitchen.order.cases.findIndex((it) => uuid === it.uuid)
+              if (idx > -1) kitchen.order.cases.splice(idx, 1, el)
+              else kitchen.order.cases.push(el)
+            })
+
+            this.$emit('input', kitchen)
+          }
+        },
+      },
+      tableTopList: {
+        get() {
+          return []
+        },
+        set() {}
       }
     },
     watch: {
@@ -448,15 +455,46 @@
           this.removeCase(true)
           if (place === 'bottomRight') this.addBottomRightToScene(true)
           if (place === 'bottomLeft') this.addBottomLeftToScene(true)
+          if (place === 'topRight') this.addTopRightToScene(true)
+          if (place === 'topLeft') this.addTopLeftToScene(true)
+
           const newCase = this.scene.children.find(({userData: {sort: findSort}, place: findPlace}) => findSort === sort && findPlace === place)
           this.selectedCase = newCase
+        }
+        if (v) {
+          const addBottomRightButton = this.scene.children.find(({name}) => name === 'addBottomRightButton')
+          const addBottomLeftButton = this.scene.children.find(({name}) => name === 'addBottomLeftButton')
+          const addTopRightButton = this.scene.children.find(({name}) => name === 'addTopRightButton')
+          const addTopLeftButton = this.scene.children.find(({name}) => name === 'addTopLeftButton')
+          if (v.userData.type !== 'bottom') {
+            this.scene.remove(addBottomRightButton)
+            this.scene.remove(addBottomLeftButton)
+            if (!addTopRightButton && !this.isMaxRightTopPadding) this.scene.add(this.addTopRightButton)
+            if (!addTopLeftButton && !this.isMaxLeftTopPadding) this.scene.add(this.addTopLeftButton)
+          } else  {
+            this.scene.remove(addTopRightButton)
+            this.scene.remove(addTopLeftButton)
+           if (!addBottomRightButton && !this.isMaxRightPadding) this.scene.add(this.addBottomRightButton)
+             if (!addBottomLeftButton && !this.isMaxLeftPadding) this.scene.add(this.addBottomLeftButton)
+          }
+        }
+      },
+      topRight: {
+        deep: false,
+        handler(v) {
+          this.cases = v
+        }
+      },
+      topLeft: {
+        deep: false,
+        handler(v) {
+          this.cases = v
         }
       },
       bottomRight: {
         deep: false,
         handler(v) {
           this.cases = v
-
         }
       },
       bottomLeft: {
@@ -506,13 +544,6 @@
           this.scene.add(this.addTopLeftButton)
         }
       },
-
-      selectedCase: {
-        deep: true,
-        handler(v) {
-
-        }
-      }
     },
     methods: {
       moveLeft() {
@@ -829,11 +860,10 @@
         body.userData.top = true
 
         const count = this.topRight.length
-        body.userData.sort = count
+        // body.userData.sort = count
         if (!isReplace) body.userData.sort = count
 
         this.scene.add(body)
-        console.log('шкафффчик справа')
       },
       addTopLeftToScene(isReplace) {
         let body = this.bodyCase.clone();
@@ -849,10 +879,9 @@
         body.userData.top = true
 
         const count = this.topLeft.length
-        body.userData.sort = count
+        if (!isReplace) body.userData.sort = count
 
         this.scene.add(body)
-        console.log('шкафффчик слева')
       },
       addTableTop() {
         const vm = this
@@ -1040,10 +1069,7 @@
 
             let controlActionName = findActionName(object)
 
-            const obj = vm.scene.children.filter(({name}) => name === 'selectBox')
-            if (obj && obj.length) {
-              obj.forEach((el) => vm.scene.remove(el))
-            }
+
 
             vm.$emit('setConfigName',  '')
             if (controlActionName) {
@@ -1056,6 +1082,8 @@
 
 
               if (recursiveFindBox(object)) {
+                const obj = vm.scene.children.find(({name}) => name === 'selectBox')
+                vm.scene.remove(obj)
                 const { userData: {width, height, depth}, position: {x,y,z}, rotation: {y: rotate} } = vm.selectedCase
                 const leftTop = selectBox({width, height, depth, x,y,z, rotate})
                 vm.scene.add(leftTop)
