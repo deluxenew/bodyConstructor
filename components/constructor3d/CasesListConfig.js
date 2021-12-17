@@ -1,4 +1,4 @@
-import {BoxGeometry, Group, CylinderGeometry, Math, Mesh, MeshStandardMaterial , Object3D} from "three";
+import {BoxGeometry, BufferGeometry, BufferAttribute, Group, CylinderGeometry, Math, Mesh, MeshStandardMaterial , Object3D} from "three";
 
 const legsHeight = 1;
 const sideDepth = .3;
@@ -17,21 +17,167 @@ const boxAngularTop = () => {
   let bodyHeight = 8;
   let bodyDepth = bodyWidth;
 
+  let bD = 4.2;
+  let sP = 1; //катет дальнего угла
+  let bP = bD - sideDepth; //глубина навесных шкафов
+  let bW = bodyWidth/2 - sideDepth
+
   let boxWidth = bodyWidth;
   let boxHeight = bodyHeight;
   let boxDepth = bodyDepth;
 
-  let gSideLR = new BoxGeometry(boxDepth/2, boxHeight, sideDepth);
+  let gSideLR = new BoxGeometry(bD, boxHeight, sideDepth);
   let gSideBack = new BoxGeometry(boxWidth - sideDepth * 2, boxHeight, sideDepth);
   let gSideBottom = new BoxGeometry(boxWidth - sideDepth * 2, boxDepth, sideDepth);
+
+  // create a simple square shape. We duplicate the top left and bottom right
+  // vertices because each vertex needs to appear once per triangle.
+
+  const vertices = [
+    
+    // front1
+    { pos: [     -bW, sideDepth,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E
+    { pos: [     -bW,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E1
+    { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //D
+
+    { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //D
+    { pos: [     -bW,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E1
+    { pos: [-bW + bP,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //D1
+
+    // front
+    { pos: [-bW + bP, sideDepth,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D
+    { pos: [-bW + bP,         0,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D1
+    { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C
+
+    { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C
+    { pos: [-bW + bP,         0,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D1
+    { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C1
+    
+    // front2
+    { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C
+    { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C1
+    { pos: [      bW, sideDepth,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B 
+    
+    { pos: [      bW, sideDepth,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B 
+    { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C1
+    { pos: [      bW,         0,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B1 
+
+    
+    //back1
+    { pos: [      bW, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B 
+    { pos: [      bW,         0,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B1
+    { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //A
+
+    { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //A
+    { pos: [      bW,         0,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B1
+    { pos: [-bW + sP,         0,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //A1
+
+
+    //back
+    { pos: [-bW + sP, sideDepth,     -bW], norm: [-1,  0, -1], uv: [0, 0], }, //A
+    { pos: [-bW + sP,         0,     -bW], norm: [-1,  0, -1], uv: [0, 0], }, //A1
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [-1,  0, -1], uv: [0, 0], }, //F
+
+    { pos: [-bW + sP,         0,     -bW], norm: [-1,  0, -1], uv: [0, 0], }, //A1
+    { pos: [     -bW,         0,-bW + sP], norm: [-1,  0, -1], uv: [0, 0], }, //F1
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [-1,  0, -1], uv: [0, 0], }, //F
+
+
+    //back2
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [-1,  0,  0], uv: [0, 0], }, //F
+    { pos: [     -bW,         0,-bW + sP], norm: [-1,  0,  0], uv: [0, 0], }, //F1
+    { pos: [     -bW, sideDepth,      bW], norm: [-1,  0,  0], uv: [0, 0], }, //E
+
+    { pos: [     -bW, sideDepth,      bW], norm: [-1,  0,  0], uv: [0, 0], }, //E
+    { pos: [     -bW,         0,-bW + sP], norm: [-1,  0,  0], uv: [0, 0], }, //F1
+    { pos: [     -bW,         0,      bW], norm: [-1,  0,  0], uv: [0, 0], }, //E1
+
+
+    // top
+    { pos: [      bW, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //B 
+    { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //A
+    { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
+    
+    { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
+    { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //A
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F 
+
+    { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //D
+    { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F  
+
+    { pos: [     -bW, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //E
+    { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //D
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F 
+
+    // bottom
+    { pos: [-bW + sP,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //A1
+    { pos: [      bW,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //B1 
+    { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
+    
+    { pos: [-bW + sP,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //A1
+    { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
+    { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
+
+    { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
+    { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
+    { pos: [-bW + bP,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //D1
+ 
+    { pos: [     -bW,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //E1
+    { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
+    { pos: [-bW + bP,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //D1
+
+
+    /*// top
+    { pos: [ boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [0, 0], },
+    { pos: [-boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [1, 0], },
+    { pos: [ boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [0, 1], },
+   
+    { pos: [ boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [0, 1], },
+    { pos: [-boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [1, 0], },
+    { pos: [-boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [1, 1], },
+    // bottom
+    { pos: [ boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [0, 0], },
+    { pos: [-boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [1, 0], },
+    { pos: [ boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [0, 1], },
+   
+    { pos: [ boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [0, 1], },
+    { pos: [-boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [1, 0], },
+    { pos: [-boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [1, 1], },*/
+  ];
+  
+  const positions = [];
+  const normals = [];
+  const uvs = [];
+  for (const vertex of vertices) {
+    positions.push(...vertex.pos);
+    normals.push(...vertex.norm);
+    uvs.push(...vertex.uv);
+  } 
+
+  const geometry = new BufferGeometry();
+  const positionNumComponents = 3;
+  const normalNumComponents = 3;
+  const uvNumComponents = 2;
+  geometry.setAttribute(
+      'position',
+      new BufferAttribute(new Float32Array(positions), positionNumComponents));
+  geometry.setAttribute(
+      'normal',
+      new BufferAttribute(new Float32Array(normals), normalNumComponents));
+  geometry.setAttribute(
+      'uv',
+      new BufferAttribute(new Float32Array(uvs), uvNumComponents));
+
+  let sideV = new Mesh(geometry, material);
 
   let sideLeft = new Mesh(gSideLR, material);
   let sideRight = new Mesh(gSideLR, material);
   let sideBackR = new Mesh(gSideBack, material);
-  let sideBackL = new Mesh(gSideBack, material);
-  let sideBottom = new Mesh(gSideBottom, material);
-  let sideBTop = new Mesh(gSideBottom, material);
-  let sideShelf = new Mesh(gSideBottom, material);
+  let sideBackL = new Mesh(gSideBack, material);  
+  let sideBottom = new Mesh(geometry, material);
+  let sideBTop = new Mesh(geometry, material);
+  //let sideShelf = new Mesh(gSideBottom, material);
   let facadeLeft = new Group()
   //let facadeRight = new Group();
 
@@ -54,20 +200,26 @@ const boxAngularTop = () => {
   let group = new Mesh();
   let bodyCase = new Mesh();
 
+  sideV.position.y = 0;
+  //sideV.position.x = sideDepth / 2;
+  //sideV.position.z = sideDepth / 2;
+  //sideV.rotation.y = Math.degToRad(90);
+  group.add(sideV);
+
   //sideLeft.rotation.y = Math.degToRad(-90);
   sideLeft.position.z = (boxDepth/2 - sideDepth / 2);
-  sideLeft.position.x = -(boxDepth/4 - sideDepth / 2);
+  sideLeft.position.x = -(boxDepth/4 /*- sideDepth / 2*/);
   sideRight.rotation.y = Math.degToRad(90);
   sideRight.position.x = (boxWidth / 2 - sideDepth / 2);
-  sideRight.position.z = -(boxDepth/4 - sideDepth / 2);
+  sideRight.position.z = -(boxDepth/4 /*- sideDepth / 2*/);
   sideBackR.position.z = -(boxDepth / 2 - sideDepth / 2);
   sideBackL.position.x = -(boxWidth / 2 - sideDepth / 2);
   sideBackL.rotation.y = Math.degToRad(90);
-  sideBottom.rotation.x = Math.degToRad(-90);
-  sideShelf.rotation.x = Math.degToRad(-90);
-  sideBottom.position.y = -(boxHeight / 2 - sideDepth / 2);
-  sideBTop.rotation.x = Math.degToRad(-90);
-  sideBTop.position.y = (boxHeight / 2 - sideDepth / 2);
+  //sideBottom.rotation.x = Math.degToRad(-90);
+  //sideShelf.rotation.x = Math.degToRad(-90);
+  sideBottom.position.y = -(boxHeight / 2 );
+ // sideBTop.rotation.x = Math.degToRad(-90);
+  sideBTop.position.y = (boxHeight / 2 - sideDepth);
   //sideBTop.position.z = (-boxDepth / 2 + sideTop / 2 + sideDepth);
 
   group.add(sideLeft);
@@ -75,7 +227,7 @@ const boxAngularTop = () => {
   group.add(sideBackR);
   group.add(sideBackL);
   group.add(sideBottom);
-  group.add(sideShelf);
+  //group.add(sideShelf);
   group.add(sideBTop)
   group.add(objFacadeLeft)
   //group.add(objFacadeRight)
@@ -222,21 +374,19 @@ const top_400_800_1 = () => {
   let bodyDepth = 4.2;
 
   let boxWidth = bodyWidth;
-  let boxHeight = bodyHeight - legsHeight;
+  let boxHeight = bodyHeight;
   let boxDepth = bodyDepth;
 
   let gSideLR = new BoxGeometry(boxDepth, boxHeight, sideDepth);
   let gSideBack = new BoxGeometry(boxWidth - sideDepth * 2, boxHeight, sideDepth);
   let gSideBottom = new BoxGeometry(boxWidth - sideDepth * 2, boxDepth, sideDepth);
-  let gSideTop = new BoxGeometry(boxWidth - sideDepth * 2, sideTop, sideDepth);
 
   let sideLeft = new Mesh(gSideLR, material);
   let sideRight = new Mesh(gSideLR, material);
   let sideBack = new Mesh(gSideBack, material);
   let sideBottom = new Mesh(gSideBottom, material);
+  let sideBTop = new Mesh(gSideBottom, material);
   let sideShelf = new Mesh(gSideBottom, material);
-  let sideTopFront = new Mesh(gSideTop, material);
-  let sideTopBack = new Mesh(gSideTop, material);
   let facadeLeft = new Group()
 
   let objFacadeLeft = new Group();
@@ -258,20 +408,15 @@ const top_400_800_1 = () => {
   sideBottom.rotation.x = Math.degToRad(-90);
   sideShelf.rotation.x = Math.degToRad(-90);
   sideBottom.position.y = -(boxHeight / 2 - sideDepth / 2);
-  sideTopFront.rotation.x = Math.degToRad(-90);
-  sideTopFront.position.y = (boxHeight / 2 - sideDepth / 2);
-  sideTopFront.position.z = (boxDepth / 2 - sideTop / 2);
-  sideTopBack.rotation.x = Math.degToRad(-90);
-  sideTopBack.position.y = (boxHeight / 2 - sideDepth / 2);
-  sideTopBack.position.z = (-boxDepth / 2 + sideTop / 2 + sideDepth);
+  sideBTop.rotation.x = Math.degToRad(-90);
+  sideBTop.position.y = (boxHeight / 2 - sideDepth / 2);
+  //sideBTop.position.z = (-boxDepth / 2 + sideTop / 2 + sideDepth);
 
   group.add(sideLeft);
   group.add(sideRight);
   group.add(sideBack);
   group.add(sideBottom);
   group.add(sideShelf);
-  group.add(sideTopFront)
-  group.add(sideTopBack)
   group.add(objFacadeLeft)
   group.name = "group"
 
@@ -308,9 +453,9 @@ const top_400_800_1 = () => {
   material.dispose()
   legMaterial.dispose()
   gSideLR.dispose()
-  gSideBack.dispose()
+  gSideBack.dispose()  
   gSideBottom.dispose()
-  gSideTop.dispose()
+  //  gSideTop.dispose()
 
   return bodyCase
 }
@@ -444,7 +589,7 @@ const bottom_400_800 = () => {
 const bottom_400_800_1 = () => {
   let bodyWidth = 6.4;
   let bodyHeight = 10;
-  let bodyDepth = 6;
+  let bodyDepth = 6;  
 
   let boxWidth = bodyWidth;
   let boxHeight = bodyHeight - legsHeight;
@@ -1586,12 +1731,13 @@ const cases = [
     typeDescription: '',
     additional: null,
     variants: null,
-    items: [top_400_800()]
+    items: [top_400_800(), boxAngularTop()]   
   }
 ]
 
 export default {
   cases,
+
   top_400_800: top_400_800(),
   top_400_800_1: top_400_800_1(),
   boxAngularTop: boxAngularTop(),

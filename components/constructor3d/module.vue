@@ -19,6 +19,8 @@
             img(:src="require('./img/trash.svg')")
 </template>
 
+
+
 <script>
   import * as Three from 'three'
 
@@ -169,7 +171,7 @@
         return this.scene.children.filter(({name, place}) => !['boxAngularFloor', 'boxAngularFloor_1'].includes(name) && place === 'bottomRight')
             .sort((a, b) => {
               if (a.userData.sort > b.userData.sort) return 1
-              if (a.userData.sort < b.userData.sort) return -1
+              if (a.userData.sort < b.userData.sort) return -1  
               return 0
             })
       },
