@@ -39,16 +39,7 @@
     PointLight,
     Vector2,
     Raycaster,
-    // BufferGeometry,
-    // Line,
-    // ShapeGeometry,
-    // LineBasicMaterial,
-    // MeshBasicMaterial,
-    // DoubleSide,
-    // Object3D
   } = Three
-  // import {FontLoader} from "./FontLoader.js";
-  // import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry.js";
 
   const windows = {innerHeight: 600, innerWidth: 800}
 
@@ -171,7 +162,7 @@
         return this.scene.children.filter(({name, place}) => !['boxAngularFloor', 'boxAngularFloor_1'].includes(name) && place === 'bottomRight')
             .sort((a, b) => {
               if (a.userData.sort > b.userData.sort) return 1
-              if (a.userData.sort < b.userData.sort) return -1  
+              if (a.userData.sort < b.userData.sort) return -1
               return 0
             })
       },
