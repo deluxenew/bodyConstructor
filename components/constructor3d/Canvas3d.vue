@@ -1,6 +1,7 @@
 <template lang="pug">
   div
     div.canvas(ref="canvas")
+
 </template>
 
 
@@ -8,10 +9,9 @@
   import * as THREE from "three"
   import StartLoader from "./StartLoader";
   import HF from "./HelperFunctions";
-  import boxes from "@/components/constructor3d/CasesListConfig";
 
   const { scene, renderer, spotLights, camera, walls, controlBoxes } = StartLoader
-  const { fromTo, camPos } = HF
+  const { fromTo, camPos, boxes} = HF
 
   const CANVAS_WIDTH = 800
   const CANVAS_HEIGHT = 600
@@ -27,7 +27,9 @@
         scene: scene(),
         camera: camera(CANVAS_WIDTH, CANVAS_HEIGHT),
         positionNumber: 1,
-        casesType: 'bottom'
+        casesType: 'bottom',
+        caseModel:null,
+        cbDeferTs: null
       }
     },
     watch: {
@@ -39,7 +41,7 @@
         }
       },
       sceneObjects: {
-        immediate: true,
+        immediate: false,
         async handler() {
           await this.$nextTick()
           this.setControlsVisible()
@@ -69,7 +71,7 @@
         })
       },
       addBottomLeftToScene() {
-        this.scene.add(this.caseModel)
+        this.scene.add(boxes.f_400.clone())
       },
       addBottomRightToScene() {
 
@@ -160,7 +162,7 @@
           this.widthRightTop,
           this.widthLeftTop
         )
-      }
+      },
     },
     mounted() {
       const vm = this
@@ -168,8 +170,8 @@
       this.init()
 
       function render() {
-        requestAnimationFrame(render);
         let steps = 13;
+        requestAnimationFrame(render);
         vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, vm.camPosition.y, steps);
         vm.scene.position.x = fromTo(vm.scene.position.x, vm.scene.position.x, vm.camPosition.sPx, steps);
         vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPosition.x, steps);

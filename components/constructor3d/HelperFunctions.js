@@ -1,5 +1,6 @@
 import * as THREE from 'three'
-import boxes from "@/components/constructor3d/CasesListConfig";
+ import boxes from "./models/boxes/BoxesList";
+ // import boxes from "./CasesListConfig"
 const { Math: threeMath } = THREE
 
 const fromTo = (value, from, to, steps) => {
@@ -98,5 +99,6 @@ export default {
   fromTo,
   camPos,
   recursiveFindBox,
-  findActionName
+  findActionName,
+  boxes
 }

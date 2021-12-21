@@ -8,11 +8,11 @@
 </template>
 
 <script>
-  import Canvas3d from "@/components/constructor3d/Canvas3d";
+   import Canvas3d from "@/components/constructor3d/Canvas3d";
 
   export default {
   name: "ViewModule3D",
-    components: {Canvas3d}
+     components: {Canvas3d}
   }
 </script>
 
