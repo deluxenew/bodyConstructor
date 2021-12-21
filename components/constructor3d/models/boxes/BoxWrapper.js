@@ -1,4 +1,4 @@
-import {BoxGeometry, Group, Mesh, MeshLambertMaterial, MeshMatcapMaterial} from "three";
+import {BoxGeometry, Group, Mesh, MeshLambertMaterial, MeshMatcapMaterial, EdgesHelper} from "three";
 
 export const boxWrapper = (width, height, depth) => {
   const boxGroup = new Group();
@@ -7,11 +7,15 @@ export const boxWrapper = (width, height, depth) => {
   //   color: 0xff00ff, transparent: true, opacity: 0.1
   // });
   const material = new MeshMatcapMaterial({
-    color: 0xff00ff, transparent: true, opacity: 0.1
+    color: 0xff00ff, transparent: true, opacity: 0.01
   });
   let boxMesh = new Mesh(boxGeometry, material);
 
+
   boxGroup.add(boxMesh)
+  const helper = new EdgesHelper( boxMesh, {color: 0xff00ff, transparent: true, opacity: 0.01} );
+  helper.material.linewidth = 1; // optional
+  boxGroup.add(helper)
   boxGroup.userData['type'] = 'box'
   boxGroup.userData['width'] = width
   boxGroup.userData['height'] = height
