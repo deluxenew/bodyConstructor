@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import boxes from "@/components/constructor3d/CasesListConfig";
 const { Math: threeMath } = THREE
 
 const fromTo = (value, from, to, steps) => {
@@ -79,7 +80,23 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
   return cameraPositions[`pos${position}`]
 }
 
+const recursiveFindBox = (obj) => {
+  if (!obj || !obj.parent) return null
+  const parent = obj.parent
+  if ([...new Set(Object.keys(boxes))].includes(parent.name)) return parent
+  else return recursiveFindBox(parent)
+}
+
+const findActionName = (obj) => {
+  if (!obj || !obj.parent) return null
+  const parent = obj.parent
+  if (parent && parent.userData && parent.userData.actionName) return parent.userData.actionName
+  else return findActionName(parent)
+}
+
 export default {
   fromTo,
   camPos,
+  recursiveFindBox,
+  findActionName
 }

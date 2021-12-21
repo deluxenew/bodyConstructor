@@ -5,9 +5,10 @@ const options = {
   antialias: true,
 }
 
-const renderer = () => {
+const renderer = (width, height) => {
   const commonRenderer = new WebGLRenderer(options)
   commonRenderer.shadowMap.enabled = true
+  commonRenderer.setSize(width, height);
   return commonRenderer
 }
 

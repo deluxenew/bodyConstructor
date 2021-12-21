@@ -56,6 +56,8 @@ wallNormalTexture.dispose()
 floorNormalTexture.dispose()
 wallMaterial.dispose()
 
+const walls = [floor, wallR, wall]
+
 export default {
-  floor, wallR, wall
+  walls
 }

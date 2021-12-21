@@ -3,8 +3,11 @@ import { PerspectiveCamera } from 'three'
 const FOV = 45
 const FAR = 200
 
-const camera =  ({ canvasWidth, canvasHeight }) => {
-  return new PerspectiveCamera(FOV, canvasWidth / canvasHeight, 1, FAR)
+const camera = (width, height) => {
+  const pCamera = new PerspectiveCamera(FOV, width / height, 1, FAR)
+  pCamera.position.z = 80;
+  pCamera.position.y = 14;
+  return pCamera
 }
 
 export default {

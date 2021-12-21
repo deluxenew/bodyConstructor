@@ -8,7 +8,7 @@
     name: "demo",
     components: {
       Constructor3d: () => {
-        if (process.browser) return import('@/components/constructor3d/Canvas3d')
+        if (process.browser) return import('@/components/constructor3d/ViewModule3D')
       }
     },
     computed: {
