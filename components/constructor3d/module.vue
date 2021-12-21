@@ -56,7 +56,7 @@
 
   import boxes from './CasesListConfig.js'
 
-  const {boxAngularFloor,} = boxes
+  const {boxAngularFloor} = boxes
 
   import tableTop from './TableTopList.js'
 
