@@ -136,7 +136,7 @@
         camera: new PerspectiveCamera(45, 800 / 600, 1, 200),
       }
     },
-    computed: {
+    computed    : {
       caseConfigModel: {
         get() {
           return this.caseConfig || null
@@ -1336,6 +1336,7 @@
           const group = it.children.find(el => el.name === 'group')
           const leftDoor = group.children.find(el => el.name === 'leftDoor')
           const rightDoor = group.children.find(el => el.name === 'rightDoor')
+          const drawer = group.children.find(el => el.name === 'drawer')
           const {userData: {openedDoors}} = it
 
           const speedOpen = 15
@@ -1343,9 +1344,11 @@
           if (openedDoors) {
             if (leftDoor) leftDoor.rotation.y = fromTo(leftDoor.rotation.y, 0, threeMath.degToRad(-90), speedOpen);
             if (rightDoor) rightDoor.rotation.y = fromTo(rightDoor.rotation.y, 0, threeMath.degToRad(90), speedOpen);
+            if (drawer) drawer.position.z = fromTo(drawer.position.z, 0, 4.8, speedOpen);
           } else {
             if (leftDoor) leftDoor.rotation.y = fromTo(leftDoor.rotation.y, threeMath.degToRad(-90), 0, speedOpen);
             if (rightDoor) rightDoor.rotation.y = fromTo(rightDoor.rotation.y, threeMath.degToRad(90), 0, speedOpen);
+            if (drawer) drawer.position.z = fromTo(drawer.position.z, 4.8, 0, speedOpen);
           }
         })
 

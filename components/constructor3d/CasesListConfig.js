@@ -44,6 +44,7 @@ const boxAngularTop = () => {
     { pos: [     -bW,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E1
     { pos: [-bW + bP,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //D1
 
+
     // front
     { pos: [-bW + bP, sideDepth,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D
     { pos: [-bW + bP,         0,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D1
@@ -53,6 +54,7 @@ const boxAngularTop = () => {
     { pos: [-bW + bP,         0,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D1
     { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C1
     
+
     // front2
     { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C
     { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C1
@@ -126,24 +128,6 @@ const boxAngularTop = () => {
     { pos: [     -bW,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //E1
     { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
     { pos: [-bW + bP,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //D1
-
-
-    /*// top
-    { pos: [ boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [0, 0], },
-    { pos: [-boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [1, 0], },
-    { pos: [ boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [0, 1], },
-   
-    { pos: [ boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [0, 1], },
-    { pos: [-boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [1, 0], },
-    { pos: [-boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [1, 1], },
-    // bottom
-    { pos: [ boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [0, 0], },
-    { pos: [-boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [1, 0], },
-    { pos: [ boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [0, 1], },
-   
-    { pos: [ boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [0, 1], },
-    { pos: [-boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [1, 0], },
-    { pos: [-boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [1, 1], },*/
   ];
   
   const positions = [];
@@ -269,7 +253,7 @@ const boxAngularTop = () => {
   return bodyCase
 }
 
-const top_400_800 = () => {
+const top_400_800 = () => { 
   let bodyWidth = 6.4;
   let bodyHeight = 8;
   let bodyDepth = 4.2;
@@ -491,6 +475,7 @@ const bottom_400_800 = () => {
   let legLeft = new Mesh(gLegs, legMaterial);
   let legRight = new Mesh(gLegs, legMaterial);
 
+
   let objFacadeLeft = new Group();
   objFacadeLeft.add(facadeLeft);
   facadeLeft.name = 'doorBox'
@@ -524,11 +509,13 @@ const bottom_400_800 = () => {
   sideTopBack.position.y = (boxHeight / 2 - sideDepth / 2);
   sideTopBack.position.z = (-boxDepth / 2 + sideTop / 2 + sideDepth);
 
+
+
   group.add(sideLeft);
   group.add(sideRight);
   group.add(sideBack);
   group.add(sideBottom);
-  group.add(sideShelf);
+  //group.add(sideShelf);
   group.add(sideTopFront)
   group.add(sideTopBack)
   group.add(objFacadeLeft)
@@ -550,6 +537,51 @@ const bottom_400_800 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
+
+  
+  /**/
+  const drawerSideGap = 0.15;  //боковой отступ выдвижного ящика
+  const drawerBottomGap = 0.12;  //нижний отступ выдвижного ящика
+  const drawerSideDepth = 0.02; // толщина стенки выдвижного ящика 
+
+  let drawerWidth = bodyWidth - sideDepth*2 - drawerSideGap*2; //ширина выдвижного ящика 
+  let drawerHeight = 2.2; //высота выдвижного ящика 
+  let drawerDepth = bodyDepth - sideDepth; //глубина выдвижного ящика 
+
+  let drawerBottomGeometry = new BoxGeometry(drawerWidth - drawerSideDepth * 2, sideDepth, drawerDepth - drawerSideDepth);
+  let drawerSideGeometry = new BoxGeometry(drawerSideDepth, drawerHeight, drawerDepth);
+  let drawerSideBackGeometry = new BoxGeometry(drawerWidth - drawerSideDepth * 2, drawerHeight, drawerSideDepth);
+
+  let drawerBottom = new Mesh(drawerBottomGeometry, material);
+  let drawerSideR = new Mesh(drawerSideGeometry, material);
+  let drawerSideL = new Mesh(drawerSideGeometry, material);
+  let drawerSideBack = new Mesh(drawerSideBackGeometry, material);
+
+  let drawer_0 = new Mesh();
+  drawer_0.name = 'drawer';
+
+  drawerBottom.position.z = drawerSideDepth/2;
+  drawerSideR.position.x = - (drawerWidth/2 - drawerSideDepth / 2);
+  drawerSideR.position.y = drawerHeight/2 - sideDepth/2;
+  drawerSideL.position.x = drawerWidth/2 - drawerSideDepth / 2;
+  drawerSideL.position.y = drawerHeight/2 - sideDepth/2;
+  drawerSideBack.position.y = drawerHeight/2 - sideDepth/2;
+  drawerSideBack.position.z = - (drawerDepth/2 - drawerSideDepth / 2);
+
+  drawer_0.add(drawerBottom);
+  drawer_0.add(drawerSideR);
+  drawer_0.add(drawerSideL);
+  drawer_0.add(drawerSideBack);
+
+  drawer_0.position.z = sideDepth/2;
+  //drawer_0.position.z += 4;
+  drawer_0.position.y = - (boxHeight/2 - sideDepth/2 - sideDepth - drawerBottomGap);
+
+
+
+  group.add(drawer_0);
+
+  /**/
 
 
   bodyCase.userData.width = bodyWidth
