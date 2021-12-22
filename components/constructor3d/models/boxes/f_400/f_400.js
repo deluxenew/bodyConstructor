@@ -1,5 +1,5 @@
 import { bottomBox } from "../bottomBox"
-import {BoxGeometry, Mesh} from "three";
+import {BoxGeometry, Mesh, Group, QuaternionKeyframeTrack, Quaternion, Vector3, AnimationClip, AnimationMixer, AnimationClipCreator} from "three";
 
 import Materials from "../../Materials";
 const { defaultMaterial } = Materials
@@ -47,10 +47,34 @@ export const f_400 = () => {
   sideTopBack.position.set(0, height - legsHeight - sideDepth * 2, -depth / 2 + sideTop / 2)
   shelf.position.set(0, sideY, 0)
 
+  const facadeGroup = new Group()
+  facadeGroup.position.set(-width / 2 - sideDepth /2, sideY, depth / 2)
+  const facadeGeometry = new BoxGeometry(width - sideDepth /4, height - legsHeight, sideDepth )
+  const facade = new Mesh(facadeGeometry, defaultMaterial());
+  facade.position.x = (width / 2 + sideDepth / 8)
+  facadeGroup.add(facade)
+  caseGroup.add(facadeGroup)
+
+  const xAxis = new Vector3( 1, 0, 0 );
+
+  const qInitial = new Quaternion().setFromAxisAngle( xAxis, 0 );
+  const qFinal = new Quaternion().setFromAxisAngle( xAxis, Math.PI );
+  const quaternionKF = new QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+
+  const clip = new AnimationClip( 'Action', 3, [  quaternionKF] );
+  let mixer = new AnimationMixer( facade );
+
+  const clipAction = mixer.clipAction( clip );
+  clipAction.play();
+
+  // const mixer = new AnimationMixer(facade );
+  // let animation = AnimationClipCreator.CreateRotationAnimation(100, "y");
+  // mixer.clipAction(animation ).play();
+
   boxGroup.name = 'f_400'
   boxGroup.code = 'f-400'
   boxGroup.userData['facadeVariants'] = ['f_400_1']
-  boxGroup.userData['configType'] = 'box'
+  boxGroup.userData['configType'] = 'boxFloor'
 
   boxGroup.scale.set( scale, scale, scale )
   return boxGroup

@@ -8,6 +8,7 @@ import {
   MeshLambertMaterial,
   ExtrudeBufferGeometry,
   MeshStandardMaterial,
+  MeshBasicMaterial,
   BoxGeometry
 } from 'three'
 const facadeTextureLoader = new TextureLoader();
@@ -31,7 +32,8 @@ const boxControl = (name, pos) => {
     let roundedRectShape = new Shape();
     f_rect( roundedRectShape, -15, -15, 30, 30, 10 );
 
-    let material = new MeshLambertMaterial( { color: 0xffffff, side: DoubleSide } );
+     let material = new MeshLambertMaterial( { color: 0xffffff, side: DoubleSide } );
+
     let extrudeSettings = { depth: 1, bevelEnabled: false, bevelSegments: 0, steps: 5, bevelSize: 2, bevelThickness: 2 };
     let geometry = new ExtrudeBufferGeometry( roundedRectShape, extrudeSettings );
 
@@ -47,7 +49,8 @@ const boxControl = (name, pos) => {
 
   const geometry =  new BoxGeometry(2, 2, 0.01)
   const material = new MeshStandardMaterial({
-    color: 0xffffff,
+    color: 0xcccccc,
+    transparent: true,
     map: facadeTextureLoader.load(add),
   });
 

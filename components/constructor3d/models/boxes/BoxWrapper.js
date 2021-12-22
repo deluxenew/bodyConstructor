@@ -21,9 +21,10 @@ export const boxWrapper = (width, height, depth) => {
   helper.material.linewidth = 1; // optional
   helper.name = 'edges'
   helper.visible = false
+  helper.scale.set(1.01,1,1.1)
   boxGroup.add(helper)
 
-  boxGroup.userData['width'] = width + betweenPadding
+  boxGroup.userData['width'] = width
   boxGroup.userData['height'] = height
   boxGroup.userData['depth'] = depth
   boxGroup.position.set(-width / 2 , height / 2, depth / 2)
