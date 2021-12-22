@@ -1,0 +1,4373 @@
+{
+    "body": {
+        "categories": [
+            {
+                "code": "type",
+                "name": "Тип",
+                "sort": 10
+            },
+            {
+                "code": "body",
+                "name": "Шкаф",
+                "imgLayers": [
+                    {
+                        "code": "layer_1",
+                        "position": "center bottom",
+                        "size": ""
+                    }
+                ],
+                "sort": 20
+            },
+            {
+                "code": "facade_material",
+                "name": "Фасад",
+                "imgLayers": [
+                    {
+                        "code": "layer_2",
+                        "size": "",
+                        "position": "center bottom"
+                    }
+                ],
+                "sort": 40
+            },
+            {
+                "code": "facade_type",
+                "name": "Тип фасада",
+                "imgLayers": [],
+                "sort": 50
+            },
+            {
+                "code": "facade_color",
+                "name": "Цвет фасада",
+                "imgLayers": [
+                    {
+                        "code": "layer_2"
+                    }
+                ],
+                "sort": 70
+            },
+            {
+                "imgLayers": [
+                    {
+                        "code": "layer_2"
+                    }
+                ],
+                "name": "Вариант",
+                "sort": 60,
+                "code": "facade_variant"
+            }
+        ],
+        "shapes": [],
+        "options": [
+            {
+                "code": "floor",
+                "name": "Напольный",
+                "image": "",
+                "description": "",
+                "category": "type",
+                "restrictions": {
+                    "body": [
+                        "f-400",
+                        "f-600",
+                        "f-800",
+                        "f-800a"
+                    ],
+                    "limitSize": [],
+                    "limitSizeByShape": [],
+                    "shapes": []
+                },
+                "dependency": [],
+                "imageScale": [],
+                "constructorCode": "body"
+            },
+            {
+                "code": "wall",
+                "name": "Навесной",
+                "image": "",
+                "description": "",
+                "category": "type",
+                "restrictions": {
+                    "body": [
+                        "w-400",
+                        "w-600",
+                        "w-800",
+                        "w-800a"
+                    ]
+                },
+                "constructorCode": "body"
+            },
+            {
+                "code": "f-400",
+                "name": "400 x 820",
+                "image": "/p/body/9c05d354-f00a-4de0-ad01-b8112d808b03/",
+                "description": "",
+                "category": "body",
+                "props": {
+                    "view": "Прямой",
+                    "width": 400,
+                    "height": 820,
+                    "length": 480,
+                    "weight": 14,
+                    "price": 2790
+                },
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    },
+                    "limitSizeByShape": [],
+                    "shapes": []
+                },
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "quantity": 1,
+                "xmlId": "676704",
+                "imageDetail": "/p/body/e92cbd46-f25e-4255-81ce-4edab2721d69/",
+                "constructorCode": "body"
+            },
+            {
+                "code": "f-600",
+                "name": "600 x 820",
+                "image": "/p/body/58687124-591f-49a9-988d-a406def89f4e/",
+                "description": "",
+                "category": "body",
+                "props": {
+                    "view": "Прямой",
+                    "width": 600,
+                    "height": 820,
+                    "length": 600,
+                    "weight": 17.4,
+                    "price": 2790
+                },
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    },
+                    "limitSizeByShape": [],
+                    "shapes": []
+                },
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "quantity": 1,
+                "xmlId": "676700",
+                "imageDetail": "/p/body/824addd8-3b5e-4f20-84f7-dfdc6e959932/",
+                "constructorCode": "body"
+            },
+            {
+                "code": "f-800",
+                "name": "800 x 820",
+                "image": "/p/body/75523a95-61ef-45f6-855b-5072d0eefe1e/",
+                "description": "",
+                "category": "body",
+                "props": {
+                    "view": "Прямой",
+                    "width": 800,
+                    "height": 820,
+                    "length": 490,
+                    "weight": 20.7,
+                    "price": 3490
+                },
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    },
+                    "limitSizeByShape": []
+                },
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "quantity": 1,
+                "xmlId": "676705",
+                "imageDetail": "/p/body/390e035e-571b-4995-8fde-8b65f2ce22f5/",
+                "constructorCode": "body"
+            },
+            {
+                "code": "f-800a",
+                "name": "800 x 820 угловой",
+                "image": "/p/body/16356356-72ae-472a-aa66-ad385b1f46f8/",
+                "description": "",
+                "category": "body",
+                "props": {
+                    "view": "Угловой",
+                    "width": 800,
+                    "height": 820,
+                    "length": 480,
+                    "weight": 20.8,
+                    "price": 3690
+                },
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "quantity": 1,
+                "xmlId": "676708",
+                "imageDetail": "/p/body/8a158acc-e06f-496a-8071-3c655ab3d2a5/",
+                "constructorCode": "body"
+            },
+            {
+                "code": "w-400",
+                "name": "400x720",
+                "image": "/p/body/42d8a4fe-8057-4818-8336-cedd7f6ae6dc/",
+                "description": "",
+                "category": "body",
+                "props": {
+                    "view": "Прямой",
+                    "width": 400,
+                    "height": 720,
+                    "length": 296,
+                    "weight": 9.6,
+                    "price": 1790
+                },
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "quantity": 1,
+                "xmlId": "676711",
+                "imageDetail": "/p/body/6f284ce9-625d-40ac-9837-afb2026ca966/",
+                "constructorCode": "body"
+            },
+            {
+                "code": "w-600",
+                "name": "600x720",
+                "image": "/p/body/da38215b-d539-45bf-918a-53e49fa9bba0/",
+                "description": "",
+                "category": "body",
+                "props": {
+                    "view": "Прямой",
+                    "width": 600,
+                    "height": 720,
+                    "length": 600,
+                    "weight": 11.6,
+                    "price": 2345
+                },
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "quantity": 1,
+                "xmlId": "676712",
+                "imageDetail": "/p/body/56fd557b-d02c-4a79-bd43-c130e15aacc0/",
+                "constructorCode": "body"
+            },
+            {
+                "code": "w-800",
+                "name": "800x720",
+                "image": "/p/body/8e4f5fc5-0e75-4e5f-831e-01c7ab77dc66/",
+                "description": "",
+                "category": "body",
+                "props": {
+                    "view": "Прямой",
+                    "width": 800,
+                    "height": 720,
+                    "length": 395,
+                    "weight": 14.2,
+                    "price": 2790
+                },
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "quantity": 1,
+                "xmlId": "676696",
+                "imageDetail": "/p/body/29d32947-aebb-450d-b3b4-4f6f39817d8b/",
+                "constructorCode": "body"
+            },
+            {
+                "code": "w-800a",
+                "name": "600x720 угловой",
+                "image": "/p/body/9b24ca23-3b43-414b-a78e-41e229dbae8b/",
+                "description": "",
+                "category": "body",
+                "props": {
+                    "view": "Угловой",
+                    "width": 800,
+                    "height": 720,
+                    "length": 600,
+                    "weight": 19.2,
+                    "price": 3245
+                },
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "quantity": 1,
+                "xmlId": "676713",
+                "imageDetail": "/p/body/03d7a113-870d-4839-9a6d-9eefd269034f/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "150х820",
+                "code": "f-150-820",
+                "category": "body",
+                "image": "/p/body/e89102cb-50dc-4c55-b41b-529ff4178593/",
+                "quantity": 1,
+                "xmlId": "676707",
+                "props": {
+                    "price": 2645,
+                    "weight": 12,
+                    "view": "Прямой",
+                    "width": 150,
+                    "height": 820,
+                    "length": 84
+                },
+                "imageDetail": "/p/body/bef379f6-7ec5-41f1-ae19-e9001905bf16/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "300х820",
+                "code": "f-300-820",
+                "category": "body",
+                "props": {
+                    "weight": 12.4,
+                    "price": 1990,
+                    "view": "Прямой",
+                    "width": 300,
+                    "height": 820,
+                    "length": 84
+                },
+                "quantity": 1,
+                "xmlId": "676703",
+                "image": "/p/body/bc1d3e95-95de-4f61-b279-87b922417125/",
+                "imageDetail": "/p/body/afd54dbe-c5ae-4de9-8220-91fc4246e674/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "400х820 (один ящик)",
+                "code": "f-400-820-1b",
+                "category": "body",
+                "image": "/p/body/c9ac22dd-07e6-41bd-9ff8-f50695ac4290/",
+                "props": {
+                    "weight": 16.1,
+                    "price": 2990,
+                    "view": "Прямой",
+                    "width": 400,
+                    "height": 820,
+                    "length": 104
+                },
+                "quantity": 1,
+                "xmlId": "676702",
+                "imageDetail": "/p/body/189045df-6ced-4dd2-8c33-8d338c963edd/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "400х820 (три ящика)",
+                "code": "f-400-820-3b",
+                "category": "body",
+                "image": "/p/body/60f765c5-eb58-41f2-9791-255a3f797651/",
+                "props": {
+                    "weight": 21.5,
+                    "price": 4990,
+                    "view": "Прямой",
+                    "width": 400,
+                    "height": 820,
+                    "length": 130
+                },
+                "quantity": 1,
+                "xmlId": "766816",
+                "imageDetail": "/p/body/c9a85476-f8d0-4e10-ae4a-ab99fd070116/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "600х820 (два ящика)",
+                "code": "f-600-820-2b",
+                "category": "body",
+                "image": "/p/body/778e06ea-938a-494f-a157-cfd21cb5eb91/",
+                "props": {
+                    "weight": 26.5,
+                    "price": 5490,
+                    "view": "Прямой",
+                    "width": 600,
+                    "height": 820,
+                    "length": 94
+                },
+                "quantity": 1,
+                "xmlId": "766814",
+                "imageDetail": "/p/body/e9aa153b-6394-40be-be4b-ecc7435c157c/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "600х820 (три ящика)",
+                "code": "f-600-820-3b",
+                "category": "body",
+                "image": "/p/body/4371b919-4370-4885-b794-74760ebde0f2/",
+                "props": {
+                    "price": 5490,
+                    "weight": 26.5,
+                    "view": "Прямой",
+                    "width": 600,
+                    "height": 820,
+                    "length": 136
+                },
+                "quantity": 1,
+                "xmlId": "766817",
+                "imageDetail": "/p/body/b1d14dec-7f7c-4a57-8f06-5945bf1821ee/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "600х820 (духовой шкаф)",
+                "code": "f-600-820-oven",
+                "category": "body",
+                "image": "/p/body/d83a6b1f-e53d-40f8-9df6-9cfedca31fe7/",
+                "props": {
+                    "weight": 15,
+                    "price": 2190,
+                    "view": "Прямой",
+                    "width": 600,
+                    "height": 820,
+                    "length": 94
+                },
+                "quantity": 1,
+                "xmlId": "676706",
+                "imageDetail": "/p/body/c9b9ba89-1dbe-47bb-8312-aeb1a50e24cd/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "800х820 (два ящика)",
+                "code": "f-800-820-2b",
+                "category": "body",
+                "image": "/p/body/da2be2f8-797c-4bc4-9529-a7d2c669c577/",
+                "props": {
+                    "weight": 33.5,
+                    "price": 6245,
+                    "view": "Прямой",
+                    "width": 800,
+                    "height": 820,
+                    "length": 94
+                },
+                "quantity": 1,
+                "xmlId": "766815",
+                "imageDetail": "/p/body/4754d88a-c26f-4a54-a740-2da7362c3bf1/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "800х820 (три ящика)",
+                "code": "f-800-820-3b",
+                "category": "body",
+                "image": "/p/body/f9864f03-27e8-4938-ab71-f0ae87d6a68b/",
+                "props": {
+                    "weight": 33.5,
+                    "price": 5490,
+                    "view": "Прямой",
+                    "width": 800,
+                    "height": 820,
+                    "length": 110
+                },
+                "quantity": 1,
+                "xmlId": "766818",
+                "imageDetail": "/p/body/2dfacf3e-1cdc-4e27-9b4f-2e5b39819943/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "floor"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "floor"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "600х2140",
+                "code": "f-600-2140",
+                "category": "body",
+                "image": "/p/body/8478b1bb-7eb5-4ce9-a9d6-c3b3e3a139f1/",
+                "props": {
+                    "weight": 52,
+                    "price": 6990,
+                    "view": "Прямой",
+                    "width": 600,
+                    "height": 2140,
+                    "length": 104
+                },
+                "quantity": 1,
+                "xmlId": "676701",
+                "imageDetail": "/p/body/e555efe4-1869-4d63-83c2-7a8e1022c3b7/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "150х720",
+                "code": "w-150-720",
+                "category": "body",
+                "image": "/p/body/0dd63092-b6bc-43dd-ba9f-8200f8ebd726/",
+                "quantity": 1,
+                "xmlId": "676709",
+                "props": {
+                    "price": 1445,
+                    "weight": 6.4,
+                    "view": "Прямой",
+                    "width": 150,
+                    "height": 720,
+                    "length": 66
+                },
+                "imageDetail": "/p/body/9ee37826-7490-4154-9a77-0aec765a940d/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "300х720",
+                "code": "w-300-720",
+                "category": "body",
+                "image": "/p/body/4594a71d-07d6-4f1e-bf7f-727113abe172/",
+                "quantity": 1,
+                "xmlId": "676710",
+                "props": {
+                    "weight": 11.2,
+                    "price": 1645,
+                    "view": "Прямой",
+                    "width": 300,
+                    "height": 720,
+                    "length": 84
+                },
+                "imageDetail": "/p/body/5516f9fc-f5a2-4401-b7f9-95ccaccf63c7/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "500х360",
+                "code": "w-500-360",
+                "category": "body",
+                "image": "/p/body/39a6acb5-8bb3-4121-8473-9a1867393815/",
+                "quantity": 1,
+                "xmlId": "676714",
+                "props": {
+                    "weight": 6.3,
+                    "price": 1490,
+                    "view": "Прямой",
+                    "width": 500,
+                    "height": 360,
+                    "length": 86
+                },
+                "imageDetail": "/p/body/ebeb0dac-a5ca-4a4d-83fc-78112fa44e4c/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    }
+                },
+                "name": "600х360",
+                "code": "w-600-360",
+                "category": "body",
+                "image": "/p/body/37d5f7a3-452f-4da7-8970-5c149bbf840e/",
+                "quantity": 1,
+                "xmlId": "676715",
+                "props": {
+                    "weight": 7,
+                    "price": 1645,
+                    "view": "Прямой",
+                    "width": 600,
+                    "height": 360,
+                    "length": 86
+                },
+                "imageDetail": "/p/body/cd634468-7960-4b9a-aaf8-7a684d1241a6/",
+                "constructorCode": "body"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "type",
+                        "values": [
+                            "wall"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "type": [
+                        "wall"
+                    ],
+                    "limitSize": {
+                        "maxWidth": 300,
+                        "maxHeight": 615,
+                        "minWidth": 300,
+                        "minHeight": 615
+                    },
+                    "limitSizeByShape": []
+                },
+                "name": "600х600",
+                "code": "w-600-600",
+                "category": "body",
+                "image": "/p/body/ad468d66-bfd4-430c-adf1-3ad75e59c41a/",
+                "quantity": 1,
+                "xmlId": "766819",
+                "props": {
+                    "weight": 10.5,
+                    "price": 1790,
+                    "view": "Прямой",
+                    "width": 600,
+                    "height": 600,
+                    "length": 100
+                },
+                "imageDetail": "/p/body/aab10eed-86aa-461e-a5a8-b843fb315714/",
+                "constructorCode": "body"
+            },
+            {
+                "code": "none",
+                "name": "Без фасада",
+                "image": "",
+                "description": "",
+                "category": "facade_material",
+                "restrictions": {
+                    "type": [
+                        "laminated",
+                        "varnished"
+                    ]
+                },
+                "dependency": [],
+                "imageScale": [],
+                "props": [],
+                "imageDetail": "",
+                "constructorCode": "body"
+            },
+            {
+                "code": "ldsp",
+                "name": "ЛДСП",
+                "image": "",
+                "description": "Ламинированная древесно - стружечная плита. Кромка 0,4 мм со всех сторон. Качественное покрытие. Устойчивость к температурным воздействиям. Упаковка: стрейч плёнка.",
+                "category": "facade_material",
+                "restrictions": {
+                    "type": [
+                        "laminated",
+                        "varnished"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-400",
+                            "f-600",
+                            "f-800",
+                            "w-400",
+                            "w-600",
+                            "w-800",
+                            "w-800a",
+                            "f-150-820",
+                            "f-400-820-1b",
+                            "f-400-820-3b",
+                            "f-600-820-2b",
+                            "f-600-820-3b",
+                            "f-800-820-2b",
+                            "f-800-820-3b",
+                            "f-600-2140",
+                            "w-150-720",
+                            "w-500-360",
+                            "w-600-360",
+                            "w-600-600",
+                            "f-600-820-oven",
+                            "f-600-820-3b"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "imageDetail": "",
+                "constructorCode": "facade"
+            },
+            {
+                "code": "mdf",
+                "name": "МДФ",
+                "image": "",
+                "description": "Покрытие - пленка ПВХ. Высокая устойчивость к УФ - лучам, сколам, истиранию, воздействию чистящих средств, изменениям влажности и высоким температурам. Упаковка: стрейч плёнка.<br>",
+                "category": "facade_material",
+                "restrictions": {
+                    "type": [
+                        "milled"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-400",
+                            "f-600",
+                            "f-800",
+                            "w-400",
+                            "w-600",
+                            "w-800",
+                            "w-800a",
+                            "f-150-820",
+                            "f-400-820-1b",
+                            "f-400-820-3b",
+                            "f-600-820-2b",
+                            "f-600-820-3b",
+                            "f-800-820-2b",
+                            "f-800-820-3b",
+                            "f-600-2140",
+                            "w-150-720",
+                            "w-500-360",
+                            "w-600-360",
+                            "w-600-600",
+                            "f-600-820-oven",
+                            "f-600-820-3b"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "constructorCode": "facade"
+            },
+            {
+                "code": "laminated",
+                "name": "Ламинированный",
+                "image": "",
+                "description": "",
+                "category": "facade_type",
+                "restrictions": {
+                    "limitSize": {
+                        "minWidth": 40,
+                        "minHeight": 116,
+                        "maxWidth": 797,
+                        "maxHeight": 1320
+                    },
+                    "material": [
+                        "ldsp"
+                    ],
+                    "color": [
+                        "ash_anchor_gray",
+                        "orinoko",
+                        "oak_votan",
+                        "rock",
+                        "benzine",
+                        "studio_light",
+                        "studio_dark"
+                    ],
+                    "dependency": [
+                        {
+                            "code": "facade_material",
+                            "values": [
+                                "ldsp"
+                            ]
+                        },
+                        {
+                            "code": "facade_color",
+                            "values": [
+                                "ash_anchor_gray",
+                                "orinoko",
+                                "oak_votan",
+                                "rock",
+                                "benzine",
+                                "studio_light",
+                                "studio_dark"
+                            ]
+                        }
+                    ],
+                    "limitSizeByShape": []
+                },
+                "dependency": [
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "constructorCode": "facade"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": {
+                    "limitSize": {
+                        "maxWidth": 797,
+                        "maxHeight": 1320,
+                        "minWidth": 40,
+                        "minHeight": 116
+                    },
+                    "limitSizeByShape": []
+                },
+                "name": "Фрезерованный",
+                "code": "milled",
+                "category": "facade_type",
+                "constructorCode": "facade"
+            },
+            {
+                "code": "varnished",
+                "name": "Лакированный",
+                "image": "",
+                "description": "",
+                "category": "facade_type",
+                "label": "soon",
+                "restrictions": {
+                    "limitSize": {
+                        "minWidth": 40,
+                        "minHeight": 716,
+                        "maxWidth": 407,
+                        "maxHeight": 716
+                    },
+                    "material": [
+                        "ldsp"
+                    ]
+                },
+                "constructorCode": "facade",
+                "dependency": [
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ]
+            },
+            {
+                "code": "ash_anchor_gray",
+                "name": "Ясень Анкор серый",
+                "image": "/p/facade/2260323b-bd25-47f5-90ad-ee6e8d7066fe/",
+                "imageDetail": "/p/facade/c26f4d6e-0570-4a73-b39e-65d93b415aa6/",
+                "description": "",
+                "category": "facade_color",
+                "restrictions": {
+                    "type": [
+                        "laminated"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "laminated"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_1320_0_right_1",
+                            "597_596_0_solid_1",
+                            "597_716_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "constructorCode": "facade"
+            },
+            {
+                "code": "orinoko",
+                "name": "Ориноко",
+                "image": "/p/facade/9b99dad2-e134-47de-9f2a-36afd752bb74/",
+                "imageDetail": "/p/facade/5414fd4d-d9ac-42e1-a090-b2c4d2c73a8c/",
+                "description": "",
+                "category": "facade_color",
+                "restrictions": {
+                    "type": [
+                        "laminated"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "laminated"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "constructorCode": "facade"
+            },
+            {
+                "code": "larch",
+                "name": "Лиственница",
+                "image": "/p/facade/4391621c-49d9-4511-acd9-113da13cd093/",
+                "imageDetail": "/p/facade/8c379c4b-9861-4097-bbaf-938e9a1671a3/",
+                "description": "",
+                "category": "facade_color",
+                "restrictions": {
+                    "type": [
+                        "milled"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_1320_0_right_1",
+                            "597_596_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "imageRotation": false,
+                "constructorCode": "facade"
+            },
+            {
+                "code": "marble_walnut",
+                "name": "Орех мраморный",
+                "image": "/p/facade/7ddc22de-036a-49a3-95d7-01e71a242c68/",
+                "imageDetail": "/p/facade/6c46aaf5-7778-4744-b116-0d8230d38b0c/",
+                "description": "",
+                "category": "facade_color",
+                "restrictions": {
+                    "type": [
+                        "milled"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "milled"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_596_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "constructorCode": "facade"
+            },
+            {
+                "code": "oak_votan",
+                "name": "Дуб вотан",
+                "image": "/p/facade/430a8450-d6a4-4c14-8f3a-37864c961c82/",
+                "imageDetail": "/p/facade/c7b36282-816f-4c3c-afec-abeaaae8c495/",
+                "description": "",
+                "category": "facade_color",
+                "restrictions": {
+                    "type": [
+                        "laminated"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "laminated"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_1320_0_right_1",
+                            "597_596_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "constructorCode": "facade"
+            },
+            {
+                "code": "rock",
+                "name": "Скала",
+                "image": "/p/facade/4a76f716-e304-4fb0-81cd-96aa82971447/",
+                "imageDetail": "/p/facade/c6dfb8a6-7683-4d70-9457-52797be61174/",
+                "description": "",
+                "category": "facade_color",
+                "restrictions": {
+                    "type": [
+                        "laminated"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "laminated"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_596_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "constructorCode": "facade"
+            },
+            {
+                "code": "studio_light",
+                "name": "Ателье светлый",
+                "image": "/p/facade/89c6cfa8-6dfe-413e-8539-0305f911368a/",
+                "imageDetail": "/p/facade/7a84ed34-a12c-44c7-bbe1-e412082ba9d5/",
+                "description": "",
+                "category": "facade_color",
+                "restrictions": {
+                    "type": [
+                        "laminated"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "laminated"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "597_1320_0_left_1",
+                            "597_596_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1",
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "constructorCode": "facade"
+            },
+            {
+                "code": "studio_dark",
+                "name": "Ателье темный",
+                "image": "/p/facade/1a671e17-04b1-45f6-a04a-6f2f96608590/",
+                "imageDetail": "/p/facade/fcf9f957-6459-4dc5-8bf0-f19d7ea40529/",
+                "description": "",
+                "category": "facade_color",
+                "restrictions": {
+                    "type": [
+                        "laminated"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "laminated"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_1320_0_right_1",
+                            "597_596_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "props": [],
+                "constructorCode": "facade"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "milled"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_1320_0_left_1",
+                            "597_1320_0_right_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Софт фисташка",
+                "code": "soft_fistashka",
+                "category": "facade_color",
+                "image": "/p/facade/91abe0d4-cbf5-4bd4-86c6-757976129a8d/",
+                "imageDetail": "/p/facade/12a5e77b-2f49-47de-b618-48dbc310366e/",
+                "constructorCode": "facade"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "milled"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_1320_0_left_1",
+                            "597_1320_0_right_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Смоки софт",
+                "category": "facade_color",
+                "code": "smoki_soft",
+                "imageDetail": "/p/facade/458f3130-1fc4-4c70-8996-e2f550241fdd/",
+                "image": "/p/facade/df57045c-5a22-4128-840d-9d7bb143a020/",
+                "constructorCode": "facade"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "milled"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_1320_0_left_1",
+                            "597_1320_0_right_1",
+                            "597_596_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Графит",
+                "code": "graphit",
+                "category": "facade_color",
+                "imageDetail": "/p/facade/8b48c97f-94f6-43f0-8404-2e03981da836/",
+                "image": "/p/facade/a76deed3-e7fd-4771-98d3-ebc029356ea3/",
+                "constructorCode": "facade"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_type",
+                        "values": [
+                            "milled"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "facade_variant",
+                        "values": [
+                            "397_716_0_solid_1",
+                            "397_716_0_solid_2",
+                            "597_1320_0_left_1",
+                            "597_1320_0_right_1",
+                            "597_596_0_solid_1",
+                            "147_716_0_vk_1",
+                            "147_716_0_solid_1",
+                            "397_716_1_solid_1",
+                            "397_716_3_solid_1",
+                            "597_716_2_solid_1",
+                            "797_716_2_solid_1",
+                            "797_716_3_solid_1",
+                            "597_602_0_solid_1",
+                            "597_716_0_solid_2",
+                            "407_716_0_solid_1",
+                            "496_357_0_solid_1",
+                            "596_357_0_solid_1",
+                            "597_716_0_solid_1",
+                            "297_716_0_solid_1",
+                            "297_716_0_solid_2",
+                            "597_116_0_solid_1",
+                            "597_716_3_solid_1"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Грей",
+                "code": "grey",
+                "category": "facade_color",
+                "image": "/p/facade/a6565ba3-8bf8-4e36-8b45-f0abe695904e/",
+                "constructorCode": "facade",
+                "imageDetail": "/p/6568865865865865/b91d5e86-ba6c-4ea3-bc12-a9a57db70c04/"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-400",
+                            "w-400"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "",
+                "code": "397_716_0_solid_1",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "imageDetail": "",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "props": []
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-800",
+                            "w-800"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "397_716_0_solid_2",
+                "category": "facade_variant",
+                "image": "/p/536464364364364643/c90912de-466a-4640-a4f8-cd7978191981/",
+                "constructorCode": "facade",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-150-820",
+                            "w-150-720"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Выкатной",
+                "code": "147_716_0_vk_1",
+                "category": "facade_variant",
+                "constructorCode": "facade"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-150-820",
+                            "w-150-720"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Дверь",
+                "code": "147_716_0_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "w-500-360"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "496_357_0_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/44665465654/ed58bf87-b329-4197-adaa-923f54d215a5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "w-600-360"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "596_357_0_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/44665465654/ed58bf87-b329-4197-adaa-923f54d215a5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "w-600-600"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "597_596_0_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/44665465654/ed58bf87-b329-4197-adaa-923f54d215a5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "w-800a"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "407_716_0_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/44665465654/ed58bf87-b329-4197-adaa-923f54d215a5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-400-820-3b"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "397_716_3_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-800-820-3b"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "797_716_3_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-800-820-2b"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "797_716_2_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "imageDetail": "",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600-820-2b"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "597_716_2_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-400-820-1b"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "397_716_1_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600",
+                            "w-600"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "597_716_0_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600-2140"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "597_1320_0_left_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "name": "Левый",
+                "image": "/p/64665654654/03ab4b37-917e-4653-bd9f-880cb83a0a8a/"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600-2140"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Правый",
+                "code": "597_1320_0_right_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/64665654654/03ab4b37-917e-4653-bd9f-880cb83a0a8a/"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600-2140"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "597_602_0_solid_1",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/575765765765765765/ece137cb-88e6-4bc7-857a-d0939ea1d831/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600-2140"
+                        ]
+                    },
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "597_716_0_solid_2",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/54345543543543543543/1f191441-eade-4da6-ab05-7c093ade0e82/",
+                "name": ""
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-300-820",
+                            "w-300-720"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "code": "297_716_0_solid_1",
+                "category": "facade_variant",
+                "name": "297_716_0_solid_1",
+                "constructorCode": "facade",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600",
+                            "w-600"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "",
+                "code": "297_716_0_solid_2",
+                "category": "facade_variant",
+                "constructorCode": "facade",
+                "image": "/p/536464364364364643/c90912de-466a-4640-a4f8-cd7978191981/"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600-820-oven"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "isDefault": false,
+                "code": "597_116_0_solid_1",
+                "name": "",
+                "category": "facade_variant",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "constructorCode": "facade"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "facade_material",
+                        "values": [
+                            "ldsp",
+                            "mdf"
+                        ]
+                    },
+                    {
+                        "code": "body",
+                        "values": [
+                            "f-600-820-3b"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "",
+                "code": "597_716_3_solid_1",
+                "category": "facade_variant",
+                "image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
+                "constructorCode": "facade"
+            }
+        ],
+        "imgLayers": [
+            {
+                "code": "layer_1",
+                "images": [
+                    {
+                        "code": "f-400",
+                        "path": "/p/body/e369fd86-4230-46bf-b153-df7caafb9c01/"
+                    },
+                    {
+                        "code": "f-600",
+                        "path": "/p/body/489708bb-51fa-4184-98dc-ef8e2c19d675/"
+                    },
+                    {
+                        "code": "f-800",
+                        "path": "/p/body/9bf4db7b-592a-42ad-b9d9-1dd5a24e8d3f/"
+                    },
+                    {
+                        "code": "f-800a",
+                        "path": "/p/body/08cb4f51-f804-4411-bc82-c99327d86ffe/"
+                    },
+                    {
+                        "code": "w-400",
+                        "path": "/p/body/34900ba1-6842-4e18-a15b-f2bda71f9a89/"
+                    },
+                    {
+                        "code": "w-600",
+                        "path": "/p/body/78e474ad-4dea-4db9-b736-a1dea30e6eeb/"
+                    },
+                    {
+                        "code": "w-800",
+                        "path": "/p/body/af3af60a-5242-41c4-b10e-03fef79b723c/"
+                    },
+                    {
+                        "code": "w-800a",
+                        "path": "/p/body/82aa7d83-a89f-49fe-b0da-842095e6a3fd/"
+                    },
+                    {
+                        "code": "f-150-820",
+                        "path": "/p/body/5421fbd9-5a6c-4007-910f-5980602656ec/"
+                    },
+                    {
+                        "code": "f-300-820",
+                        "path": "/p/body/0aa38ca9-f529-4644-80ad-8084bf1369ad/"
+                    },
+                    {
+                        "code": "f-400-820-1b",
+                        "path": "/p/body/d72bb6fa-1f3b-4ff4-b9eb-57cd9e162538/"
+                    },
+                    {
+                        "code": "f-400-820-3b",
+                        "path": "/p/body/45379999-34cc-4b70-beb1-106b8125d1bf/"
+                    },
+                    {
+                        "code": "f-600-820-2b",
+                        "path": "/p/body/e2d1f7fe-5a3f-40c3-8327-bf1ab2280e3f/"
+                    },
+                    {
+                        "code": "f-600-820-3b",
+                        "path": "/p/body/12abd841-7241-4b85-a3c0-cfe2506c312b/"
+                    },
+                    {
+                        "code": "f-600-820-oven",
+                        "path": "/p/body/b18dc9de-7f1f-4555-b535-8f2bc2083608/"
+                    },
+                    {
+                        "code": "f-800-820-2b",
+                        "path": "/p/body/95ebd3c1-a26a-43b4-93a2-6df4e968ed45/"
+                    },
+                    {
+                        "code": "f-800-820-3b",
+                        "path": "/p/body/abd1fee4-58b4-4f9a-96b6-8c9eb34f5a2e/"
+                    },
+                    {
+                        "code": "f-600-2140",
+                        "path": "/p/body/c448f084-9553-44fe-a22f-b3017c36448e/"
+                    },
+                    {
+                        "code": "w-150-720",
+                        "path": "/p/body/cc7cca94-8f89-4d75-a985-2b3f846b5917/"
+                    },
+                    {
+                        "code": "w-300-720",
+                        "path": "/p/body/c2507282-1859-4386-b8a8-b2a379e147da/"
+                    },
+                    {
+                        "code": "w-500-360",
+                        "path": "/p/body/303ef138-8be1-48af-99ba-1d333f6f9cff/"
+                    },
+                    {
+                        "code": "w-600-360",
+                        "path": "/p/body/5f934ef6-90f1-49aa-a6fc-2ac25cf582a5/"
+                    },
+                    {
+                        "code": "w-600-600",
+                        "path": "/p/body/956b428b-c903-4e63-b414-e997938d3f34/"
+                    }
+                ]
+            },
+            {
+                "code": "layer_2",
+                "images": [
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_116_0_solid_1",
+                        "path": "/p/facade/a32a962d-71db-4819-ae13-2aff42b99f91/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::496_357_0_solid_1",
+                        "path": "/p/facade/4dae5702-a6c5-45b6-89e6-fb735e8ff28d/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::596_357_0_solid_1",
+                        "path": "/p/facade/f5304090-1c2a-495c-8445-0b774a69c315/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_596_0_solid_1",
+                        "path": "/p/facade/d95066bf-1740-4e3e-a491-5fcaaee7e757/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_602_0_solid_1",
+                        "path": "/p/facade/4eed12a8-23a3-4610-b031-ed76764f0e10/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::147_716_0_vk_1",
+                        "path": "/p/facade/77a57441-b476-4ffb-8f33-70295870a045/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::397_716_3_solid_1",
+                        "path": "/p/facade/667d953b-e1bd-40ab-a49d-2faf049838e1/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::397_716_0_solid_1",
+                        "path": "/p/facade/62f4ca0e-45f2-4fa0-89a0-8b12f1137b9d/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::397_716_0_solid_2",
+                        "path": "/p/facade/b60be5d7-f96b-401a-a59c-fa125aaaccb1/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::397_716_1_solid_1",
+                        "path": "/p/facade/7a0ac896-cb9a-4924-91b8-e09820cd6843/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::407_716_0_solid_1",
+                        "path": "/p/facade/74fd496a-cef9-489a-b7dd-73092161acab/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_716_2_solid_1",
+                        "path": "/p/facade/39504cef-727b-4dd0-8ea5-f87e2329c082/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_716_3_solid_1",
+                        "path": "/p/facade/55b9ef38-5ae1-49fb-a2e5-de91739eb419/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_716_1_solid_1",
+                        "path": "/p/facade/5e9b7fd4-ac15-40b3-984d-dcf001c32043/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_716_0_solid_2",
+                        "path": "/p/facade/7f587bc2-b222-41c2-98c7-21b3bb231c2a/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::797_716_2_solid_1",
+                        "path": "/p/facade/b6ff5977-8147-4822-9ffb-bbd80de1fc27/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::797_716_3_solid_1",
+                        "path": "/p/facade/faf05da3-8aef-4452-8e35-8f6dbcf9c50e/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_1320_0_right_1",
+                        "path": "/p/facade/8c00a3bb-3369-437b-bf9d-caabbd2d56db/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::147_716_0_solid_1",
+                        "path": "/p/facade/77a57441-b476-4ffb-8f33-70295870a045/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_1320_0_left_1",
+                        "path": "/p/facade/8c00a3bb-3369-437b-bf9d-caabbd2d56db/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_116_0_solid_1",
+                        "path": "/p/facade/337a976e-7120-468f-81d9-d25fed1f9f04/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::496_357_0_solid_1",
+                        "path": "/p/facade/9312f2f1-1b3c-4996-9e79-824a40528ba9/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::596_357_0_solid_1",
+                        "path": "/p/facade/8a23949d-084f-457c-a033-875376693308/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_596_0_solid_1",
+                        "path": "/p/facade/b36feb59-cacb-42f8-b685-64fd5006a12e/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_602_0_solid_1",
+                        "path": "/p/facade/7c18cf5e-5994-4ad8-a867-68ada82b4b00/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::147_716_0_vk_1",
+                        "path": "/p/facade/e8b2a108-8da8-4ddb-b0a6-88090fdf0696/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::397_716_3_solid_1",
+                        "path": "/p/facade/723aac93-bb48-41f0-aa78-ba7ebf6eff03/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::397_716_0_solid_1",
+                        "path": "/p/facade/600506d9-f7b5-474b-b262-f85691f73688/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::397_716_0_solid_2",
+                        "path": "/p/facade/57baf6ce-537d-4ce9-89d9-aaa343bb1404/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::397_716_1_solid_1",
+                        "path": "/p/facade/6235a195-cadc-4f5b-a4db-4ac05954a2fb/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::407_716_0_solid_1",
+                        "path": "/p/facade/b62ca653-9bd3-462c-8b52-68817ac07633/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_716_2_solid_1",
+                        "path": "/p/facade/35520cff-752d-43f3-8ace-047fb586a252/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_716_3_solid_1",
+                        "path": "/p/facade/f014e835-3036-49e8-8959-ea793239ccc1/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_716_1_solid_1",
+                        "path": "/p/facade/b6c8cd39-1e5a-447f-a1a1-449688d0890a/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_716_2_solid_2",
+                        "path": "/p/facade/a2e30095-dd4d-455f-8fe2-99f7b08565c3/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::797_716_2_solid_1",
+                        "path": "/p/facade/843f9a3f-5ebb-4caf-b9e4-a02769cce09b/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::797_716_3_solid_1",
+                        "path": "/p/facade/772361a2-3ca2-4229-b14f-d1505b0c017f/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_1320_0_right_1",
+                        "path": "/p/facade/b7257cba-b359-4c90-8144-f9b65c86adf6/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_1320_0_left_1",
+                        "path": "/p/facade/b7257cba-b359-4c90-8144-f9b65c86adf6/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::147_716_0_solid_1",
+                        "path": "/p/facade/e8b2a108-8da8-4ddb-b0a6-88090fdf0696/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_116_0_solid_1",
+                        "path": "/p/facade/3a0c5e6d-59da-424f-aefa-c8034b52fa50/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::496_357_0_solid_1",
+                        "path": "/p/facade/0af661e6-69b2-4e08-bd81-592f5451dde4/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::596_357_0_solid_1",
+                        "path": "/p/facade/fca2ef80-4f37-4eb2-950a-dd87583bd38f/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_596_0_solid_1",
+                        "path": "/p/facade/2269d592-3a46-4fb8-b678-f48ff7790d62/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_602_0_solid_1",
+                        "path": "/p/facade/c83fbe5d-b475-4763-9dd9-5fa51a1488cd/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::147_716_0_vk_1",
+                        "path": "/p/facade/cc7ade2f-fe0e-4b0b-a8e7-63caafbecbf8/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::397_716_3_solid_1",
+                        "path": "/p/facade/d1b88cf7-3ff9-401d-9f8f-2031752f7972/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::397_716_0_solid_1",
+                        "path": "/p/facade/8a25c497-72a4-4e08-8879-34b99454dfd4/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::397_716_0_solid_2",
+                        "path": "/p/facade/76c0b465-6e23-4d32-914a-5a7715c0af63/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::397_716_1_solid_1",
+                        "path": "/p/facade/f811829b-ae7f-4fe2-a6aa-3501c110abf6/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::407_716_0_solid_1",
+                        "path": "/p/facade/f9f14f94-e6e5-428a-ab00-f7ac088e9eaa/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_716_2_solid_1",
+                        "path": "/p/facade/f9694d8a-43a5-477c-a175-e127c8d66eae/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_716_3_solid_1",
+                        "path": "/p/facade/f106f121-5c97-4faa-8fbc-e43e9ab7edd5/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_716_1_solid_1",
+                        "path": "/p/facade/387906c5-696c-4397-b165-47c649f9c940/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_716_2_solid_2",
+                        "path": "/p/facade/7bcbb0f9-8263-45c1-be52-90b0e5435f83/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::797_716_2_solid_1",
+                        "path": "/p/facade/a3513a9e-72ab-4542-8cd0-460a24ebc683/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::797_716_3_solid_1",
+                        "path": "/p/facade/ca7ddc3c-0fd6-45ea-a7bf-1cd41f8c3bdd/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_1320_0_right_1",
+                        "path": "/p/facade/16b409e2-8622-4cd2-9ac9-04cd4f72628a/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_1320_0_left_1",
+                        "path": "/p/facade/16b409e2-8622-4cd2-9ac9-04cd4f72628a/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::147_716_0_solid_1",
+                        "path": "/p/facade/cc7ade2f-fe0e-4b0b-a8e7-63caafbecbf8/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_116_0_solid_1",
+                        "path": "/p/facade/71208568-634f-4698-9eaa-639dd1c86be7/"
+                    },
+                    {
+                        "code": "ldsp::rock::496_357_0_solid_1",
+                        "path": "/p/facade/51cab6b1-05b9-4b0f-8fa2-00f841f670b6/"
+                    },
+                    {
+                        "code": "ldsp::rock::596_357_0_solid_1",
+                        "path": "/p/facade/14c966a1-2b90-4270-a3b6-05adb31505ef/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_596_0_solid_1",
+                        "path": "/p/facade/9ff91158-5858-490e-8700-b3f58acc0fa9/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_602_0_solid_1",
+                        "path": "/p/facade/2332c9d1-82e1-40d4-9798-3e292ac954e0/"
+                    },
+                    {
+                        "code": "ldsp::rock::147_716_0_vk_1",
+                        "path": "/p/facade/a7f68850-cb37-423a-be02-6c1d7124ece8/"
+                    },
+                    {
+                        "code": "ldsp::rock::397_716_3_solid_1",
+                        "path": "/p/facade/f7349f8c-7330-4c8b-8c19-322cdf9cf909/"
+                    },
+                    {
+                        "code": "ldsp::rock::397_716_0_solid_1",
+                        "path": "/p/facade/6b2b50ad-abfb-4e53-bda7-4024754b3d76/"
+                    },
+                    {
+                        "code": "ldsp::rock::397_716_0_solid_2",
+                        "path": "/p/facade/24bfbfce-534f-42a9-a860-65ce4ec76660/"
+                    },
+                    {
+                        "code": "ldsp::rock::397_716_1_solid_1",
+                        "path": "/p/facade/94994546-548e-4da2-965b-b97dcc9f7bfa/"
+                    },
+                    {
+                        "code": "ldsp::rock::407_716_0_solid_1",
+                        "path": "/p/facade/c7e97985-6d13-4938-a35b-bd24f9bfecbd/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_716_2_solid_1",
+                        "path": "/p/facade/015efe28-0f68-461b-b155-f8323ea18e01/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_716_3_solid_1",
+                        "path": "/p/facade/2f841ed6-b6fd-485d-8707-1d2a24c8dc39/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_716_0_solid_1",
+                        "path": "/p/facade/8f038d4e-e77d-4eca-b024-51b3e9135d0a/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_716_0_solid_2",
+                        "path": "/p/facade/bcced53b-02ae-47af-9732-a443aad98215/"
+                    },
+                    {
+                        "code": "ldsp::rock::797_716_2_solid_1",
+                        "path": "/p/facade/a13cfb46-d5a9-47b9-9f6d-93b648994153/"
+                    },
+                    {
+                        "code": "ldsp::rock::797_716_3_solid_1",
+                        "path": "/p/facade/18861640-7a53-45e0-82a4-02e20dc77af0/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_1320_0_right_1",
+                        "path": "/p/facade/24dd388c-1cb2-4d20-bc2f-5fda3da97c91/"
+                    },
+                    {
+                        "code": "ldsp::rock::597_1320_0_left_1",
+                        "path": "/p/facade/24dd388c-1cb2-4d20-bc2f-5fda3da97c91/"
+                    },
+                    {
+                        "code": "ldsp::rock::147_716_0_solid_1",
+                        "path": "/p/facade/a7f68850-cb37-423a-be02-6c1d7124ece8/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_116_0_solid_1",
+                        "path": "/p/facade/b5d0aa0a-66a0-4bc6-be55-7d58eabbc4da/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::496_357_0_solid_1",
+                        "path": "/p/facade/4f91cb44-c7e0-4c94-b8e1-fecf9c5c5c16/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::596_357_0_solid_1",
+                        "path": "/p/facade/1b6c4938-608e-41e5-80f6-8557fa928cc6/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_596_0_solid_1",
+                        "path": "/p/facade/8aaf39ef-f097-4216-b70f-e457c740f63e/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_602_0_solid_1",
+                        "path": "/p/facade/d6c643da-21da-488b-8248-6b633e03ec46/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::147_716_0_vk_1",
+                        "path": "/p/facade/8d1322df-9297-453a-a740-21ddbcf66bde/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::397_716_3_solid_1",
+                        "path": "/p/facade/224daf81-7167-4ef8-963e-2ffa68b73b9c/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::397_716_0_solid_1",
+                        "path": "/p/facade/beaa2c3e-d3d2-49e7-878a-43580a57a7bb/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::397_716_0_solid_2",
+                        "path": "/p/facade/d14b756c-cd2a-4fe7-ac8d-aba6246d2c65/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::397_716_1_solid_1",
+                        "path": "/p/facade/6c922ffa-7737-4fa8-ad1f-4826d35f69d0/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::407_716_0_solid_1",
+                        "path": "/p/facade/42fad385-c484-4b60-af0a-bdc1050a7781/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_716_2_solid_1",
+                        "path": "/p/facade/38bfcb85-cd8a-4930-be45-25fa08b6661e/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_716_3_solid_1",
+                        "path": "/p/facade/54f5e8ac-e05b-43c3-a04c-e6550afdd649/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_716_0_solid_1",
+                        "path": "/p/facade/b5137476-15c1-43b0-81b8-d867bdcf0751/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_716_0_solid_2",
+                        "path": "/p/facade/d90b0f45-0b16-4dec-95e2-21f047a446df/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::797_716_2_solid_1",
+                        "path": "/p/facade/b70deb46-90f9-4688-a2b6-d3dc5df65838/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::797_716_3_solid_1",
+                        "path": "/p/facade/f47e5dfc-0614-4774-9c81-22cfa3331d2e/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_1320_0_right_1",
+                        "path": "/p/facade/cab65087-cedf-48f6-af85-9e8cb65bbcb5/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::597_1320_0_left_1",
+                        "path": "/p/facade/cab65087-cedf-48f6-af85-9e8cb65bbcb5/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::147_716_0_solid_1",
+                        "path": "/p/facade/8d1322df-9297-453a-a740-21ddbcf66bde/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_1320_0_right",
+                        "path": "/p/facade/5bcdeb91-6cab-4c7d-8bec-b5e14642dcb3/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::797_716_3_solid_1",
+                        "path": "/p/facade/69e14b0e-e70e-436f-b8fa-d8991212b571/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::797_716_2_solid_1",
+                        "path": "/p/facade/8e2c7474-552e-4ea7-a042-340f06be07b0/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_716_0_solid_2",
+                        "path": "/p/facade/ad405fc9-e3b2-44c6-93f5-68b73eea110a/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_716_0_solid_1",
+                        "path": "/p/facade/8e43fc2d-dbeb-4d26-92cb-830d34568835/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_716_3_solid_1",
+                        "path": "/p/facade/bfb14f93-53f9-45f8-9765-06a0b037f4df/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_716_2_solid_1",
+                        "path": "/p/facade/f6a70fd2-e730-43bc-8368-d2b40fe99e94/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::407_716_0_solid_1",
+                        "path": "/p/facade/6c0517e4-381b-4b15-8921-c509c4cbbcbe/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::397_716_1_solid_1",
+                        "path": "/p/facade/ab4b034f-1f2a-439c-9240-5122d5fd1b58/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::397_716_0_solid_2",
+                        "path": "/p/facade/44b9d937-1f68-47b2-8dc8-9945f7ef5b80/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::397_716_0_solid_1",
+                        "path": "/p/facade/2212ac56-7de1-4c1c-92a3-8c11a8d14943/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::397_716_3_solid_1",
+                        "path": "/p/facade/d19a36a5-dde2-4670-915f-42773b468523/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::147_716_0_vk_1",
+                        "path": "/p/facade/1fc7f212-b327-46f6-a3bc-c7edfa754588/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_602_0_solid_1",
+                        "path": "/p/facade/536d850a-4136-4b0b-a5dc-19f3d3e5caca/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_596_0_solid_1",
+                        "path": "/p/facade/3485379a-5b89-400e-a106-7d8664648bb2/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::596_357_0_solid_1",
+                        "path": "/p/facade/29954eab-34f7-441e-b027-08c71b36c089/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::496_357_0_solid_1",
+                        "path": "/p/facade/55304450-0256-4f22-8145-f31fd21f6b27/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_116_0_solid_1",
+                        "path": "/p/facade/018d7ced-6855-4500-9e2c-1735fe44a5b7/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::597_1320_0_left_1",
+                        "path": "/p/facade/5bcdeb91-6cab-4c7d-8bec-b5e14642dcb3/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::147_716_0_solid_1",
+                        "path": "/p/facade/1fc7f212-b327-46f6-a3bc-c7edfa754588/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_116_0_solid_1",
+                        "path": "/p/facade/205ce1d2-4fce-47fe-a7a9-15551db19539/"
+                    },
+                    {
+                        "code": "mdf::graphit::496_357_0_solid_1",
+                        "path": "/p/facade/86f6d1ad-a10b-4958-bbf9-b844e702277a/"
+                    },
+                    {
+                        "code": "mdf::graphit::596_357_0_solid_1",
+                        "path": "/p/facade/833ae867-d6a9-4b72-8c02-414202c56870/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_596_0_solid_1",
+                        "path": "/p/facade/18097913-8ff3-47a2-8d87-ea6f59842d8d/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_602_0_solid_1",
+                        "path": "/p/facade/46161970-e515-4fdc-a2a7-ffc00bba161e/"
+                    },
+                    {
+                        "code": "mdf::graphit::147_716_0_vk_1",
+                        "path": "/p/facade/2466c86d-e1f2-4703-aa3a-483440260eb0/"
+                    },
+                    {
+                        "code": "mdf::graphit::397_716_3_solid_1",
+                        "path": "/p/4633646343664643/eefbf4a8-49b1-47ea-b778-1cd09130183b/"
+                    },
+                    {
+                        "code": "mdf::graphit::397_716_0_solid_1",
+                        "path": "/p/facade/7cd3e3ad-0ed2-4d9a-bc4b-26fcade9df3d/"
+                    },
+                    {
+                        "code": "mdf::graphit::397_716_0_solid_2",
+                        "path": "/p/facade/05d2606e-145e-4ca9-9fc6-01b9b061f1e6/"
+                    },
+                    {
+                        "code": "mdf::graphit::397_716_1_solid_1",
+                        "path": "/p/facade/41d595ad-1f90-4dee-b3c9-9adb148f984c/"
+                    },
+                    {
+                        "code": "mdf::graphit::407_716_0_solid_1",
+                        "path": "/p/facade/def74763-e757-4f27-8ea7-c9cec17fd21d/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_716_2_solid_1",
+                        "path": "/p/facade/6adb3aa8-2650-46ee-bcd1-713533a808a1/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_716_3_solid_1",
+                        "path": "/p/32435532325532/e45d76e3-fd4c-48b1-8d9e-64ced06715b7/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_716_0_solid_1",
+                        "path": "/p/facade/cffd09c6-153f-4298-bb5f-5aae978b162d/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_716_0_solid_2",
+                        "path": "/p/facade/36c94d7d-d974-48e1-a476-039bdd8d2375/"
+                    },
+                    {
+                        "code": "mdf::graphit::797_716_2_solid_1",
+                        "path": "/p/facade/8d860157-ede1-4201-a9f7-7118d1805d7c/"
+                    },
+                    {
+                        "code": "mdf::graphit::797_716_3_solid_1",
+                        "path": "/p/4377737743743743743/4eadc1dc-7e31-4b46-8022-851e1c9c911a/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_1320_0_right_1",
+                        "path": "/p/facade/cfe81143-6d3f-4505-9bf1-e42b2974d71b/"
+                    },
+                    {
+                        "code": "mdf::graphit::597_1320_0_left_1",
+                        "path": "/p/facade/cfe81143-6d3f-4505-9bf1-e42b2974d71b/"
+                    },
+                    {
+                        "code": "mdf::graphit::147_716_0_solid_1",
+                        "path": "/p/facade/2466c86d-e1f2-4703-aa3a-483440260eb0/"
+                    },
+                    {
+                        "code": "mdf::grey::597_116_0_solid_1",
+                        "path": "/p/facade/825188f1-986c-43cb-8948-3506b0180363/"
+                    },
+                    {
+                        "code": "mdf::grey::496_357_0_solid_1",
+                        "path": "/p/facade/d14c3f35-2a2c-4545-81c6-a3d411e96634/"
+                    },
+                    {
+                        "code": "mdf::grey::596_357_0_solid_1",
+                        "path": "/p/facade/f2055af5-ba6e-4b91-9264-91446952efd9/"
+                    },
+                    {
+                        "code": "mdf::grey::597_596_0_solid_1",
+                        "path": "/p/facade/989fc76c-e61a-4489-81b7-66cf9e3ef604/"
+                    },
+                    {
+                        "code": "mdf::grey::597_602_0_solid_1",
+                        "path": "/p/facade/f1d7ce04-a32e-417d-9f66-77217c76442c/"
+                    },
+                    {
+                        "code": "mdf::grey::147_716_0_vk_1",
+                        "path": "/p/facade/5cf0ae02-2e89-4f69-80d4-ac34d403bd7d/"
+                    },
+                    {
+                        "code": "mdf::grey::397_716_3_solid_1",
+                        "path": "/p/65776568658865/866c8498-886e-4ac5-a2c1-9fbcd2cc6c98/"
+                    },
+                    {
+                        "code": "mdf::grey::397_716_0_solid_1",
+                        "path": "/p/facade/71e8de94-0e39-4d5b-ac12-928dda2567e0/"
+                    },
+                    {
+                        "code": "mdf::grey::397_716_0_solid_2",
+                        "path": "/p/facade/2c3be50e-510c-4f45-ba7c-7cfa1a3dc53b/"
+                    },
+                    {
+                        "code": "mdf::grey::397_716_1_solid_1",
+                        "path": "/p/facade/03518ab3-8404-4e5e-b358-77d7078a7c38/"
+                    },
+                    {
+                        "code": "mdf::grey::407_716_0_solid_1",
+                        "path": "/p/facade/38619651-86a0-4aa6-9157-cecbc3602e36/"
+                    },
+                    {
+                        "code": "mdf::grey::597_716_2_solid_1",
+                        "path": "/p/facade/7aeb34dc-2fde-4908-8184-a215d17713e7/"
+                    },
+                    {
+                        "code": "mdf::grey::597_716_3_solid_1",
+                        "path": "/p/43664364364364364/b88b830a-9d5e-4741-91b2-2a2fbf64f365/"
+                    },
+                    {
+                        "code": "mdf::grey::597_716_0_solid_1",
+                        "path": "/p/facade/51c92418-0315-4a7f-ad08-e373ab5b44a5/"
+                    },
+                    {
+                        "code": "mdf::grey::597_716_0_solid_2",
+                        "path": "/p/facade/021cde7e-77f5-4445-8ec7-760cc5d84adb/"
+                    },
+                    {
+                        "code": "mdf::grey::797_716_2_solid_1",
+                        "path": "/p/facade/b95ab3bf-6cda-4cb0-b8a7-399e31b7ea42/"
+                    },
+                    {
+                        "code": "mdf::grey::797_716_3_solid_1",
+                        "path": "/p/3266366363263/f4617e79-b314-4aa8-9bbd-1b4d67c4991e/"
+                    },
+                    {
+                        "code": "mdf::grey::597_1320_0_right_1",
+                        "path": "/p/facade/c0b92b75-47bd-48a9-a992-c4bcb4178dda/"
+                    },
+                    {
+                        "code": "mdf::grey::597_1320_0_left_1",
+                        "path": "/p/facade/c0b92b75-47bd-48a9-a992-c4bcb4178dda/"
+                    },
+                    {
+                        "code": "mdf::grey::147_716_0_solid_1",
+                        "path": "/p/facade/5cf0ae02-2e89-4f69-80d4-ac34d403bd7d/"
+                    },
+                    {
+                        "code": "mdf::larch::597_116_0_solid_1",
+                        "path": "/p/facade/709342e3-b57b-4b71-ac4d-e0ed2242b8e2/"
+                    },
+                    {
+                        "code": "mdf::larch::496_357_0_solid_1",
+                        "path": "/p/facade/ed9c7008-6d26-4e30-b183-2924b2f48eb8/"
+                    },
+                    {
+                        "code": "mdf::larch::596_357_0_solid_1",
+                        "path": "/p/facade/0043c1dd-9330-4357-93d1-88371a1d4c70/"
+                    },
+                    {
+                        "code": "mdf::larch::597_596_0_solid_1",
+                        "path": "/p/facade/50a5f5ea-6813-47f4-8d46-49041d2a6b7b/"
+                    },
+                    {
+                        "code": "mdf::larch::597_602_0_solid_1",
+                        "path": "/p/facade/1c587313-f35f-4f17-ae6f-9ae9ff726710/"
+                    },
+                    {
+                        "code": "mdf::larch::147_716_0_vk_1",
+                        "path": "/p/facade/b7c66754-7aa7-46c3-b4ee-3810baa0c221/"
+                    },
+                    {
+                        "code": "mdf::larch::397_716_3_solid_1",
+                        "path": "/p/facade/e591ab22-d6be-4e9e-b6cd-107c10c80119/"
+                    },
+                    {
+                        "code": "mdf::larch::397_716_0_solid_1",
+                        "path": "/p/facade/2e9f4f2f-e13b-40c7-b9ed-8e466547294a/"
+                    },
+                    {
+                        "code": "mdf::larch::397_716_0_solid_2",
+                        "path": "/p/facade/f85df11e-c15c-46b5-9944-f57cbd5f6d73/"
+                    },
+                    {
+                        "code": "mdf::larch::397_716_1_solid_1",
+                        "path": "/p/facade/f03197ba-9903-49e8-aece-62593fe2b4fb/"
+                    },
+                    {
+                        "code": "mdf::larch::407_716_0_solid_1",
+                        "path": "/p/facade/869f2e45-3797-4939-8861-a36dedfba209/"
+                    },
+                    {
+                        "code": "mdf::larch::597_716_2_solid_1",
+                        "path": "/p/facade/16030d9a-2545-4c5e-a962-37833a6afe36/"
+                    },
+                    {
+                        "code": "mdf::larch::597_716_3_solid_1",
+                        "path": "/p/facade/d4e5b9a0-6f7a-4c94-b8f0-926695de5d62/"
+                    },
+                    {
+                        "code": "mdf::larch::597_716_0_solid_1",
+                        "path": "/p/facade/3251ba52-ea27-4b59-9e32-1b97a49eefb5/"
+                    },
+                    {
+                        "code": "mdf::larch::597_716_0_solid_2",
+                        "path": "/p/facade/7c7dc232-f8c5-439e-880f-bef3f3cb22e6/"
+                    },
+                    {
+                        "code": "mdf::larch::797_716_2_solid_1",
+                        "path": "/p/facade/fa03eac5-4481-41f8-b743-f0f4f7c90c43/"
+                    },
+                    {
+                        "code": "mdf::larch::797_716_3_solid_1",
+                        "path": "/p/facade/d7a2ec0d-b5f5-4298-a2be-7be0e6bc1679/"
+                    },
+                    {
+                        "code": "mdf::larch::597_1320_0_right_1",
+                        "path": "/p/facade/b981631f-7899-4677-b89b-fecf82ae08e1/"
+                    },
+                    {
+                        "code": "mdf::larch::597_1320_0_left_1",
+                        "path": "/p/facade/b981631f-7899-4677-b89b-fecf82ae08e1/"
+                    },
+                    {
+                        "code": "mdf::larch::147_716_0_solid_1",
+                        "path": "/p/facade/b7c66754-7aa7-46c3-b4ee-3810baa0c221/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_116_0_solid_1",
+                        "path": "/p/facade/082f4606-d80e-4344-8f1d-562200c5ac0a/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::496_357_0_solid_1",
+                        "path": "/p/facade/4faaead1-a2fe-40ec-a3b4-63f5687fc433/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::596_357_0_solid_1",
+                        "path": "/p/facade/8af47abe-7398-4e7b-8ea0-43c5b28fa0b6/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_596_0_solid_1",
+                        "path": "/p/facade/62a89e38-1022-4292-9e80-ef418f5c2f10/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_602_0_solid_1",
+                        "path": "/p/facade/83bb4db8-588e-4f2b-96ed-45def91a8b4e/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::147_716_0_vk_1",
+                        "path": "/p/facade/b17ddf95-1a29-4934-b152-ff2137593335/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::397_716_3_solid_1",
+                        "path": "/p/facade/1533912e-fe42-4f63-8070-2ba9d3e9ac04/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::397_716_0_solid_1",
+                        "path": "/p/facade/30dfee79-1a61-40a8-9e62-ce151f7a778a/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::397_716_0_solid_2",
+                        "path": "/p/facade/4bc8f3e6-b74d-42df-84a8-0277430814e4/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::397_716_1_solid_1",
+                        "path": "/p/facade/257d0bb5-3d7e-4864-be7c-96aeeb150abb/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::407_716_0_solid_1",
+                        "path": "/p/facade/c5e20602-e936-4bd1-bdb6-fd625e567059/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_716_2_solid_1",
+                        "path": "/p/facade/7dd7fbb3-b159-48e7-9838-ee333446d4fa/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_716_3_solid_1",
+                        "path": "/p/facade/4789e851-afa0-41f3-952e-a95c4488d4b2/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_716_0_solid_1",
+                        "path": "/p/facade/c754e186-f082-4d16-a93c-23d7a31fc860/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_716_0_solid_2",
+                        "path": "/p/facade/7b3bebe4-661d-46bc-bf67-1aa9cd2fef61/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::797_716_2_solid_1",
+                        "path": "/p/facade/48ce3ff3-cdc9-4809-a8d0-4d0391cd5a1e/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::797_716_3_solid_1",
+                        "path": "/p/facade/1183bfd0-5088-438a-b5bb-c3a4bb1a6bd4/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_1320_0_right_1",
+                        "path": "/p/facade/47ce8edf-cbdb-40f5-9aec-672209187049/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::597_1320_0_left_1",
+                        "path": "/p/facade/47ce8edf-cbdb-40f5-9aec-672209187049/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::147_716_0_solid_1",
+                        "path": "/p/facade/b17ddf95-1a29-4934-b152-ff2137593335/"
+                    },
+                    {
+                        "code": "mdf::milk::597_116_0_solid_1",
+                        "path": "/p/facade/5674d8e7-4b18-4b78-a738-aaede1a2784d/"
+                    },
+                    {
+                        "code": "mdf::milk::496_357_0_solid_1",
+                        "path": "/p/facade/1dd90463-236c-4a68-b380-eee5bf13148e/"
+                    },
+                    {
+                        "code": "mdf::milk::596_357_0_solid_1",
+                        "path": "/p/facade/05c7c8fc-2026-4aad-abdf-4c6fbac617dc/"
+                    },
+                    {
+                        "code": "mdf::milk::597_596_0_solid_1",
+                        "path": "/p/facade/29389e90-737a-4df6-ab6d-eaf68d874c0b/"
+                    },
+                    {
+                        "code": "mdf::milk::597_602_0_solid_1",
+                        "path": "/p/facade/b3904da7-15d7-406b-ae3a-cd5ba5337633/"
+                    },
+                    {
+                        "code": "mdf::milk::147_716_0_vk_1",
+                        "path": "/p/facade/4e86ca72-27b6-44d6-80f7-5bb3820b8de8/"
+                    },
+                    {
+                        "code": "mdf::milk::397_716_3_solid_1",
+                        "path": "/p/567487885485/06a4e506-76f2-4078-b048-d8f10b559c65/"
+                    },
+                    {
+                        "code": "mdf::milk::397_716_0_solid_1",
+                        "path": "/p/facade/438b28ac-640c-4d42-a9da-3fc420f36072/"
+                    },
+                    {
+                        "code": "mdf::milk::397_716_0_solid_2",
+                        "path": "/p/facade/38a85b5b-ab4d-42b1-83f1-cd7e802bd509/"
+                    },
+                    {
+                        "code": "mdf::milk::397_716_1_solid_1",
+                        "path": "/p/facade/6bc9bd11-11d8-4568-b883-e8fa4a9f5fcf/"
+                    },
+                    {
+                        "code": "mdf::milk::407_716_0_solid_1",
+                        "path": "/p/facade/6e3aa1e4-e3b9-4789-87f9-d6ceedf46a73/"
+                    },
+                    {
+                        "code": "mdf::milk::597_716_2_solid_1",
+                        "path": "/p/facade/cf88b678-b374-42e3-945d-30df8ae21582/"
+                    },
+                    {
+                        "code": "mdf::milk::597_716_3_solid_1",
+                        "path": "/p/36464634643436/52b3cb9f-e5f6-46f8-b7b6-6ec77c846204/"
+                    },
+                    {
+                        "code": "mdf::milk::597_716_0_solid_1",
+                        "path": "/p/facade/85307a51-3480-45d7-b07a-724e8ecbea83/"
+                    },
+                    {
+                        "code": "mdf::milk::597_716_0_solid_2",
+                        "path": "/p/facade/60ab90f2-0a81-4a64-b486-e7fac9b90016/"
+                    },
+                    {
+                        "code": "mdf::milk::797_716_2_solid_1",
+                        "path": "/p/facade/3aa23a48-355e-4a7c-b9ca-5dabff4ee5d9/"
+                    },
+                    {
+                        "code": "mdf::milk::797_716_3_solid_1",
+                        "path": "/p/437884438384/4ce99970-c5bc-4bdb-a0d3-87095571d635/"
+                    },
+                    {
+                        "code": "mdf::milk::597_1320_0_right_1",
+                        "path": "/p/facade/9de56bcb-c357-4795-8f15-db623c6bdda6/"
+                    },
+                    {
+                        "code": "mdf::milk::597_1320_0_left_1",
+                        "path": "/p/facade/9de56bcb-c357-4795-8f15-db623c6bdda6/"
+                    },
+                    {
+                        "code": "mdf::milk::147_716_0_solid_1",
+                        "path": "/p/facade/4e86ca72-27b6-44d6-80f7-5bb3820b8de8/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_116_0_solid_1",
+                        "path": "/p/facade/77b50065-b4d8-4ce4-9246-e51ad771eaf2/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::496_357_0_solid_1",
+                        "path": "/p/facade/53c57031-a5b3-43e9-a0d1-74ec58d8658b/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::596_357_0_solid_1",
+                        "path": "/p/facade/feffa57b-bb4f-4a23-b934-e7a54371da11/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_596_0_solid_1",
+                        "path": "/p/facade/34ccbddd-dad9-4512-983b-d8bac6b30e8b/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_602_0_solid_1",
+                        "path": "/p/facade/4119e04d-7050-4b5a-a68e-f7094006ed1b/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::147_716_0_vk_1",
+                        "path": "/p/facade/0e2bf060-131b-459e-9dd9-030bdffd18d2/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::397_716_3_solid_1",
+                        "path": "/p/facade/cc03f4cc-dc83-4c1b-971d-dd55e475cf56/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::397_716_0_solid_1",
+                        "path": "/p/facade/342df9fd-bed0-4981-802c-7bc41b06be2a/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::397_716_0_solid_2",
+                        "path": "/p/facade/fa3b10e4-92ef-486b-b847-bd01547ae914/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::397_716_1_solid_1",
+                        "path": "/p/facade/503fd49d-1908-4e18-b34b-808cc38f3ffb/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::407_716_0_solid_1",
+                        "path": "/p/facade/f8765a7d-a54e-42d0-941b-49a228c4f292/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_716_2_solid_1",
+                        "path": "/p/facade/f00570f5-ef68-428b-ab08-703537c8241d/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_716_3_solid_1",
+                        "path": "/p/facade/7be18cf1-c51c-4eee-ad8f-20a4a0e92ce9/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_716_0_solid_1",
+                        "path": "/p/facade/f55bdb86-917a-4e36-b820-2b206b3b9a21/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_716_0_solid_2",
+                        "path": "/p/facade/34a4ff22-9b27-49d2-9f7c-d3258f39dd35/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::797_716_2_solid_1",
+                        "path": "/p/facade/33a27670-d32d-480d-bb27-a211a089bfb7/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::797_716_3_solid_1",
+                        "path": "/p/facade/ad00df5f-4099-4c9c-afc8-d09248082392/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_1320_0_right_1",
+                        "path": "/p/facade/beabc752-98fc-477a-abec-76076b5bd9c5/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::597_1320_0_left_1",
+                        "path": "/p/facade/beabc752-98fc-477a-abec-76076b5bd9c5/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::147_716_0_solid_1",
+                        "path": "/p/facade/0e2bf060-131b-459e-9dd9-030bdffd18d2/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_116_0_solid_1",
+                        "path": "/p/facade/c136fbbb-5d49-400b-9d55-5cf6af21553b/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::496_357_0_solid_1",
+                        "path": "/p/facade/84c0ab70-bc77-4499-a579-beb8371061f1/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::596_357_0_solid_1",
+                        "path": "/p/facade/40132fdb-d993-48e6-9537-e6fa30796fbb/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_596_0_solid_1",
+                        "path": "/p/facade/650f55af-0adf-4e5c-ac70-03b81d1b4dad/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_602_0_solid_1",
+                        "path": "/p/facade/6e02004a-5997-4dbc-8e00-a8ae0b58ad91/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::147_716_0_vk_1",
+                        "path": "/p/facade/3154aa7b-0b35-405e-9326-a5652305290f/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::397_716_3_solid_1",
+                        "path": "/p/facade/7bf34d49-6bdd-40bf-8d04-925a0efb0104/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::397_716_0_solid_1",
+                        "path": "/p/facade/d9115e8e-1578-41ca-9caa-4cac4e2b12a9/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::397_716_0_solid_2",
+                        "path": "/p/facade/17df3bd8-db97-4691-9574-b629bf37cc63/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::397_716_1_solid_1",
+                        "path": "/p/facade/9619076b-3284-4522-93fa-fed800d50457/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::407_716_0_solid_1",
+                        "path": "/p/facade/4e80263f-b367-4591-aa77-7bb4ddbac8a0/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_716_2_solid_1",
+                        "path": "/p/facade/420622cf-3353-430a-b7fc-0ec9a4b2dd5c/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_716_3_solid_1",
+                        "path": "/p/facade/6f2cd238-3f7b-4de6-9d2c-74ee171d0c90/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_716_0_solid_1",
+                        "path": "/p/facade/61f409f9-d861-4b95-a528-789117f31ac7/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_716_0_solid_2",
+                        "path": "/p/facade/f0505591-f848-4aeb-ad0c-95a90c801aac/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::797_716_2_solid_1",
+                        "path": "/p/facade/77dc8aae-b29c-4469-9d1e-ca57443ff2f9/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::797_716_3_solid_1",
+                        "path": "/p/facade/b3e2d765-6e58-476b-9749-2eec29172949/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_1320_0_right_1",
+                        "path": "/p/facade/083ab62b-f4e3-4ce2-8c1f-e6fbf0a42841/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::597_1320_0_left_1",
+                        "path": "/p/facade/083ab62b-f4e3-4ce2-8c1f-e6fbf0a42841/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::147_716_0_solid_1",
+                        "path": "/p/facade/3154aa7b-0b35-405e-9326-a5652305290f/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_116_0_solid_1",
+                        "path": "/p/facade/f13e67d3-5a24-4032-b526-c4b3dc3c741e/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::496_357_0_solid_1",
+                        "path": "/p/facade/ee21def1-38e2-48e1-bb6c-f9e90ee1ef56/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::596_357_0_solid_1",
+                        "path": "/p/facade/dc0513a7-1697-4ba6-b1f1-2fa8361950d5/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_596_0_solid_1",
+                        "path": "/p/facade/a8c8bd6e-b396-4c5c-bc5d-ac3ca5cbb90e/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_602_0_solid_1",
+                        "path": "/p/facade/82e13cd5-c106-45a3-bad8-aff2dd9fd788/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::147_716_0_vk_1",
+                        "path": "/p/facade/c744c3a6-64c0-4b4a-8281-8d504324d4cd/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::397_716_3_solid_1",
+                        "path": "/p/facade/d216ae45-e882-47f9-a879-3418a59a46d9/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::397_716_0_solid_1",
+                        "path": "/p/facade/955305ae-82c0-4128-b12e-a787c1e376d4/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::397_716_0_solid_2",
+                        "path": "/p/facade/ed80fc17-736f-47d3-bb8c-246d8228c86f/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::397_716_1_solid_1",
+                        "path": "/p/facade/3ccddcda-3e01-4ec9-8b50-e5a76b9a847e/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::407_716_0_solid_1",
+                        "path": "/p/facade/aced1bdf-1478-4fe4-9f48-252bce5062fc/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_716_2_solid_1",
+                        "path": "/p/facade/d1b185d7-e74a-4329-bb51-5bddb92413ba/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_716_3_solid_1",
+                        "path": "/p/facade/62782d8b-b400-44a8-a3f9-1134b56d921d/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_716_0_solid_1",
+                        "path": "/p/facade/2321101b-3c90-44df-9c3c-8f88a0fd7097/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_716_0_solid_2",
+                        "path": "/p/facade/dbf6352d-5c99-4d20-8b19-6a9732b48a74/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::797_716_2_solid_1",
+                        "path": "/p/facade/33140bc0-e628-45fe-a7d7-259a2e21e1c3/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::797_716_3_solid_1",
+                        "path": "/p/facade/dda10b78-1122-4791-a261-ca73467bd113/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_1320_0_right_1",
+                        "path": "/p/facade/0e03573e-98df-4894-b950-06aab2d7948c/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::597_1320_0_left_1",
+                        "path": "/p/facade/0e03573e-98df-4894-b950-06aab2d7948c/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::147_716_0_solid_1",
+                        "path": "/p/facade/c744c3a6-64c0-4b4a-8281-8d504324d4cd/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_116_0_solid_1",
+                        "path": "/p/facade/bbe55f75-d902-40d8-b561-ba4ce3fa1329/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::496_357_0_solid_1",
+                        "path": "/p/facade/0f65646a-862b-4586-a786-c27d55e5b0fa/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::596_357_0_solid_1",
+                        "path": "/p/facade/8339c8dc-4cdc-4632-b647-32a35dec32b6/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_596_0_solid_1",
+                        "path": "/p/facade/5b807be1-b143-40d6-8a56-002df4d97152/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_602_0_solid_1",
+                        "path": "/p/facade/6ad43cdd-9745-43a6-b383-e5e00ddf303b/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::147_716_0_vk_1",
+                        "path": "/p/facade/53efe882-821f-4151-a99d-409423764a8e/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::397_716_3_solid_1",
+                        "path": "/p/facade/713a0e11-cc51-4287-88ce-2e08e9a1a24d/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::397_716_0_solid_1",
+                        "path": "/p/facade/37a6245b-7dce-4d9b-b02d-41a59813c1b9/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::397_716_0_solid_2",
+                        "path": "/p/facade/b2a6f91a-ed77-4c4d-afd0-8ac3e58a5ee9/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::397_716_1_solid_1",
+                        "path": "/p/facade/99f5e679-47a7-44f6-9030-663fbfd6f6c9/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::407_716_0_solid_1",
+                        "path": "/p/facade/a4741a4d-b57b-461a-b6a3-cfdd089572d9/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_716_2_solid_1",
+                        "path": "/p/facade/42dc2abb-98f2-48e2-b3d8-2456f2c45146/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_716_3_solid_1",
+                        "path": "/p/facade/aae5a054-89a1-45b9-a0da-a10bfbbad61a/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_716_0_solid_1",
+                        "path": "/p/facade/8ac0d480-6b00-4375-bfae-594570c9c044/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_716_0_solid_2",
+                        "path": "/p/facade/eb72156f-0f3b-4280-84c2-118ec125b34c/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::797_716_2_solid_1",
+                        "path": "/p/facade/20a9e2d8-2a79-4b30-801f-dee2c8db6acf/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::797_716_3_solid_1",
+                        "path": "/p/facade/85de681b-58fe-459a-86d0-025c1e92f4d0/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_1320_0_right_1",
+                        "path": "/p/facade/fdc2cdd1-0f09-4d70-9b9c-ff918cdaf435/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::597_1320_0_left_1",
+                        "path": "/p/facade/fdc2cdd1-0f09-4d70-9b9c-ff918cdaf435/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::147_716_0_solid_1",
+                        "path": "/p/facade/53efe882-821f-4151-a99d-409423764a8e/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_716_0_solid_2",
+                        "path": "/p/facade/7bcbb0f9-8263-45c1-be52-90b0e5435f83/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::597_716_0_solid_1",
+                        "path": "/p/facade/5e9b7fd4-ac15-40b3-984d-dcf001c32043/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::597_716_0_solid_1",
+                        "path": "/p/facade/387906c5-696c-4397-b165-47c649f9c940/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_716_0_solid_1",
+                        "path": "/p/facade/b6c8cd39-1e5a-447f-a1a1-449688d0890a/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::597_716_0_solid_2",
+                        "path": "/p/facade/a2e30095-dd4d-455f-8fe2-99f7b08565c3/"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::297_716_0_solid_1",
+                        "path": ""
+                    },
+                    {
+                        "code": "ldsp::orinoko::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "ldsp::rock::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "ldsp::studio_light::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::larch::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::graphit::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::shato_azur::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::milk::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "mdf::grey::297_716_0_solid_1"
+                    },
+                    {
+                        "code": "ldsp::ash_anchor_gray::297_716_0_solid_2",
+                        "path": "/p/facade/546a4f6c-2519-4006-bfe6-35ded1f13ea8/"
+                    },
+                    {
+                        "code": "ldsp::orinoko::297_716_0_solid_2",
+                        "path": "/p/facade/e9f4aef1-55e0-4edf-b6af-92d3ef8242a5/"
+                    },
+                    {
+                        "code": "ldsp::oak_votan::297_716_0_solid_2",
+                        "path": "/p/facade/a8521cd2-bfd8-4dba-9354-95ebcbcc7443/"
+                    },
+                    {
+                        "code": "ldsp::rock::297_716_0_solid_2",
+                        "path": "/p/facade/1e3523c4-7f90-4f94-a25b-ddfd4ea52b12/"
+                    },
+                    {
+                        "code": "ldsp::studio_light::297_716_0_solid_2",
+                        "path": "/p/facade/16a379a3-469e-412b-949e-68f946dd654d/"
+                    },
+                    {
+                        "code": "ldsp::studio_dark::297_716_0_solid_2",
+                        "path": "/p/facade/92d36fc4-0665-4854-a6bc-18cd325ba5d1/"
+                    },
+                    {
+                        "code": "mdf::larch::297_716_0_solid_2",
+                        "path": "/p/facade/c65b942d-faac-40a6-8894-2bdd008ea692/"
+                    },
+                    {
+                        "code": "mdf::marble_walnut::297_716_0_solid_2",
+                        "path": "/p/facade/90b7fe01-c1d2-4e64-bded-a1ce25d1ec82/"
+                    },
+                    {
+                        "code": "mdf::soft_fistashka::297_716_0_solid_2",
+                        "path": "/p/facade/d1e847d1-229b-409a-9c51-b173f6218ee8/"
+                    },
+                    {
+                        "code": "mdf::smoki_soft::297_716_0_solid_2",
+                        "path": "/p/facade/b3ff7a0e-44c9-4efd-aef2-6cda9c074d62/"
+                    },
+                    {
+                        "code": "mdf::graphit::297_716_0_solid_2",
+                        "path": "/p/facade/33acd5ae-a6a7-41f4-9bc0-bf4a639babd5/"
+                    },
+                    {
+                        "code": "mdf::shato_azur::297_716_0_solid_2",
+                        "path": "/p/facade/8ffd764c-c15c-44b2-8504-cee6e6a9daaa/"
+                    },
+                    {
+                        "code": "mdf::milk::297_716_0_solid_2",
+                        "path": "/p/facade/0d1f2f0f-7251-43ed-bac9-cad3265b769c/"
+                    },
+                    {
+                        "code": "mdf::shato_indigo::297_716_0_solid_2",
+                        "path": "/p/facade/5f8327e7-386a-4a2d-8461-32e9ec27675b/"
+                    },
+                    {
+                        "code": "mdf::grey::297_716_0_solid_2",
+                        "path": "/p/facade/fe419adf-30fa-44d2-bd06-3795e8f85423/"
+                    }
+                ]
+            }
+        ],
+        "sliderImages": [
+            {
+                "link": "/p/facade/1361d6c5-82a3-425d-87ab-885f1bae4969/"
+            },
+            {
+                "link": "/p/facade/e301bfcf-1177-4961-a6b3-16aaaa4fd468/"
+            },
+            {
+                "link": "/p/facade/7427b5ed-bfa1-4560-9349-1d7cc581d002/"
+            },
+            {
+                "link": "/p/facade/1b1bd1e1-1114-4a8b-82bd-ea90ec34e7d9/"
+            },
+            {
+                "link": "/p/body/bd2e2e4c-9633-45a2-9fe7-0f7107b012c1/"
+            },
+            {
+                "link": "/p/facade/959b634b-3ab7-493b-8190-9f9b0c31be04/"
+            },
+            {
+                "link": "/p/facade/5d767b56-d724-4d1b-a4c9-d30a6cfb358f/"
+            },
+            {
+                "link": "/p/facade/00c83693-6221-4302-97be-15d08b4ac07e/"
+            },
+            {
+                "link": "/p/facade/e0d1f09d-abbb-42c1-9fda-135857151f00/"
+            },
+            {
+                "link": "/p/facade/27fccae0-f4c6-4e73-b349-97ed29f80c45/"
+            }
+        ],
+        "videoLinks": [
+            {
+                "link": "https://www.youtube.com/embed/76oxGJImlFc?&showinfo=0&autohide=1&enablejsapi=1&html5=0&rel=0&modestbranding=1&loop=1",
+                "preview": "/s/22660467/7dd38425-102f-404a-8f4f-5de30542ceab/"
+            }
+        ],
+        "frontData": [],
+        "compositeImages": []
+    },
+    "tabletop": {
+        "categories": [
+            {
+                "code": "material",
+                "name": "Материал"
+            },
+            {
+                "code": "thickness",
+                "name": "Толщина"
+            },
+            {
+                "code": "color",
+                "name": "Цвет",
+                "imgLayers": [
+                    {
+                        "code": "layer_1",
+                        "position": "left top"
+                    }
+                ]
+            }
+        ],
+        "shapes": [],
+        "options": [
+            {
+                "code": "26",
+                "name": "26 мм",
+                "image": "",
+                "description": "",
+                "category": "thickness",
+                "restrictions": [],
+                "dependency": [
+                    {
+                        "code": "material",
+                        "values": [
+                            "postforming"
+                        ]
+                    }
+                ],
+                "imageScale": []
+            },
+            {
+                "code": "38",
+                "name": "38 мм",
+                "image": "",
+                "description": "",
+                "category": "thickness",
+                "restrictions": [],
+                "dependency": [
+                    {
+                        "code": "material",
+                        "values": [
+                            "postforming"
+                        ]
+                    }
+                ],
+                "imageScale": []
+            },
+            {
+                "code": "postforming",
+                "name": "Постформинг",
+                "image": "/p/tabletop/754e804f-c87f-407e-af64-a680c92cd84f/",
+                "description": "Технология ламинирования плит ДСП и МДФ. Скругление по лицевой стороне. Высокая влаго- и температуростойкость. Европейский стандарт экологичности. Материал представлен в толщинах 26 мм (радиус завала R9) и 38 мм (радиус завала R8). В нижней части лицевой стороны предусмотрен каплесборник для предотвращения стекания капель воды со столешницы на фасады или встроенную технику. Упаковка: картон и стрейч-плёнка.",
+                "category": "material",
+                "restrictions": {
+                    "limitSize": {
+                        "minWidth": 150,
+                        "minHeight": 600,
+                        "maxWidth": 3000,
+                        "maxHeight": 600
+                    },
+                    "colors": [
+                        "semolina_beige",
+                        "alambra_dark",
+                        "granite_black",
+                        "oak_votan",
+                        "paladin_dark",
+                        "winterberg",
+                        "opal_light",
+                        "marble_gray"
+                    ]
+                },
+                "dependency": [],
+                "imageScale": [],
+                "imageDetail": "/p/tabletop/4397c13f-5757-4097-a1c7-e7c7e9d738cb/",
+                "props": []
+            },
+            {
+                "code": "semolina_beige",
+                "name": "Семолина бежевая",
+                "image": "/p/437859694434367474/4a11019b-82da-44f3-b0f2-8011249be22a/",
+                "description": "",
+                "category": "color",
+                "restrictions": {
+                    "thickness": [
+                        "26"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "38",
+                            "26"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "imageDetail": "/p/548978437784399696/db4b1424-7268-4e2f-b1df-ecf834bf54f1/",
+                "props": []
+            },
+            {
+                "code": "alambra_dark",
+                "name": "Аламбра темная",
+                "image": "/p/455849696535353775/f7ce0636-1a95-45e4-bedd-59f438f611ae/",
+                "description": "",
+                "category": "color",
+                "restrictions": {
+                    "thickness": [
+                        "26"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "26"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "imageDetail": "/p/45797670635423774373/cc33d77b-b3fd-4a2a-92ec-19411215ee1a/",
+                "props": []
+            },
+            {
+                "code": "granite_black",
+                "name": "Черный гранит",
+                "image": "/p/5438863474877474/0358d5a0-e06a-4722-bc47-be30f24f79ac/",
+                "description": "",
+                "category": "color",
+                "restrictions": {
+                    "thickness": [
+                        "26"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "26"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "imageDetail": "/p/543437743743385383/43863994-30c1-4193-bfdc-2362b3b1061a/",
+                "props": []
+            },
+            {
+                "code": "oak_votan",
+                "name": "Дуб Вотан",
+                "image": "/p/547966955535353/e766608d-b989-4b43-85db-f4a79ef564de/",
+                "description": "",
+                "category": "color",
+                "restrictions": {
+                    "thickness": [
+                        "26",
+                        "38"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "38",
+                            "26"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "imageDetail": "/p/754896554689499544242/61fcf3e2-6369-4da9-8454-1790775bccc5/",
+                "props": []
+            },
+            {
+                "code": "winterberg",
+                "name": "Винтерберг",
+                "image": "/p/6432743484856996/1460cb7d-178c-4035-b8c7-bf96fec61ef7/",
+                "description": "",
+                "category": "color",
+                "restrictions": {
+                    "thickness": [
+                        "26"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "38",
+                            "26"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "imageDetail": "/p/43785495499549549542/520529c3-ef66-4f05-8c2e-1f3b9ddb2125/",
+                "props": []
+            },
+            {
+                "code": "paladin_dark",
+                "name": "Паладина темная",
+                "image": "/p/43749604242426364643/ed9fda03-6d66-4107-b5e2-b47377f7e2a0/",
+                "description": "",
+                "category": "color",
+                "restrictions": {
+                    "thickness": [
+                        "38"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "38"
+                        ]
+                    }
+                ],
+                "props": [],
+                "imageScale": [],
+                "imageDetail": "/p/5485800683253253/bc8cb822-d5b9-407e-ace6-f5f6ff1d1781/"
+            },
+            {
+                "code": "opal_light",
+                "name": "Опал светлый",
+                "image": "/p/3475969494942432/ef7fb74f-4ae1-433b-a6a9-2e0566beceb4/",
+                "description": "",
+                "category": "color",
+                "restrictions": {
+                    "thickness": [
+                        "26"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "38",
+                            "26"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "imageDetail": "/p/4378007677065353535/327c6126-fe1e-41db-9115-ce1060bfb778/",
+                "props": []
+            },
+            {
+                "code": "marble_gray",
+                "name": "Мрамор серый",
+                "image": "/p/548633274748484/83cc4981-b3a5-4254-b13c-ea9970525296/",
+                "description": "",
+                "category": "color",
+                "restrictions": {
+                    "thickness": [
+                        "26"
+                    ]
+                },
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "26",
+                            "38"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "imageDetail": "/p/436879070707065354/82d053e3-b9e3-46fd-bb03-eb3d3661e5f8/",
+                "props": []
+            },
+            {
+                "dependency": [],
+                "imageScale": [],
+                "restrictions": {
+                    "limitSize": {
+                        "minWidth": 200,
+                        "minHeight": 200,
+                        "maxHeight": 1700,
+                        "maxWidth": 2700
+                    },
+                    "limitSizeByShape": []
+                },
+                "name": "ЛДСП",
+                "category": "material",
+                "code": "ldsp",
+                "isDefault": false,
+                "imageDetail": "/p/tabletop/9f4361f2-0878-4e65-a0ed-02f371e4faa2/",
+                "image": "/p/tabletop/833ac314-2031-45f9-a756-54a7e5e7af94/",
+                "description": "Ламинированная древесно-стружечная плита. Кромка толщиной 2 мм на полиуретановом клее обеспечивает высокую защиту от попадания влаги и наклеивается со всех сторон. Европейский стандарт экологичности. Толщина материала 22 мм. Упаковка: картон и стрейч-плёнка.",
+                "props": []
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "material",
+                        "values": [
+                            "ldsp"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "22 мм",
+                "code": "22",
+                "category": "thickness"
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "22"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Белый",
+                "code": "white",
+                "category": "color",
+                "image": "/p/18133313/8c858dec-99fd-4f69-b6a4-22f7676bf026/",
+                "imageDetail": "/p/tabletop/ca444a6f-342f-44a0-a2dc-dd188937dc84/",
+                "props": []
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "22"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Дуб Сонома",
+                "code": "dub_sonoma",
+                "category": "color",
+                "image": "/p/18133313/38e62ed6-7fff-4b64-b70d-13a1741c8830/",
+                "imageDetail": "/p/tabletop/603d8713-211a-40a6-b103-2921a792d049/",
+                "props": []
+            },
+            {
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "22"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Венге Темный",
+                "code": "venge_temnyy",
+                "category": "color",
+                "image": "/p/18133313/bcf982d1-dbe5-496a-b251-4e7c2db9a5d8/",
+                "imageDetail": "/p/tabletop/e4e84b65-2c6b-4e20-afce-d284a8d01e21/",
+                "props": []
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "22"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Ясень шимо светлый",
+                "code": "ash_shimo_svetlyy",
+                "category": "color",
+                "image": "/p/18133313/0cee8721-cd3e-4334-a028-1ec157acffda/",
+                "imageDetail": "/p/tabletop/2dea873e-0f05-4abe-9c57-5be878fa26b8/"
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "22"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Ясень шимо темный",
+                "code": "ash_shimo_temnyy",
+                "category": "color",
+                "image": "/p/18133313/7e6a2af7-8e6f-4252-a128-c819e20ed9bb/",
+                "imageDetail": "/p/tabletop/39040936-45a1-4ea5-ac36-e1aac2c8fd9c/",
+                "isDefault": false
+            },
+            {
+                "props": [],
+                "dependency": [
+                    {
+                        "code": "thickness",
+                        "values": [
+                            "22"
+                        ]
+                    }
+                ],
+                "imageScale": [],
+                "restrictions": [],
+                "name": "Ясень анкор светлый",
+                "category": "color",
+                "code": "ash_anchor_gray",
+                "image": "/p/69797377747747474/de6741a1-5be6-469d-877a-5fac7003dd16/",
+                "imageDetail": "/p/6579549596549696965/073e6980-ce66-4754-ad44-533c97844c5e/"
+            }
+        ],
+        "imgLayers": [
+            {
+                "code": "layer_1",
+                "images": [
+                    {
+                        "code": "semolina_beige",
+                        "path": "/p/22660467/c65375e1-cf2b-403f-a860-b68aa0a7f3a6/"
+                    },
+                    {
+                        "code": "alambra_dark",
+                        "path": "/p/22660467/3d254ee2-9935-4b5b-a332-52d5978d1989/"
+                    },
+                    {
+                        "code": "granite_black",
+                        "path": "/p/22660467/ad70f1f5-46ef-426a-8d38-2119e534a303/"
+                    },
+                    {
+                        "code": "winterberg",
+                        "path": "/p/22660467/c990890f-26d6-4229-a952-232769cf7a64/"
+                    },
+                    {
+                        "code": "oak_votan",
+                        "path": "/p/22660467/a8e8258a-0d5f-454b-b679-433f22d245ca/"
+                    },
+                    {
+                        "code": "paladin_dark",
+                        "path": "/p/22660467/3706aab1-7ddc-4e3e-b15c-46e0700db2dd/"
+                    },
+                    {
+                        "code": "opal_light",
+                        "path": "/p/22660467/2dc4b4ce-e25a-4674-96aa-1a92aa796cc6/"
+                    },
+                    {
+                        "code": "marble_gray",
+                        "path": "/p/22660467/30ef1549-2c56-4b0d-813d-34d35c49ab3b/"
+                    },
+                    {
+                        "code": "white",
+                        "path": "/p/18133313/35e8dbd4-be7e-4e31-ba81-c90aca3c11f5/"
+                    },
+                    {
+                        "code": "dub_sonoma",
+                        "path": "/p/18133313/cbd4bf71-66c0-47dd-8a04-898a02b567b4/"
+                    },
+                    {
+                        "code": "venge_temnyy",
+                        "path": "/p/18133313/d0b42d25-f6a2-4053-a969-0d64cad35633/"
+                    },
+                    {
+                        "path": "/p/18133313/3fe056ea-9a0c-4ad0-bae5-b3d6324b5b48/",
+                        "code": "ash_shimo_svetlyy"
+                    },
+                    {
+                        "code": "ash_shimo_temnyy",
+                        "path": "/p/18133313/4cf6a16f-528e-47d7-9794-d5135d3cedbc/"
+                    },
+                    {
+                        "code": "ash_anchor_gray",
+                        "path": "/p/5478849494696496496/8a86f6e4-c2c2-44bb-8718-f1b100b2e0e7/"
+                    }
+                ]
+            }
+        ],
+        "sliderImages": [
+            {
+                "link": "/s/slider_tabletop/7bacde44-df29-4794-8a92-ab0884707755/"
+            },
+            {
+                "link": "/s/slider_tabletop/8b8174b9-fd6e-4cbb-b908-5889a3cd44bb/"
+            },
+            {
+                "link": "/s/slider_tabletop/a6719e3e-0f9e-4770-a500-4cb0ad329ff3/"
+            },
+            {
+                "link": "/s/slider_tabletop/898f08de-9d06-4100-b8a3-d6d052386023/"
+            },
+            {
+                "link": "/s/slider_tabletop/cb4012ee-73e5-4efa-9610-56c123d68db4/"
+            },
+            {
+                "link": "/s/slider_tabletop/fe42e56a-be82-4ba5-affa-76b0f1345039/"
+            },
+            {
+                "link": "/s/slider_tabletop/d6727050-8d01-4e48-9b1e-457cefc87fd9/"
+            },
+            {
+                "link": "/s/slider_tabletop/c3b43766-c540-45b0-851a-46c821abbab3/"
+            },
+            {
+                "link": "/s/slider_tabletop/18910a17-ae83-4c0f-ad81-d4b57a6d1104/"
+            },
+            {
+                "link": "/s/slider_tabletop/d84f6ab8-d14d-4870-8743-a5f29517a846/"
+            },
+            {
+                "link": "/s/slider_tabletop/3eee68ce-b78d-49ed-b65b-cb1c033ba431/"
+            }
+        ],
+        "videoLinks": [
+            {
+                "link": "https://www.youtube.com/embed/Y55EcfR4qSU?&showinfo=0&autohide=1&enablejsapi=1&html5=0&rel=0&modestbranding=1&loop=1",
+                "preview": "/s/22660467/7dd38425-102f-404a-8f4f-5de30542ceab/"
+            }
+        ],
+        "frontData": [],
+        "compositeImages": []
+    }
+}

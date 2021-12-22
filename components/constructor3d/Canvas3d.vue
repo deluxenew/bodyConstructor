@@ -9,9 +9,10 @@
   import * as THREE from "three"
   import StartLoader from "./StartLoader";
   import HF from "./HelperFunctions";
+  import boxes from "./models/boxes/BoxesList";
 
   const { scene, renderer, spotLights, camera, walls, controlBoxes } = StartLoader
-  const { fromTo, camPos, boxes} = HF
+  const { fromTo, camPos } = HF
 
   const CANVAS_WIDTH = 800
   const CANVAS_HEIGHT = 600
@@ -109,21 +110,28 @@
               vm[controlActionName]()
             } else {
               const findBox = HF.recursiveFindBox(object)
-              vm.selectedCase = findBox
+              console.log(findBox)
+              vm.caseModel = findBox
 
-              vm.$emit('setConfigName', vm.selectedCase?.name )
+              vm.$emit('setConfigName', vm.caseModel?.name )
 
               if (findBox) {
-                const obj = vm.scene.children.find(({name}) => name === 'selectBox')
-                vm.scene.remove(obj)
-                const { userData: {width, height, depth}, position: {x,y,z}, rotation: {y: rotate} } = vm.selectedCase
-                const leftTop = selectBox({width, height, depth, x,y,z, rotate})
-                vm.scene.add(leftTop)
-                leftTop.position.set(x, y, z )
-                leftTop.rotation.y = rotate
+                const obj = findBox.children.find(({name}) => name === 'edges')
+                obj.visible = true
               } else {
-                const obj = vm.scene.children.find(({name}) => name === 'selectBox')
-                vm.scene.remove(obj)
+                vm.scene.children.forEach((el) => {
+                  const box = el.children.find(({name}) => name === 'edges')
+                  if (box) box.visible = false
+                })
+                // vm.scene.remove(obj)
+              //   const { userData: {width, height, depth}, position: {x,y,z}, rotation: {y: rotate} } = vm.caseModel
+              //   const leftTop = selectBox({width, height, depth, x,y,z, rotate})
+              //   vm.scene.add(leftTop)
+              //   leftTop.position.set(x, y, z )
+              //   leftTop.rotation.y = rotate
+              // } else {
+              //   const obj = vm.scene.children.find(({name}) => name === 'selectBox')
+              //   vm.scene.remove(obj)
               }
             }
           }

@@ -100,5 +100,4 @@ export default {
   camPos,
   recursiveFindBox,
   findActionName,
-  boxes
 }

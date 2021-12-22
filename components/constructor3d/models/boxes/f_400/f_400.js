@@ -4,11 +4,12 @@ const width = 4
 const height = 8.2
 const depth = 4.8
 
-const scale = 3
+const scale = 2
 
 export const f_400 = () => {
   const box = bottomBox(width, height, depth)
-  box.name = 'f-400'
+  box.name = 'f_400'
+  box.code = 'f-400'
   box.userData['facadeVariants'] = ['f-400-1']
   box.scale.set( scale, scale, scale )
   return box

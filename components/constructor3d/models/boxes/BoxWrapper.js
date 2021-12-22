@@ -13,13 +13,16 @@ export const boxWrapper = (width, height, depth) => {
 
 
   boxGroup.add(boxMesh)
-  const helper = new EdgesHelper( boxMesh, {color: 0xff00ff, transparent: true, opacity: 0.01} );
+  const helper = new EdgesHelper( boxMesh, 0xff0000 );
   helper.material.linewidth = 1; // optional
+  helper.name = 'edges'
+  helper.visible = false
   boxGroup.add(helper)
   boxGroup.userData['type'] = 'box'
   boxGroup.userData['width'] = width
   boxGroup.userData['height'] = height
   boxGroup.userData['depth'] = depth
+  boxGroup.position.set(-width,height,depth)
   material.dispose()
   return boxGroup
 }
