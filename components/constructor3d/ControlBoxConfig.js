@@ -6,7 +6,8 @@ import {
   TextureLoader,
   MeshLambertMaterial,
   ExtrudeBufferGeometry,
-  MeshStandardMaterial, BoxGeometry
+  MeshStandardMaterial,
+  BoxGeometry
 } from 'three'
 const facadeTextureLoader = new TextureLoader();
 
@@ -63,6 +64,7 @@ const boxControl = () => {
   buttonsGroup.name='control'
 
   buttonsGroup.scale.set( 1, 1, 1 )
+  material.dispose()
   return buttonsGroup
 }
 
