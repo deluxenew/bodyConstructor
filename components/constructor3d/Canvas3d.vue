@@ -16,8 +16,7 @@
 
   const CANVAS_WIDTH = 800
   const CANVAS_HEIGHT = 600
-
-  const MAX_WIDTH = 50
+  const MAX_PLACE_WIDTH = 50
 
   export default {
     name: "Canvas3d",
@@ -29,7 +28,8 @@
         camera: camera(CANVAS_WIDTH, CANVAS_HEIGHT),
         positionNumber: 1,
         casesType: 'bottom',
-        caseModel:null,
+        caseModel: boxes.f_400,
+        selectedBox: null,
         cbDeferTs: null
       }
     },
@@ -47,6 +47,7 @@
           await this.$nextTick()
           this.setControlsVisible()
           this.setControlsPosition()
+          HF.setCasesPosition(this.scene.children)
         }
       },
     },
@@ -61,7 +62,8 @@
       setControlsVisible() {
         this.sceneObjects.control.forEach((el) => {
           const { userData: { pos, watcher } } = el
-          el.visible = pos === this.casesType && this[watcher] <= MAX_WIDTH
+          el.visible = pos === this.casesType && this[watcher] <= MAX_PLACE_WIDTH
+          if (watcher !== 'widthLeftBottom' && this.caseModel && this.caseModel.userData['configType'] === 'angularBox') el.visible = false
         })
       },
 
@@ -71,17 +73,24 @@
           el.position.set(...getCoords(x, y, z, this[watcher]))
         })
       },
+      addBoxToScene(pos) {
+        const box = this.caseModel.clone()
+        const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
+        box.userData['type'] = pos
+        box.userData['sort'] = count
+        return box
+      },
       addBottomLeftToScene() {
-        this.scene.add(boxes.f_400.clone())
+        this.scene.add(this.addBoxToScene('bottomLeft'))
       },
       addBottomRightToScene() {
-
+        this.scene.add(HF.rotationY(this.addBoxToScene('bottomRight')))
       },
       addTopLeftToScene() {
-
+        this.scene.add(this.addBoxToScene('topLeft'))
       },
       addTopRightToScene() {
-
+        this.scene.add(HF.rotationY(this.addBoxToScene('topRight')))
       },
       selectCase() {
         const vm = this
@@ -89,6 +98,17 @@
         const raycaster = new THREE.Raycaster();
 
         this.$refs.canvas.addEventListener('pointerdown', onPointerDown);
+
+        function clearHelpers() {
+          vm.scene.children.forEach((el) => {
+            const edges = el.children.find(({name}) => name === 'edges')
+            const transparent = el.children.find(({name}) => name === 'transparent')
+            if (edges) {
+              edges.visible = false
+              transparent.visible = false
+            }
+          })
+        }
 
         function onPointerDown(event) {
           // console.log(event)
@@ -102,36 +122,29 @@
           const intersects = raycaster.intersectObjects(vm.scene.children, true);
           if (intersects.length > 0) {
             const object = intersects[0].object;
-
-            let controlActionName = HF.findActionName(object)
+            const controlActionName = HF.findActionName(object)
 
             vm.$emit('setConfigName',  '')
+
             if (controlActionName) {
               vm[controlActionName]()
             } else {
               const findBox = HF.recursiveFindBox(object)
-              console.log(findBox)
-              vm.caseModel = findBox
 
-              vm.$emit('setConfigName', vm.caseModel?.name )
+              vm.selectedBox = findBox
+
+              vm.$emit('setConfigName', vm.selectedBox?.name )
 
               if (findBox) {
-                const obj = findBox.children.find(({name}) => name === 'edges')
-                obj.visible = true
+                clearHelpers()
+
+                const edges = findBox.children.find(({name}) => name === 'edges')
+                const transparent = findBox.children.find(({name}) => name === 'transparent')
+
+                edges.visible = true
+                transparent.visible = true
               } else {
-                vm.scene.children.forEach((el) => {
-                  const box = el.children.find(({name}) => name === 'edges')
-                  if (box) box.visible = false
-                })
-                // vm.scene.remove(obj)
-              //   const { userData: {width, height, depth}, position: {x,y,z}, rotation: {y: rotate} } = vm.caseModel
-              //   const leftTop = selectBox({width, height, depth, x,y,z, rotate})
-              //   vm.scene.add(leftTop)
-              //   leftTop.position.set(x, y, z )
-              //   leftTop.rotation.y = rotate
-              // } else {
-              //   const obj = vm.scene.children.find(({name}) => name === 'selectBox')
-              //   vm.scene.remove(obj)
+                clearHelpers()
               }
             }
           }
@@ -151,25 +164,19 @@
         return result
       },
       widthLeftBottom() {
-        return 10
+        return HF.getPlaceWidth(this.sceneObjects.bottomLeft, this.sceneObjects.bottomRight)
       },
       widthRightBottom() {
-        return 10
+        return HF.getPlaceWidth(this.sceneObjects.bottomRight, this.sceneObjects.bottomLeft)
       },
       widthLeftTop() {
-        return 10
+        return HF.getPlaceWidth(this.sceneObjects.topLeft, this.sceneObjects.topRight)
       },
       widthRightTop() {
-        return 10
+        return HF.getPlaceWidth(this.sceneObjects.topRight, this.sceneObjects.topLeft)
       },
       camPosition() {
-        return camPos(
-          this.positionNumber,
-          this.widthRightBottom,
-          this.widthLeftBottom,
-          this.widthRightTop,
-          this.widthLeftTop
-        )
+        return camPos(this.positionNumber, this.widthRightBottom, this.widthLeftBottom, this.widthRightTop, this.widthLeftTop)
       },
     },
     mounted() {

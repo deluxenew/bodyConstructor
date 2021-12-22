@@ -1,7 +1,7 @@
 import * as THREE from 'three'
- import boxes from "./models/boxes/BoxesList";
- // import boxes from "./CasesListConfig"
-const { Math: threeMath } = THREE
+import boxes from "./models/boxes/BoxesList";
+
+const {Math: threeMath} = THREE
 
 const fromTo = (value, from, to, steps) => {
   let step = 0;
@@ -91,8 +91,87 @@ const recursiveFindBox = (obj) => {
 const findActionName = (obj) => {
   if (!obj || !obj.parent) return null
   const parent = obj.parent
-  if (parent && parent.userData && parent.userData.actionName) return parent.userData.actionName
+  if (parent && parent.visible && parent.userData && parent.userData.actionName) return parent.userData.actionName
   else return findActionName(parent)
+}
+
+const rotationY = (obj) => {
+  obj.rotation.y = threeMath.degToRad(-90);
+  return obj
+}
+
+const setCasesPosition = (boxes) => {
+  const places = ['bottomLeft', 'bottomRight', 'topLeft', 'topRight']
+  const groupBy = (list, key) => {
+    return list.reduce(function (acc, el) {
+      if (places.includes(el['userData'][key])) {
+        (acc[el['userData'][key]] = acc[el['userData'][key]] || []).push(el)
+      }
+      return acc
+    }, {})
+  }
+  const groupedBoxes = groupBy(boxes, 'type')
+
+  const getPaddingBySort = (arr, elSort, elWidth, padding) => {
+    return arr.reduce((acc, {userData: {sort, width}}) => {
+      if (elSort > sort) acc += width
+      return acc
+    }, 0) + elWidth / 2 + padding
+  }
+  const wallPadding = 0.6
+
+  if (groupedBoxes.bottomLeft) {
+    const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0]['userData']['depth'] || 0
+    const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
+
+    groupedBoxes.bottomLeft.forEach((el) => {
+      const {userData: {sort, width, depth}} = el
+      el.position.x = -getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding : padding + wallPadding)
+      el.position.z = depth / 2 + wallPadding
+    })
+  }
+
+  if (groupedBoxes.bottomRight) {
+    const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0]['userData']['depth'] || 0
+
+    groupedBoxes.bottomRight.forEach((el) => {
+      const {userData: {sort, width, depth}} = el
+      el.position.z = getPaddingBySort(groupedBoxes.bottomRight, sort, width, padding + wallPadding)
+      el.position.x = -(depth / 2 + wallPadding)
+    })
+  }
+
+  if (groupedBoxes.topLeft) {
+    const padding = groupedBoxes.topRight && groupedBoxes.topRight[0]['userData']['depth']
+
+    groupedBoxes.topLeft.forEach((el) => {
+      const {userData: {sort, width}} = el
+      el.position.x = -getPaddingBySort(groupedBoxes.topLeft, sort, width, padding)
+    })
+  }
+
+  if (groupedBoxes.topRight) {
+    const padding = groupedBoxes.topLeft && groupedBoxes.topLeft[0]['userData']['depth']
+
+    groupedBoxes.topRight.forEach((el) => {
+      const {userData: {sort, width}} = el
+      el.position.z = getPaddingBySort(groupedBoxes.topRight, sort, width, padding)
+    })
+  }
+}
+
+const getPlaceWidth = (arr, additionalArr) => {
+  let padding = 0
+  if (additionalArr) {
+    padding = additionalArr[0]['userData']['depth']
+  }
+  if (!arr) return padding
+  let width = arr.reduce((acc, {userData: {width}}) => {
+    acc += width
+    return acc
+  }, 0)
+
+  return width + padding
 }
 
 export default {
@@ -100,4 +179,7 @@ export default {
   camPos,
   recursiveFindBox,
   findActionName,
+  setCasesPosition,
+  rotationY,
+  getPlaceWidth
 }
