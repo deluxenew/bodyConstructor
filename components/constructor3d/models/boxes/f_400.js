@@ -59,7 +59,7 @@ export const f_400 = () => {
   caseGroup.add(facadeGroup)
 
   boxGroup.name = 'f_400'
-  boxGroup.code = 'f-400'
+  boxGroup.userData['code'] = 'f-400'
   boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
   boxGroup.userData['configType'] = 'boxFloor'
   boxGroup.userData['openedDoors'] = false

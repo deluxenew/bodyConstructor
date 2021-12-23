@@ -11,8 +11,8 @@
         div.column.config
           select-case(
             v-model="kitchen.currentConfig.caseConfig"
+            :options="bodyOptions"
             :selectedBoxName="selectedBoxName"
-            :elementVariants="boxes"
             @selectItem="selectCaseConfig"
             @remove="$refs.kitchen.removeCase()"
             @selectType="selectType"
@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import Canvas3d from "@/components/constructor3d/Canvas3d";
-import boxes from './CasesListConfig'
+import Canvas3d from "./Canvas3d";
+import boxes from './models/boxes/BoxesList'
 import facades from './FacadesListConfig'
 import tableTops from './TableTopList'
 
@@ -64,7 +64,7 @@ export default {
     return {
       config: null,
       controlsVerticalPosition: 'bottom',
-      caseModel: null,
+      caseModelCode: null,
       selectedBoxName: null,
 
 
@@ -95,10 +95,13 @@ export default {
     }
   },
   computed: {
+    bodyOptions() {
+      return this.config && this.config.body.options || null
+    },
     canvas3DBind() {
       return {
         controlsVerticalPosition: this.controlsVerticalPosition,
-        caseModel: this.caseModel,
+        caseModelCode: this.caseModelCode || '',
       }
     },
     boxes() {
@@ -188,7 +191,7 @@ export default {
       this.kitchen.currentConfig.facadeConfig.name = config && config.userData && config.userData.parent ? config.name : ''
     },
     selectCaseConfig(v) {
-      this.caseConfig = v
+      this.caseModelCode = v
 
     },
     selectFacadeConfig(v) {

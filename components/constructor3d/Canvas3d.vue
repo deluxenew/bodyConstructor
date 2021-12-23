@@ -42,10 +42,10 @@ export default {
       type: String,
       default: 'bottom'
     },
-    // caseModel: {
-    //   type: Object,
-    //   default: null
-    // }
+    caseModelCode: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -53,7 +53,7 @@ export default {
       scene: scene(),
       camera: camera(CANVAS_WIDTH, CANVAS_HEIGHT),
       positionNumber: 1,
-       caseModel: boxes.f_400_820_1b,
+      // caseModel: boxes.f_400_820_1b,
       selectedBox: null,
       mixer: null,
       clock: new THREE.Clock(),
@@ -227,6 +227,13 @@ export default {
     }
   },
   computed: {
+    caseModel() {
+      if (!this.caseModelCode) return null
+      const caseModelCodeFormatted = this.caseModelCode.replaceAll('_', '-')
+      const findModel = boxes[caseModelCodeFormatted]
+      console.log(this.caseModelCode)
+      if (findModel) return findModel
+    },
     isMoveRightActive() {
       return true
       // const currentUuid = this.selectedCase?.uuid

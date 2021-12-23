@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.select-elements
+  div.select-elements(v-if="options")
     div.select-elements__header
       div.select-elements__title Шкаф
         img.select-elements__chevron(
@@ -17,20 +17,20 @@
       div.select-elements__group(v-show="opened")
         div.select-elements__tabs
           div.select-elements__tabs-item(
-            v-for="item in elementVariants"
-            :class="{active: item.type === currentTypeModel.type}"
+            v-for="item in typeVariants"
+            :class="{active: item.code === currentTypeModel}"
             @click="selectCurrentType(item)"
           )
-            div.tab__title {{item.typeName}}
+            div.tab__title {{item.name}}
 
-        div.select-elements__list(v-if="currentTypeModel && currentTypeModel.items")
+        div.select-elements__list(v-if="currentTypeModel")
           div.select-elements__item(
-            v-for="item in currentTypeModel.items"
-            :class="{active: item.name === currentItemModel.name, disabled: value.name}"
+            v-for="item in bodyVariants"
+            :class="{active: item.code === currentItemModel, disabled: value.name}"
             @click="selectItem(item)"
           )
-            img.select-elements__img(v-if="item.userData" :src="item.userData.img")
-            | {{item && item.userData ? item.userData.form : ''}}
+            img.select-elements__img(v-if="item.image" :src="'https://cdn.akson.ru/webp/' + item.image + '0.png'")
+            | {{item.name }}
 
 </template>
 
@@ -44,9 +44,13 @@ export default {
       type: String,
       default: ''
     },
-    elementVariants: {
+    options: {
       type: Array,
       default: () => []
+    },
+    bodyConfigName: {
+      type: Object,
+      default: () => {}
     },
     value: {
       type: Object,
@@ -72,19 +76,25 @@ export default {
           this.currentItemModel = item
           // this.$emit('sceneChange', item)
         }
-        const parent = this.currentTypeModel.items.find(({name}) => v.name === name)
-        // if (parent)  this.$emit('sceneChange', item)
       }
     }
   },
   computed: {
+    typeVariants() {
+      return this.options && this.options.filter(({category}) => category === 'type')
+    },
+    bodyVariants() {
+      return this.options && this.options.filter(({category, restrictions }) => {
+        return category === 'body' && restrictions.type.includes(this.currentTypeModel)
+      } )
+    },
     selectedCase() {
       return this.value.name
     },
     // значение первой вкладки
     currentTypeModel: {
       get() {
-        return this.currentType || this.elementVariants[0]
+        return this.currentType || this.typeVariants && this.typeVariants[0].code
       },
       set(v) {
         this.currentType = v
@@ -92,7 +102,7 @@ export default {
     },
     currentItemModel: {
       get() {
-        return this.currentItem || this.currentTypeModel?.items[0] || null
+        return this.currentItem || this.bodyVariants && this.bodyVariants[0].code || null
       },
       set(v) {
         this.currentItem = v
@@ -107,14 +117,14 @@ export default {
       if (this.value.name) this.$emit('remove')
     },
     selectCurrentType(item) {
-      this.currentTypeModel = item
-      if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel.items[0] || null
-      this.$emit('selectType', item.type)
+      this.currentTypeModel = item.code
+      // if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel. || null
+      this.$emit('selectType', item.code)
       this.$emit('selectItem', this.currentItemModel)
     },
     selectItem(item) {
       if (!this.value.name) {
-        this.currentItemModel = item
+        this.currentItemModel = item.code
         this.$emit('selectItem', this.currentItemModel)
       }
     }
