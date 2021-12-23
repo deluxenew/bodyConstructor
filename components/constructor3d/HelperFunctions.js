@@ -174,6 +174,20 @@ const getPlaceWidth = (arr, additionalArr) => {
   return width + padding
 }
 
+const getFacadeGroup = (obj) => {
+  if (!obj) return null
+
+  const caseGroup = obj.children.find(({name}) => name === 'caseGroup')
+  console.log(caseGroup, 'caseGroup')
+  if (caseGroup) {
+    const facade = caseGroup.children.find(({name}) => name === 'facade')
+    console.log(facade, 'facade')
+    if (facade) return facade
+  }
+
+  return null
+}
+
 export default {
   fromTo,
   camPos,
@@ -181,5 +195,6 @@ export default {
   findActionName,
   setCasesPosition,
   rotationY,
-  getPlaceWidth
+  getPlaceWidth,
+  getFacadeGroup
 }

@@ -52,20 +52,23 @@ export const f_400 = () => {
   const facadeGeometry = new BoxGeometry(width - sideDepth /4, height - legsHeight, sideDepth )
   const facade = new Mesh(facadeGeometry, defaultMaterial());
   facade.position.x = (width / 2 + sideDepth / 8)
+  facadeGroup.name = 'facade'
   facadeGroup.add(facade)
   caseGroup.add(facadeGroup)
 
-  const xAxis = new Vector3( 1, 0, 0 );
+  // const xAxis = new Vector3( 1, 0, 0 );
+  //
+  // const qInitial = new Quaternion().setFromAxisAngle( xAxis, 0 );
+  // const qFinal = new Quaternion().setFromAxisAngle( xAxis, Math.PI );
+  // const quaternionKF = new QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+  //
+  // const clip = new AnimationClip( 'Action', 3, [  quaternionKF] );
+  // let mixer = new AnimationMixer( facadeGroup );
+  //
+  // const clipAction = mixer.clipAction( clip );
+  // clipAction.play();
 
-  const qInitial = new Quaternion().setFromAxisAngle( xAxis, 0 );
-  const qFinal = new Quaternion().setFromAxisAngle( xAxis, Math.PI );
-  const quaternionKF = new QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
-
-  const clip = new AnimationClip( 'Action', 3, [  quaternionKF] );
-  let mixer = new AnimationMixer( facade );
-
-  const clipAction = mixer.clipAction( clip );
-  clipAction.play();
+  // facadeGroup.animations.push(clipAction)
 
   // const mixer = new AnimationMixer(facade );
   // let animation = AnimationClipCreator.CreateRotationAnimation(100, "y");
@@ -75,6 +78,7 @@ export const f_400 = () => {
   boxGroup.code = 'f-400'
   boxGroup.userData['facadeVariants'] = ['f_400_1']
   boxGroup.userData['configType'] = 'boxFloor'
+  boxGroup.userData['openedDoors'] = false
 
   boxGroup.scale.set( scale, scale, scale )
   return boxGroup
