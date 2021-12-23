@@ -54,7 +54,7 @@ export const f_400 = () => {
   facade.position.x = (width / 2 + sideDepth / 8)
   facadeGroup.name = 'facade'
   facadeGroup.code = '397_716_0_solid_1'
-  facadeGroup.visible = false
+  facadeGroup.visible = true
   facadeGroup.add(facade)
   caseGroup.add(facadeGroup)
 

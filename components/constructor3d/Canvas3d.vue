@@ -229,7 +229,7 @@ export default {
   computed: {
     caseModel() {
       if (!this.caseModelCode) return null
-      const caseModelCodeFormatted = this.caseModelCode.replaceAll('_', '-')
+      const caseModelCodeFormatted = this.caseModelCode.replaceAll('-', '_')
       const findModel = boxes[caseModelCodeFormatted]
       console.log(this.caseModelCode)
       if (findModel) return findModel

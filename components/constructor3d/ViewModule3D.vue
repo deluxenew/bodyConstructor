@@ -101,7 +101,7 @@ export default {
     canvas3DBind() {
       return {
         controlsVerticalPosition: this.controlsVerticalPosition,
-        caseModelCode: this.caseModelCode || '',
+        caseModelCode: this.caseModelCode,
       }
     },
     boxes() {
