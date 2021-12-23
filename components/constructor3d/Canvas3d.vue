@@ -31,27 +31,37 @@ import {AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vect
 const {scene, renderer, spotLights, camera, walls, controlBoxes} = StartLoader
 const {fromTo, camPos} = HF
 
-const CANVAS_WIDTH = 800
+const CANVAS_WIDTH = 780
 const CANVAS_HEIGHT = 600
 const MAX_PLACE_WIDTH = 50
 
 export default {
   name: "Canvas3d",
-  props: {},
+  props: {
+    controlsVerticalPosition: {
+      type: String,
+      default: 'bottom'
+    },
+    // caseModel: {
+    //   type: Object,
+    //   default: null
+    // }
+  },
   data() {
     return {
       renderer: renderer(CANVAS_WIDTH, CANVAS_HEIGHT),
       scene: scene(),
       camera: camera(CANVAS_WIDTH, CANVAS_HEIGHT),
       positionNumber: 1,
-      casesType: 'bottom',
-      caseModel: boxes.f_400,
+       caseModel: boxes.f_400,
       selectedBox: null,
-      cbDeferTs: null
+      mixer: null,
+      clock: new THREE.Clock(),
+      animations: [],
     }
   },
   watch: {
-    casesType: {
+    controlsVerticalPosition: {
       immediate: true,
       async handler() {
         await this.$nextTick()
@@ -91,20 +101,27 @@ export default {
         const {userData: {openedDoors}} = this.selectedBox
 
         const facade = HF.getFacadeGroup(this.selectedBox)
-        const xAxis = new Vector3( 1, 0, 0 );
+        const xAxis = new Vector3( 0, -1, 0 );
 
         const qInitial = new Quaternion().setFromAxisAngle( xAxis, 0 );
-        const qFinal = new Quaternion().setFromAxisAngle( xAxis, Math.PI );
-        const quaternionKF = new QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
-        const positionKF = new THREE.VectorKeyframeTrack( '.position', [ 0, 1, 2 ], [ 0, 0, 0, 30, 0, 0, 0, 0, 0 ] );
+        const qFinal = new Quaternion().setFromAxisAngle( xAxis, Math.PI / 2);
+        const quaternionKF = new QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w ] );
+        const quaternionKFR = new QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [ qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+        let anim = openedDoors ? quaternionKFR : quaternionKF
 
-        const clip = new AnimationClip( 'Action', 3, [  positionKF] );
-        let mixer = new AnimationMixer( facade );
 
-        const clipAction = mixer.clipAction( clip );
+        const clip = new AnimationClip( 'Action', 1, [  anim] );
+        this.mixer = new AnimationMixer( facade );
+
+
+        const clipAction = this.mixer.clipAction( clip );
+        clipAction.loop = THREE.LoopOnce;
+        clipAction.clampWhenFinished = true
+        console.log(clipAction.getClip() )
         clipAction.play();
-        // facade.rotation.y = 10
-        mixer.update()
+        this.mixer.addEventListener( 'finished', function( e ) {
+          console.log(e)
+        } )
 
         this.selectedBox.userData.openedDoors = !openedDoors
       }
@@ -115,7 +132,7 @@ export default {
     setControlsVisible() {
       this.sceneObjects.control.forEach((el) => {
         const {userData: {pos, watcher}} = el
-        el.visible = pos === this.casesType && this[watcher] <= MAX_PLACE_WIDTH
+        el.visible = pos === this.controlsVerticalPosition && this[watcher] <= MAX_PLACE_WIDTH
         if (watcher !== 'widthLeftBottom' && this.caseModel && this.caseModel.userData['configType'] === 'angularBox') el.visible = false
       })
     },
@@ -185,8 +202,9 @@ export default {
             const findBox = HF.recursiveFindBox(object)
 
             vm.selectedBox = findBox
+            vm.$emit('getBoxName', vm.selectedBox?.name || null)
 
-            vm.$emit('setConfigName', vm.selectedBox?.name)
+            // vm.$emit('setConfigName', vm.selectedBox?.name)
             vm.animateClip()
 
             if (findBox) {
@@ -271,6 +289,14 @@ export default {
       vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPosition.x, steps);
       vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPosition.cPz, steps);
       vm.renderer.render(vm.scene, vm.camera);
+
+      const delta = vm.clock.getDelta();
+
+      if (vm.mixer) {
+
+        vm.mixer.update( delta);
+
+      }
     }
 
     render()

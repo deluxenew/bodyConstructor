@@ -53,6 +53,8 @@ export const f_400 = () => {
   const facade = new Mesh(facadeGeometry, defaultMaterial());
   facade.position.x = (width / 2 + sideDepth / 8)
   facadeGroup.name = 'facade'
+  facadeGroup.code = '397_716_0_solid_1'
+  facadeGroup.visible = false
   facadeGroup.add(facade)
   caseGroup.add(facadeGroup)
 
