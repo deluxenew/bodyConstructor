@@ -53,7 +53,7 @@ export default {
       scene: scene(),
       camera: camera(CANVAS_WIDTH, CANVAS_HEIGHT),
       positionNumber: 1,
-       caseModel: boxes.f_400,
+       caseModel: boxes.f_400_820_1b,
       selectedBox: null,
       mixer: null,
       clock: new THREE.Clock(),

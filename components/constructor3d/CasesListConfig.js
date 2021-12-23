@@ -565,7 +565,7 @@ const bottom_400_800 = () => {
   drawerSideBack.position.y = drawerHeight/2 - sideDepth/2;
   drawerSideBack.position.z = - (drawerDepth/2 - drawerSideDepth / 2);
 
-  let drawer_0 = new Mesh();
+  let drawer_0 = new Group();
   drawer_0.name = 'drawer';
 
   drawer_0.add(drawerBottom);
