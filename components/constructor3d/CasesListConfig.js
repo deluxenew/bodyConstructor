@@ -34,7 +34,7 @@ const boxAngularTop = () => {
   // vertices because each vertex needs to appear once per triangle.
 
   const vertices = [
-
+    
     // front1
     { pos: [     -bW, sideDepth,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E
     { pos: [     -bW,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E1
@@ -44,6 +44,7 @@ const boxAngularTop = () => {
     { pos: [     -bW,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E1
     { pos: [-bW + bP,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //D1
 
+
     // front
     { pos: [-bW + bP, sideDepth,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D
     { pos: [-bW + bP,         0,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D1
@@ -52,19 +53,20 @@ const boxAngularTop = () => {
     { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C
     { pos: [-bW + bP,         0,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D1
     { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C1
+    
 
     // front2
     { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C
     { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C1
-    { pos: [      bW, sideDepth,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B
-
-    { pos: [      bW, sideDepth,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B
+    { pos: [      bW, sideDepth,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B 
+    
+    { pos: [      bW, sideDepth,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B 
     { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C1
-    { pos: [      bW,         0,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B1
+    { pos: [      bW,         0,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B1 
 
-
+    
     //back1
-    { pos: [      bW, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B
+    { pos: [      bW, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B 
     { pos: [      bW,         0,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B1
     { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //A
 
@@ -94,27 +96,27 @@ const boxAngularTop = () => {
 
 
     // top
-    { pos: [      bW, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //B
+    { pos: [      bW, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //B 
     { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //A
     { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
-
+    
     { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
     { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //A
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F 
 
     { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //D
     { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F  
 
     { pos: [     -bW, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //E
     { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //D
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F
+    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F 
 
     // bottom
     { pos: [-bW + sP,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //A1
-    { pos: [      bW,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //B1
+    { pos: [      bW,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //B1 
     { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
-
+    
     { pos: [-bW + sP,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //A1
     { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
     { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
@@ -122,30 +124,12 @@ const boxAngularTop = () => {
     { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
     { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
     { pos: [-bW + bP,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //D1
-
+ 
     { pos: [     -bW,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //E1
     { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
     { pos: [-bW + bP,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //D1
-
-
-    /*// top
-    { pos: [ boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [0, 0], },
-    { pos: [-boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [1, 0], },
-    { pos: [ boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [0, 1], },
-
-    { pos: [ boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [0, 1], },
-    { pos: [-boxWidth/2, sideDepth,-boxWidth/2], norm: [ 0,  1,  0], uv: [1, 0], },
-    { pos: [-boxWidth/2, sideDepth, boxWidth/2], norm: [ 0,  1,  0], uv: [1, 1], },
-    // bottom
-    { pos: [ boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [0, 0], },
-    { pos: [-boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [1, 0], },
-    { pos: [ boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [0, 1], },
-
-    { pos: [ boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [0, 1], },
-    { pos: [-boxWidth/2,         0, boxWidth/2], norm: [ 0, -1,  0], uv: [1, 0], },
-    { pos: [-boxWidth/2,         0,-boxWidth/2], norm: [ 0, -1,  0], uv: [1, 1], },*/
   ];
-
+  
   const positions = [];
   const normals = [];
   const uvs = [];
@@ -153,7 +137,7 @@ const boxAngularTop = () => {
     positions.push(...vertex.pos);
     normals.push(...vertex.norm);
     uvs.push(...vertex.uv);
-  }
+  } 
 
   const geometry = new BufferGeometry();
   const positionNumComponents = 3;
@@ -174,7 +158,7 @@ const boxAngularTop = () => {
   let sideLeft = new Mesh(gSideLR, material);
   let sideRight = new Mesh(gSideLR, material);
   let sideBackR = new Mesh(gSideBack, material);
-  let sideBackL = new Mesh(gSideBack, material);
+  let sideBackL = new Mesh(gSideBack, material);  
   let sideBottom = new Mesh(geometry, material);
   let sideBTop = new Mesh(geometry, material);
   //let sideShelf = new Mesh(gSideBottom, material);
@@ -269,7 +253,7 @@ const boxAngularTop = () => {
   return bodyCase
 }
 
-const top_400_800 = () => {
+const top_400_800 = () => { 
   let bodyWidth = 6.4;
   let bodyHeight = 8;
   let bodyDepth = 4.2;
@@ -453,7 +437,7 @@ const top_400_800_1 = () => {
   material.dispose()
   legMaterial.dispose()
   gSideLR.dispose()
-  gSideBack.dispose()
+  gSideBack.dispose()  
   gSideBottom.dispose()
   //  gSideTop.dispose()
 
@@ -491,6 +475,7 @@ const bottom_400_800 = () => {
   let legLeft = new Mesh(gLegs, legMaterial);
   let legRight = new Mesh(gLegs, legMaterial);
 
+
   let objFacadeLeft = new Group();
   objFacadeLeft.add(facadeLeft);
   facadeLeft.name = 'doorBox'
@@ -524,11 +509,13 @@ const bottom_400_800 = () => {
   sideTopBack.position.y = (boxHeight / 2 - sideDepth / 2);
   sideTopBack.position.z = (-boxDepth / 2 + sideTop / 2 + sideDepth);
 
+
+
   group.add(sideLeft);
   group.add(sideRight);
   group.add(sideBack);
   group.add(sideBottom);
-  group.add(sideShelf);
+  //group.add(sideShelf);
   group.add(sideTopFront)
   group.add(sideTopBack)
   group.add(objFacadeLeft)
@@ -550,6 +537,51 @@ const bottom_400_800 = () => {
   legRight.position.y = -bodyHeight / 2 + legsHeight;
   legRight.position.z = -bodyDepth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = bodyWidth / 2 - legsRad - legFrontMargin;
+
+  
+  /**/
+  const drawerSideGap = 0.15;  //боковой отступ выдвижного ящика
+  const drawerBottomGap = 0.12;  //нижний отступ выдвижного ящика
+  const drawerSideDepth = 0.02; // толщина стенки выдвижного ящика 
+
+  let drawerWidth = bodyWidth - sideDepth*2 - drawerSideGap*2; //ширина выдвижного ящика 
+  let drawerHeight = 2.2; //высота выдвижного ящика 
+  let drawerDepth = bodyDepth - sideDepth; //глубина выдвижного ящика 
+
+  let drawerBottomGeometry = new BoxGeometry(drawerWidth - drawerSideDepth * 2, sideDepth, drawerDepth - drawerSideDepth);
+  let drawerSideGeometry = new BoxGeometry(drawerSideDepth, drawerHeight, drawerDepth);
+  let drawerSideBackGeometry = new BoxGeometry(drawerWidth - drawerSideDepth * 2, drawerHeight, drawerSideDepth);
+
+  let drawerBottom = new Mesh(drawerBottomGeometry, material);
+  let drawerSideR = new Mesh(drawerSideGeometry, material);
+  let drawerSideL = new Mesh(drawerSideGeometry, material);
+  let drawerSideBack = new Mesh(drawerSideBackGeometry, material);
+
+  drawerBottom.position.z = drawerSideDepth/2;
+  drawerSideR.position.x = - (drawerWidth/2 - drawerSideDepth / 2);
+  drawerSideR.position.y = drawerHeight/2 - sideDepth/2;
+  drawerSideL.position.x = drawerWidth/2 - drawerSideDepth / 2;
+  drawerSideL.position.y = drawerHeight/2 - sideDepth/2;
+  drawerSideBack.position.y = drawerHeight/2 - sideDepth/2;
+  drawerSideBack.position.z = - (drawerDepth/2 - drawerSideDepth / 2);
+
+  let drawer_0 = new Mesh();
+  drawer_0.name = 'drawer';
+    
+  drawer_0.add(drawerBottom);
+  drawer_0.add(drawerSideR);
+  drawer_0.add(drawerSideL);
+  drawer_0.add(drawerSideBack);
+
+  drawer_0.position.z = sideDepth/2;
+  //drawer_0.position.z += 4;
+  drawer_0.position.y = - (boxHeight/2 - sideDepth/2 - sideDepth - drawerBottomGap);
+
+
+
+  group.add(drawer_0);
+
+  /**/
 
 
   bodyCase.userData.width = bodyWidth
@@ -589,7 +621,7 @@ const bottom_400_800 = () => {
 const bottom_400_800_1 = () => {
   let bodyWidth = 6.4;
   let bodyHeight = 10;
-  let bodyDepth = 6;
+  let bodyDepth = 6;  
 
   let boxWidth = bodyWidth;
   let boxHeight = bodyHeight - legsHeight;
@@ -1731,12 +1763,12 @@ const cases = [
     typeDescription: '',
     additional: null,
     variants: null,
-    items: [top_400_800(), boxAngularTop()]
+    items: [top_400_800(), boxAngularTop()]   
   }
 ]
 
 export default {
-  // cases,
+  cases,
 
   top_400_800: top_400_800(),
   top_400_800_1: top_400_800_1(),

@@ -22,6 +22,9 @@
 
 
 <script>
+import HorizontalBlurShader from "three/examples/jsm/shaders/HorizontalBlurShader";
+import VerticalBlurShader  from "three/examples/jsm/shaders/VerticalBlurShader";
+
   import * as Three from 'three'
 
   const {
@@ -38,7 +41,7 @@
     SpotLight,
     PointLight,
     Vector2,
-    Raycaster,
+    Raycaster, 
   } = Three
 
   const windows = {innerHeight: 600, innerWidth: 800}
