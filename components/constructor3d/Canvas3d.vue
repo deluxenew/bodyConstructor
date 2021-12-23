@@ -123,21 +123,21 @@
           if (intersects.length > 0) {
             const object = intersects[0].object;
             const controlActionName = HF.findActionName(object)
-
+           
             vm.$emit('setConfigName',  '')
 
             if (controlActionName) {
               vm[controlActionName]()
             } else {
               const findBox = HF.recursiveFindBox(object)
-
+   
               vm.selectedBox = findBox
 
               vm.$emit('setConfigName', vm.selectedBox?.name )
 
               if (findBox) {
                 clearHelpers()
-
+                vm.animationClip();
                 const edges = findBox.children.find(({name}) => name === 'edges')
                 const transparent = findBox.children.find(({name}) => name === 'transparent')
 
@@ -150,6 +150,20 @@
           }
         }
       },
+      animationClip(){
+                const xAxis = new THREE.Vector3( 1, 0, 0 );
+      
+      const qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis, 0 );
+      const qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis, Math.PI );
+       const quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+      //
+      const clip = new THREE.AnimationClip( 'Action', 3, [  quaternionKF] );
+      let mixer = new THREE.AnimationMixer( this.scene );
+      //
+      const clipAction = mixer.clipAction( clip );
+      clipAction.play();
+      mixer.update()
+      }
     },
     computed: {
       sceneObjects() {
@@ -180,6 +194,10 @@
       },
     },
     mounted() {
+
+
+
+
       const vm = this
 
       this.init()
@@ -194,21 +212,11 @@
         vm.renderer.render(vm.scene, vm.camera);
       }
 
-      // const xAxis = new THREE.Vector3( 1, 0, 0 );
-      //
-      // const qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis, 0 );
-      // const qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis, Math.PI );
-      // const quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
-      //
-      // const clip = new THREE.AnimationClip( 'Action', 3, [  quaternionKF] );
-      // let mixer = new THREE.AnimationMixer( vm.scene );
-      //
-      // const clipAction = mixer.clipAction( clip );
-      // clipAction.play();
-      // mixer.update()
+
 
       render()
     }
+    
   }
 </script>
 
