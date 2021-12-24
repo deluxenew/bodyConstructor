@@ -1,43 +1,48 @@
 import {constants}  from "./constants";
-import { bottomBox } from "./BottomBox"
-import { bottomBeams } from "./BottomBeams"
+
+import { topBox } from "./TopBox"
 import {BoxGeometry, Mesh, Group, QuaternionKeyframeTrack, Quaternion, Vector3, AnimationClip, AnimationMixer, AnimationClipCreator} from "three";
 
 import Materials from "../Materials";
 const { defaultMaterial } = Materials
 
-const width = 3
+const width = 8
 
-const height = constants.bottomHeight
-const depth = constants.bottomDepth
+const height = constants.topHeight
+const depth = constants.topDepth
 
 const sideDepth = constants.sideDepth;
-const legsHeight = constants.legsHeight;
 const scale = constants.scale
 
-const sideY = (height - legsHeight) / 2 - sideDepth
+const sideY = (height) / 2 - sideDepth
 
-export const f_300_820 = () => {
-  const beams = bottomBeams(width)
-  const wrap = bottomBox(width, height, depth)
+export const w_800 = () => {
+
+  const wrap = topBox(width, height, depth)
   const boxGroup = wrap.boxGroup
   const caseGroup = wrap.caseGroup
   boxGroup.add(caseGroup)
 
-  const sideGeometry = new BoxGeometry(sideDepth, height - legsHeight, depth);
-  const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth);
+  const sideGeometry = new BoxGeometry(sideDepth, height, depth);
+  const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height, sideDepth);
   const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth);
 
   const sideRight = new Mesh(sideGeometry, defaultMaterial());
   const sideLeft = new Mesh(sideGeometry, defaultMaterial());
   const sideBack = new Mesh(sideBackGeometry, defaultMaterial());
   const shelf = new Mesh(shelfGeometry, defaultMaterial())
+  const sideTop = new Mesh(shelfGeometry, defaultMaterial())
+  const sideBottom = new Mesh(shelfGeometry, defaultMaterial())
 
   caseGroup.add(sideRight)
   caseGroup.add(sideLeft)
   caseGroup.add(sideBack)
-  caseGroup.add(beams)
   caseGroup.add(shelf)
+  caseGroup.add(sideTop)
+  caseGroup.add(sideBottom)
+
+  sideTop.position.y = height - sideDepth*1.5
+  sideBottom.position.y = 0 - sideDepth/2
 
   sideRight.position.set(width / 2 - sideDepth /2, sideY, 0)
   sideLeft.position.set(-width / 2 + sideDepth /2, sideY, 0)
@@ -57,10 +62,10 @@ export const f_300_820 = () => {
   facadeGroup.add(facade)
   caseGroup.add(facadeGroup)
 */
-  boxGroup.name = 'f_300_820'
-  boxGroup.userData['code'] = 'f-300-820'
+  boxGroup.name = 'w_800'
+  boxGroup.userData['code'] = 'w-800'
   //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
-  boxGroup.userData['configType'] = 'boxFloor'
+  boxGroup.userData['configType'] = 'boxWall'
   boxGroup.userData['openedDoors'] = false
 
   boxGroup.scale.set( scale, scale, scale )

@@ -9,12 +9,12 @@ const { defaultMaterial } = Materials
 
 const width = 4 
 
-const height = constants().bottomHeight
-const depth = constants().bottomDepth
+const height = constants.bottomHeight
+const depth = constants.bottomDepth
 
-const sideDepth = constants().sideDepth;
-const legsHeight = constants().legsHeight;
-const scale = constants().scale
+const sideDepth = constants.sideDepth;
+const legsHeight = constants.legsHeight;
+const scale = constants.scale
 
 const sideY = (height - legsHeight) / 2 - sideDepth
 
@@ -36,15 +36,15 @@ export const f_400_820_3b = () => {
   const sideBack = new Mesh(sideBackGeometry, defaultMaterial());
 
   const drawer_0 = Drawer(width, height, depth, drawer_0_Height)
-  drawer_0.position.y = constants().drawerBottomGap
+  drawer_0.position.y = constants.drawerBottomGap
   caseGroup.add(drawer_0)
 
   const drawer_1 = Drawer(width, height, depth, drawer_1_2_Height)
-  drawer_1.position.y = height - legsHeight - sideDepth - constants().drawerTopGap - drawer_1_2_Height * 2 - constants().drawerBetweenGap
+  drawer_1.position.y = height - legsHeight - sideDepth - constants.drawerTopGap - drawer_1_2_Height * 2 - constants.drawerBetweenGap
   caseGroup.add(drawer_1)
 
   const drawer_2 = Drawer(width, height, depth, drawer_1_2_Height)
-  drawer_2.position.y = height - legsHeight - sideDepth - constants().drawerTopGap - drawer_1_2_Height
+  drawer_2.position.y = height - legsHeight - sideDepth - constants.drawerTopGap - drawer_1_2_Height
   caseGroup.add(drawer_2)
 
   caseGroup.add(sideRight)

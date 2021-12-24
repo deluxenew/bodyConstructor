@@ -2,10 +2,10 @@ import {constants} from "./constants";
 import {BoxGeometry, Group, Mesh, MeshStandardMaterial} from "three";
 
 export const Drawer = (bodyWidth, boxHeight, bodyDepth, drawerHeight) => {
-  const sideDepth = constants().sideDepth;
+  const sideDepth = constants.sideDepth;
   const material = new MeshStandardMaterial({color: 0xffffff});
-  const drawerSideGap =  constants().drawerSideGap;
-  const drawerSideDepth = constants().drawerSideDepth;
+  const drawerSideGap =  constants.drawerSideGap;
+  const drawerSideDepth = constants.drawerSideDepth;
 
   let drawerWidth = bodyWidth - sideDepth*2 - drawerSideGap*2; //ширина выдвижного ящика
   let drawerDepth = bodyDepth - sideDepth; //глубина выдвижного ящика

@@ -15,6 +15,8 @@ import { f_400_820_1b } from "./f_400_820_1b"
 
 import { w_400 } from "./w_400"
 import { w_600_600 } from "./w_600_600"
+import { w_800 } from "./w_800"
+import { w_800a } from "./w_800a"
 
 export default {
   f_150_820: f_150_820(),
@@ -34,4 +36,6 @@ export default {
 
   w_400: w_400(),
   w_600_600: w_600_600(),
+  w_800: w_800(),
+  w_800a: w_800a(),
 }

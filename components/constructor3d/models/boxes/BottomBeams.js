@@ -4,12 +4,12 @@ import {constants} from "./constants";
 
 const { defaultMaterial } = Materials
 
-const sideDepth = constants().sideDepth;
-const legsHeight = constants().legsHeight;
-const sideTop = constants().sideTop;
+const sideDepth = constants.sideDepth;
+const legsHeight = constants.legsHeight;
+const sideTop = constants.sideTop;
 
-const height = constants().bottomHeight
-const depth = constants().bottomDepth
+const height = constants.bottomHeight
+const depth = constants.bottomDepth
 
 export const bottomBeams = (width) => {
 

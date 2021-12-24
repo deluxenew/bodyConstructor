@@ -6,7 +6,7 @@ export const topBox = (width, height, depth) => {
   const caseGroup = new Group()
   const boxGroup = boxWrapper(width, height, depth)
   boxGroup.userData['pos'] = 'top'
-  boxGroup.position.y = constants().topBound - height + constants().sideDepth
+  boxGroup.position.y = constants.topBound - height + constants.sideDepth
   return {
     boxGroup,
     caseGroup

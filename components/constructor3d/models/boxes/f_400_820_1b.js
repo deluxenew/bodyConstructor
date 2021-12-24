@@ -9,12 +9,12 @@ const { defaultMaterial } = Materials
 
 const width = 4
 
-const height = constants().bottomHeight
-const depth = constants().bottomDepth
+const height = constants.bottomHeight
+const depth = constants.bottomDepth
 
-const sideDepth = constants().sideDepth;
-const legsHeight = constants().legsHeight;
-const scale = constants().scale
+const sideDepth = constants.sideDepth;
+const legsHeight = constants.legsHeight;
+const scale = constants.scale
 
 const sideY = (height - legsHeight) / 2 - sideDepth
 
@@ -37,7 +37,7 @@ export const f_400_820_1b = () => {
   const shelf = new Mesh(shelfGeometry, defaultMaterial())
 
   const drawer = Drawer(width, height, depth, drawerHeight)
-  drawer.position.y = height - legsHeight - sideDepth - constants().drawerTopGap - drawerHeight
+  drawer.position.y = height - legsHeight - sideDepth - constants.drawerTopGap - drawerHeight
   caseGroup.add(drawer)
 
   caseGroup.add(sideRight)

@@ -7,12 +7,12 @@ const { defaultMaterial } = Materials
 
 const width = 6
 
-const height = constants().topBound
-const depth = constants().bottomDepth
+const height = constants.topBound
+const depth = constants.bottomDepth
 
-const sideDepth = constants().sideDepth;
-const legsHeight = constants().legsHeight;
-const scale = constants().scale
+const sideDepth = constants.sideDepth;
+const legsHeight = constants.legsHeight;
+const scale = constants.scale
 
 const sideY = (height - legsHeight) / 2 - sideDepth
 const shelfGap = (height) / 6 - sideDepth * 1.5

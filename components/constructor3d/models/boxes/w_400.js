@@ -8,11 +8,11 @@ const { defaultMaterial } = Materials
 
 const width = 4
 
-const height = constants().topHeight
-const depth = constants().topDepth
+const height = constants.topHeight
+const depth = constants.topDepth
 
-const sideDepth = constants().sideDepth;
-const scale = constants().scale
+const sideDepth = constants.sideDepth;
+const scale = constants.scale
 
 const sideY = (height) / 2 - sideDepth
 
