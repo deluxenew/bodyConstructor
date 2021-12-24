@@ -1,7 +1,13 @@
-import { boxWrapper } from "../BoxWrapper"
+import { boxWrapper } from "./BoxWrapper"
+import {BoxGeometry, CylinderGeometry, Group, Mesh} from "three";
 
 export const topBox = (width, height, depth) => {
-  const boxWrap = boxWrapper(width, height, depth)
-  boxWrap.userData['pos'] = 'top'
-  return boxWrap
+  const caseGroup = new Group()
+  const boxGroup = boxWrapper(width, height, depth)
+  boxGroup.userData['pos'] = 'top'
+  boxGroup.position.y = 20 - height
+  return {
+    boxGroup,
+    caseGroup
+  }
 }

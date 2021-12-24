@@ -52,7 +52,7 @@ export const f_150_820 = () => {
   sideBack.position.set(0, sideY, - depth / 2 + sideDepth)
 
   boxGroup.name = 'f_150_820'
-  boxGroup.userData['code'] = 'f_150_820'
+  boxGroup.userData['code'] = 'f-150-820'
   //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_2']
   boxGroup.userData['configType'] = 'boxFloor'
   boxGroup.userData['openedDoors'] = false

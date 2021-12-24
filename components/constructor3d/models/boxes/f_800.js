@@ -45,7 +45,7 @@ export const f_800 = () => {
   sideBack.position.set(0, sideY, - depth / 2 + sideDepth)
   shelf.position.set(0, sideY, 0)
 
-  boxGroup.name = 'f-800'
+  boxGroup.name = 'f_800'
   boxGroup.userData['code'] = 'f-800'
   boxGroup.userData['facadeVariants'] = ['397_716_0_solid_2']
   boxGroup.userData['configType'] = 'boxFloor'

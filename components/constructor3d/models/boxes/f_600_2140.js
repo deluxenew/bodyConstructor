@@ -62,7 +62,7 @@ export const f_600_2140 = () => {
   sideTop.position.y = height - legsHeight - sideDepth * 1.5
 
   boxGroup.name = 'f_600_2140'
-  boxGroup.userData['code'] = 'f_600_2140'
+  boxGroup.userData['code'] = 'f-600-2140'
   //boxGroup.userData['facadeVariants'] = ['597_716_0_solid_1']
   boxGroup.userData['configType'] = 'boxFloor'
   boxGroup.userData['openedDoors'] = false
