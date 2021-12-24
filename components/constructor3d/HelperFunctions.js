@@ -161,8 +161,9 @@ const setCasesPosition = (boxes) => {
     const padding = groupedBoxes.topRight && groupedBoxes.topRight[0]['userData']['depth'] || 0
 
     groupedBoxes.topLeft.forEach((el) => {
-      const {userData: {sort, width}} = el
+      const {userData: {sort, width, depth }} = el
       el.position.x = -getPaddingBySort(groupedBoxes.topLeft, sort, width, padding)
+      el.position.z = depth / 2
     })
   }
 
@@ -170,8 +171,9 @@ const setCasesPosition = (boxes) => {
     const padding = groupedBoxes.topLeft && groupedBoxes.topLeft[0]['userData']['depth'] || 0
 
     groupedBoxes.topRight.forEach((el) => {
-      const {userData: {sort, width}} = el
+      const {userData: {sort, width, depth }} = el
       el.position.z = getPaddingBySort(groupedBoxes.topRight, sort, width, padding)
+      el.position.x = -(depth / 2)
     })
   }
 }

@@ -1,6 +1,8 @@
 import {BoxGeometry, Group, Mesh, MeshLambertMaterial, MeshMatcapMaterial, EdgesHelper} from "three";
 
-export const boxWrapper = (width, height, depth) => {
+import {constants}  from "./constants";
+
+export const boxWrapper = (width, height, depth, isTop) => {
   const boxGroup = new Group();
   const boxGeometry = new BoxGeometry(width, height, depth);
   // const material = new MeshLambertMaterial({
@@ -13,6 +15,7 @@ export const boxWrapper = (width, height, depth) => {
   let boxMesh = new Mesh(boxGeometry, material);
   boxMesh.name = 'transparent'
   boxMesh.visible = false
+  boxMesh.position.set(0,isTop ? height / 2 : 0,0)
   boxGroup.add(boxMesh)
 
   const helper = new EdgesHelper( boxMesh, 0x0099DC );
@@ -20,13 +23,14 @@ export const boxWrapper = (width, height, depth) => {
   helper.name = 'edges'
   helper.visible = false
   helper.scale.set(1.01,1,1.1)
-  helper.position.set(0,0,0)
+  helper.position.set(0,isTop ? height / 2 - constants.sideDepth : 0,0)
   boxGroup.add(helper)
+
 
   boxGroup.userData['width'] = width
   boxGroup.userData['height'] = height
   boxGroup.userData['depth'] = depth
-  boxGroup.position.set(-width / 2 , height / 2, depth / 2)
+  boxGroup.position.set(-width / 2 , height / 2, 0)
   material.dispose()
   boxGroup.name = 'boxGroup'
   return boxGroup

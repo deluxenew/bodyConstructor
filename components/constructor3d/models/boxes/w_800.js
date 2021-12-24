@@ -68,7 +68,7 @@ export const w_800 = () => {
   boxGroup.userData['configType'] = 'boxWall'
   boxGroup.userData['openedDoors'] = false
 
-  boxGroup.scale.set( scale, scale, scale )
+  // boxGroup.scale.set( scale, scale, scale )
   return boxGroup
 }
 
