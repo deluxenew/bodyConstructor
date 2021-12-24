@@ -16,6 +16,11 @@ export const constants = () => {
   const bottomHeight = 8.2
   const bottomDepth = 4.8
 
+  const topHeight = 7.2
+  const topDepth = 3
+
+  const topBound = 21.40
+
   return {
     sideDepth,
     legsHeight,
@@ -30,7 +35,10 @@ export const constants = () => {
     drawerSideDepth,
     drawerTopGap,
     drawerTopGapBig,
-    drawerBetweenGap
+    drawerBetweenGap,
+    topHeight,
+    topDepth,
+    topBound
 
   }
 }

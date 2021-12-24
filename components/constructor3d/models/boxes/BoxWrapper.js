@@ -10,14 +10,14 @@ export const boxWrapper = (width, height, depth) => {
   // });
 
   const material = new MeshMatcapMaterial({
-    color: 0x0000ff, transparent: true, opacity: 0.05
+    color: 0x0099DC, transparent: true, opacity: 0.15
   });
   let boxMesh = new Mesh(boxGeometry, material);
   boxMesh.name = 'transparent'
   boxMesh.visible = false
   boxGroup.add(boxMesh)
 
-  const helper = new EdgesHelper( boxMesh, 0x0000ff );
+  const helper = new EdgesHelper( boxMesh, 0x0099DC );
   helper.material.linewidth = 1; // optional
   helper.name = 'edges'
   helper.visible = false
