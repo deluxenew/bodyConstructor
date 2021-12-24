@@ -6,7 +6,8 @@
           ref="items"
           v-for="item in line"
           :class="{active: item.code === currentItemCode}"
-          @click.stop="selectItem(item)"
+          :key="item.code"
+          @click="selectItem(item)"
         )
           img.item__img(v-if="item.image" :src="'https://cdn.akson.ru/webp/' + item.image + '0.png'")
           | {{item.name }}
@@ -59,8 +60,10 @@ export default {
     },
     currentItemCode(v) {
       const itemIndex = this.items.findIndex(({ code }) => code === v)
-
-      this.scroll = this.itemsTranslate[itemIndex]
+      const offset = this.itemsTranslate[itemIndex].offsetLeft - 98
+      if (offset < this.maxScroll ) this.scroll = offset >= 0 ? offset : 0
+      else this.scroll = this.maxScroll
+      this.positionX = this.scroll
     }
   },
   computed: {
@@ -69,10 +72,8 @@ export default {
       const countItems = this.items && this.items.length || 0
       if (countItems > 2) {
         const half = Math.round(countItems / 2)
-        const additional = countItems % 2
-        const lineItems = half + (additional ? 1 : 0)
-        result.push(this.items.slice(0, lineItems))
-        result.push(this.items.slice(countItems - lineItems, countItems))
+        result.push(this.items.slice(0, half))
+        result.push(this.items.slice(half, countItems))
       } else result.push(this.items)
       return result
     },
@@ -179,7 +180,7 @@ $thumbWidth: var(--thumb-width);
   width: 150px;
   height: 150px;
   cursor: pointer;
-  transition: .3s ease-in-out;
+  //transition: .3s ease-in-out;
   user-select: none;
 
 

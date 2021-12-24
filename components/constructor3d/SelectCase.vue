@@ -22,14 +22,11 @@
             @click="selectCurrentType(item)"
           )
             div.tab__title {{item.name}}
-
-
         horizontal-list-items(
           :items="bodyVariants"
           :currentItemCode="currentItemModel"
           @selectItem="selectItem"
         )
-
 </template>
 
 <script>
@@ -48,6 +45,10 @@ export default {
       default: () => []
     },
     selectedBoxName: {
+      type: String,
+      default: ''
+    },
+    selectedBoxType: {
       type: String,
       default: ''
     },
@@ -70,7 +71,15 @@ export default {
     value: {
       handler(v) {
           this.currentItemModel = v.replaceAll('_', '-')
+          const el = this.options.find(({code}) =>  code === this.currentItemModel)
+          if (el) this.currentTypeModel = el.restrictions.type[0]
       }
+    },
+    currentItemModel(v) {
+      if (v) this.$emit('selectItem', v)
+    },
+    currentTypeModel(v) {
+      if (v) this.$emit('selectType', v)
     }
   },
   computed: {
@@ -85,10 +94,9 @@ export default {
     selectedCase() {
       return this.value
     },
-    // значение первой вкладки
     currentTypeModel: {
       get() {
-        return this.currentType || this.typeVariants && this.typeVariants[0].code
+        return this.currentType || this.selectedBoxType || this.typeVariants && this.typeVariants[0].code
       },
       set(v) {
         this.currentType = v
@@ -113,7 +121,6 @@ export default {
     },
     selectCurrentType(item) {
       this.currentTypeModel = item.code
-      // if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel. || null
       this.$emit('selectType', item.code)
       this.$emit('selectItem', this.currentItemModel)
     },
@@ -121,9 +128,6 @@ export default {
       this.currentItemModel = item.code
       this.$emit('selectItem', this.currentItemModel)
     }
-  },
-  mounted() {
-     this.$emit('selectItem', this.currentItemModel)
   }
 }
 </script>

@@ -12,7 +12,6 @@
           select-case(
             v-model="selectedBoxName"
             :options="bodyOptions"
-            :selectedBoxName="selectedBoxName"
             @selectItem="selectCaseConfig"
             @remove="removeCase"
             @selectType="selectType"
@@ -95,14 +94,14 @@ export default {
     }
   },
   computed: {
-    bodyOptions() {
-      return this.config && this.config.body.options || null
-    },
     canvas3DBind() {
       return {
         controlsVerticalPosition: this.controlsVerticalPosition,
         caseModelCode: this.caseModelCode,
       }
+    },
+    bodyOptions() {
+      return this.config && this.config.body.options || null
     },
     boxes() {
       const { cases } = boxes
@@ -158,8 +157,8 @@ export default {
       this.kitchen.currentConfig.caseConfig.name = v
       if (v) this.caseConfig = boxes[v]
     },
-    selectType() {
-      this.caseConfig = null
+    selectType(v) {
+      this.controlsVerticalPosition = v
     },
     removeItem({uuid, type}) {
       this.$refs.kitchen.removeItem({uuid, type})
@@ -192,7 +191,6 @@ export default {
     },
     selectCaseConfig(v) {
       this.caseModelCode = v
-
     },
     selectFacadeConfig(v) {
       // this.facadeConfig = v

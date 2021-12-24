@@ -22,6 +22,7 @@ export const boxWrapper = (width, height, depth) => {
   helper.name = 'edges'
   helper.visible = false
   helper.scale.set(1.01,1,1.1)
+  helper.position.set(0,0,0)
   boxGroup.add(helper)
 
   boxGroup.userData['width'] = width
