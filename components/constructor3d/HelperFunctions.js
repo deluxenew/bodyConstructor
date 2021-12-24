@@ -9,7 +9,7 @@ const animationFromTo = () => {
   const qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis, 0 );
   const qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis, Math.PI );
   const quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
-  // 
+  //
   const clip = new THREE.AnimationClip( 'Action', 3, [  quaternionKF] );
   let mixer = new THREE.AnimationMixer( this.scene );
   //
@@ -158,7 +158,7 @@ const setCasesPosition = (boxes) => {
   }
 
   if (groupedBoxes.topLeft) {
-    const padding = groupedBoxes.topRight && groupedBoxes.topRight[0]['userData']['depth']
+    const padding = groupedBoxes.topRight && groupedBoxes.topRight[0]['userData']['depth'] || 0
 
     groupedBoxes.topLeft.forEach((el) => {
       const {userData: {sort, width}} = el
@@ -167,7 +167,7 @@ const setCasesPosition = (boxes) => {
   }
 
   if (groupedBoxes.topRight) {
-    const padding = groupedBoxes.topLeft && groupedBoxes.topLeft[0]['userData']['depth']
+    const padding = groupedBoxes.topLeft && groupedBoxes.topLeft[0]['userData']['depth'] || 0
 
     groupedBoxes.topRight.forEach((el) => {
       const {userData: {sort, width}} = el
@@ -191,12 +191,9 @@ const getPlaceWidth = (arr, additionalArr) => {
 }
 const getFacadeGroup = (obj) => {
   if (!obj) return null
-
   const caseGroup = obj.children.find(({name}) => name === 'caseGroup')
-  console.log(caseGroup, 'caseGroup')
   if (caseGroup) {
     const facade = caseGroup.children.find(({name}) => name === 'facade')
-    console.log(facade, 'facade')
     if (facade) return facade
   }
 

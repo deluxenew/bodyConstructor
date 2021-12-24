@@ -48,6 +48,10 @@ export default {
       type: String,
       default: ''
     },
+    selectedBoxType: {
+      type: String,
+      default: ''
+    },
     value: {
       type: String,
       default: ''
@@ -67,11 +71,16 @@ export default {
     value: {
       handler(v) {
           this.currentItemModel = v.replaceAll('_', '-')
+          const el = this.options.find(({code}) =>  code === this.currentItemModel)
+          if (el) this.currentTypeModel = el.restrictions.type[0]
       }
     },
     currentItemModel(v) {
       if (v) this.$emit('selectItem', v)
     },
+    currentTypeModel(v) {
+      if (v) this.$emit('selectType', v)
+    }
   },
   computed: {
     typeVariants() {
@@ -85,10 +94,9 @@ export default {
     selectedCase() {
       return this.value
     },
-    // значение первой вкладки
     currentTypeModel: {
       get() {
-        return this.currentType || this.typeVariants && this.typeVariants[0].code
+        return this.currentType || this.selectedBoxType || this.typeVariants && this.typeVariants[0].code
       },
       set(v) {
         this.currentType = v
@@ -113,7 +121,6 @@ export default {
     },
     selectCurrentType(item) {
       this.currentTypeModel = item.code
-      // if (this.currentTypeModel.items) this.currentItem = this.currentTypeModel. || null
       this.$emit('selectType', item.code)
       this.$emit('selectItem', this.currentItemModel)
     },
@@ -121,10 +128,6 @@ export default {
       this.currentItemModel = item.code
       this.$emit('selectItem', this.currentItemModel)
     }
-  },
-  async mounted() {
-    await this.$nextTick()
-     this.$emit('selectItem', this.currentItemModel)
   }
 }
 </script>

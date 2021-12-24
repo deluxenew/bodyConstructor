@@ -40,7 +40,7 @@ export default {
   props: {
     controlsVerticalPosition: {
       type: String,
-      default: 'bottom'
+      default: 'floor'
     },
     caseModelCode: {
       type: String,
@@ -101,6 +101,7 @@ export default {
         const {userData: {openedDoors}} = this.selectedBox
 
         const facade = HF.getFacadeGroup(this.selectedBox)
+        if (!facade) return
         const xAxis = new Vector3( 0, -1, 0 );
 
         const qInitial = new Quaternion().setFromAxisAngle( xAxis, 0 );
@@ -113,15 +114,14 @@ export default {
         const clip = new AnimationClip( 'Action', 1, [  anim] );
         this.mixer = new AnimationMixer( facade );
 
-
         const clipAction = this.mixer.clipAction( clip );
         clipAction.loop = THREE.LoopOnce;
         clipAction.clampWhenFinished = true
-        console.log(clipAction.getClip() )
+        console.log(clipAction.getClip())
         clipAction.play();
         this.mixer.addEventListener( 'finished', function( e ) {
           console.log(e)
-        } )
+        })
 
         this.selectedBox.userData.openedDoors = !openedDoors
       }
@@ -225,7 +225,6 @@ export default {
       if (!this.caseModelCode) return null
       const caseModelCodeFormatted = this.caseModelCode.replaceAll('-', '_')
       const findModel = boxes[caseModelCodeFormatted]
-      console.log(this.caseModelCode)
       if (findModel) return findModel
     },
     isMoveRightActive() {

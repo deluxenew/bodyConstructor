@@ -12,7 +12,6 @@
           select-case(
             v-model="selectedBoxName"
             :options="bodyOptions"
-            :selectedBoxName="selectedBoxName"
             @selectItem="selectCaseConfig"
             @remove="removeCase"
             @selectType="selectType"
@@ -158,8 +157,8 @@ export default {
       this.kitchen.currentConfig.caseConfig.name = v
       if (v) this.caseConfig = boxes[v]
     },
-    selectType() {
-      this.caseConfig = null
+    selectType(v) {
+      this.controlsVerticalPosition = v
     },
     removeItem({uuid, type}) {
       this.$refs.kitchen.removeItem({uuid, type})
@@ -191,7 +190,6 @@ export default {
       this.kitchen.currentConfig.facadeConfig.name = config && config.userData && config.userData.parent ? config.name : ''
     },
     selectCaseConfig(v) {
-      console.log(v)
       this.caseModelCode = v
     },
     selectFacadeConfig(v) {
