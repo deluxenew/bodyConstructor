@@ -10,11 +10,11 @@
           )
         div.column.config
           select-case(
-            v-model="kitchen.currentConfig.caseConfig"
+            v-model="selectedBoxName"
             :options="bodyOptions"
             :selectedBoxName="selectedBoxName"
             @selectItem="selectCaseConfig"
-            @remove="$refs.kitchen.removeCase()"
+            @remove="removeCase"
             @selectType="selectType"
             @sceneChange="caseConfig = $event"
           )
@@ -228,7 +228,10 @@ export default {
       this.tableTopConfig.url = url
       this.tableTopConfig.maxWidth = maxWidth
 
-    }
+    },
+    removeCase() {
+
+    },
   },
   async mounted() {
     let response = await fetch('/kitchen.json');

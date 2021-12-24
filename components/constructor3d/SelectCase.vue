@@ -23,22 +23,21 @@
           )
             div.tab__title {{item.name}}
 
-        div.select-elements__list(v-if="currentTypeModel")
-          div.select-elements__item(
-            v-for="item in bodyVariants"
-            :class="{active: item.code === currentItemModel, disabled: value.name}"
-            @click="selectItem(item)"
-          )
-            img.select-elements__img(v-if="item.image" :src="'https://cdn.akson.ru/webp/' + item.image + '0.png'")
-            | {{item.name }}
+
+        horizontal-list-items(
+          :items="bodyVariants"
+          :currentItemCode="currentItemModel"
+          @selectItem="selectItem"
+        )
 
 </template>
 
 <script>
 import TransitionExpand from './TransitionExpand.vue'
+import HorizontalListItems from "@/components/constructor3d/HorizontalListItems";
 export default {
   name: "SelectCase",
-  components: {TransitionExpand},
+  components: {HorizontalListItems, TransitionExpand},
   props: {
     title: {
       type: String,
@@ -48,13 +47,13 @@ export default {
       type: Array,
       default: () => []
     },
-    bodyConfigName: {
-      type: Object,
-      default: () => {}
+    selectedBoxName: {
+      type: String,
+      default: ''
     },
     value: {
-      type: Object,
-      default: () => {}
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -69,13 +68,8 @@ export default {
 
     },
     value: {
-      deep: true,
       handler(v) {
-        const item = this.currentTypeModel.items && this.currentTypeModel.items.find((el) => el.userData.variants.map(({id}) => id).includes(v.name) || el.name === v.name)
-        if (item) {
-          this.currentItemModel = item
-          // this.$emit('sceneChange', item)
-        }
+          this.currentItemModel = v.replaceAll('_', '-')
       }
     }
   },
@@ -89,7 +83,7 @@ export default {
       } )
     },
     selectedCase() {
-      return this.value.name
+      return this.value
     },
     // значение первой вкладки
     currentTypeModel: {
@@ -98,6 +92,7 @@ export default {
       },
       set(v) {
         this.currentType = v
+        if (!this.selectedCase) this.currentItemModel = this.bodyVariants[0].code
       }
     },
     currentItemModel: {
@@ -114,7 +109,7 @@ export default {
       this.opened = !this.opened
     },
     removeItem () {
-      if (this.value.name) this.$emit('remove')
+      if (this.value) this.$emit('remove')
     },
     selectCurrentType(item) {
       this.currentTypeModel = item.code
@@ -123,10 +118,8 @@ export default {
       this.$emit('selectItem', this.currentItemModel)
     },
     selectItem(item) {
-      if (!this.value.name) {
-        this.currentItemModel = item.code
-        this.$emit('selectItem', this.currentItemModel)
-      }
+      this.currentItemModel = item.code
+      this.$emit('selectItem', this.currentItemModel)
     }
   },
   mounted() {
