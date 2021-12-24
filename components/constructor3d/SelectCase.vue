@@ -22,14 +22,11 @@
             @click="selectCurrentType(item)"
           )
             div.tab__title {{item.name}}
-
-
         horizontal-list-items(
           :items="bodyVariants"
           :currentItemCode="currentItemModel"
           @selectItem="selectItem"
         )
-
 </template>
 
 <script>
@@ -71,7 +68,10 @@ export default {
       handler(v) {
           this.currentItemModel = v.replaceAll('_', '-')
       }
-    }
+    },
+    currentItemModel(v) {
+      if (v) this.$emit('selectItem', v)
+    },
   },
   computed: {
     typeVariants() {
@@ -122,7 +122,8 @@ export default {
       this.$emit('selectItem', this.currentItemModel)
     }
   },
-  mounted() {
+  async mounted() {
+    await this.$nextTick()
      this.$emit('selectItem', this.currentItemModel)
   }
 }

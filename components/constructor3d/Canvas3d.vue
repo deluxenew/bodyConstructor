@@ -202,13 +202,10 @@ export default {
             const findBox = HF.recursiveFindBox(object)
 
             vm.selectedBox = findBox
-            vm.$emit('getBoxName', vm.selectedBox?.name || null)
-
-            // vm.$emit('setConfigName', vm.selectedBox?.name)
-            vm.animateClip()
 
             if (findBox) {
               clearHelpers()
+              vm.$emit('getBoxName', vm.selectedBox?.name || null)
 
               const edges = findBox.children.find(({name}) => name === 'edges')
               const transparent = findBox.children.find(({name}) => name === 'transparent')
@@ -222,9 +219,6 @@ export default {
         }
       }
     },
-    animateClip() {
-
-    }
   },
   computed: {
     caseModel() {

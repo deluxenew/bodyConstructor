@@ -95,14 +95,14 @@ export default {
     }
   },
   computed: {
-    bodyOptions() {
-      return this.config && this.config.body.options || null
-    },
     canvas3DBind() {
       return {
         controlsVerticalPosition: this.controlsVerticalPosition,
         caseModelCode: this.caseModelCode,
       }
+    },
+    bodyOptions() {
+      return this.config && this.config.body.options || null
     },
     boxes() {
       const { cases } = boxes
@@ -191,8 +191,8 @@ export default {
       this.kitchen.currentConfig.facadeConfig.name = config && config.userData && config.userData.parent ? config.name : ''
     },
     selectCaseConfig(v) {
+      console.log(v)
       this.caseModelCode = v
-
     },
     selectFacadeConfig(v) {
       // this.facadeConfig = v

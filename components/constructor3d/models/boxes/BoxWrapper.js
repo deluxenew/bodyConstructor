@@ -17,7 +17,7 @@ export const boxWrapper = (width, height, depth) => {
   boxMesh.visible = false
   boxGroup.add(boxMesh)
 
-  const helper = new EdgesHelper( boxMesh, 0x00ff );
+  const helper = new EdgesHelper( boxMesh, 0x0000ff );
   helper.material.linewidth = 1; // optional
   helper.name = 'edges'
   helper.visible = false
