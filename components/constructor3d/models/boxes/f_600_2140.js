@@ -7,7 +7,7 @@ const { defaultMaterial } = Materials
 
 const width = 6
 
-const height = 20
+const height = constants().topBound
 const depth = constants().bottomDepth
 
 const sideDepth = constants().sideDepth;
