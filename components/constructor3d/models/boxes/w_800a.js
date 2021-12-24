@@ -26,8 +26,8 @@ export const w_800a = () => {
   let bodyHeight = height;
   let bodyDepth = bodyWidth;
 
-  let bD = 4.2;
-  let sP = 1; //катет дальнего угла
+  let bD = constants.topDepth;
+  let sP = 0; //катет дальнего угла
   let bP = bD - sideDepth; //глубина навесных шкафов
   let bW = bodyWidth/2 - sideDepth
 
@@ -227,7 +227,7 @@ export const w_800a = () => {
 
   boxGroup.add(group);
 
-  group.position.y = boxHeight / 4;
+  group.position.y = boxHeight/2 - sideDepth; 
 
   /*boxGroup.userData.width = bodyWidth
   boxGroup.userData.depth = bodyDepth
