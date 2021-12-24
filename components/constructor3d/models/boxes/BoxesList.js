@@ -5,6 +5,8 @@ import { f_400_820_3b } from "./f_400_820_3b"
 import { f_600 } from "./f_600"
 import { f_600_820_2b } from "./f_600_820_2b"
 import { f_600_820_3b } from "./f_600_820_3b"
+import { f_600_820_oven } from "./f_600_820_oven"
+import { f_600_2140 } from "./f_600_2140"
 import { f_800 } from "./f_800"
 import { f_800a } from "./f_800a"
 import { f_800_820_2b } from "./f_800_820_2b"
@@ -19,6 +21,8 @@ export default {
   f_600: f_600(),
   f_600_820_2b: f_600_820_2b(),
   f_600_820_3b: f_600_820_3b(),
+  f_600_820_oven: f_600_820_oven(),
+  f_600_2140: f_600_2140(),
   f_800: f_800(),
   f_800a: f_800a(),
   f_800_820_2b: f_800_820_2b(),
