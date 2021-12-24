@@ -1,7 +1,5 @@
 import {BoxGeometry, Group, Mesh, MeshLambertMaterial, MeshMatcapMaterial, EdgesHelper} from "three";
 
-const betweenPadding = 0.03
-
 export const boxWrapper = (width, height, depth) => {
   const boxGroup = new Group();
   const boxGeometry = new BoxGeometry(width, height, depth);

@@ -5,15 +5,15 @@ const {Math: threeMath} = THREE
 
 const animationFromTo = () => {
 
-  const xAxis = new THREE.Vector3( 1, 0, 0 );
-  const qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis, 0 );
-  const qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis, Math.PI );
-  const quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+  const xAxis = new THREE.Vector3(1, 0, 0);
+  const qInitial = new THREE.Quaternion().setFromAxisAngle(xAxis, 0);
+  const qFinal = new THREE.Quaternion().setFromAxisAngle(xAxis, Math.PI);
+  const quaternionKF = new THREE.QuaternionKeyframeTrack('.quaternion', [0, 1, 2], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w]);
   //
-  const clip = new THREE.AnimationClip( 'Action', 3, [  quaternionKF] );
-  let mixer = new THREE.AnimationMixer( this.scene );
+  const clip = new THREE.AnimationClip('Action', 3, [quaternionKF]);
+  let mixer = new THREE.AnimationMixer(this.scene);
   //
-  const clipAction = mixer.clipAction( clip );
+  const clipAction = mixer.clipAction(clip);
   clipAction.play();
   mixer.update()
 
@@ -176,6 +176,14 @@ const setCasesPosition = (boxes) => {
   }
 }
 
+const setControlsVisible = (sceneObjects, caseModel, position, widths, maxPlaceWidth) => {
+  sceneObjects.control.forEach((el) => {
+    const {userData: {pos, watcher}} = el
+    el.visible = pos === position && widths[watcher] <= maxPlaceWidth
+    if (watcher !== 'widthLeftBottom' && caseModel && caseModel.userData['configType'] === 'angularFloorBox') el.visible = false
+  })
+}
+
 const getPlaceWidth = (arr, additionalArr) => {
   let padding = 0
   if (additionalArr) {
@@ -206,6 +214,7 @@ export default {
   recursiveFindBox,
   findActionName,
   setCasesPosition,
+  setControlsVisible,
   rotationY,
   getPlaceWidth,
   getFacadeGroup

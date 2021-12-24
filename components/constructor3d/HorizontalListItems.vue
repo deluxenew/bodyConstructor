@@ -58,7 +58,8 @@ export default {
         }
       }
     },
-    currentItemCode(v) {
+    async currentItemCode(v) {
+      await this.$nextTick()
       const itemIndex = this.items.findIndex(({ code }) => code === v)
       const offset = this.itemsTranslate[itemIndex].offsetLeft - 98
       if (offset < this.maxScroll ) this.scroll = offset >= 0 ? offset : 0

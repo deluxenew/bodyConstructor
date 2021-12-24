@@ -77,6 +77,9 @@ export default {
         HF.setCasesPosition(this.scene.children)
       }
     },
+    caseModelCode() {
+      this.setControlsVisible()
+    },
   },
   methods: {
     init() {
@@ -110,7 +113,6 @@ export default {
         const quaternionKFR = new QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [ qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
         let anim = openedDoors ? quaternionKFR : quaternionKF
 
-
         const clip = new AnimationClip( 'Action', 1, [  anim] );
         this.mixer = new AnimationMixer( facade );
 
@@ -130,11 +132,13 @@ export default {
 
     },
     setControlsVisible() {
-      this.sceneObjects.control.forEach((el) => {
-        const {userData: {pos, watcher}} = el
-        el.visible = pos === this.controlsVerticalPosition && this[watcher] <= MAX_PLACE_WIDTH
-        if (watcher !== 'widthLeftBottom' && this.caseModel && this.caseModel.userData['configType'] === 'angularBox') el.visible = false
-      })
+      const widths = {
+        widthLeftBottom: this.widthLeftBottom,
+        widthRightBottom: this.widthRightBottom,
+        widthLeftTop: this.widthLeftTop,
+        widthRightTop: this.widthRightTop
+      }
+      HF.setControlsVisible(this.sceneObjects, this.caseModel, this.controlsVerticalPosition, widths, MAX_PLACE_WIDTH)
     },
 
     setControlsPosition() {
