@@ -5,7 +5,7 @@
         .item(
           ref="items"
           v-for="item in line"
-          :class="{active: item.code === currentItemCode}"
+          :class="{active: item.code === currentItemCode, disabled: isDisabled(item)}"
           :key="item.code"
           @click="selectItem(item)"
         )
@@ -34,7 +34,11 @@ export default {
     currentItemCode: {
       type: String,
       default: ''
-    }
+    },
+    caseModelCode: {
+      type: String,
+      default: ''
+    },
   },
   data() {
     return {
@@ -45,7 +49,8 @@ export default {
       listWidth: 0,
       blockWidth: 0,
       hold: false,
-      itemsTranslate: []
+      itemsTranslate: [],
+      cbDeferTs: null
     }
   },
   watch: {
@@ -61,7 +66,7 @@ export default {
     async currentItemCode(v) {
       await this.$nextTick()
       const itemIndex = this.items.findIndex(({ code }) => code === v)
-      const offset = this.itemsTranslate[itemIndex].offsetLeft - 98
+      const offset = this.itemsTranslate[itemIndex] - 98
       if (offset < this.maxScroll ) this.scroll = offset >= 0 ? offset : 0
       else this.scroll = this.maxScroll
       this.positionX = this.scroll
@@ -86,6 +91,10 @@ export default {
     }
   },
   methods: {
+    isDisabled(item) {
+      if (this.caseModelCode && item.code.indexOf('a') > -1) return true
+      return false
+    },
     getSizes() {
       this.scroll = 0
       this.positionX = 0
@@ -93,22 +102,32 @@ export default {
       this.blockWidth = this.$refs.block.clientWidth
       this.listWidth = this.$refs.list.scrollWidth
       this.maxScroll = (this.listWidth - this.blockWidth)
-      this.itemsTranslate = this.$refs.items.map((el) => {
-        return {
-          width: el.clientWidth,
-          offsetLeft: el.offsetLeft
-        }
-      })
+      this.itemsTranslate = this.$refs.items.map((el) => el.offsetLeft)
     },
     selectItem(item) {
-      if (!this.hold) this.$emit('selectItem', item)
+      if (!this.hold && !this.isDisabled(item)) this.$emit('selectItem', item)
     },
     calcPositionMouse(event) {
       const scroll =  this.startScroll + this.positionX - event.clientX
       if (scroll >= 0 && scroll < this.maxScroll) this.scroll = scroll
       else if (scroll < 0) this.scroll = 0
       else this.scroll = this.maxScroll
-      this.hold = true
+      if (Math.abs(this.scroll - this.positionX) > 10) this.hold = true
+
+      const cb = () => {
+        this.hold = false
+      }
+      this.cfDefer(cb, 50)
+    },
+    cfDefer(callback, ms = 500) {
+      const ts = Date.now()
+      this.cbDeferTs = ts
+
+      setTimeout(() => {
+        if (ts === this.cbDeferTs) {
+          callback()
+        }
+      }, ms)
     },
     onHold(event) {
       if (this.$refs.list.contains(event.target) || this.$refs.scroll.contains(event.target)) {
@@ -117,9 +136,7 @@ export default {
       }
     },
     offHold() {
-      setTimeout(() => {
-        this.hold = false
-      },0)
+
       window.removeEventListener('mousemove', this.calcPositionMouse)
       this.positionX = this.scroll
     },
@@ -128,6 +145,7 @@ export default {
     this.getSizes()
     window.addEventListener('mousedown', this.onHold)
     window.addEventListener('mouseup', this.offHold)
+    this.$emit('selectItem', this.currentItemCode)
   },
   beforeDestroy() {
     window.removeEventListener('mousedown', this.onHold)
@@ -195,7 +213,7 @@ $thumbWidth: var(--thumb-width);
 
   &__img {
     width: 100px;
-    padding-bottom: 20px;
+    padding-bottom: 8px;
     user-select: none;
     -webkit-user-drag: none;
   }

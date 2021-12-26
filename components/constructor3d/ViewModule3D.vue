@@ -7,11 +7,13 @@
           canvas3d(
             v-bind="canvas3DBind"
             @getBoxName="selectedBoxName = $event"
+
           )
         div.column.config
           select-case(
             v-model="selectedBoxName"
             :options="bodyOptions"
+            :caseModelCode="caseModelCode"
             @selectItem="selectCaseConfig"
             @remove="removeCase"
             @selectType="selectType"
@@ -153,6 +155,11 @@ export default {
     },
   },
   methods: {
+    // getBoxName(name) {
+    //   console.log(name)
+    //   this.selectedBoxName = name
+    //   this.caseModelCode = name
+    // },
     setConfigName(v) {
       this.kitchen.currentConfig.caseConfig.name = v
       if (v) this.caseConfig = boxes[v]

@@ -15,7 +15,7 @@
             img(:src="require('./img/arrow.svg')")
           button.button.open(:disabled="!selectedBox" @click="openDoors")
             img(:src="require('./img/doors.svg')")
-          button.button.remove(:disabled="!selectedBox" @click="removeCase")
+          button.button.remove(:disabled="!selectedBox" @click="removeCase(false)")
             img(:src="require('./img/trash.svg')")
 
 </template>
@@ -68,17 +68,21 @@ export default {
         this.setControlsVisible()
       }
     },
-    sceneObjects: {
-      immediate: false,
-      async handler() {
-        await this.$nextTick()
-        this.setControlsVisible()
-        this.setControlsPosition()
-        HF.setCasesPosition(this.scene.children)
-      }
+    'sceneObjects.length': async function () {
+      await this.$nextTick()
+      this.setControlsVisible()
+      this.setControlsPosition()
+      HF.setCasesPosition(this.scene.children)
     },
     caseModelCode() {
       this.setControlsVisible()
+      if (this.selectedBox) {
+        const { userData: { sort, type } } = this.selectedBox
+        this.replaceBox(sort, type)
+      }
+      HF.setCasesPosition(this.scene.children)
+      this.setControlsPosition()
+      this.selectedBox = null
     },
   },
   methods: {
@@ -88,6 +92,15 @@ export default {
       controlBoxes.forEach(control => this.scene.add(control))
       this.$refs.canvas.appendChild(this.renderer.domElement);
       this.selectCase()
+    },
+    replaceBox(sort, type) {
+      if (!this.selectedBox) return
+      console.log(sort, type)
+      const arrAddMethods = ['addBottomLeftToScene', 'addBottomRightToScene', 'addTopLeftToScene', 'addTopRightToScene']
+      const addMethod = HF.getAddMethodName(arrAddMethods, type)
+      this.removeCase(true)
+      this[addMethod](sort)
+
     },
     swapCam() {
       if (this.positionNumber < 3) this.positionNumber += 1
@@ -128,8 +141,21 @@ export default {
         this.selectedBox.userData.openedDoors = !openedDoors
       }
     },
-    removeCase(isReplace) {
+    removeCase(isReplace = false) {
+      const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedBox.uuid);
+      if (selectedObject) {
+        const { userData: { type, sort } } = selectedObject
+        console.log(type, sort);
+        this.scene.remove(selectedObject);
+        this.selectedBox = null
+        if (isReplace) return
+        this.sceneObjects[type].forEach((el) => {
+          console.log(el.userData.sort > sort);
+          if (el.userData.sort > sort) el.userData.sort --
+        })
 
+        // this.$emit('removeItem', {uuid: selectedObject.uuid, type: 'cases'})
+      }
     },
     setControlsVisible() {
       const widths = {
@@ -140,31 +166,31 @@ export default {
       }
       HF.setControlsVisible(this.sceneObjects, this.caseModel, this.controlsVerticalPosition, widths, MAX_PLACE_WIDTH)
     },
-
     setControlsPosition() {
       this.sceneObjects.control.forEach((el) => {
         const {userData: {getCoords, watcher}, position: {x, y, z}} = el
         el.position.set(...getCoords(x, y, z, this[watcher]))
       })
     },
-    addBoxToScene(pos) {
+    addBoxToScene(pos, sort) {
       const box = this.caseModel.clone()
       const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
       box.userData['type'] = pos
-      box.userData['sort'] = count
+      box.userData['sort'] = sort ? sort : count
       return box
     },
-    addBottomLeftToScene() {
-      this.scene.add(this.addBoxToScene('bottomLeft'))
+    addBottomLeftToScene(sort) {
+      this.scene.add(this.addBoxToScene('bottomLeft', sort))
     },
-    addBottomRightToScene() {
-      this.scene.add(HF.rotationY(this.addBoxToScene('bottomRight')))
+    addBottomRightToScene(sort) {
+      this.scene.add(HF.rotationY(this.addBoxToScene('bottomRight', sort)))
+      console.log(sort);
     },
-    addTopLeftToScene() {
-      this.scene.add(this.addBoxToScene('topLeft'))
+    addTopLeftToScene(sort) {
+      this.scene.add(this.addBoxToScene('topLeft', sort))
     },
-    addTopRightToScene() {
-      this.scene.add(HF.rotationY(this.addBoxToScene('topRight')))
+    addTopRightToScene(sort) {
+      this.scene.add(HF.rotationY(this.addBoxToScene('topRight', sort)))
     },
     selectCase() {
       const vm = this
@@ -262,6 +288,7 @@ export default {
         }
         return acc
       }, {})
+      result['length'] = this.scene.children.length
       return result
     },
     widthLeftBottom() {

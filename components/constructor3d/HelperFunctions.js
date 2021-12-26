@@ -134,17 +134,18 @@ const setCasesPosition = (boxes) => {
       return acc
     }, 0) + elWidth / 2 + padding
   }
+
   const wallPadding = 0.6
 
   if (groupedBoxes.bottomLeft) {
     const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0]['userData']['depth'] || 0
     const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
-
     groupedBoxes.bottomLeft.forEach((el) => {
       const {userData: {sort, width, depth}} = el
       el.position.x = -getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding : padding + wallPadding)
       el.position.z = depth / 2 + wallPadding
     })
+
   }
 
   if (groupedBoxes.bottomRight) {
@@ -210,6 +211,11 @@ const getFacadeGroup = (obj) => {
   return null
 }
 
+const getAddMethodName = (arrAddMethods, val) => {
+  const name = arrAddMethods.find(el => el.toLowerCase().indexOf(val.toLowerCase()) > -1)
+  return name ? name : ''
+}
+
 export default {
   fromTo,
   camPos,
@@ -219,5 +225,6 @@ export default {
   setControlsVisible,
   rotationY,
   getPlaceWidth,
-  getFacadeGroup
+  getFacadeGroup,
+  getAddMethodName
 }

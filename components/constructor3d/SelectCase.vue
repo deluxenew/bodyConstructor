@@ -25,6 +25,7 @@
         horizontal-list-items(
           :items="bodyVariants"
           :currentItemCode="currentItemModel"
+          :caseModelCode="caseModelCode"
           @selectItem="selectItem"
         )
 </template>
@@ -44,11 +45,11 @@ export default {
       type: Array,
       default: () => []
     },
-    selectedBoxName: {
+    selectedBoxType: {
       type: String,
       default: ''
     },
-    selectedBoxType: {
+    caseModelCode: {
       type: String,
       default: ''
     },
@@ -75,9 +76,9 @@ export default {
           if (el) this.currentTypeModel = el.restrictions.type[0]
       }
     },
-    currentItemModel(v) {
-      if (v) this.$emit('selectItem', v)
-    },
+    // currentItemModel(v) {
+    //   if (v) this.$emit('selectItem', v)
+    // },
     currentTypeModel(v) {
       if (v) this.$emit('selectType', v)
     }
