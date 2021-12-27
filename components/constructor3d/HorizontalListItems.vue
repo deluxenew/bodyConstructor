@@ -35,9 +35,9 @@ export default {
       type: String,
       default: ''
     },
-    caseModelCode: {
-      type: String,
-      default: ''
+    selectedBox: {
+      type: Object,
+      default: null
     },
   },
   data() {
@@ -92,9 +92,10 @@ export default {
   },
   methods: {
     isDisabled(item) {
-      if (this.caseModelCode && item.code.indexOf('a') > -1) return true
+      if (this.selectedBox && item.code.indexOf('a') > -1) return true
       return false
     },
+
     getSizes() {
       this.scroll = 0
       this.positionX = 0

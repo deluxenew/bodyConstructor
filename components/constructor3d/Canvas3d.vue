@@ -61,6 +61,9 @@ export default {
     }
   },
   watch: {
+    selectedBox(v) {
+      this.$emit('selectBox', v)
+    },
     controlsVerticalPosition: {
       immediate: true,
       async handler() {
@@ -149,6 +152,7 @@ export default {
         this.scene.remove(selectedObject);
         this.selectedBox = null
         if (isReplace) return
+        if (!this.sceneObjects[type]) return;
         this.sceneObjects[type].forEach((el) => {
           console.log(el.userData.sort > sort);
           if (el.userData.sort > sort) el.userData.sort --
@@ -176,7 +180,7 @@ export default {
       const box = this.caseModel.clone()
       const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
       box.userData['type'] = pos
-      box.userData['sort'] = sort ? sort : count
+      box.userData['sort'] = sort !== undefined ? sort : count
       return box
     },
     addBottomLeftToScene(sort) {

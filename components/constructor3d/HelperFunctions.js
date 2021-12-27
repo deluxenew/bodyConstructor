@@ -136,13 +136,14 @@ const setCasesPosition = (boxes) => {
   }
 
   const wallPadding = 0.6
+  const angularPadding = 2
 
   if (groupedBoxes.bottomLeft) {
     const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0]['userData']['depth'] || 0
-    const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
+    const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularFloorBox')
     groupedBoxes.bottomLeft.forEach((el) => {
       const {userData: {sort, width, depth}} = el
-      el.position.x = -getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding : padding + wallPadding)
+      el.position.x = -getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
       el.position.z = depth / 2 + wallPadding
     })
 
@@ -180,10 +181,15 @@ const setCasesPosition = (boxes) => {
 }
 
 const setControlsVisible = (sceneObjects, caseModel, position, widths, maxPlaceWidth) => {
+  const angularExist = sceneObjects['bottomLeft'] && sceneObjects['bottomLeft'].find(({userData: {configType} }) => configType === 'angularFloorBox')
+  const isAngular = caseModel && caseModel.userData['configType'] === 'angularFloorBox'
+  const empty = !sceneObjects['bottomLeft'] && !sceneObjects['bottomRight']
   sceneObjects.control.forEach((el) => {
     const {userData: {pos, watcher}} = el
     el.visible = pos === position && widths[watcher] <= maxPlaceWidth
-    if (watcher !== 'widthLeftBottom' && caseModel && caseModel.userData['configType'] === 'angularFloorBox') el.visible = false
+    if (watcher !== 'widthLeftBottom' && isAngular) el.visible = false
+    if (!empty && !angularExist && el.name === 'addBottomRightButton') el.visible = false
+    if (sceneObjects['bottomRight'] && !angularExist && el.name === 'addBottomLeftButton' && !isAngular) el.visible = false
   })
 }
 

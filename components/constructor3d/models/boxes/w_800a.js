@@ -1,7 +1,20 @@
 import {constants}  from "./constants";
-
 import { topBox } from "./TopBox"
-import {BoxGeometry, Mesh, Group, BufferGeometry, Math, BufferAttribute, QuaternionKeyframeTrack, Quaternion, Vector3, AnimationClip, AnimationMixer, AnimationClipCreator} from "three";
+import {
+  BoxGeometry,
+  Mesh,
+  Group,
+  BufferGeometry,
+  Math,
+  BufferAttribute,
+  QuaternionKeyframeTrack,
+  Quaternion,
+  Vector3,
+  AnimationClip,
+  AnimationMixer,
+  AnimationClipCreator,
+  default as THREE
+} from "three";
 
 import  Materials from "../Materials";
 const { defaultMaterial } =  Materials
@@ -227,7 +240,7 @@ export const w_800a = () => {
 
   boxGroup.add(group);
 
-  group.position.y = boxHeight/2 - sideDepth; 
+  group.position.y = boxHeight/2 - sideDepth;
 
   /*boxGroup.userData.width = bodyWidth
   boxGroup.userData.depth = bodyDepth
@@ -235,6 +248,7 @@ export const w_800a = () => {
 
   boxGroup.name = 'w_800a'
   boxGroup.userData['code'] = 'w-800a'
+  boxGroup.userData['configType'] = 'angularFloorBox'
   //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
   boxGroup.userData['configType'] = 'boxWall'
   boxGroup.userData['openedDoors'] = false
@@ -247,8 +261,8 @@ export const w_800a = () => {
   gSideLR.dispose()
   gSideBack.dispose()
   gSideBottom.dispose()
+  boxGroup.rotation.y = Math.degToRad(-90);
   //gSideTop.dispose()
-
   return boxGroup
 
 }

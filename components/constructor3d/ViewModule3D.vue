@@ -7,13 +7,13 @@
           canvas3d(
             v-bind="canvas3DBind"
             @getBoxName="selectedBoxName = $event"
-
+            @selectBox="selectedBox = $event"
           )
         div.column.config
           select-case(
             v-model="selectedBoxName"
             :options="bodyOptions"
-            :caseModelCode="caseModelCode"
+            :selectedBox="selectedBox"
             @selectItem="selectCaseConfig"
             @remove="removeCase"
             @selectType="selectType"
@@ -65,6 +65,7 @@ export default {
     return {
       config: null,
       controlsVerticalPosition: 'bottom',
+      selectedBox: null,
       caseModelCode: null,
       selectedBoxName: null,
 

@@ -25,7 +25,7 @@
         horizontal-list-items(
           :items="bodyVariants"
           :currentItemCode="currentItemModel"
-          :caseModelCode="caseModelCode"
+          :selectedBox="selectedBox"
           @selectItem="selectItem"
         )
 </template>
@@ -49,9 +49,9 @@ export default {
       type: String,
       default: ''
     },
-    caseModelCode: {
-      type: String,
-      default: ''
+    selectedBox: {
+      type: Object,
+      default: null
     },
     value: {
       type: String,
