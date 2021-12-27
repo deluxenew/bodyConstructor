@@ -28,7 +28,7 @@ const spotLight_2 = () => {
 
 const spotLight_3 = () => {
   const spotLight = new PointLight(0xffffff);
-  spotLight.position.set(-30, 10, -1);
+  spotLight.position.set(-20, 10, -1);
   spotLight.intensity = 0.2
   return spotLight
 }
