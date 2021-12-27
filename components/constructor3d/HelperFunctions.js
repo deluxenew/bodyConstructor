@@ -140,7 +140,7 @@ const setCasesPosition = (boxes) => {
 
   if (groupedBoxes.bottomLeft) {
     const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0]['userData']['depth'] || 0
-    const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularFloorBox')
+    const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
     groupedBoxes.bottomLeft.forEach((el) => {
       const {userData: {sort, width, depth}} = el
       el.position.x = -getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
@@ -181,8 +181,8 @@ const setCasesPosition = (boxes) => {
 }
 
 const setControlsVisible = (sceneObjects, caseModel, position, widths, maxPlaceWidth) => {
-  const angularExist = sceneObjects['bottomLeft'] && sceneObjects['bottomLeft'].find(({userData: {configType} }) => configType === 'angularFloorBox')
-  const isAngular = caseModel && caseModel.userData['configType'] === 'angularFloorBox'
+  const angularExist = sceneObjects['bottomLeft'] && sceneObjects['bottomLeft'].find(({userData: {configType} }) => configType === 'angularBox')
+  const isAngular = caseModel && caseModel.userData['configType'] === 'angularBox'
   const empty = !sceneObjects['bottomLeft'] || !sceneObjects['bottomRight']
   sceneObjects.control.forEach((el) => {
     const {userData: {pos, watcher}} = el
@@ -232,5 +232,5 @@ export default {
   rotationY,
   getPlaceWidth,
   getFacadeGroup,
-  getAddMethodName
+  getAddMethodName,
 }

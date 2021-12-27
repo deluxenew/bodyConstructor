@@ -248,7 +248,7 @@ export const w_800a = () => {
 
   boxGroup.name = 'w_800a'
   boxGroup.userData['code'] = 'w-800a'
-  boxGroup.userData['configType'] = 'angularFloorBox'
+  boxGroup.userData['configType'] = 'angularBox'
   //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
   boxGroup.userData['configType'] = 'boxWall'
   boxGroup.userData['openedDoors'] = false

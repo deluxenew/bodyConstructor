@@ -66,8 +66,8 @@ export default {
     }
   },
   watch:{
-    currentItem(v) {
-
+    selectedBox(v) {
+      if (v) this.currentItemModel = v.name.replaceAll('_', '-')
     },
     value: {
       handler(v) {
@@ -76,6 +76,7 @@ export default {
           if (el) this.currentTypeModel = el.restrictions.type[0]
       }
     },
+
     // currentItemModel(v) {
     //   if (v) this.$emit('selectItem', v)
     // },

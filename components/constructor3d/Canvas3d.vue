@@ -9,9 +9,9 @@
               svg(width="7" height="4" viewBox="0 0 7 4" fill="none")
                 path(d="M0 2C0 0.895431 0.89543 0 2 0H4.66667C5.77124 0 6.66667 0.895431 6.66667 2C6.66667 3.10457 5.77124 4 4.66667 4H2C0.895429 4 0 3.10457 0 2Z" :fill="item <= positionNumber ? '#5C6270' : '#E3E5E8'")
         div.box-control
-          button.button.left(:disabled="!selectedBox || !isMoveLeftActive || isAngularIsSelected" @click="moveLeft")
+          button.button.left(:disabled="!selectedBox || !isMoveLeftActive" @click="moveLeft")
             img(:src="require('./img/arrow.svg')")
-          button.button.right(:disabled="!selectedBox || !isMoveRightActive || isAngularIsSelected" @click="moveRight")
+          button.button.right(:disabled="!selectedBox || !isMoveRightActive" @click="moveRight")
             img(:src="require('./img/arrow.svg')")
           button.button.open(:disabled="!selectedBox" @click="openDoors")
             img(:src="require('./img/doors.svg')")
@@ -53,7 +53,6 @@ export default {
       scene: scene(),
       camera: camera(CANVAS_WIDTH, CANVAS_HEIGHT),
       positionNumber: 1,
-      // caseModel: boxes.f_400_820_1b,
       selectedBox: null,
       mixer: null,
       clock: new THREE.Clock(),
@@ -71,21 +70,21 @@ export default {
         this.setControlsVisible()
       }
     },
-    'sceneObjects.length': async function () {
-      await this.$nextTick()
+    sceneObjects() {
       this.setControlsVisible()
       this.setControlsPosition()
       HF.setCasesPosition(this.scene.children)
     },
-    caseModelCode() {
+    caseModelCode(v) {
       this.setControlsVisible()
-      if (this.selectedBox) {
+      if (this.selectedBox && this.selectedBox.userData.code !== v) {
         const { userData: { sort, type } } = this.selectedBox
         this.replaceBox(sort, type)
+        HF.setCasesPosition(this.scene.children)
+        this.setControlsPosition()
       }
-      HF.setCasesPosition(this.scene.children)
-      this.setControlsPosition()
-      this.selectedBox = null
+
+      // this.selectedBox = null
     },
   },
   methods: {
@@ -109,11 +108,23 @@ export default {
       if (this.positionNumber < 3) this.positionNumber += 1
       else this.positionNumber = 1
     },
+    moveBox(toLeft) {
+      if (!this.selectedBox) return
+      const { userData: { sort: replaceSort, type } } = this.selectedBox
+      const isLeft = type.toLowerCase().indexOf('left') > -1
+      const increment = (isLeft && toLeft) || (!isLeft && !toLeft) ? 1 : -1
+      const obj = this.sceneObjects[type].find(({ userData: { sort } }) => sort - increment === replaceSort)
+      if (obj) {
+        obj.userData.sort -= increment
+        this.selectedBox.userData.sort += increment
+      }
+      HF.setCasesPosition(this.scene.children)
+    },
     moveLeft() {
-
+      this.moveBox(true)
     },
     moveRight() {
-
+      this.moveBox(false)
     },
     openDoors() {
       if (this.selectedBox) {
@@ -148,10 +159,12 @@ export default {
       const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedBox.uuid);
       if (selectedObject) {
         const { userData: { type, sort } } = selectedObject
-        console.log(type, sort);
+        // console.log(type, sort);
         this.scene.remove(selectedObject);
         this.selectedBox = null
         if (isReplace) return
+
+
         if (!this.sceneObjects[type]) return;
         this.sceneObjects[type].forEach((el) => {
           console.log(el.userData.sort > sort);
@@ -168,7 +181,15 @@ export default {
         widthLeftTop: this.widthLeftTop,
         widthRightTop: this.widthRightTop
       }
-      HF.setControlsVisible(this.sceneObjects, this.caseModel, this.controlsVerticalPosition, widths, MAX_PLACE_WIDTH)
+      const isAngular = this.caseModel && this.caseModel.userData['configType'] === 'angularBox'
+      this.sceneObjects.control.forEach((el) => {
+        const {userData: {pos, watcher, position, side }} = el
+        const isExistAngular = this.sceneObjects[position] && this.sceneObjects[position].find(({userData: {configType}}) => configType === 'angularBox')
+        el.visible = pos === this.controlsVerticalPosition && widths[watcher] <= MAX_PLACE_WIDTH
+        if (!isAngular && isExistAngular && pos === this.controlsVerticalPosition) el.visible = true
+        if (isAngular && side === 'right') el.visible = false
+        if (isAngular && isExistAngular && side === 'left') el.visible = false
+      })
     },
     setControlsPosition() {
       this.sceneObjects.control.forEach((el) => {
@@ -176,25 +197,29 @@ export default {
         el.position.set(...getCoords(x, y, z, this[watcher]))
       })
     },
-    addBoxToScene(pos, sort) {
+    addBoxToScene(pos, side, sort) {
+      if (!this.caseModel) return
       const box = this.caseModel.clone()
       const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
+      const isAngular = box.userData['configType'] === 'angularBox'
+      if (isAngular && this.sceneObjects[pos]) this.sceneObjects[pos].forEach((el) => el.userData.sort++)
       box.userData['type'] = pos
-      box.userData['sort'] = sort !== undefined ? sort : count
+      box.userData['side'] = side
+      box.userData['sort'] = isAngular ? 0 : (sort !== undefined ? sort : count)
       return box
     },
     addBottomLeftToScene(sort) {
-      this.scene.add(this.addBoxToScene('bottomLeft', sort))
+      this.scene.add(this.addBoxToScene('bottomLeft','left', sort))
     },
     addBottomRightToScene(sort) {
-      this.scene.add(HF.rotationY(this.addBoxToScene('bottomRight', sort)))
+      this.scene.add(HF.rotationY(this.addBoxToScene('bottomRight', 'right', sort)))
       console.log(sort);
     },
     addTopLeftToScene(sort) {
-      this.scene.add(this.addBoxToScene('topLeft', sort))
+      this.scene.add(this.addBoxToScene('topLeft', 'left', sort))
     },
     addTopRightToScene(sort) {
-      this.scene.add(HF.rotationY(this.addBoxToScene('topRight', sort)))
+      this.scene.add(HF.rotationY(this.addBoxToScene('topRight', 'right', sort)))
     },
     selectCase() {
       const vm = this
@@ -215,7 +240,6 @@ export default {
       }
 
       function onPointerDown(event) {
-        // console.log(event)
         if (event.target.className !== "controls") return
         const canvasPos = vm.$refs.canvas.getBoundingClientRect()
         mouse.x = ((event.clientX - canvasPos.x) / CANVAS_WIDTH) * 2 - 1;
@@ -248,40 +272,37 @@ export default {
               transparent.visible = true
             } else {
               clearHelpers()
+              // vm.$emit('getBoxName', '')
             }
           }
         }
       }
     },
+    isMoveButtonActive(isLeft) {
+      if (!this.sceneObjects.selectedBox) return false
+      const {userData: {type, sort: selectedSort, side, configType: selectType}} = this.sceneObjects.selectedBox
+      if (selectType !== 'boxFloor') return
+      const increment = (side === 'left' && isLeft) || (side !== 'left' && !isLeft) ? 1 : -1
+      const obj = this.sceneObjects[type].find(({userData: {sort}}) => sort - increment === selectedSort)
+      if (!obj) return false
+      const {userData: {configType}} = obj
+      return obj && configType === 'boxFloor'
+    }
   },
   computed: {
     caseModel() {
-      if (!this.caseModelCode) return null
-      const caseModelCodeFormatted = this.caseModelCode.replaceAll('-', '_')
+      if (this.selectedBox) return boxes[this.selectedBox.userData.code.replaceAll('-', '_')]
+      // if (!this.caseModelCode) return null
+
+      const caseModelCodeFormatted = this.caseModelCode &&  this.caseModelCode.replaceAll('-', '_')
       const findModel = boxes[caseModelCodeFormatted]
       if (findModel) return findModel
     },
-    isMoveRightActive() {
-      return true
-      // const currentUuid = this.selectedCase?.uuid
-      // if (!currentUuid) return false
-      // const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentUuid)
-      // const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === currentUuid)
-      // return (leftIdx > 0 && this.bottomLeft.length > 1)
-      //   || (rightIdx > -1 && rightIdx < this.bottomRight.length - 1 && this.bottomRight.length > 1)
-    },
     isMoveLeftActive() {
-      return true
-      // const currentUuid = this.selectedCase?.uuid
-      // if (!currentUuid) return false
-      // const leftIdx = this.bottomLeft.findIndex(({uuid}) => uuid === currentUuid)
-      // const rightIdx = this.bottomRight.findIndex(({uuid}) => uuid === currentUuid)
-      // return (rightIdx > 0 && this.bottomRight.length > 1)
-      //   || (leftIdx > -1 && leftIdx < this.bottomLeft.length - 1 && this.bottomLeft.length > 1)
+      return this.isMoveButtonActive(true)
     },
-    isAngularIsSelected() {
-      return true
-      // return ['boxAngularFloor', 'boxAngularFloor_1'].includes(this.selectedCase?.name)
+    isMoveRightActive() {
+      return this.isMoveButtonActive(false)
     },
     sceneObjects() {
       const result = this.scene.children.reduce((acc, el) => {
@@ -292,6 +313,7 @@ export default {
         }
         return acc
       }, {})
+      result['selectedBox'] = this.selectedBox
       result['length'] = this.scene.children.length
       return result
     },

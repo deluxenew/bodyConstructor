@@ -79,6 +79,8 @@ const boxControl = (name, pos) => {
 const bottomLeft = boxControl('addBottomLeftButton', 'floor')
 bottomLeft.userData.actionName = 'addBottomLeftToScene'
 bottomLeft.userData.watcher = 'widthLeftBottom'
+bottomLeft.userData.position = 'bottomLeft'
+bottomLeft.userData.side = 'left'
 bottomLeft.position.set(-6, 5, 1)
 bottomLeft.userData.getCoords = function (x, y, z, value) {
   return [-6 - value, y, z ]
@@ -89,6 +91,8 @@ const bottomRight = boxControl('addBottomRightButton', 'floor')
 bottomRight.rotation.y = Math.degToRad(-90);
 bottomRight.userData.actionName = 'addBottomRightToScene'
 bottomRight.userData.watcher = 'widthRightBottom'
+bottomRight.userData.position = 'bottomRight'
+bottomRight.userData.side = 'right'
 bottomRight.position.set(-1, 5, 6)
 bottomRight.userData.getCoords = function (x, y, z, value) {
   return [x, y, 6 + value]
@@ -97,6 +101,8 @@ bottomRight.userData.getCoords = function (x, y, z, value) {
 const topLeft = boxControl('addTopLeftButton', 'wall')
 topLeft.userData.actionName = 'addTopLeftToScene'
 topLeft.userData.watcher = 'widthLeftTop'
+topLeft.userData.position = 'topLeft'
+topLeft.userData.side = 'left'
 topLeft.position.set(-6, 18, 1)
 topLeft.userData.getCoords = function (x, y, z, value) {
   return [-6 - value, y, z ]
@@ -107,6 +113,8 @@ const topRight = boxControl('addTopRightButton', 'wall')
 topRight.rotation.y = Math.degToRad(-90);
 topRight.userData.actionName = 'addTopRightToScene'
 topRight.userData.watcher = 'widthRightTop'
+topRight.userData.position = 'topRight'
+topRight.userData.side = 'right'
 topRight.position.set(-1, 18, 6)
 topRight.userData.getCoords = function (x, y, z, value) {
   return [x, y, 6 + value]

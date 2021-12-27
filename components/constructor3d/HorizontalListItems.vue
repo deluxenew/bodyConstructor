@@ -162,12 +162,14 @@ $thumbWidth: var(--thumb-width);
   width: 100%;
   overflow: hidden;
   padding-top: 16px;
+  user-select: none;
 
   &__list {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    user-select: none;
   }
 
   &__line + &__line {
@@ -177,6 +179,7 @@ $thumbWidth: var(--thumb-width);
   &__line {
     display: flex;
     flex-wrap: nowrap;
+    user-select: none;
   }
 
   &__scroll {

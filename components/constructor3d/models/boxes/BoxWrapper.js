@@ -1,14 +1,10 @@
-import {BoxGeometry, Group, Mesh, MeshLambertMaterial, MeshMatcapMaterial, EdgesHelper} from "three";
+import {BoxGeometry, Group, Mesh, MeshMatcapMaterial, EdgesGeometry, LineSegments, LineBasicMaterial} from "three";
 
 import {constants}  from "./constants";
 
 export const boxWrapper = (width, height, depth, isTop) => {
   const boxGroup = new Group();
   const boxGeometry = new BoxGeometry(width, height, depth);
-  // const material = new MeshLambertMaterial({
-  //   color: 0xff00ff, transparent: true, opacity: 0.1
-  // });
-
   const material = new MeshMatcapMaterial({
     color: 0x0099DC, transparent: true, opacity: 0.15
   });
@@ -18,14 +14,13 @@ export const boxWrapper = (width, height, depth, isTop) => {
   boxMesh.position.set(0,isTop ? height / 2 : 0,0)
   boxGroup.add(boxMesh)
 
-  const helper = new EdgesHelper( boxMesh, 0x0099DC );
-  helper.material.linewidth = 1; // optional
-  helper.name = 'edges'
-  helper.visible = false
-  helper.scale.set(1.01,1,1.1)
-  helper.position.set(0,isTop ? height / 2 - constants.sideDepth : 0,0)
-  boxGroup.add(helper)
-
+  const edges = new EdgesGeometry( boxMesh.geometry );
+  const line = new LineSegments( edges , new LineBasicMaterial({ color: 0x0099DC }))
+  line.name = 'edges'
+  line.visible = false
+  line.scale.set(1.01,1,1.1)
+  line.position.set(0,isTop ? height / 2 - constants.sideDepth : 0,0)
+  boxGroup.add(line)
 
   boxGroup.userData['width'] = width
   boxGroup.userData['height'] = height

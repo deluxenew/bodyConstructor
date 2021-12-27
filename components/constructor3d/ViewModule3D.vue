@@ -7,7 +7,7 @@
           canvas3d(
             v-bind="canvas3DBind"
             @getBoxName="selectedBoxName = $event"
-            @selectBox="selectedBox = $event"
+            @selectBox="selectBox"
           )
         div.column.config
           select-case(
@@ -199,6 +199,10 @@ export default {
     },
     selectCaseConfig(v) {
       this.caseModelCode = v
+    },
+    selectBox(v) {
+      if (v) this.caseModelCode = v.userData.code
+      this.selectedBox = v
     },
     selectFacadeConfig(v) {
       // this.facadeConfig = v
