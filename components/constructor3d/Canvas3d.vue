@@ -192,7 +192,6 @@ export default {
         if (isAngular && isExistAngular) el.visible = false
         if (pos !== this.controlsVerticalPosition) el.visible = false
         if (this[watcher] >= MAX_PLACE_WIDTH) el.visible = false
-
       })
     },
     setControlsPosition() {
@@ -292,25 +291,51 @@ export default {
       const {userData: {configType}} = obj
       return obj && configType === 'boxFloor'
     },
-    addTableTop() {
+    async addTableTop() {
+      await this.$nextTick()
       if (this.sceneObjects.leftTableTop) {
         const leftSorted = this.sceneObjects.leftTableTop.sort((a, b) => a.sort - b.sort)
-        let tableTopWidth
+        let tableTop = {
+          width: 0,
+          side: '',
+          x: 0,
+          z: 0
+        }
+        let itemsCount = 0
         let counter
+        let i = 0
         let leftTableTops = leftSorted.reduce((acc, el) => {
           const {side, width, sort, x, z} = el
-          if (leftSorted.length === sort + 1) acc.p
-          counter = sort
+          tableTop.side = side
+          itemsCount++
+          if (counter === sort + 1) {
+            acc.push(tableTop)
+            tableTop.width = 0
+            tableTop.x = 0
+            tableTop.z = 0
+            tableTop.width += width
+            tableTop.x = side === 'left' ? (tableTop.x + x) / i : x
+            tableTop.z = side === 'left' ? z : (tableTop.z + z) / i
+            counter++
+            i = 0
+          } else {
+            tableTop.width += width
+            tableTop.x = side === 'left' ? (tableTop.x + x) / i : x
+            tableTop.z = side === 'left' ? z : (tableTop.z + z) / i
+            counter++
+            i++
+          }
+          if (leftSorted.length === itemsCount) acc.push(tableTop)
           return acc
         }, [])
-
-        // leftSorted.forEach((el) => {
-        //   const {side, width, sort, x, z} = el
-        //
-        //   if (counter === sort)
-        //   counter ++
-        // })
-        console.log(leftSorted)
+        console.log(leftTableTops)
+        leftTableTops.forEach(({width, x, z}) => {
+          const newTableTop = this.getTableTopModel(width).clone()
+          newTableTop.position.x = x
+          newTableTop.position.z = z
+          newTableTop.position.y = 9
+          this.scene.add(newTableTop)
+        })
       }
     },
     getTableTopModel(width) {

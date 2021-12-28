@@ -140,6 +140,7 @@ export default {
   methods: {
     addTableTop(val) {
       this.tableTopConfig = val
+      this.$nextTick()
       this.$refs.canvas.addTableTop()
     },
     setControlsVerticalPosition(v) {

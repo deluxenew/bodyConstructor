@@ -141,7 +141,7 @@ export default {
   methods: {
     addTableTop() {
       this.$emit('addTableTop', {
-        url: '',
+        url: require('./img/tableTop/ldsp/dark_venge.png'),
         height: '',
         type: ''
       })
