@@ -8,7 +8,7 @@
           @click="toggleOpen"
         )
       div.select-elements__remove(
-        :class="{disabled: !selectedCase}"
+        :class="{disabled: !selectedBox}"
         @click="removeItem"
       )
         span Убрать
@@ -119,7 +119,7 @@ export default {
       this.opened = !this.opened
     },
     removeItem () {
-      if (this.value) this.$emit('remove')
+      if (this.value && this.selectedBox) this.$emit('remove')
     },
     selectCurrentType(item) {
       this.currentTypeModel = item.code

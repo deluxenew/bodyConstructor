@@ -2,12 +2,12 @@ import {constants}  from "./constants";
 import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
 import { Drawer } from "./Drawer"
-import {BoxGeometry, Mesh, Group, QuaternionKeyframeTrack, Quaternion, Vector3, AnimationClip, AnimationMixer, AnimationClipCreator} from "three";
+import {BoxGeometry, Mesh} from "three";
 
 import Materials from "../Materials";
 const { defaultMaterial } = Materials
 
-const width = 4 
+const width = 4
 
 const height = constants.bottomHeight
 const depth = constants.bottomDepth

@@ -8,11 +8,18 @@
           @click="toggleOpen"
         )
       div.select-elements__remove(
+        v-if="value"
         :class="{disabled: !selectedCase}"
         @click="removeItem"
       )
         span Убрать
         img(:src="require('./img/close.svg')")
+      div.select-elements__remove(
+        v-else
+        @click="addTableTop"
+      )
+        span Добавить
+        img(:src="require('./img/add.svg')")
     transition-expand
       div.select-elements__group(v-show="opened")
         div.select-elements__tabs
@@ -57,7 +64,7 @@ export default {
     },
     value: {
       type: Object,
-      default: () => {}
+      default: () => null
     }
   },
   data() {
@@ -75,6 +82,7 @@ export default {
     value: {
       deep: true,
       handler(v) {
+        if (!v) return
         if (!!v.type) {
           const typeObj = this.elementVariants.find(({type}) => v.type === type)
           this.currentTypeModel = typeObj || null
@@ -92,7 +100,7 @@ export default {
   },
   computed: {
     selectedCase() {
-      return this.value.name
+      return this.value?.name
     },
     // значение первой вкладки
     currentTypeModel: {
@@ -131,6 +139,13 @@ export default {
     },
   },
   methods: {
+    addTableTop() {
+      this.$emit('addTableTop', {
+        url: '',
+        height: '',
+        type: ''
+      })
+    },
     toggleOpen() {
       this.opened = !this.opened
     },
@@ -160,7 +175,7 @@ export default {
     },
   },
   mounted() {
-    this.selectCurrentColor(this.currentTypeModel.variants[0])
+    // this.selectCurrentColor(this.currentTypeModel.variants[0])
   }
 }
 </script>

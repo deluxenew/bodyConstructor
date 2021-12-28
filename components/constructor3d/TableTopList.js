@@ -46,12 +46,12 @@ const colors = [
 const depth = 7
 // const material = new MeshStandardMaterial({color: 0x000000,});
 
-const getMaterial = (url) => {
+const getMaterial = async (url) => {
   const facadeTextureLoader = new TextureLoader();
 
   const facadeMaterial = new MeshStandardMaterial({
     color: 0xffffff,
-    map: facadeTextureLoader.load(url),
+    map: await facadeTextureLoader.load(url),
   });
 
   const material = new MeshStandardMaterial({color: 0xffffff,});

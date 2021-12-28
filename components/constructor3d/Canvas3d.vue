@@ -26,10 +26,13 @@ import * as THREE from "three"
 import StartLoader from "./StartLoader";
 import HF from "./HelperFunctions";
 import boxes from "./models/boxes/BoxesList";
+import tableTopList from "./TableTopList";
 import {AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3} from "three";
 
 const {scene, renderer, spotLights, camera, walls, controlBoxes} = StartLoader
 const {fromTo, camPos} = HF
+
+const {getTableTop} = tableTopList
 
 const CANVAS_WIDTH = 780
 const CANVAS_HEIGHT = 600
@@ -45,6 +48,10 @@ export default {
     caseModelCode: {
       type: String,
       default: ''
+    },
+    tableTopConfig: {
+      type: Object,
+      default: () => null
     }
   },
   data() {
@@ -284,17 +291,43 @@ export default {
       if (!obj) return false
       const {userData: {configType}} = obj
       return obj && configType === 'boxFloor'
-    }
+    },
+    addTableTop() {
+      if (this.sceneObjects.leftTableTop) {
+        const leftSorted = this.sceneObjects.leftTableTop.sort((a, b) => a.sort - b.sort)
+        let tableTopWidth
+        let counter
+        let leftTableTops = leftSorted.reduce((acc, el) => {
+          const {side, width, sort, x, z} = el
+          if (leftSorted.length === sort + 1) acc.p
+          counter = sort
+          return acc
+        }, [])
+
+        // leftSorted.forEach((el) => {
+        //   const {side, width, sort, x, z} = el
+        //
+        //   if (counter === sort)
+        //   counter ++
+        // })
+        console.log(leftSorted)
+      }
+    },
+    getTableTopModel(width) {
+      const { url, height, type } = this.tableTopConfig
+      return getTableTop({
+        width, url, height, type
+      })
+    },
   },
   computed: {
     caseModel() {
       if (this.selectedBox) return boxes[this.selectedBox.userData.code.replaceAll('-', '_')]
-      // if (!this.caseModelCode) return null
-
       const caseModelCodeFormatted = this.caseModelCode &&  this.caseModelCode.replaceAll('-', '_')
-      const findModel = boxes[caseModelCodeFormatted]
-      if (findModel) return findModel
+      const model = boxes[caseModelCodeFormatted]
+      if (model) return model
     },
+
     isMoveLeftActive() {
       return this.isMoveButtonActive(true)
     },
@@ -303,10 +336,16 @@ export default {
     },
     sceneObjects() {
       const result = this.scene.children.reduce((acc, el) => {
-        const {userData: {type, pos, }} = el
+        const {userData: { type, pos, side, sort, width, noTableTop }, position: { x, z }} = el
+
         if (pos && type !== 'control') {
           if (!acc[pos]) acc[pos] = []
           acc[pos].push(el)
+        }
+        if (pos === 'floor' && type !== 'control') {
+          const field = side + 'TableTop'
+          if (!acc[field]) acc[field] = []
+          if (!noTableTop) acc[field].push({ side, width, sort, x, z })
         }
         if (type) {
           if (!acc[type]) acc[type] = []

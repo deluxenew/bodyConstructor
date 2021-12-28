@@ -1,7 +1,7 @@
 import {constants}  from "./constants";
 
 import { topBox } from "./TopBox"
-import {BoxGeometry, Mesh, Group, QuaternionKeyframeTrack, Quaternion, Vector3, AnimationClip, AnimationMixer, AnimationClipCreator} from "three";
+import {BoxGeometry, Mesh} from "three";
 
 import Materials from "../Materials";
 const { defaultMaterial } = Materials

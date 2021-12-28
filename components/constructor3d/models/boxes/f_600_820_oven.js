@@ -1,7 +1,7 @@
 import {constants}  from "./constants";
 import { bottomBox } from "./BottomBox"
 import { Drawer } from "./Drawer"
-import {BoxGeometry, Mesh, Group, QuaternionKeyframeTrack, Quaternion, Vector3, AnimationClip, AnimationMixer, AnimationClipCreator} from "three";
+import {BoxGeometry, Mesh} from "three";
 
 import Materials from "../Materials";
 const { defaultMaterial } = Materials
@@ -26,13 +26,13 @@ export const f_600_820_oven = () => {
   boxGroup.add(caseGroup)
 
   const sideGeometry = new BoxGeometry(sideDepth, height - legsHeight, depth);
-  const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth);
+  // const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth);
   const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth);
 
   const sideRight = new Mesh(sideGeometry, defaultMaterial());
   const sideLeft = new Mesh(sideGeometry, defaultMaterial());
   const shelf = new Mesh(shelfGeometry, defaultMaterial())
-  
+
 
   const drawer = Drawer(width, height, depth, drawerHeight)
   drawer.position.y = constants.drawerBottomGap
@@ -49,6 +49,7 @@ export const f_600_820_oven = () => {
 
   boxGroup.name = 'f_600_820_oven'
   boxGroup.userData['code'] = 'f-600-820-oven'
+  boxGroup.userData['noTableTop'] = true
   //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_2']
   boxGroup.userData['configType'] = 'boxFloor'
   boxGroup.userData['openedDoors'] = false
