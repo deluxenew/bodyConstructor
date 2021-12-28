@@ -7,13 +7,6 @@ import {
   BufferGeometry,
   Math,
   BufferAttribute,
-  QuaternionKeyframeTrack,
-  Quaternion,
-  Vector3,
-  AnimationClip,
-  AnimationMixer,
-  AnimationClipCreator,
-  default as THREE
 } from "three";
 
 import  Materials from "../Materials";
@@ -250,7 +243,7 @@ export const w_800a = () => {
   boxGroup.userData['code'] = 'w-800a'
   boxGroup.userData['configType'] = 'angularBox'
   //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
-  boxGroup.userData['configType'] = 'boxWall'
+  // boxGroup.userData['configType'] = 'boxWall'
   boxGroup.userData['openedDoors'] = false
 
   boxGroup.scale.set( scale, scale, scale )

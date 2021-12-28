@@ -161,10 +161,11 @@ const setCasesPosition = (boxes) => {
 
   if (groupedBoxes.topLeft) {
     const padding = groupedBoxes.topRight && groupedBoxes.topRight[0]['userData']['depth'] || 0
+    const angularBox = groupedBoxes.topLeft.find(({userData: {configType}}) => configType === 'angularBox')
 
     groupedBoxes.topLeft.forEach((el) => {
       const {userData: {sort, width, depth }} = el
-      el.position.x = -getPaddingBySort(groupedBoxes.topLeft, sort, width, padding)
+      el.position.x = -getPaddingBySort(groupedBoxes.topLeft, sort, width, angularBox ? 0 : padding)
       el.position.z = depth / 2
     })
   }

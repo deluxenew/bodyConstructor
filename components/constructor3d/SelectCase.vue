@@ -123,6 +123,7 @@ export default {
     },
     selectCurrentType(item) {
       this.currentTypeModel = item.code
+      this.currentItemModel = this.bodyVariants && this.bodyVariants[0].code.replaceAll('_', '-')
       this.$emit('selectType', item.code)
       this.$emit('selectItem', this.currentItemModel)
     },

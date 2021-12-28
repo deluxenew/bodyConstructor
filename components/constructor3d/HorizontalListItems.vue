@@ -92,8 +92,8 @@ export default {
   },
   methods: {
     isDisabled(item) {
-      if (this.selectedBox && item.code.indexOf('a') > -1) return true
-      return false
+      return (this.selectedBox && item.code.indexOf('a') > -1) || (this.selectedBox && this.currentItemCode.indexOf('a') > -1 && item.code.indexOf('a') === -1);
+
     },
 
     getSizes() {

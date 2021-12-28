@@ -14,6 +14,7 @@
             v-model="selectedBoxName"
             :options="bodyOptions"
             :selectedBox="selectedBox"
+            :selectedBoxType="selectedBoxType"
             @selectItem="selectCaseConfig"
             @remove="removeCase"
             @selectType="selectType"
@@ -68,6 +69,7 @@ export default {
       selectedBox: null,
       caseModelCode: null,
       selectedBoxName: null,
+      selectedBoxType: null,
 
 
       caseConfig: null,
@@ -201,6 +203,7 @@ export default {
       this.caseModelCode = v
     },
     selectBox(v) {
+      if (v) this.selectedBoxType = v.userData.pos
       if (v) this.caseModelCode = v.userData.code
       this.selectedBox = v
     },

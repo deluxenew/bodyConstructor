@@ -68,6 +68,7 @@ export default {
       async handler() {
         await this.$nextTick()
         this.setControlsVisible()
+
       }
     },
     sceneObjects() {
@@ -176,14 +177,15 @@ export default {
       this.sceneObjects.control.forEach((el) => {
         const {userData: {pos, watcher, position, side }} = el
         const isExistAngular = this.sceneObjects[pos] && this.sceneObjects[pos].find(({userData: {configType}}) => configType === 'angularBox')
-
+        el.visible = true
         if ((!isExistAngular && !this.sceneObjects[pos] ) || (isExistAngular && this.sceneObjects[pos])) el.visible = true
+
+        if (this.sceneObjects[pos] && !isExistAngular && !this.sceneObjects[position] && pos === this.controlsVerticalPosition) el.visible = false
+        if (isAngular && !isExistAngular && pos === this.controlsVerticalPosition) el.visible = side === 'left'
+        if (isAngular && isExistAngular) el.visible = false
         if (pos !== this.controlsVerticalPosition) el.visible = false
         if (this[watcher] >= MAX_PLACE_WIDTH) el.visible = false
-        if (this.sceneObjects[pos] && !isExistAngular && !this.sceneObjects[position]) el.visible = false
-        if (isAngular && !isExistAngular && side === 'right') el.visible = false
-        if (isAngular && !isExistAngular && side === 'left' && pos === this.controlsVerticalPosition) el.visible = true
-        if (isAngular && isExistAngular) el.visible = false
+
       })
     },
     setControlsPosition() {
