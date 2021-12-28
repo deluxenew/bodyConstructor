@@ -159,36 +159,31 @@ export default {
       const selectedObject = this.scene.getObjectByProperty('uuid', this.selectedBox.uuid);
       if (selectedObject) {
         const { userData: { type, sort } } = selectedObject
-        // console.log(type, sort);
         this.scene.remove(selectedObject);
         this.selectedBox = null
         if (isReplace) return
-
 
         if (!this.sceneObjects[type]) return;
         this.sceneObjects[type].forEach((el) => {
           console.log(el.userData.sort > sort);
           if (el.userData.sort > sort) el.userData.sort --
         })
-
         // this.$emit('removeItem', {uuid: selectedObject.uuid, type: 'cases'})
       }
     },
     setControlsVisible() {
-      const widths = {
-        widthLeftBottom: this.widthLeftBottom,
-        widthRightBottom: this.widthRightBottom,
-        widthLeftTop: this.widthLeftTop,
-        widthRightTop: this.widthRightTop
-      }
       const isAngular = this.caseModel && this.caseModel.userData['configType'] === 'angularBox'
       this.sceneObjects.control.forEach((el) => {
         const {userData: {pos, watcher, position, side }} = el
-        const isExistAngular = this.sceneObjects[position] && this.sceneObjects[position].find(({userData: {configType}}) => configType === 'angularBox')
-        el.visible = pos === this.controlsVerticalPosition && widths[watcher] <= MAX_PLACE_WIDTH
-        if (!isAngular && isExistAngular && pos === this.controlsVerticalPosition) el.visible = true
-        if (isAngular && side === 'right') el.visible = false
-        if (isAngular && isExistAngular && side === 'left') el.visible = false
+        const isExistAngular = this.sceneObjects[pos] && this.sceneObjects[pos].find(({userData: {configType}}) => configType === 'angularBox')
+
+        if ((!isExistAngular && !this.sceneObjects[pos] ) || (isExistAngular && this.sceneObjects[pos])) el.visible = true
+        if (pos !== this.controlsVerticalPosition) el.visible = false
+        if (this[watcher] >= MAX_PLACE_WIDTH) el.visible = false
+        if (this.sceneObjects[pos] && !isExistAngular && !this.sceneObjects[position]) el.visible = false
+        if (isAngular && !isExistAngular && side === 'right') el.visible = false
+        if (isAngular && !isExistAngular && side === 'left' && pos === this.controlsVerticalPosition) el.visible = true
+        if (isAngular && isExistAngular) el.visible = false
       })
     },
     setControlsPosition() {
@@ -306,7 +301,11 @@ export default {
     },
     sceneObjects() {
       const result = this.scene.children.reduce((acc, el) => {
-        const {userData: {type}} = el
+        const {userData: {type, pos, }} = el
+        if (pos && type !== 'control') {
+          if (!acc[pos]) acc[pos] = []
+          acc[pos].push(el)
+        }
         if (type) {
           if (!acc[type]) acc[type] = []
           acc[type].push(el)

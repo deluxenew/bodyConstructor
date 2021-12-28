@@ -42,7 +42,7 @@ export const bottomBox = (width, height, depth) => {
   caseGroup.position.y = -height / 2 + legsHeight + sideDepth
   boxGroup.position.set(-width / 2 , height / 2, depth / 2)
   caseGroup.name = 'caseGroup'
-  boxGroup.userData['pos'] = 'bottom'
+  boxGroup.userData['pos'] = 'floor'
 
   return {
     boxGroup,
