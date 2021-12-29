@@ -23,15 +23,12 @@
 
 <script>
 
-import { HorizontalBlurShader } from "three/examples/jsm/shaders/HorizontalBlurShader";
-import { VerticalBlurShader }  from "three/examples/jsm/shaders/VerticalBlurShader";
-
 import * as THREE from "three"
 import StartLoader from "./StartLoader";
 import HF from "./HelperFunctions";
 import boxes from "./models/boxes/BoxesList";
 import tableTopList from "./TableTopList";
-import {AnimationClip, AnimationMixer, Stats, Group, WebGLRenderTarget, Quaternion, QuaternionKeyframeTrack, Vector3} from "three";
+import {AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3} from "three";
 
 const {scene, renderer, spotLights, camera, walls, controlBoxes} = StartLoader
 const {fromTo, camPos} = HF
@@ -223,7 +220,6 @@ export default {
     },
     addBottomRightToScene(sort) {
       this.scene.add(HF.rotationY(this.addBoxToScene('bottomRight', 'right', sort)))
-      console.log(sort);
     },
     addTopLeftToScene(sort) {
       this.scene.add(this.addBoxToScene('topLeft', 'left', sort))
@@ -299,8 +295,8 @@ export default {
       return obj && ['boxFloor', 'penalBox'].includes(configType)
     },
     async addTableTop() {
-      await this.$nextTick()
       if (!this.tableTopConfig) return
+      await this.$nextTick()
       if (this.sceneObjects.leftTableTop) {
         const leftSorted = this.sceneObjects.leftTableTop
           .sort((a, b) => a.sort - b.sort)
@@ -343,10 +339,20 @@ export default {
     replaceTableTops() {
       const tableTops = this.sceneObjects.tableTop
       if (tableTops) {
-        tableTops.forEach((el) => this.scene.remove(el))
+        tableTops.forEach((el) => el.userData['old'] = true)
+
       }
-      this.$nextTick()
       this.addTableTop()
+
+      if (tableTops) {
+        setTimeout (() => {
+          tableTops.forEach((el) => {
+            if (el.userData['old']) this.scene.remove(el)
+          })
+        },50)
+      }
+
+
     },
   },
   computed: {

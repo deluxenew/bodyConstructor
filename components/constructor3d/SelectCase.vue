@@ -76,10 +76,6 @@ export default {
           if (el) this.currentTypeModel = el.restrictions.type[0]
       }
     },
-
-    // currentItemModel(v) {
-    //   if (v) this.$emit('selectItem', v)
-    // },
     currentTypeModel(v) {
       if (v) this.$emit('selectType', v)
     }
@@ -91,7 +87,11 @@ export default {
     bodyVariants() {
       return this.options && this.options.filter(({category, restrictions }) => {
         return category === 'body' && restrictions.type.includes(this.currentTypeModel)
-      } )
+      } ).sort((a,b) => {
+        if (a.code > b.code) return -1
+        if (a.code < b.code) return 1
+        if (a.code === b.code) return  0
+      })
     },
     selectedCase() {
       return this.value
