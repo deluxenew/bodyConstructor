@@ -1,6 +1,7 @@
 import { boxWrapper } from "./BoxWrapper"
 import {BoxGeometry, CylinderGeometry, Group, Mesh} from "three";
 import Materials from "../Materials";
+import { mesh } from "./CustomMesh"
 
 const { defaultMaterial, legMaterial } = Materials
 
@@ -14,18 +15,18 @@ export const bottomBox = (width, height, depth) => {
   const boxGroup = boxWrapper(width, height, depth)
 
   const gSideBottom = new BoxGeometry(width - sideDepth * 2, sideDepth, depth);
-  const sideBottom = new Mesh(gSideBottom, defaultMaterial())
+  const sideBottom = mesh(gSideBottom, defaultMaterial())
   sideBottom.position.y = -height / 2 + legsHeight
 
   const gLegFront = new BoxGeometry(width, legsHeight, sideDepth)
-  const legFront = new Mesh(gLegFront, defaultMaterial());
+  const legFront = mesh(gLegFront, defaultMaterial());
   legFront.position.set( 0, legsHeight / 2 - height / 2, depth /2 - legFrontMargin - sideDepth)
 
   const gLegs = new CylinderGeometry(
     legsRad, legsRad, legsHeight, 16);
 
-  const legLeft = new Mesh(gLegs, legMaterial());
-  const legRight = new Mesh(gLegs, legMaterial());
+  const legLeft = mesh(gLegs, legMaterial());
+  const legRight = mesh(gLegs, legMaterial());
   legLeft.position.y = -height / 2 + legsHeight / 2;
   legLeft.position.z = -depth / 2 + legsRad / 2 + legFrontMargin;
   legLeft.position.x = -width / 2 + legsRad + legFrontMargin;

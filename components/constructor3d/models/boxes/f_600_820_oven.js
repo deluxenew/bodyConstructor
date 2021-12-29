@@ -2,6 +2,7 @@ import {constants}  from "./constants";
 import { bottomBox } from "./BottomBox"
 import { Drawer } from "./Drawer"
 import {BoxGeometry, Mesh} from "three";
+import { mesh } from "./CustomMesh"
 
 import Materials from "../Materials";
 const { defaultMaterial } = Materials
@@ -29,9 +30,9 @@ export const f_600_820_oven = () => {
   // const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth);
   const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth);
 
-  const sideRight = new Mesh(sideGeometry, defaultMaterial());
-  const sideLeft = new Mesh(sideGeometry, defaultMaterial());
-  const shelf = new Mesh(shelfGeometry, defaultMaterial())
+  const sideRight = mesh(sideGeometry, defaultMaterial());
+  const sideLeft = mesh(sideGeometry, defaultMaterial());
+  const shelf = mesh(shelfGeometry, defaultMaterial())
 
 
   const drawer = Drawer(width, height, depth, drawerHeight)

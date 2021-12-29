@@ -3,6 +3,7 @@ import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
 import { Drawer } from "./Drawer"
 import {BoxGeometry, Mesh} from "three";
+import { mesh } from "./CustomMesh"
 
 import Materials from "../Materials";
 const { defaultMaterial } = Materials
@@ -31,9 +32,9 @@ export const f_400_820_3b = () => {
   const sideGeometry = new BoxGeometry(sideDepth, height - legsHeight, depth);
   const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth);
 
-  const sideRight = new Mesh(sideGeometry, defaultMaterial());
-  const sideLeft = new Mesh(sideGeometry, defaultMaterial());
-  const sideBack = new Mesh(sideBackGeometry, defaultMaterial());
+  const sideRight = mesh(sideGeometry, defaultMaterial());
+  const sideLeft = mesh(sideGeometry, defaultMaterial());
+  const sideBack = mesh(sideBackGeometry, defaultMaterial());
 
   const drawer_0 = Drawer(width, height, depth, drawer_0_Height)
   drawer_0.position.y = constants.drawerBottomGap

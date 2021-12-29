@@ -1,4 +1,5 @@
 import {constants}  from "./constants";
+import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
 import {
   BoxGeometry,
@@ -168,15 +169,15 @@ export const w_800a = () => {
       'uv',
       new BufferAttribute(new Float32Array(uvs), uvNumComponents));
 
-  let sideV = new Mesh(geometry, defaultMaterial());
+  let sideV = mesh(geometry, defaultMaterial());
 
-  let sideLeft = new Mesh(gSideLR, defaultMaterial());
-  let sideRight = new Mesh(gSideLR, defaultMaterial());
-  let sideBackR = new Mesh(gSideBack, defaultMaterial());
-  let sideBackL = new Mesh(gSideBack, defaultMaterial());
-  let sideBottom = new Mesh(geometry, defaultMaterial());
-  let sideBTop = new Mesh(geometry, defaultMaterial());
-  //let sideShelf = new Mesh(gSideBottom, defaultMaterial());
+  let sideLeft = mesh(gSideLR, defaultMaterial());
+  let sideRight = mesh(gSideLR, defaultMaterial());
+  let sideBackR = mesh(gSideBack, defaultMaterial());
+  let sideBackL = mesh(gSideBack, defaultMaterial());
+  let sideBottom = mesh(geometry, defaultMaterial());
+  let sideBTop = mesh(geometry, defaultMaterial());
+  //let sideShelf = mesh(gSideBottom, defaultMaterial());
   let facadeLeft = new Group()
   //let facadeRight = new Group();
 
@@ -196,7 +197,7 @@ export const w_800a = () => {
   objFacadeRight.position.z = boxDepth / 2 + sideDepth / 2;
   objFacadeRight.name = 'rightDoor'*/
 
-  let group = new Mesh();
+  let group = mesh();
 
   sideV.position.y = 0;
   //sideV.position.x = sideDepth / 2;
