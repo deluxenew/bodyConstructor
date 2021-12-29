@@ -29,6 +29,10 @@ const wall = new Mesh(wallGeometry, wallMaterial);
 const wallR = new Mesh(wallGeometry, wallMaterial);
 const floor = new Mesh(floorGeometry, floorMaterial);
 
+floor.receiveShadow = true;
+wallR.receiveShadow = true;
+wall.receiveShadow = true;
+
 wall.material.normalMap.repeat.set(8 * 2, 4 * 2);
 wall.material.needsUpdate = true;
 wallR.material.normalMap.repeat.set(4 * 2, 8 * 2);

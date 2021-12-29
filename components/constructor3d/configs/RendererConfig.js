@@ -1,4 +1,4 @@
-import { WebGLRenderer } from 'three'
+import { PCFSoftShadowMap, WebGLRenderer } from 'three'
 
 const options = {
   alpha: true,
@@ -8,6 +8,8 @@ const options = {
 const renderer = (width, height) => {
   const commonRenderer = new WebGLRenderer(options)
   commonRenderer.shadowMap.enabled = true
+  commonRenderer.shadowMapSoft = true;
+  commonRenderer.shadowMap.type = PCFSoftShadowMap;
   commonRenderer.setSize(width, height);
   return commonRenderer
 }

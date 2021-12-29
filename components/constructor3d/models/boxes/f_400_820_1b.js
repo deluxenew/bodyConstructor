@@ -3,6 +3,7 @@ import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
 import { Drawer } from "./Drawer"
 import {BoxGeometry, Mesh} from "three";
+import { mesh } from "./CustomMesh"
 
 import Materials from "../Materials";
 const { defaultMaterial } = Materials
@@ -31,10 +32,10 @@ export const f_400_820_1b = () => {
   const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth);
   const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth);
 
-  const sideRight = new Mesh(sideGeometry, defaultMaterial());
-  const sideLeft = new Mesh(sideGeometry, defaultMaterial());
-  const sideBack = new Mesh(sideBackGeometry, defaultMaterial());
-  const shelf = new Mesh(shelfGeometry, defaultMaterial())
+  const sideRight = mesh(sideGeometry, defaultMaterial());
+  const sideLeft = mesh(sideGeometry, defaultMaterial());
+  const sideBack = mesh(sideBackGeometry, defaultMaterial());
+  const shelf = mesh(shelfGeometry, defaultMaterial())
 
   const drawer = Drawer(width, height, depth, drawerHeight)
   drawer.position.y = height - legsHeight - sideDepth - constants.drawerTopGap - drawerHeight
@@ -51,10 +52,10 @@ export const f_400_820_1b = () => {
   sideBack.position.set(0, sideY, - depth / 2 + sideDepth)
   shelf.position.set(0, sideY, 0)
 
-  const facadeGroup = new Mesh()
+  const facadeGroup = mesh()
   facadeGroup.position.set(-width / 2 - sideDepth /2, sideY, depth / 2)
   const facadeGeometry = new BoxGeometry(width - sideDepth /4, height - legsHeight, sideDepth )
-  const facade = new Mesh(facadeGeometry, defaultMaterial());
+  const facade = mesh(facadeGeometry, defaultMaterial());
   facade.position.x = (width / 2 + sideDepth / 8)
   facadeGroup.name = 'facade'
   facadeGroup.code = '397_716_0_solid_1'

@@ -1,5 +1,5 @@
 import {constants}  from "./constants";
-
+import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
 import {BoxGeometry, Mesh} from "three";
 
@@ -27,12 +27,12 @@ export const w_600 = () => {
   const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height, sideDepth);
   const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth);
 
-  const sideRight = new Mesh(sideGeometry, defaultMaterial());
-  const sideLeft = new Mesh(sideGeometry, defaultMaterial());
-  const sideBack = new Mesh(sideBackGeometry, defaultMaterial());
-  const shelf = new Mesh(shelfGeometry, defaultMaterial())
-  const sideTop = new Mesh(shelfGeometry, defaultMaterial())
-  const sideBottom = new Mesh(shelfGeometry, defaultMaterial())
+  const sideRight = mesh(sideGeometry, defaultMaterial());
+  const sideLeft = mesh(sideGeometry, defaultMaterial());
+  const sideBack = mesh(sideBackGeometry, defaultMaterial());
+  const shelf = mesh(shelfGeometry, defaultMaterial())
+  const sideTop = mesh(shelfGeometry, defaultMaterial())
+  const sideBottom = mesh(shelfGeometry, defaultMaterial())
 
   caseGroup.add(sideRight)
   caseGroup.add(sideLeft)
@@ -54,7 +54,7 @@ export const w_600 = () => {
   const facadeGroup = new Group()
   facadeGroup.position.set(-width / 2 - sideDepth /2, sideY, depth / 2)
   const facadeGeometry = new BoxGeometry(width - sideDepth /4, height - legsHeight, sideDepth )
-  const facade = new Mesh(facadeGeometry, defaultMaterial());
+  const facade = mesh(facadeGeometry, defaultMaterial());
   facade.position.x = (width / 2 + sideDepth / 8)
   facadeGroup.name = 'facade'
   facadeGroup.code = '397_716_0_solid_1'

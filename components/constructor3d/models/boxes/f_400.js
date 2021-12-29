@@ -1,6 +1,7 @@
 import {constants}  from "./constants";
 import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
+import { mesh } from "./CustomMesh"
 import {BoxGeometry, Mesh} from "three";
 
 import Materials from "../Materials";
@@ -28,10 +29,12 @@ export const f_400 = () => {
   const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth);
   const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth);
 
-  const sideRight = new Mesh(sideGeometry, defaultMaterial());
-  const sideLeft = new Mesh(sideGeometry, defaultMaterial());
-  const sideBack = new Mesh(sideBackGeometry, defaultMaterial());
-  const shelf = new Mesh(shelfGeometry, defaultMaterial())
+  const sideRight = mesh(sideGeometry, defaultMaterial());
+  const sideLeft = mesh(sideGeometry, defaultMaterial());
+  const sideBack = mesh(sideBackGeometry, defaultMaterial());
+  const shelf = mesh(shelfGeometry, defaultMaterial());
+
+
 
   caseGroup.add(sideRight)
   caseGroup.add(sideLeft)
