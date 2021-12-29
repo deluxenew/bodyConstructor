@@ -75,8 +75,12 @@ export default {
       async handler() {
         await this.$nextTick()
         this.setControlsVisible()
-
       }
+    },
+    async 'sceneObjects.floor.length'() {
+      if (!this.tableTopConfig) return
+      await this.$nextTick()
+      this.replaceTableTops()
     },
     sceneObjects() {
       this.setControlsVisible()
@@ -91,8 +95,6 @@ export default {
         HF.setCasesPosition(this.scene.children)
         this.setControlsPosition()
       }
-
-      // this.selectedBox = null
     },
   },
   methods: {
@@ -105,11 +107,12 @@ export default {
     },
     replaceBox(sort, type) {
       if (!this.selectedBox) return
-      console.log(sort, type)
       const arrAddMethods = ['addBottomLeftToScene', 'addBottomRightToScene', 'addTopLeftToScene', 'addTopRightToScene']
       const addMethod = HF.getAddMethodName(arrAddMethods, type)
       this.removeCase(true)
       this[addMethod](sort)
+      if (!this.tableTopConfig) return
+      this.replaceTableTops()
 
     },
     swapCam() {
@@ -182,16 +185,13 @@ export default {
     setControlsVisible() {
       const isAngular = this.caseModel && this.caseModel.userData['configType'] === 'angularBox'
       this.sceneObjects.control.forEach((el) => {
-        const {userData: {pos, watcher, position, side }} = el
+        const {userData: {pos, watcher, position }} = el
         const isExistAngular = this.sceneObjects[pos] && this.sceneObjects[pos].find(({userData: {configType}}) => configType === 'angularBox')
-        el.visible = true
-        if ((!isExistAngular && !this.sceneObjects[pos] ) || (isExistAngular && this.sceneObjects[pos])) el.visible = true
-
-        if (this.sceneObjects[pos] && !isExistAngular && !this.sceneObjects[position] && pos === this.controlsVerticalPosition) el.visible = false
-        if (isAngular && !isExistAngular && pos === this.controlsVerticalPosition) el.visible = side === 'left'
-        if (isAngular && isExistAngular) el.visible = false
-        if (pos !== this.controlsVerticalPosition) el.visible = false
-        if (this[watcher] >= MAX_PLACE_WIDTH) el.visible = false
+        const noAddAngularMoreOne = isAngular && isExistAngular
+        const correctVerticalPosition = pos === this.controlsVerticalPosition
+        const noAddBoxToAnotherSide =  this.sceneObjects[pos] && !isAngular && !isExistAngular && !this.sceneObjects[position] && correctVerticalPosition
+        const exceedingWidth = this[watcher] >= MAX_PLACE_WIDTH
+        el.visible = !(noAddAngularMoreOne || !correctVerticalPosition || noAddBoxToAnotherSide || exceedingWidth);
       })
     },
     setControlsPosition() {
@@ -284,57 +284,46 @@ export default {
     isMoveButtonActive(isLeft) {
       if (!this.sceneObjects.selectedBox) return false
       const {userData: {type, sort: selectedSort, side, configType: selectType}} = this.sceneObjects.selectedBox
-      if (selectType !== 'boxFloor') return
+      if (!['boxFloor', 'penalBox'].includes(selectType)) return false
       const increment = (side === 'left' && isLeft) || (side !== 'left' && !isLeft) ? 1 : -1
       const obj = this.sceneObjects[type].find(({userData: {sort}}) => sort - increment === selectedSort)
       if (!obj) return false
       const {userData: {configType}} = obj
-      return obj && configType === 'boxFloor'
+      return obj && ['boxFloor', 'penalBox'].includes(configType)
     },
     async addTableTop() {
       await this.$nextTick()
+      if (!this.tableTopConfig) return
       if (this.sceneObjects.leftTableTop) {
-        const leftSorted = this.sceneObjects.leftTableTop.sort((a, b) => a.sort - b.sort)
-        let tableTop = {
-          width: 0,
-          side: '',
-          x: 0,
-          z: 0
-        }
-        let itemsCount = 0
-        let counter
-        let i = 0
-        let leftTableTops = leftSorted.reduce((acc, el) => {
-          const {side, width, sort, x, z} = el
-          tableTop.side = side
-          itemsCount++
-          if (counter === sort + 1) {
-            acc.push(tableTop)
-            tableTop.width = 0
-            tableTop.x = 0
-            tableTop.z = 0
-            tableTop.width += width
-            tableTop.x = side === 'left' ? (tableTop.x + x) / i : x
-            tableTop.z = side === 'left' ? z : (tableTop.z + z) / i
-            counter++
-            i = 0
-          } else {
-            tableTop.width += width
-            tableTop.x = side === 'left' ? (tableTop.x + x) / i : x
-            tableTop.z = side === 'left' ? z : (tableTop.z + z) / i
-            counter++
-            i++
-          }
-          if (leftSorted.length === itemsCount) acc.push(tableTop)
-          return acc
-        }, [])
-        console.log(leftTableTops)
+        const leftSorted = this.sceneObjects.leftTableTop
+          .sort((a, b) => a.sort - b.sort)
+          .filter((el, index) => {
+          if ((index === this.sceneObjects.leftTableTop.length - 1 && el.width === 0) || el.width !==0) return el
+        })
+
+        const leftTableTops = HF.getTableTops(leftSorted)
         leftTableTops.forEach(({width, x, z}) => {
           const newTableTop = this.getTableTopModel(width).clone()
           newTableTop.position.x = x
           newTableTop.position.z = z
-          newTableTop.position.y = 9
+          newTableTop.position.y = 8.2 + this.tableTopConfig.height /2
           this.scene.add(newTableTop)
+        })
+      }
+      if (this.sceneObjects.rightTableTop) {
+        const leftSorted = this.sceneObjects.rightTableTop
+          .sort((a, b) => a.sort - b.sort)
+          .filter((el, index) => {
+            if ((index === this.sceneObjects.rightTableTop.length - 1 && el.width === 0) || el.width !==0) return el
+          })
+
+        const leftTableTops = HF.getTableTops(leftSorted)
+        leftTableTops.forEach(({width, x, z}) => {
+          const newTableTop = this.getTableTopModel(width).clone()
+          newTableTop.position.x = x
+          newTableTop.position.z = z
+          newTableTop.position.y = 8.2 + this.tableTopConfig.height /2
+          this.scene.add(HF.rotationY(newTableTop))
         })
       }
     },
@@ -343,6 +332,14 @@ export default {
       return getTableTop({
         width, url, height, type
       })
+    },
+    replaceTableTops() {
+      const tableTops = this.sceneObjects.tableTop
+      if (tableTops) {
+        tableTops.forEach((el) => this.scene.remove(el))
+      }
+      this.$nextTick()
+      this.addTableTop()
     },
   },
   computed: {
@@ -361,7 +358,7 @@ export default {
     },
     sceneObjects() {
       const result = this.scene.children.reduce((acc, el) => {
-        const {userData: { type, pos, side, sort, width, noTableTop }, position: { x, z }} = el
+        const {userData: { type, pos, side, sort, width, noTableTop, configType }, position: { x, z }} = el
 
         if (pos && type !== 'control') {
           if (!acc[pos]) acc[pos] = []
@@ -370,7 +367,11 @@ export default {
         if (pos === 'floor' && type !== 'control') {
           const field = side + 'TableTop'
           if (!acc[field]) acc[field] = []
-          if (!noTableTop) acc[field].push({ side, width, sort, x, z })
+          const angularTableWidth = configType === 'angularBox' ? width + 2 : width
+          const tableWidth = noTableTop ? 0 : angularTableWidth
+          const tableX = configType === 'angularBox' ? (side === 'left' ? x + 1 : x) : x
+          const tableZ = configType === 'angularBox' ? (side === 'left' ? z : z - 1) : z
+          acc[field].push({ side, width: tableWidth, sort, x:tableX, z: tableZ })
         }
         if (type) {
           if (!acc[type]) acc[type] = []

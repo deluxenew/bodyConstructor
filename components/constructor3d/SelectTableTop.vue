@@ -141,8 +141,8 @@ export default {
   methods: {
     addTableTop() {
       this.$emit('addTableTop', {
-        url: require('./img/tableTop/ldsp/dark_venge.png'),
-        height: '',
+        url: require('./img/tableTop/ldsp/yasen_shimo_soft.webp'),
+        height: 0.3,
         type: ''
       })
     },

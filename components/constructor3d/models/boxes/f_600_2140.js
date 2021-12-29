@@ -63,8 +63,9 @@ export const f_600_2140 = () => {
 
   boxGroup.name = 'f_600_2140'
   boxGroup.userData['code'] = 'f-600-2140'
+  boxGroup.userData['noTableTop'] = true
   //boxGroup.userData['facadeVariants'] = ['597_716_0_solid_1']
-  boxGroup.userData['configType'] = 'boxFloor'
+  boxGroup.userData['configType'] = 'penalBox'
   boxGroup.userData['openedDoors'] = false
 
   boxGroup.scale.set( scale, scale, scale )

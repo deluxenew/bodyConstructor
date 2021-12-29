@@ -141,6 +141,7 @@ const setCasesPosition = (boxes) => {
   if (groupedBoxes.bottomLeft) {
     const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0]['userData']['depth'] || 0
     const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
+
     groupedBoxes.bottomLeft.forEach((el) => {
       const {userData: {sort, width, depth}} = el
       el.position.x = -getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
@@ -151,10 +152,11 @@ const setCasesPosition = (boxes) => {
 
   if (groupedBoxes.bottomRight) {
     const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0]['userData']['depth'] || 0
+    const angularBox = groupedBoxes.bottomRight.find(({userData: {configType}}) => configType === 'angularBox')
 
     groupedBoxes.bottomRight.forEach((el) => {
       const {userData: {sort, width, depth}} = el
-      el.position.z = getPaddingBySort(groupedBoxes.bottomRight, sort, width, padding + wallPadding)
+      el.position.z = getPaddingBySort(groupedBoxes.bottomRight, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
       el.position.x = -(depth / 2 + wallPadding)
     })
   }
@@ -172,26 +174,14 @@ const setCasesPosition = (boxes) => {
 
   if (groupedBoxes.topRight) {
     const padding = groupedBoxes.topLeft && groupedBoxes.topLeft[0]['userData']['depth'] || 0
+    const angularBox = groupedBoxes.topRight.find(({userData: {configType}}) => configType === 'angularBox')
 
     groupedBoxes.topRight.forEach((el) => {
       const {userData: {sort, width, depth }} = el
-      el.position.z = getPaddingBySort(groupedBoxes.topRight, sort, width, padding)
+      el.position.z = getPaddingBySort(groupedBoxes.topRight, sort, width, angularBox ? 0 : padding)
       el.position.x = -(depth / 2)
     })
   }
-}
-
-const setControlsVisible = (sceneObjects, caseModel, position, widths, maxPlaceWidth) => {
-  const angularExist = sceneObjects['bottomLeft'] && sceneObjects['bottomLeft'].find(({userData: {configType} }) => configType === 'angularBox')
-  const isAngular = caseModel && caseModel.userData['configType'] === 'angularBox'
-  const empty = !sceneObjects['bottomLeft'] || !sceneObjects['bottomRight']
-  sceneObjects.control.forEach((el) => {
-    const {userData: {pos, watcher}} = el
-    el.visible = pos === position && widths[watcher] <= maxPlaceWidth
-    if (watcher !== 'widthLeftBottom' && isAngular) el.visible = false
-     if (sceneObjects['bottomLeft'] && !angularExist && el.name === 'addBottomRightButton') el.visible = false
-    if (sceneObjects['bottomRight'] && !angularExist && el.name === 'addBottomLeftButton' && !isAngular) el.visible = false
-  })
 }
 
 const getPlaceWidth = (arr, additionalArr) => {
@@ -223,15 +213,61 @@ const getAddMethodName = (arrAddMethods, val) => {
   return name ? name : ''
 }
 
+const getTableTops = (arr) => {
+  let tableTop = {
+    width: 0,
+    side: '',
+    x: 0,
+    z: 0
+  }
+  let itemsCount = 0
+  let counter = 0
+  let padding = 0
+  return arr.reduce((acc, el) => {
+    itemsCount++
+    const {side, width, sort, x, z} = el
+    if (itemsCount === 1) {
+      counter = sort
+      padding = side === 'left' ? (sort === 0 ? x + 0.6 : x) + width / 2 :  (sort === 0 ? z - 0.6 : z) - width / 2
+    }
+    tableTop.side = side
+
+    if (counter !== sort) {
+      acc.push({...tableTop})
+      tableTop.width = width
+      padding = side === 'left' ? x + width / 2 : z - width / 2
+      tableTop.x = side === 'left' ? padding - width / 2 : x
+      tableTop.z = side === 'left' ? z : padding + width / 2
+      counter = sort
+      counter++
+
+    } else {
+      tableTop.width += (sort === 0 ? width + 0.6 : width)
+      tableTop.x = side === 'left' ? padding - tableTop.width / 2 : x
+      tableTop.z = side === 'left' ? z : padding + tableTop.width / 2
+      counter++
+    }
+    if (arr.length === itemsCount) {
+      if (width !== 0) {
+        tableTop.width += 0.02
+        tableTop.x += side === 'left' ? -0.01 : 0
+        tableTop.z += side === 'left' ? 0 : 0.01
+      }
+      acc.push({...tableTop})
+    }
+    return acc
+  }, [])
+}
+
 export default {
   fromTo,
   camPos,
   recursiveFindBox,
   findActionName,
   setCasesPosition,
-  setControlsVisible,
   rotationY,
   getPlaceWidth,
   getFacadeGroup,
   getAddMethodName,
+  getTableTops
 }

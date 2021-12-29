@@ -43,12 +43,12 @@ const colors = [
   },
 ]
 
-const depth = 7
+const depth = 6
 // const material = new MeshStandardMaterial({color: 0x000000,});
 
 const getMaterial = (url) => {
   const facadeTextureLoader = new TextureLoader();
-
+  console.log(url)
   const facadeMaterial = new MeshStandardMaterial({
     color: 0xffffff,
     map: facadeTextureLoader.load(url),
@@ -92,7 +92,7 @@ const getTableTop = ({width, height, type, url}) => {
 
   tableTopGroup.add(tableTop)
 
-  tableTopGroup.userData.type = type
+  tableTopGroup.userData.type = 'tableTop'
   tableTopGroup.userData.width = width
   tableTopGroup.userData.height = height
   tableTopGroup.userData.depth = depth
