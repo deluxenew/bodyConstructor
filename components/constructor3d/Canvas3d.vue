@@ -70,6 +70,9 @@ export default {
     selectedBox(v) {
       this.$emit('selectBox', v)
     },
+    tableTopConfig() {
+      this.replaceTableTops()
+    },
     controlsVerticalPosition: {
       immediate: true,
       async handler() {
