@@ -302,7 +302,7 @@ export default {
     isMoveButtonActive(isLeft) {
       if (!this.sceneObjects.selectedBox) return false
       const {userData: {type, sort: selectedSort, side, configType: selectType}} = this.sceneObjects.selectedBox
-      if (!['boxFloor', 'penalBox'].includes(selectType)) return false
+      if (!['boxFloor', 'penalBox', 'boxWall'].includes(selectType)) return false
       const increment = (side === 'left' && isLeft) || (side !== 'left' && !isLeft) ? 1 : -1
       const obj = this.sceneObjects[type].find(({userData: {sort}}) => sort - increment === selectedSort)
       if (!obj) return false
@@ -443,17 +443,17 @@ export default {
       vm.addBottomLeftToScene(item.sort)
       //vm[item.method]()
     });
-    */  
+    */
     //animationFromTo(vm.scene)
     function render() {
       let steps = 13;
       requestAnimationFrame(render);
-      
+
       vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, vm.camPosition.y, steps);
       vm.scene.position.x = fromTo(vm.scene.position.x, vm.scene.position.x, vm.camPosition.sPx, steps);
       vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPosition.x, steps);
       vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPosition.cPz, steps);
-      
+
       /*vm.scene.rotation.y = vm.camPosition.y;
       vm.scene.position.x = vm.camPosition.sPx;
       vm.camera.position.x = vm.camPosition.x;

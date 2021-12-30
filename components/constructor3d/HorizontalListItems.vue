@@ -1,7 +1,7 @@
 <template lang="pug">
   .horizontal(ref="block")
-    .horizontal__list(:style="listStyle" ref="list")
-      .horizontal__line(v-for="(line, index) in lines" :key="line")
+    .horizontal__list(:style="listStyle" ref="list" )
+      .horizontal__line(v-for="(line, index) in lines" :key="JSON.stringify(line)")
         .item(
           ref="items"
           v-for="item in line"
