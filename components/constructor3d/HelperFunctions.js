@@ -188,7 +188,7 @@ const setCasesPosition = (boxes) => {
 
 const getPlaceWidth = (arr, additionalArr) => {
   let padding = 0
-  if (additionalArr) {
+  if (additionalArr && !(arr && arr.find(({userData:{configType}}) => configType === 'angularBox')  )) {
     padding = additionalArr[0]['userData']['depth']
   }
   if (!arr) return padding

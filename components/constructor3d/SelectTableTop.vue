@@ -28,8 +28,9 @@
             @click="selectMaterial(item)"
           )
             div.tab__title {{item.name}}
-        div.select-elements__tabs
-          div.select-elements__tabs-item(
+        div.select-elements__tabs.select-elements__buttons
+          | Толщина:
+          div.select-elements__tabs-item.select-elements__buttons-item(
             v-for="item in thicknessVariants"
             :class="{active: item.code === thicknessModel}"
             @click="selectThickness(item)"
@@ -262,6 +263,33 @@ export default {
 
     &.pt-16 {
       padding-top: 16px;
+    }
+  }
+
+  &__buttons {
+    padding-top: 16px;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 16px;
+    line-height: 24px;
+    color: #454A54;
+
+    &-item {
+      margin-left: 16px;
+      flex-grow: 0;
+      border-bottom: none;
+      border-radius: 4px;
+      font-size: 16px;
+      line-height: 22px;
+      color: #454A54;
+
+      &.active {
+       background-color: #0099DC;
+        border-bottom: none;
+        font-style: normal;
+        font-weight: normal;
+        color: #ffffff;
+      }
     }
   }
 
