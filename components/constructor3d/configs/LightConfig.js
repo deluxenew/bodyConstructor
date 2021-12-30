@@ -49,7 +49,7 @@ const spotLight_4 = () => {
   spotLight.shadow.bias = 0;
   spotLight.shadow.mapSize.width = res;
   spotLight.shadow.mapSize.height = res;
-  spotLight.shadow.radius = 4;
+  spotLight.shadow.radius = 8;
   spotLight.castShadow = true;
 
   return spotLight
