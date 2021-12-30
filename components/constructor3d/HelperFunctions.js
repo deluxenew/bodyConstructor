@@ -192,7 +192,8 @@ const getPlaceWidth = (arr, additionalArr) => {
     padding = additionalArr[0]['userData']['depth']
   }
   if (!arr) return padding
-  let width = arr.reduce((acc, {userData: {width}}) => {
+  let width = arr.reduce((acc, {userData: {width, configType }}) => {
+    if (configType === 'angularBox') acc += 2
     acc += width
     return acc
   }, 0)

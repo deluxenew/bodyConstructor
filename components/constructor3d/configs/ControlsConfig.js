@@ -81,9 +81,9 @@ bottomLeft.userData.actionName = 'addBottomLeftToScene'
 bottomLeft.userData.watcher = 'widthLeftBottom'
 bottomLeft.userData.position = 'bottomLeft'
 bottomLeft.userData.side = 'left'
-bottomLeft.position.set(-6, 5, 1)
+bottomLeft.position.set(-4, 5, 1)
 bottomLeft.userData.getCoords = function (x, y, z, value) {
-  return [-6 - value, y, z ]
+  return [-4 - value, y, z ]
 }
 
 
@@ -93,9 +93,9 @@ bottomRight.userData.actionName = 'addBottomRightToScene'
 bottomRight.userData.watcher = 'widthRightBottom'
 bottomRight.userData.position = 'bottomRight'
 bottomRight.userData.side = 'right'
-bottomRight.position.set(-1, 5, 6)
+bottomRight.position.set(-1, 5, 4)
 bottomRight.userData.getCoords = function (x, y, z, value) {
-  return [x, y, 6 + value]
+  return [x, y, 4 + value]
 }
 
 const topLeft = boxControl('addTopLeftButton', 'wall')
@@ -103,9 +103,9 @@ topLeft.userData.actionName = 'addTopLeftToScene'
 topLeft.userData.watcher = 'widthLeftTop'
 topLeft.userData.position = 'topLeft'
 topLeft.userData.side = 'left'
-topLeft.position.set(-6, 18, 1)
+topLeft.position.set(-4, 18, 1)
 topLeft.userData.getCoords = function (x, y, z, value) {
-  return [-6 - value, y, z ]
+  return [-4 - value, y, z ]
 }
 
 
@@ -115,9 +115,9 @@ topRight.userData.actionName = 'addTopRightToScene'
 topRight.userData.watcher = 'widthRightTop'
 topRight.userData.position = 'topRight'
 topRight.userData.side = 'right'
-topRight.position.set(-1, 18, 6)
+topRight.position.set(-1, 18, 4)
 topRight.userData.getCoords = function (x, y, z, value) {
-  return [x, y, 6 + value]
+  return [x, y, 4 + value]
 }
 
 const controlBoxes = [bottomLeft, bottomRight, topLeft, topRight]

@@ -12,13 +12,13 @@
         @click="removeItem"
       )
         span Убрать
-        img(:src="require('./img/close.svg')")
+        img.select-elements__icon(:src="require('./img/close.svg')")
       div.select-elements__remove(
         v-else
         @click="addTableTop"
       )
         span Добавить
-        img(:src="require('./img/add.svg')")
+        img.select-elements__icon(:src="require('./img/add.svg')")
     transition-expand
       div.select-elements__group(v-show="opened")
         div.select-elements__tabs
@@ -187,6 +187,11 @@ export default {
 
 .select-elements {
   width: 100%;
+
+  &__icon {
+    flex: 0 0 24px;
+    margin-left: 8px;
+  }
 
   &__header {
     width: 100%;

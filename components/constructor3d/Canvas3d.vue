@@ -217,7 +217,7 @@ export default {
     setControlsPosition() {
       this.sceneObjects.control.forEach((el) => {
         const {userData: {getCoords, watcher}, position: {x, y, z}} = el
-        el.position.set(...getCoords(x, y, z, this[watcher]))
+        el.position.set(...getCoords(x, y, z, this.sceneObjects[this.controlsVerticalPosition] ? this[watcher] : 2))
       })
     },
     addBoxToScene(pos, side, sort) {
