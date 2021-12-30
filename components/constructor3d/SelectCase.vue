@@ -32,7 +32,7 @@
 
 <script>
 import TransitionExpand from './TransitionExpand.vue'
-import HorizontalListItems from "@/components/constructor3d/HorizontalListItems";
+import HorizontalListItems from "./HorizontalListItems"
 export default {
   name: "SelectCase",
   components: {HorizontalListItems, TransitionExpand},
@@ -125,6 +125,7 @@ export default {
       this.currentTypeModel = item.code
       this.currentItemModel = this.bodyVariants && this.bodyVariants[0].code.replaceAll('_', '-')
       this.$emit('selectType', item.code)
+      this.$emit('discardSelectBox')
       this.$emit('selectItem', this.currentItemModel)
     },
     selectItem(item) {

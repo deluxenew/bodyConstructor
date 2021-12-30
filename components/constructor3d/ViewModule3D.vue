@@ -19,9 +19,12 @@
             @selectItem="selectCaseConfig"
             @remove="removeCase"
             @selectType="setControlsVerticalPosition"
+            @discardSelectBox="discardSelectBox"
           )
           select-table-top(
             v-model="tableTopConfig"
+            :options="tableTopOptions"
+            :textures="tableTopTextures"
             :elementVariants="tableTops"
             @selectColor="selectTableTopConfig"
             @addTableTop="addTableTop"
@@ -93,6 +96,12 @@ export default {
     bodyOptions() {
       return this.config && this.config.body.options || null
     },
+    tableTopOptions() {
+      return this.config && this.config.tabletop.options || null
+    },
+    tableTopTextures() {
+      return this.config && this.config.tabletop.imgLayers[0].images || null
+    },
     boxes() {
       const { cases } = boxes
       return cases
@@ -138,6 +147,9 @@ export default {
     },
   },
   methods: {
+    discardSelectBox() {
+      this.$refs.canvas.clearSelect()
+    },
     addTableTop(val) {
       this.tableTopConfig = val
       this.$nextTick()
@@ -208,13 +220,29 @@ export default {
     //   this.caseConfig.userData.facadeVariantType = variantType
     //   this.caseConfig.userData.facadeVariantTypeName = variantTypeName
     // },
-    selectTableTopConfig(color) {
-      const { id, type, maxWidth, typeName, url, name, variantType, variant } = color
+    async selectTableTopConfig(item) {
+      function getImage(url){
+        return new Promise(function(resolve, reject){
+          let img = new Image();
+          img.onload = function(){
+            resolve(url);
+          };
+          img.onerror = function(){
+            reject(url);
+          };
+          img.src = url;
+        });
+      }
+
+      const { color, type, maxWidth, typeName, url, name, variantType, height } = item
+
+      const loadedUrl = await getImage(url)
+
       this.tableTopConfig = {}
       this.tableTopConfig.type = type
-      this.tableTopConfig.height = variant
-      this.tableTopConfig.color = id
-      this.tableTopConfig.url = url
+      this.tableTopConfig.height = height
+      this.tableTopConfig.color = color
+      this.tableTopConfig.url = loadedUrl
       this.tableTopConfig.maxWidth = maxWidth
     },
     removeCase() {

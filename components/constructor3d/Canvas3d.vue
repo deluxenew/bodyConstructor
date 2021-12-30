@@ -91,7 +91,8 @@ export default {
       this.setControlsPosition()
       HF.setCasesPosition(this.scene.children)
     },
-    caseModelCode(v) {
+    async caseModelCode(v) {
+      await this.$nextTick()
       this.setControlsVisible()
       if (this.selectedBox && this.selectedBox.userData.code !== v) {
         const { userData: { sort, type } } = this.selectedBox
@@ -108,6 +109,21 @@ export default {
       controlBoxes.forEach(control => this.scene.add(control))
       this.$refs.canvas.appendChild(this.renderer.domElement);
       this.selectCase()
+    },
+    clearSelect() {
+      this.selectedBox = null
+      const vm = this
+      function clearHelpers() {
+        vm.scene.children.forEach((el) => {
+          const edges = el.children.find(({name}) => name === 'edges')
+          const transparent = el.children.find(({name}) => name === 'transparent')
+          if (edges) {
+            edges.visible = false
+            transparent.visible = false
+          }
+        })
+      }
+      clearHelpers()
     },
     replaceBox(sort, type) {
       if (!this.selectedBox) return
@@ -277,8 +293,7 @@ export default {
               edges.visible = true
               transparent.visible = true
             } else {
-              clearHelpers()
-              // vm.$emit('getBoxName', '')
+              vm.clearSelect()
             }
           }
         }

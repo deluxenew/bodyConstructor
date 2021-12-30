@@ -1,17 +1,17 @@
 <template lang="pug">
   .horizontal(ref="block")
     .horizontal__list(:style="listStyle" ref="list")
-      .horizontal__line(v-for="line in lines")
+      .horizontal__line(v-for="(line, index) in lines" :key="line")
         .item(
           ref="items"
           v-for="item in line"
           :class="{active: item.code === currentItemCode, disabled: isDisabled(item)}"
-          :key="item.code"
+          :key="item.code + index"
           @click="selectItem(item)"
         )
           img.item__img(v-if="item.image" :src="'https://cdn.akson.ru/webp/' + item.image + '0.png'")
           | {{item.name }}
-    .horizontal__scroll(v-if="listWidth >= blockWidth")
+    .horizontal__scroll(v-if="listWidth > blockWidth")
       input(
         ref="scroll"
         v-model.number="scroll"
@@ -56,16 +56,18 @@ export default {
   watch: {
     items: {
       deep: true,
+      immediate: true,
       async handler(v) {
-        await this.$nextTick()
         if (v) {
-          this.getSizes()
+          await this.getSizes()
         }
       }
     },
-    async currentItemCode(v) {
-      await this.$nextTick()
+    currentItemCode(v) {
+      // await this.$nextTick()
+      if (!this.items) return
       const itemIndex = this.items.findIndex(({ code }) => code === v)
+      if (itemIndex === -1) return
       const offset = this.itemsTranslate[itemIndex] - 98
       if (offset < this.maxScroll ) this.scroll = offset >= 0 ? offset : 0
       else this.scroll = this.maxScroll
@@ -96,14 +98,15 @@ export default {
 
     },
 
-    getSizes() {
+    async getSizes() {
+      await this.$nextTick()
       this.scroll = 0
       this.positionX = 0
       this.startScroll = 0
       this.blockWidth = this.$refs.block.clientWidth
       this.listWidth = this.$refs.list.scrollWidth
       this.maxScroll = (this.listWidth - this.blockWidth)
-      this.itemsTranslate = this.$refs.items.map((el) => el.offsetLeft)
+      this.itemsTranslate = this.$refs.items && this.$refs.items.map((el) => el.offsetLeft)
     },
     selectItem(item) {
       if (!this.hold && !this.isDisabled(item)) this.$emit('selectItem', item)
@@ -131,19 +134,17 @@ export default {
       }, ms)
     },
     onHold(event) {
-      if (this.$refs.list.contains(event.target) || this.$refs.scroll.contains(event.target)) {
+      if (this.$refs.list.contains(event.target) || (this.$refs.scroll && this.$refs.scroll.contains(event.target))) {
         this.startScroll = event.clientX
         window.addEventListener('mousemove', this.calcPositionMouse)
       }
     },
     offHold() {
-
       window.removeEventListener('mousemove', this.calcPositionMouse)
       this.positionX = this.scroll
     },
   },
   mounted() {
-    this.getSizes()
     window.addEventListener('mousedown', this.onHold)
     window.addEventListener('mouseup', this.offHold)
     this.$emit('selectItem', this.currentItemCode)

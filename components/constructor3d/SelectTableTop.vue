@@ -9,7 +9,6 @@
         )
       div.select-elements__remove(
         v-if="value"
-        :class="{disabled: !selectedCase}"
         @click="removeItem"
       )
         span Убрать
@@ -24,41 +23,47 @@
       div.select-elements__group(v-show="opened")
         div.select-elements__tabs
           div.select-elements__tabs-item(
-            v-for="item in elementVariants"
-            :class="{active: item.type === currentTypeModel.type}"
-            @click="selectCurrentType(item)"
+            v-for="item in materialVariants"
+            :class="{active: item.code === materialModel}"
+            @click="selectMaterial(item)"
           )
-            div.tab__title {{item.typeName}}
-        div.select-elements__tabs.pt-16(v-if="currentTypeModel && currentTypeModel.items")
+            div.tab__title {{item.name}}
+        div.select-elements__tabs
           div.select-elements__tabs-item(
-            v-for="variant in currentTypeModel.items"
-            :class="{active: variant === currentVariantModel}"
-            @click="selectCurrentVariant(variant)"
+            v-for="item in thicknessVariants"
+            :class="{active: item.code === thicknessModel}"
+            @click="selectThickness(item)"
           )
-            div.tab__title {{variant}}
-        div.select-elements__list(v-if="currentTypeModel && currentTypeModel.variants && currentTypeModel.variants.length")
-          div.select-elements__item(
-            v-for="color in currentTypeModel.variants"
-            :class="{active: currentItemModel && color.name === currentItemModel.name}"
-            @click="selectCurrentColor(color)"
-          )
-            img.select-elements__img(v-if="color" :src="color.url")
-            | {{color && color.name ? color.name : ''}}
+            div.tab__title {{item.name}}
+        horizontal-list-items(
+          :items="colorVariants"
+          :currentItemCode="colorModel"
+          @selectItem="selectItem"
+        )
 </template>
 
 <script>
 import UiInputCheckbox from './UiInputCheckbox.vue'
 import TransitionExpand from './TransitionExpand.vue'
+import HorizontalListItems from "./HorizontalListItems.vue"
 
 export default {
   name: "SelectTabletop",
-  components: {TransitionExpand, UiInputCheckbox},
+  components: {TransitionExpand, UiInputCheckbox, HorizontalListItems},
   props: {
     title: {
       type: String,
       default: ''
     },
     elementVariants: {
+      type: Array,
+      default: () => []
+    },
+    options: {
+      type: Array,
+      default: () => []
+    },
+    textures: {
       type: Array,
       default: () => []
     },
@@ -70,80 +75,75 @@ export default {
   data() {
     return {
       currentType: null,
-      currentVariant: null,
+      currentThickness: null,
       currentItem: null,
       opened: true
     }
   },
-  watch:{
-    currentItem(v) {
-
-    },
-    value: {
-      deep: true,
-      handler(v) {
-        if (!v) return
-        if (!!v.type) {
-          const typeObj = this.elementVariants.find(({type}) => v.type === type)
-          this.currentTypeModel = typeObj || null
-        }
-        if (!!v.variant) {
-          const variantObj = this.currentTypeModel?.items.find((el) => v.variant === el)
-          this.currentVariantModel = variantObj || null
-        }
-        if (!!v.colorId) {
-          const colorObj = this.currentVariantModel?.variants.find(({ id }) => v.colorId === id)
-          this.currentItemModel = colorObj || null
-        }
-      }
-    }
-  },
   computed: {
-    selectedCase() {
-      return this.value?.name
+    materialVariants() {
+      return this.options && this.options.filter(({category}) => category === 'material')
     },
-    // значение первой вкладки
-    currentTypeModel: {
+    thicknessVariants() {
+      return this.options && this.options.filter(({dependency, category}) => category === 'thickness' && dependency[0].code === 'material' && dependency[0].values.includes(this.materialModel))
+    },
+    colorVariants() {
+      return this.options && this.options.filter(({category, restrictions  }) => {
+        return category === 'color' && restrictions.thickness && restrictions.thickness.includes(this.thicknessModel)
+      }).sort((a,b) => {
+        if (a.code > b.code) return -1
+        if (a.code < b.code) return 1
+        if (a.code === b.code) return  0
+      })
+    },
+    materialModel: {
       get() {
-        return this.currentType || this.elementVariants[0]
+        return this.currentType || this.selectedBoxType || this.materialVariants && this.materialVariants[0].code
       },
       set(v) {
         this.currentType = v
       }
     },
-    // значение второй вкладки
-    currentVariantModel: {
+    thicknessModel: {
       get() {
-        return this.currentVariant || (this.currentTypeModel && this.currentTypeModel?.items[0]) || null
+        return this.currentThickness || this.thicknessVariants[0]?.code
       },
       set(v) {
-        this.currentVariant = v
-      }
+        this.currentThickness = v
+      },
     },
-    // выбранный вариант конфига
-    currentItemModel: {
+    colorModel: {
       get() {
-        return this.currentItem || this.currentTypeModel?.variants[0] || null
+        return this.currentItem || this.colorVariants && this.colorVariants[0] && this.colorVariants[0].code || null
       },
       set(v) {
         this.currentItem = v
       }
     },
-    valueModel: {
-      get() {
-        return this.value || null
-      },
-      set(v) {
-        this.$emit('input', v)
-      }
+    colorObj() {
+      return this.colorVariants && this.colorVariants.find(({code}) => code === this.colorModel)
     },
+    imageUrl() {
+      const item = this.textures && this.textures.find(({code}) => this.colorModel === code )
+      if (item) return 'https://cdn.akson.ru/webp' + item.path + '0.png'
+      return ''
+    },
+    config() {
+      return {
+        type: this.materialModel,
+        height: this.thicknessModel / 100,
+        color: this.colorModel,
+        url: this.imageUrl,
+        colorName: this.colorObj ? this.colorObj.name : ''
+      }
+    }
   },
   methods: {
     addTableTop() {
       this.$emit('addTableTop', {
         url: require('./img/tableTop/ldsp/yasen_shimo_soft.webp'),
         height: 0.3,
-        type: this.currentTypeModel.type
+        type: this.materialModel.type
       })
     },
     toggleOpen() {
@@ -152,31 +152,31 @@ export default {
     removeItem() {
       this.currentItem = null
     },
-    selectCurrentType(item) {
-      this.currentTypeModel = item
-      this.selectCurrentVariant(this.currentTypeModel.items[0], true)
-    },
-    selectCurrentVariant(variant, newColor) {
-      this.currentVariantModel = variant
-      if (!newColor) this.selectCurrentColor(this.currentItem)
-      else this.selectCurrentColor(this.currentTypeModel.variants[0])
-
-    },
-    selectCurrentColor(color) {
-      this.currentItem = color
-      const item = {
-        ...color,
-        type: this.currentTypeModel?.type,
-        typeName: this.currentTypeModel?.typeName,
-        variant: this.currentVariantModel,
-        maxWidth: this.currentTypeModel?.maxWidth
+    selectMaterial({code}) {
+      if (this.materialModel === code) return
+      this.materialModel = code
+      if (this.thicknessVariants && this.thicknessVariants[0]) {
+        this.thicknessModel = this.thicknessVariants[0].code
       }
-      this.$emit('selectColor', item)
+      if (this.colorVariants && this.colorVariants[0]) {
+        this.colorModel =  this.colorVariants[0].code
+        this.$emit('selectColor', this.config)
+      }
     },
+    selectThickness({code}) {
+      if (this.thicknessModel === code) return
+      this.thicknessModel = code
+      if (this.colorVariants && this.colorVariants[0]) {
+        this.colorModel =  this.colorVariants[0].code
+        this.$emit('selectColor', this.config)
+      }
+    },
+    selectItem(item) {
+      if (!item) return
+      this.colorModel = item.code
+      this.$emit('selectColor', this.config)
+    }
   },
-  mounted() {
-    // this.selectCurrentColor(this.currentTypeModel.variants[0])
-  }
 }
 </script>
 
