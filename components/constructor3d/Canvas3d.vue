@@ -31,7 +31,7 @@ import tableTopList from "./TableTopList";
 import {AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3} from "three";
 
 const {scene, renderer, spotLights, camera, walls, controlBoxes} = StartLoader
-const {fromTo, camPos} = HF
+const {fromTo, camPos, animationFromTo} = HF
 
 const {getTableTop} = tableTopList
 
@@ -431,47 +431,33 @@ export default {
     const vm = this
 
     this.init()
-
     /*
-    const meshes = [];
-    let stats, gui;
-
-
-
-    let shadowGroup, renderTarget, renderTargetBlur, shadowCamera, cameraHelper, depthMaterial, horizontalBlurMaterial, verticalBlurMaterial;
-
-    let plane, blurPlane, fillPlane;
-    let scale = 8;
-    const angle = ( 1 ) * Math.PI * 2;
-    const geometry = new THREE.TorusKnotGeometry( 0.4, 0.05, 256, 24, 1, 3 );
-    const material = new THREE.MeshNormalMaterial();
-    const mesh = new THREE.Mesh( geometry, material );
-    mesh.position.set(-8,8,8);
-    vm.scene.add( mesh );
-		meshes.push( mesh );
-    mesh.scale.set( scale, scale, scale )
-
-        // the container, if you need to move the plane just move this
-    shadowGroup = new Group();
-    shadowGroup.position.y = - 0.3;
-    vm.scene.add( shadowGroup );
-
-    // the render target that will show the shadows in the plane texture
-    renderTarget = new WebGLRenderTarget( 512, 512 );
-    renderTarget.texture.generateMipmaps = false;
-
-    // the render target that we will use to blur the first render target
-    renderTargetBlur = new WebGLRenderTarget( 512, 512 );
-    renderTargetBlur.texture.generateMipmaps = false;
-    */
-
+    const arr = [
+      { box: boxes["f_400"], pos: "floor", side: 'left', type: 'boxFloor', sort: '0' },
+      //{ code: "f_800", method: "addBottomRightToScene" }
+      ]
+    arr.forEach((item) => {
+      vm.selectedBox = item.box
+      vm.selectedBox.userData.sort = item.sort
+      vm.selectedBox.userData.type = item.type
+      vm.addBottomLeftToScene(item.sort)
+      //vm[item.method]()
+    });
+    */  
+    //animationFromTo(vm.scene)
     function render() {
       let steps = 13;
       requestAnimationFrame(render);
+      
       vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, vm.camPosition.y, steps);
       vm.scene.position.x = fromTo(vm.scene.position.x, vm.scene.position.x, vm.camPosition.sPx, steps);
       vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPosition.x, steps);
       vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPosition.cPz, steps);
+      
+      /*vm.scene.rotation.y = vm.camPosition.y;
+      vm.scene.position.x = vm.camPosition.sPx;
+      vm.camera.position.x = vm.camPosition.x;
+      vm.camera.position.z = vm.camPosition.cPz;*/
       vm.renderer.render(vm.scene, vm.camera);
 
       const delta = vm.clock.getDelta();

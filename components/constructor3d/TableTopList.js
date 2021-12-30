@@ -84,7 +84,8 @@ const getTableTop = ({width, height, type, url}) => {
 
   let tableTopBox = new BoxGeometry(width, height, depth);
   let tableTop = new Mesh(tableTopBox, getMaterial(url));
-
+  tableTop.castShadow = true;
+  tableTop.receiveShadow = true;
   tableTop.name = 'tableTop'
 
   const tableTopGroup = new Group()
