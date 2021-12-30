@@ -51,6 +51,7 @@ export const f_800a = () => {
   //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_2']
   boxGroup.userData['configType'] = 'angularBox'
   boxGroup.userData['openedDoors'] = false
+  boxGroup.userData['depth'] = depth + 0.4
 
   boxGroup.scale.set( scale, scale, scale )
   return boxGroup
