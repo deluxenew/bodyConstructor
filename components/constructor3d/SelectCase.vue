@@ -32,7 +32,7 @@
 
 <script>
 import TransitionExpand from './TransitionExpand.vue'
-import HorizontalListItems from "@/components/constructor3d/HorizontalListItems";
+import HorizontalListItems from "./HorizontalListItems"
 export default {
   name: "SelectCase",
   components: {HorizontalListItems, TransitionExpand},
@@ -76,10 +76,6 @@ export default {
           if (el) this.currentTypeModel = el.restrictions.type[0]
       }
     },
-
-    // currentItemModel(v) {
-    //   if (v) this.$emit('selectItem', v)
-    // },
     currentTypeModel(v) {
       if (v) this.$emit('selectType', v)
     }
@@ -91,7 +87,11 @@ export default {
     bodyVariants() {
       return this.options && this.options.filter(({category, restrictions }) => {
         return category === 'body' && restrictions.type.includes(this.currentTypeModel)
-      } )
+      } ).sort((a,b) => {
+        if (a.code > b.code) return -1
+        if (a.code < b.code) return 1
+        if (a.code === b.code) return  0
+      })
     },
     selectedCase() {
       return this.value
@@ -125,6 +125,7 @@ export default {
       this.currentTypeModel = item.code
       this.currentItemModel = this.bodyVariants && this.bodyVariants[0].code.replaceAll('_', '-')
       this.$emit('selectType', item.code)
+      this.$emit('discardSelectBox')
       this.$emit('selectItem', this.currentItemModel)
     },
     selectItem(item) {

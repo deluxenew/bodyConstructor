@@ -48,7 +48,6 @@ const depth = 6
 
 const getMaterial = (url) => {
   const facadeTextureLoader = new TextureLoader();
-  console.log(url)
   const facadeMaterial = new MeshStandardMaterial({
     color: 0xffffff,
     map: facadeTextureLoader.load(url),
