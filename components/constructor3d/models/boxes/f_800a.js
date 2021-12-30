@@ -1,7 +1,7 @@
 import {constants}  from "./constants";
 import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
-import {BoxGeometry, Mesh} from "three";
+import {BoxGeometry} from "three";
 import { mesh } from "./CustomMesh"
 
 import Materials from "../Materials";
@@ -51,7 +51,7 @@ export const f_800a = () => {
   //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_2']
   boxGroup.userData['configType'] = 'angularBox'
   boxGroup.userData['openedDoors'] = false
-  boxGroup.userData['depth'] = depth + 0.6
+  // boxGroup.userData['depth'] = depth + 0.6
 
   boxGroup.scale.set( scale, scale, scale )
   return boxGroup

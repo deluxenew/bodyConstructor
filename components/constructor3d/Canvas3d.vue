@@ -307,6 +307,10 @@ export default {
       const obj = this.sceneObjects[type].find(({userData: {sort}}) => sort - increment === selectedSort)
       if (!obj) return false
       const {userData: {configType}} = obj
+      const isPenalBox = configType === 'penalBox'
+      if (isPenalBox) {
+
+      }
       return obj && ['boxFloor', 'penalBox', 'boxWall'].includes(configType)
     },
     async addTableTop() {

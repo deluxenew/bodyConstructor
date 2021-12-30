@@ -136,10 +136,11 @@ const setCasesPosition = (boxes) => {
   }
 
   const wallPadding = 0.6
-  const angularPadding = 2
+  const angularPadding = 1.4
 
   if (groupedBoxes.bottomLeft) {
-    const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0]['userData']['depth'] || 0
+    const isAngular = groupedBoxes.bottomRight && groupedBoxes.bottomRight.find(({userData: {configType}}) => configType === 'angularBox')
+    const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0]['userData']['depth'] + (isAngular ? 0.6 : 0) || 0
     const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
 
     groupedBoxes.bottomLeft.forEach((el) => {
@@ -151,7 +152,8 @@ const setCasesPosition = (boxes) => {
   }
 
   if (groupedBoxes.bottomRight) {
-    const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0]['userData']['depth'] || 0
+    const isAngular = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
+    const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0]['userData']['depth'] + (isAngular ? 0.6 : 0) || 0
     const angularBox = groupedBoxes.bottomRight.find(({userData: {configType}}) => configType === 'angularBox')
 
     groupedBoxes.bottomRight.forEach((el) => {
