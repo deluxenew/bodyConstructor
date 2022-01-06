@@ -18,6 +18,8 @@
           button.button.remove(:disabled="!selectedBox" @click="removeCase(false)")
             img(:src="require('./img/trash.svg')")
 
+    button(@click="addText")
+      | 123
 </template>
 
 
@@ -29,7 +31,8 @@ import HF from "./HelperFunctions";
 import boxes from "./models/boxes/BoxesList";
 import tableTopList from "./TableTopList";
 import {AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3} from "three";
-
+import {GetText} from "./configs/TextConfig";
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 const {scene, renderer, spotLights, camera, walls, controlBoxes} = StartLoader
 const {fromTo, camPos, animationFromTo} = HF
 
@@ -103,6 +106,10 @@ export default {
     },
   },
   methods: {
+    addText() {
+      const text = GetText('adsdsadsad')
+      this.scene.add(text)
+    },
     init() {
       walls.forEach(wall => this.scene.add(wall))
       spotLights.forEach(spotLight => this.scene.add(spotLight))
@@ -432,6 +439,16 @@ export default {
     },
   },
   mounted() {
+
+    const loader = new FontLoader();
+    const url = require('./configs/font/helvetiker_regular.typeface.json')
+    console.log(url)
+    loader.load( './helvetiker_regular.typeface.json', function ( response ) {
+      console.log(response)
+      // font = response;
+
+    } );
+
     const vm = this
 
     this.init()

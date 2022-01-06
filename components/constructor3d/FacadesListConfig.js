@@ -1,76 +1,5 @@
 import {BoxGeometry, Group, Mesh, MeshStandardMaterial, TextureLoader} from "three";
 
-const colors = [
-  {
-    type: 'ldsp',
-    typeName: 'ЛДСП',
-    typeDescription: 'Ламинированная древесно - стружечная плита. Кромка 0,4 мм со всех сторон. Качественное покрытие. Устойчивость к температурным воздействиям. Упаковка: стрейч плёнка.',
-    additional: null,
-    items: null,
-    variants: [
-      {
-        type: 'laminate',
-        typeName: 'Ламинированный',
-        typeDescription: 'Фасад с ламинированной пленкой на 5 граней',
-        items: [
-          {
-            id: 'dub_votan',
-            url: require('./img/facades/ldsp/dub_votan.webp'),
-            name: 'Дуб вотан',
-          },
-          {
-            id: 'yasen_ankor_sseryi',
-            url: require('./img/facades/ldsp/yasen_ankor_sseryi.webp'),
-            name: 'Ясень Анкор серый',
-          },
-        ]
-      },
-      {
-        type: 'lacquered',
-        typeName: 'Лакированный',
-        typeDescription: 'Фасад с покраской и нанесением лака',
-        items: [
-
-        ]
-      }
-    ]
-  },
-  {
-    type: 'mdf',
-    typeName: 'МДФ',
-    typeDescription: 'Ламинированная древесно - стружечная плита. Кромка 0,4 мм со всех сторон. Качественное покрытие. Устойчивость к температурным воздействиям. Упаковка: стрейч плёнка.',
-    additional: null,
-    items: null,
-    variants: [
-      {
-        type: 'milled',
-        typeName: 'Фрезерованный',
-        typeDescription: 'Фасад с фрезерованными гранями и внутренним рельефом',
-        items: [
-          {
-            id: 'listvennica',
-            url: require('./img/facades/mdf/listvennica.webp'),
-            name: 'Лиственница',
-          },
-          {
-            id: 'orex_mramornyi',
-            url: require('./img/facades/mdf/orex_mramornyi.webp'),
-            name: 'Орех мраморный',
-          },
-        ]
-      },
-      {
-        type: 'lacquered',
-        typeName: 'Лакированный',
-        typeDescription: 'Фасад с покраской и нанесением лака',
-        items: [
-
-        ]
-      }
-    ]
-  },
-]
-
 const sideDepth = .3;
 
 const getMaterial = (url) => {
@@ -168,7 +97,6 @@ const mdf = (colorId, width, height, url) => {
 // }
 
 export default {
-  colors,
   // getFacadeByColorId,
   ldsp,
   mdf

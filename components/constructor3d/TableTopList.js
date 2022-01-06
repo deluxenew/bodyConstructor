@@ -1,48 +1,5 @@
 import {BoxGeometry, Mesh, MeshStandardMaterial, Group, TextureLoader} from "three";
 
-const colors = [
-  {
-    type: 'post',
-    typeName: 'Постформинг',
-    typeDescription: 'Технология ламинирования плит ДСП или МДФ. Скругление по передней стороне. Высокая влаго- и температуростойкость. Европейский стандарт экологичности. Материал представлен в толщинах 26мм и 38мм. Упаковка: картон и стрейч плёнка. Для защиты материала от влаги, края изделия обработаны белой технологической кромкой. При монтаже, технологическую кромку необходимо удалить и заменить на кромку в цвет изделия, либо воспользоваться торцевыми планками.',
-    maxWidth: 30,
-    items: [0.26, 0.38],
-    variants: [
-          {
-            id: 'winter_berg_1',
-            url: require('./img/facades/ldsp/dub_votan.webp'),
-            name: 'Дуб вотан',
-          },
-          {
-            id: 'winter_berg_2',
-            url: require('./img/tableTop/ldsp/atelie_soft.webp'),
-            name: 'Ателье светлый',
-          }
-    ]
-  },
-  {
-    type: 'ldsp',
-    typeName: 'ЛДСП',
-    typeDescription: 'Ламинированная древесно - стружечная плита. Кромка 2мм на полиуретановом клее со всех сторон. Высокая влагостойкость. Качественное и экологичное покрытие. Толщина материала 22мм. Упаковка: картон и стрейч плёнка.',
-    maxWidth: 27,
-    items: [0.22],
-    variants: [
-
-          {
-            id: 'dark_venge_2',
-            url: require('./img/tableTop/ldsp/dark_venge.png'),
-            name: 'Венге темный',
-          },
-          {
-            id: 'dark_venge_2',
-            url: require('./img/tableTop/ldsp/yasen_shimo_soft.webp'),
-            name: 'Ясень шимо светлый',
-          },
-        ]
-
-  },
-]
-
 const depth = 6
 // const material = new MeshStandardMaterial({color: 0x000000,});
 
@@ -106,7 +63,6 @@ const getTableTop = ({width, height, type, url}) => {
 }
 
 export default {
-  colors,
   getTableTop,
 }
 

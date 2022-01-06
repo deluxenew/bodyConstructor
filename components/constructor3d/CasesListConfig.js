@@ -232,7 +232,6 @@ const boxAngularTop = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800.png')
 
   bodyCase.userData.type = 'top'
   bodyCase.userData.variants = [
@@ -331,7 +330,6 @@ const top_400_800 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800.png')
 
   bodyCase.userData.type = 'top'
   bodyCase.userData.variants = [
@@ -422,7 +420,6 @@ const top_400_800_1 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_1.png')
 
   bodyCase.userData.type = 'top'
   bodyCase.userData.parent = {
@@ -594,7 +591,6 @@ const bottom_400_800 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800.png')
 
   bodyCase.userData.type = 'bottom'
   bodyCase.userData.variants = [
@@ -722,7 +718,6 @@ const bottom_400_800_1 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_1.png')
 
   bodyCase.userData.type = 'bottom'
    bodyCase.userData.parent = {
@@ -845,7 +840,6 @@ const bottom_600_800 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800.png')
 
   bodyCase.userData.type = 'bottom'
   bodyCase.userData.variants = [
@@ -977,7 +971,6 @@ const bottom_600_800_1 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_1.png')
 
   bodyCase.userData.type = 'bottom'
    bodyCase.userData.parent = {
@@ -1104,7 +1097,6 @@ const bottom_600_800_2 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_2.png')
 
   bodyCase.userData.type = 'bottom'
   bodyCase.userData.parent = {
@@ -1227,7 +1219,6 @@ const bottom_1000_800 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800.png')
 
   bodyCase.userData.type = 'bottom'
   bodyCase.userData.variants = [
@@ -1360,7 +1351,6 @@ const bottom_1000_800_1 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_1.png')
 
   bodyCase.userData.type = 'bottom'
    bodyCase.userData.parent = {
@@ -1487,7 +1477,6 @@ const bottom_1000_800_2 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 1500
-  bodyCase.userData.img = require('./img/cases/bottom/bottom_1000_800_2.png')
 
   bodyCase.userData.type = 'bottom'
   bodyCase.userData.parent = {
@@ -1732,7 +1721,6 @@ const boxAngularFloor_1 = () => {
   bodyCase.userData.color = 'Белый'
   bodyCase.userData.value = 1
   bodyCase.userData.price = 2100
-  bodyCase.userData.img = require('./img/cases/bottom/boxAngularFloor_1.png')
 
   bodyCase.userData.type = 'bottom'
    bodyCase.userData.parent = {

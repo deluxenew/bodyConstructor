@@ -142,7 +142,7 @@ export default {
   methods: {
     addTableTop() {
       this.$emit('addTableTop', {
-        url: require('./img/tableTop/ldsp/yasen_shimo_soft.webp'),
+        url: '',
         height: 0.3,
         type: this.materialModel.type
       })
