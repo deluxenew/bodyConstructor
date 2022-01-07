@@ -4,19 +4,18 @@
 </template>
 
 <script>
-  export default {
-    name: "demo",
-    components: {
-      ViewModule3D: () => {
-        if (process.browser) return import('@/components/constructor3d/ViewModule3D')
-      }
+export default {
+  name: 'Demo',
+  components: {
+    ViewModule3D: () => {
+      if (process.browser) return import('@/components/constructor3d/ViewModule3D');
     },
-    computed: {
-      componentName() {
-        if (process.browser) return 'ViewModule3D'
-        return ''
-      }
-    }
-  }
+  },
+  computed: {
+    componentName() {
+      if (process.browser) return 'ViewModule3D';
+      return '';
+    },
+  },
+};
 </script>
-

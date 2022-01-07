@@ -46,183 +46,185 @@
 
 <script>
 
-  import boxes from './CasesListConfig'
-  import facades from './FacadesListConfig'
-  import tableTops from './TableTopList'
+import boxes from "./CasesListConfig"
+import facades from "./FacadesListConfig"
+import tableTops from "./TableTopList"
 
-  import Module from './module'
-  import SelectCase from './SelectCase.vue'
-  import SelectFacade from './SelectFacade.vue'
-  import SelectTableTop from './SelectTableTop.vue'
-  import CalculateOrder from "./CalculateOrder";
+import Module from "./module"
+import SelectCase from "./SelectCase.vue"
+import SelectFacade from "./SelectFacade.vue"
+import SelectTableTop from "./SelectTableTop.vue"
+import CalculateOrder from "./CalculateOrder"
 
-  export default {
-    name: 'constructor3d',
-    components: {
-      CalculateOrder,
-      Module,
-      SelectCase,
-      SelectFacade,
-      SelectTableTop
-    },
-    data() {
-      return {
-        caseConfig: null,
-        facadeConfig: null,
-        tableTopConfig: null,
-        kitchen: {
-          currentConfig: {
-            caseConfig: {
-              name: ''
-            },
-            facadeConfig: {
-              name: '',
-              type: '',
-              variant: '',
-              colorId: ''
-            },
-            tableTopConfig: {
+export default {
+	name: "Constructor3d",
+	components: {
+		CalculateOrder,
+		Module,
+		SelectCase,
+		SelectFacade,
+		SelectTableTop,
+	},
+	data() {
+		return {
+			caseConfig: null,
+			facadeConfig: null,
+			tableTopConfig: null,
+			kitchen: {
+				currentConfig: {
+					caseConfig: {
+						name: "",
+					},
+					facadeConfig: {
+						name: "",
+						type: "",
+						variant: "",
+						colorId: "",
+					},
+					tableTopConfig: {
 
-            },
-          },
-          order: {
-            cases: [],
-            facades: [],
-            tableTops: []
-          }
-        }
-      }
-    },
-    computed: {
-      boxes() {
-        const { cases } = boxes
-        return cases
-      },
-      parentVariants() {
-        const variants = this.caseConfig?.userData?.variants
-        const parentId = this.caseConfig?.userData?.parent?.id
+					},
+				},
+				order: {
+					cases: [],
+					facades: [],
+					tableTops: [],
+				},
+			},
+		}
+	},
+	computed: {
+		boxes() {
+			const { cases } = boxes
+			return cases
+		},
+		parentVariants() {
+			const variants = this.caseConfig?.userData?.variants
+			const parentId = this.caseConfig?.userData?.parent?.id
 
+			if (variants && variants.length) {
+				const result = []
+				variants.forEach((el) => {
+					const fn = boxes[el.id]
+					result.push(fn)
+				})
+				return result
+			}
 
+			if (parentId) {
+				const result = []
+				const parent = boxes[parentId]
 
-        if (variants && variants.length) {
-          let result = []
-          variants.forEach((el) => {
-            const fn = boxes[el.id]
-            result.push(fn)
-          })
-          return result
-        }
+				if (parent) {
+					const parentVariants = parent.userData.variants
 
-        if (parentId) {
-          let result = []
-          const parent =  boxes[parentId]
+					parentVariants.forEach((el) => {
+						const fn = boxes[el.id]
+						result.push(fn)
+					})
+					return result
+				}
+			}
 
-          if (parent) {
-            const parentVariants = parent.userData.variants
+			return []
+		},
+		facades() {
+			const { colors } = facades
 
-            parentVariants.forEach((el) => {
-              const fn = boxes[el.id]
-              result.push(fn)
-            })
-            return result
-          }
-        }
+			return colors
+		},
+		tableTops() {
+			const { colors } = tableTops
+			return colors
+		},
+	},
+	watch: {
+		"kitchen.currentConfig.caseConfig.name": function(v) {
+			// this.caseConfig = boxes[v]
+		},
+	},
+	methods: {
+		setConfigName(v) {
+			this.kitchen.currentConfig.caseConfig.name = v
+			if (v) this.caseConfig = boxes[v]
+		},
+		selectType() {
+			this.caseConfig = null
+		},
+		removeItem({ uuid, type }) {
+			this.$refs.kitchen.removeItem({ uuid, type })
+			const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
+			if (idx > -1) this.kitchen.order[type].splice(idx, 1)
+		},
+		selectChildConfig({ config, color }) {
+			const {
+				boxId, id, type, typeName, url, name, variantType, variantTypeName,
+			} = color
 
-        return []
-      },
-      facades() {
-        const { colors } = facades
+			const { userData: { doorWidth, doorHeight } } = config
 
-        return colors
-      },
-      tableTops() {
-        const { colors } = tableTops
-        return colors
-      },
-    },
-    watch: {
-      'kitchen.currentConfig.caseConfig.name'(v) {
-        // this.caseConfig = boxes[v]
-      },
-    },
-    methods: {
-      setConfigName(v) {
-        this.kitchen.currentConfig.caseConfig.name = v
-        if (v) this.caseConfig = boxes[v]
-      },
-      selectType() {
-        this.caseConfig = null
-      },
-      removeItem({uuid, type}) {
-        this.$refs.kitchen.removeItem({uuid, type})
-        const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
-        if (idx > -1) this.kitchen.order[type].splice(idx, 1)
-      },
-      selectChildConfig({config, color}) {
-        const {boxId, id, type, typeName, url, name, variantType, variantTypeName } = color
+			const group = config.children.find(({ name }) => name === "group")
+			const doors = group.children.filter(({ name }) => name === "leftDoor" || name === "rightDoor")
 
-        const { userData: {doorWidth, doorHeight} } = config
+			doors.forEach((el) => {
+				el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
+			})
 
-        const group = config.children.find(({name}) => name === 'group')
-        const doors = group.children.filter(({name}) => name === 'leftDoor' || name === 'rightDoor')
+			this.caseConfig = config
 
-        doors.forEach((el) => {
-          el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
-        })
+			this.caseConfig.userData.facadeCount = doors.length
+			this.caseConfig.userData.facadeColorName = name
+			this.caseConfig.userData.facadeColorId = id
+			this.caseConfig.userData.facadeType = type
+			this.caseConfig.userData.facadeTypeName = typeName
+			this.caseConfig.userData.facadeVariantType = variantType
+			this.caseConfig.userData.facadeVariantTypeName = variantTypeName
 
-        this.caseConfig = config
+			this.kitchen.currentConfig.facadeConfig.name = config && config.userData && config.userData.parent ? config.name : ""
+		},
+		selectCaseConfig(v) {
+			this.caseConfig = v
+		},
+		selectFacadeConfig(v) {
+			// this.facadeConfig = v
+		},
+		selectFacadeColor(color) {
+			const {
+				id, type, typeName, url, name, variantType, variantTypeName,
+			} = color
+			const { userData: { doorWidth, doorHeight } } = this.caseConfig
 
-        this.caseConfig.userData.facadeCount = doors.length
-        this.caseConfig.userData.facadeColorName = name
-        this.caseConfig.userData.facadeColorId = id
-        this.caseConfig.userData.facadeType = type
-        this.caseConfig.userData.facadeTypeName = typeName
-        this.caseConfig.userData.facadeVariantType = variantType
-        this.caseConfig.userData.facadeVariantTypeName = variantTypeName
+			const group = this.caseConfig.children.find(({ name }) => name === "group")
+			const doors = group.children.filter(({ name }) => name === "leftDoor" || name === "rightDoor")
 
-        this.kitchen.currentConfig.facadeConfig.name = config && config.userData && config.userData.parent ? config.name : ''
-      },
-      selectCaseConfig(v) {
-        this.caseConfig = v
+			doors.forEach((el) => {
+				el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
+			})
 
-      },
-      selectFacadeConfig(v) {
-        // this.facadeConfig = v
-      },
-      selectFacadeColor(color) {
-        const { id, type, typeName, url, name, variantType, variantTypeName } = color
-        const { userData: { doorWidth, doorHeight } } = this.caseConfig
+			const temp = this.caseConfig.clone()
+			this.caseConfig = temp
 
-        const group = this.caseConfig.children.find(({name}) => name === 'group')
-        const doors = group.children.filter(({name}) => name === 'leftDoor' || name === 'rightDoor')
-
-        doors.forEach((el) => {
-          el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
-        })
-
-        const temp = this.caseConfig.clone()
-        this.caseConfig = temp
-
-        this.caseConfig.userData.facadeCount = doors.length
-        this.caseConfig.userData.facadeColorName = name
-        this.caseConfig.userData.facadeColorId = id
-        this.caseConfig.userData.facadeType = type
-        this.caseConfig.userData.facadeTypeName = typeName
-        this.caseConfig.userData.facadeVariantType = variantType
-        this.caseConfig.userData.facadeVariantTypeName = variantTypeName
-      },
-      selectTableTopConfig(color) {
-        const { id, type, maxWidth, typeName, url, name, variantType, variant } = color
-        this.tableTopConfig = {}
-        this.tableTopConfig.type = type
-        this.tableTopConfig.height = variant
-        this.tableTopConfig.color = id
-        this.tableTopConfig.url = url
-        this.tableTopConfig.maxWidth = maxWidth
-
-      }
-    },
-  }
+			this.caseConfig.userData.facadeCount = doors.length
+			this.caseConfig.userData.facadeColorName = name
+			this.caseConfig.userData.facadeColorId = id
+			this.caseConfig.userData.facadeType = type
+			this.caseConfig.userData.facadeTypeName = typeName
+			this.caseConfig.userData.facadeVariantType = variantType
+			this.caseConfig.userData.facadeVariantTypeName = variantTypeName
+		},
+		selectTableTopConfig(color) {
+			const {
+				id, type, maxWidth, typeName, url, name, variantType, variant,
+			} = color
+			this.tableTopConfig = {}
+			this.tableTopConfig.type = type
+			this.tableTopConfig.height = variant
+			this.tableTopConfig.color = id
+			this.tableTopConfig.url = url
+			this.tableTopConfig.maxWidth = maxWidth
+		},
+	},
+}
 </script>
 
 <style lang="scss">

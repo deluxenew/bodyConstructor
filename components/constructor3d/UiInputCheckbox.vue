@@ -17,63 +17,64 @@
 </template>
 
 <script>
-import UiIconMark from './UiIconMark'
+import UiIconMark from "./UiIconMark"
+
 export default {
-  name: 'UiInputCheckbox',
-  components: {
-    UiIconMark
-  },
-  data() {
-    return {
-      hovered: false
-    }
-  },
-  props: {
-    value: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    spaceBetween: {
-      type: Boolean,
-      default: false
-    }
-  },
-  computed: {
-    model: {
-      get() {
-        return this.value
-      },
-      set(v) {
-        this.$emit('input', v)
-      }
-    },
-    labelClass() {
-      return {
-        checkbox__label_disabled: this.disabled,
-        checkbox__label_between: this.spaceBetween
-      }
-    },
-    textClass() {
-      return {
-        checkbox__text_disabled: this.disabled
-      }
-    },
-    iconClass() {
-      return {
-        checkbox__check_active: this.model,
-        checkbox__check_hover: this.hovered,
-        checkbox__check_disabled: this.disabled
-      }
-    }
-  }
+	name: "UiInputCheckbox",
+	components: {
+		UiIconMark,
+	},
+	props: {
+		value: {
+			type: Boolean,
+			default: false,
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
+		label: {
+			type: String,
+			default: "",
+		},
+		spaceBetween: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	data() {
+		return {
+			hovered: false,
+		}
+	},
+	computed: {
+		model: {
+			get() {
+				return this.value
+			},
+			set(v) {
+				this.$emit("input", v)
+			},
+		},
+		labelClass() {
+			return {
+				checkbox__label_disabled: this.disabled,
+				checkbox__label_between: this.spaceBetween,
+			}
+		},
+		textClass() {
+			return {
+				checkbox__text_disabled: this.disabled,
+			}
+		},
+		iconClass() {
+			return {
+				checkbox__check_active: this.model,
+				checkbox__check_hover: this.hovered,
+				checkbox__check_disabled: this.disabled,
+			}
+		},
+	},
 }
 </script>
 

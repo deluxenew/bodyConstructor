@@ -70,58 +70,58 @@
 </template>
 
 <script>
-  export default {
-    name: "CalculateOrder",
-    props: {
-      kitchen: {
-        type: Object,
-        default: () => ({
-          currentConfig: {
-            caseConfig: {
-              name: ''
-            },
-            facadeConfig: {
-              name: '',
-              type: '',
-              variant: '',
-              colorId: ''
-            },
-            tableTopConfig: {
+export default {
+	name: "CalculateOrder",
+	props: {
+		kitchen: {
+			type: Object,
+			default: () => ({
+				currentConfig: {
+					caseConfig: {
+						name: "",
+					},
+					facadeConfig: {
+						name: "",
+						type: "",
+						variant: "",
+						colorId: "",
+					},
+					tableTopConfig: {
 
-            },
-          },
-          order: {
-            cases: [],
-            facades: [],
-            tableTops: []
-          }
-        })
-      }
-    },
-    computed: {
-      cases() {
-        return this.kitchen?.order?.cases
-          .reduce((acc, el) => {
-            const existId = acc.findIndex((it) => it.form === el.form)
-            if (existId > -1) acc[existId].value += 1
-            else acc.push(el)
-          return acc
-        }, []) || []
-      },
-      facades() {
-        return this.kitchen?.order?.facades || []
-      },
-      tableTops() {
-        return this.kitchen?.order?.tableTops || []
-      }
+					},
+				},
+				order: {
+					cases: [],
+					facades: [],
+					tableTops: [],
+				},
+			}),
+		},
+	},
+	computed: {
+		cases() {
+			return this.kitchen?.order?.cases
+				.reduce((acc, el) => {
+					const existId = acc.findIndex((it) => it.form === el.form)
+					if (existId > -1) acc[existId].value += 1
+					else acc.push(el)
+					return acc
+				}, []) || []
+		},
+		facades() {
+			return this.kitchen?.order?.facades || []
+		},
+		tableTops() {
+			return this.kitchen?.order?.tableTops || []
+		},
 
-    },
-    methods: {
-      removeItem(uuid) {
-        this.$emit('removeItem', uuid)
-      }
-    }
-  }
+	},
+	methods: {
+		removeItem(uuid) {
+			this.$emit("removeItem", uuid)
+		},
+	},
+}
 </script>
 
 <style lang="scss" scoped>
@@ -207,7 +207,6 @@
       }
     }
   }
-
 
 }
 </style>

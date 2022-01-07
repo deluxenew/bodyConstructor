@@ -5,17 +5,17 @@
 
 <script>
 export default {
-  name: 'UiIconMark',
-  props: {
-    color: {
-      type: String,
-      default: '#5C6270'
-    },
-    width: {
-      type: Number,
-      default: 12
-    }
-  }
+	name: "UiIconMark",
+	props: {
+		color: {
+			type: String,
+			default: "#5C6270",
+		},
+		width: {
+			type: Number,
+			default: 12,
+		},
+	},
 }
 </script>
 

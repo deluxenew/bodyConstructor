@@ -56,177 +56,175 @@
 </template>
 
 <script>
-import UiInputCheckbox from './UiInputCheckbox.vue'
-import TransitionExpand from './TransitionExpand.vue'
+import UiInputCheckbox from "./UiInputCheckbox.vue"
+import TransitionExpand from "./TransitionExpand.vue"
 
 export default {
-  name: "SelectFacade",
-  components: {TransitionExpand, UiInputCheckbox},
-  props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    parentVariants: {
-      type: Array,
-      default: () => []
-    },
-    elementVariants: {
-      type: Array,
-      default: () => []
-    },
-    value: {
-      type: Object,
-      default: () => {}
-    }
-  },
-  data() {
-    return {
-      applyForAllCases: false,
-      currentType: null,
-      currentVariant: null,
-      currentParentVariant: null,
-      currentItem: null,
-      opened: true
-    }
-  },
-  watch:{
-    parentVariants() {
-      // this.currentParentVariant = this.currentParentVariant ? this.parentVariants[0] : null
-      // if (this.currentItemModel) this.currentItemModel = this.currentVariantModel.items[0] || null
-    },
-    currentParentVariant(v) {
-      if (!this.currentItemModel) this.currentItem = this.currentVariantModel.items[0]
-    },
-    currentItem(v) {
+	name: "SelectFacade",
+	components: { TransitionExpand, UiInputCheckbox },
+	props: {
+		title: {
+			type: String,
+			default: "",
+		},
+		parentVariants: {
+			type: Array,
+			default: () => [],
+		},
+		elementVariants: {
+			type: Array,
+			default: () => [],
+		},
+		value: {
+			type: Object,
+			default: () => {},
+		},
+	},
+	data() {
+		return {
+			applyForAllCases: false,
+			currentType: null,
+			currentVariant: null,
+			currentParentVariant: null,
+			currentItem: null,
+			opened: true,
+		}
+	},
+	computed: {
 
-    },
-    value: {
-      deep: true,
-      handler(v) {
-        if (!!v.name) {
-          const caseBox = this.parentVariants.find((el) => v.name === el.name)
-          this.currentParentVariantModel  = caseBox || null
-        }
-        if (!!v.type) {
-          const typeObj = this.elementVariants.find(({type}) => v.type === type)
-          this.currentTypeModel = typeObj || null
-        }
-        if (!!v.variant) {
-          const variantObj = this.currentTypeModel?.variants.find(({ type }) => v.variant === type)
-          this.currentVariantModel = variantObj || null
-        }
-        if (!!v.colorId) {
-          const colorObj = this.currentVariantModel?.items.find(({ id }) => v.colorId === id)
-          this.currentItemModel = colorObj || null
-        }
-      }
-    }
-  },
-  computed: {
+		selectedCase() {
+			return this.value.name
+		},
+		// значение первой вкладки
+		currentTypeModel: {
+			get() {
+				return this.currentType || this.elementVariants[0]
+			},
+			set(v) {
+				this.currentType = v
+			},
+		},
+		// значение второй вкладки
+		currentVariantModel: {
+			get() {
+				return this.currentVariant || (this.currentTypeModel?.variants && this.currentTypeModel?.variants[0]) || null
+			},
+			set(v) {
+				this.currentVariant = v
+			},
+		},
+		// значение варианта выбора фасада
+		currentParentVariantModel: {
+			get() {
+				return this.currentParentVariant
+			},
+			set(v) {
+				this.currentParentVariant = v
+			},
+		},
+		// выбранный вариант конфига
+		currentItemModel: {
+			get() {
+				return this.currentItem || null
+			},
+			set(v) {
+				this.currentItem = v
+			},
+		},
+		valueModel: {
+			get() {
+				return this.value || null
+			},
+			set(v) {
+				this.$emit("input", v)
+			},
+		},
+	},
+	watch: {
+		parentVariants() {
+			// this.currentParentVariant = this.currentParentVariant ? this.parentVariants[0] : null
+			// if (this.currentItemModel) this.currentItemModel = this.currentVariantModel.items[0] || null
+		},
+		currentParentVariant(v) {
+			if (!this.currentItemModel) this.currentItem = this.currentVariantModel.items[0]
+		},
+		currentItem(v) {
 
-    selectedCase() {
-      return this.value.name
-    },
-    // значение первой вкладки
-    currentTypeModel: {
-      get() {
-        return this.currentType || this.elementVariants[0]
-      },
-      set(v) {
-        this.currentType = v
-      }
-    },
-    // значение второй вкладки
-    currentVariantModel: {
-      get() {
-        return this.currentVariant || (this.currentTypeModel?.variants && this.currentTypeModel?.variants[0]) || null
-      },
-      set(v) {
-        this.currentVariant = v
-      }
-    },
-    // значение варианта выбора фасада
-    currentParentVariantModel: {
-      get() {
-        return this.currentParentVariant
-      },
-      set(v) {
-        this.currentParentVariant = v
-      }
-    },
-    // выбранный вариант конфига
-    currentItemModel: {
-      get() {
-        return this.currentItem || null
-      },
-      set(v) {
-        this.currentItem = v
-      }
-    },
-    valueModel: {
-      get() {
-        return this.value || null
-      },
-      set(v) {
-        this.$emit('input', v)
-      }
-    },
-  },
-  methods: {
-    toggleOpen() {
-      this.opened = !this.opened
-    },
-    removeItem () {
-      this.currentParentVariant = null
-      this.currentItem = null
-      if (this.currentParentVariantModel) {
-        const parent = this.currentParentVariantModel.userData.parent.id
-        this.$emit('input', {name: parent})
-      }
-    },
-    selectCurrentType(item) {
-      this.currentTypeModel = item
-      if (this.currentVariantModel) this.currentVariantModel = this.currentTypeModel.variants[0]
-    },
-    selectCurrentVariant(variant) {
-      this.currentVariantModel = variant
-      if (this.currentItemModel) this.currentItem = this.currentVariantModel.items[0]
-    },
-    selectParentVariant(config ) {
+		},
+		value: {
+			deep: true,
+			handler(v) {
+				if (v.name) {
+					const caseBox = this.parentVariants.find((el) => v.name === el.name)
+					this.currentParentVariantModel = caseBox || null
+				}
+				if (v.type) {
+					const typeObj = this.elementVariants.find(({ type }) => v.type === type)
+					this.currentTypeModel = typeObj || null
+				}
+				if (v.variant) {
+					const variantObj = this.currentTypeModel?.variants.find(({ type }) => v.variant === type)
+					this.currentVariantModel = variantObj || null
+				}
+				if (v.colorId) {
+					const colorObj = this.currentVariantModel?.items.find(({ id }) => v.colorId === id)
+					this.currentItemModel = colorObj || null
+				}
+			},
+		},
+	},
+	mounted() {
+	},
+	methods: {
+		toggleOpen() {
+			this.opened = !this.opened
+		},
+		removeItem() {
+			this.currentParentVariant = null
+			this.currentItem = null
+			if (this.currentParentVariantModel) {
+				const parent = this.currentParentVariantModel.userData.parent.id
+				this.$emit("input", { name: parent })
+			}
+		},
+		selectCurrentType(item) {
+			this.currentTypeModel = item
+			if (this.currentVariantModel) this.currentVariantModel = this.currentTypeModel.variants[0]
+		},
+		selectCurrentVariant(variant) {
+			this.currentVariantModel = variant
+			if (this.currentItemModel) this.currentItem = this.currentVariantModel.items[0]
+		},
+		selectParentVariant(config) {
+			const item = this.currentItem ? this.currentItem : this.currentVariantModel.items[0]
+			const color = {
+				...item,
+				boxId: this.currentParentVariantModel?.name,
+				type: this.currentTypeModel?.type,
+				typeName: this.currentTypeModel?.typeName,
+				variantType: this.currentVariantModel?.type,
+				variantTypeName: this.currentVariantModel?.typeName,
+				variant: this.currentVariantModel?.type,
+			}
+			this.currentParentVariant = item
+			this.$emit("selectChildConfig", { config, color })
 
-      const item = this.currentItem ? this.currentItem : this.currentVariantModel.items[0]
-      const color = {
-        ...item,
-        boxId: this.currentParentVariantModel?.name,
-        type: this.currentTypeModel?.type,
-        typeName: this.currentTypeModel?.typeName,
-        variantType: this.currentVariantModel?.type,
-        variantTypeName: this.currentVariantModel?.typeName,
-        variant: this.currentVariantModel?.type
-      }
-       this.currentParentVariant = item
-       this.$emit('selectChildConfig', {config, color})
-
-      // this.currentParentVariantModel = item
-    },
-    selectCurrentColor(color) {
-      this.currentItem = color
-      const item = {
-        ...color,
-        boxId: this.currentParentVariantModel?.name,
-        type: this.currentTypeModel?.type,
-        typeName: this.currentTypeModel?.typeName,
-        variantType: this.currentVariantModel?.type,
-        variantTypeName: this.currentVariantModel?.typeName,
-        variant: this.currentVariantModel?.type
-      }
-      this.$emit('selectColor', item)
-
-    },
-  },
-  mounted() {
-  }
+			// this.currentParentVariantModel = item
+		},
+		selectCurrentColor(color) {
+			this.currentItem = color
+			const item = {
+				...color,
+				boxId: this.currentParentVariantModel?.name,
+				type: this.currentTypeModel?.type,
+				typeName: this.currentTypeModel?.typeName,
+				variantType: this.currentVariantModel?.type,
+				variantTypeName: this.currentVariantModel?.typeName,
+				variant: this.currentVariantModel?.type,
+			}
+			this.$emit("selectColor", item)
+		},
+	},
 }
 </script>
 
@@ -345,7 +343,6 @@ export default {
       cursor: pointer;
       transition: .3s ease-in-out;
       user-select: none;
-
 
       &.active {
         border: 2px solid #0099DC;

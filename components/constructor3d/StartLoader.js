@@ -1,8 +1,8 @@
-import RendererConfig from './configs/RendererConfig'
-import CameraConfig from'./configs/CameraConfig'
-import LightConfig from'./configs/LightConfig'
-import SceneConfig from'./configs/SceneConfig'
-import ControlsConfig from'./configs/ControlsConfig'
+import RendererConfig from "./configs/Renderer"
+import CameraConfig from "./configs/Camera"
+import LightConfig from "./configs/Light"
+import SceneConfig from "./configs/Scene"
+import ControlsConfig from "./configs/Controls"
 import Walls from "./models/Walls"
 
 const { renderer } = RendererConfig
@@ -13,10 +13,10 @@ const { walls } = Walls
 const { controlBoxes } = ControlsConfig
 
 export default {
-  renderer,
-  camera,
-  spotLights,
-  scene,
-  walls,
-  controlBoxes
+	renderer,
+	camera,
+	spotLights,
+	scene,
+	walls,
+	controlBoxes,
 }

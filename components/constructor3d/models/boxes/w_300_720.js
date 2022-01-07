@@ -1,9 +1,10 @@
-import {constants}  from "./constants";
+import { BoxGeometry, Mesh } from "three"
+import { constants } from "./constants"
 import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
-import {BoxGeometry, Mesh} from "three";
 
-import Materials from "../Materials";
+import Materials from "../Materials"
+
 const { defaultMaterial } = Materials
 
 const width = 3
@@ -11,46 +12,45 @@ const width = 3
 const height = constants.topHeight
 const depth = constants.topDepth
 
-const sideDepth = constants.sideDepth;
-const scale = constants.scale
+const { sideDepth } = constants
+const { scale } = constants
 
 const sideY = (height) / 2 - sideDepth
 
 export const w_300_720 = () => {
+	const wrap = topBox(width, height, depth)
+	const { boxGroup } = wrap
+	const { caseGroup } = wrap
+	boxGroup.add(caseGroup)
 
-  const wrap = topBox(width, height, depth)
-  const boxGroup = wrap.boxGroup
-  const caseGroup = wrap.caseGroup
-  boxGroup.add(caseGroup)
+	const sideGeometry = new BoxGeometry(sideDepth, height, depth)
+	const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height, sideDepth)
+	const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth)
 
-  const sideGeometry = new BoxGeometry(sideDepth, height, depth);
-  const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height, sideDepth);
-  const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth);
+	const sideRight = mesh(sideGeometry, defaultMaterial())
+	const sideLeft = mesh(sideGeometry, defaultMaterial())
+	const sideBack = mesh(sideBackGeometry, defaultMaterial())
+	const shelf = mesh(shelfGeometry, defaultMaterial())
+	const sideTop = mesh(shelfGeometry, defaultMaterial())
+	const sideBottom = mesh(shelfGeometry, defaultMaterial())
 
-  const sideRight = mesh(sideGeometry, defaultMaterial());
-  const sideLeft = mesh(sideGeometry, defaultMaterial());
-  const sideBack = mesh(sideBackGeometry, defaultMaterial());
-  const shelf = mesh(shelfGeometry, defaultMaterial())
-  const sideTop = mesh(shelfGeometry, defaultMaterial())
-  const sideBottom = mesh(shelfGeometry, defaultMaterial())
+	caseGroup.add(sideRight)
+	caseGroup.add(sideLeft)
+	caseGroup.add(sideBack)
+	caseGroup.add(shelf)
+	caseGroup.add(sideTop)
+	caseGroup.add(sideBottom)
 
-  caseGroup.add(sideRight)
-  caseGroup.add(sideLeft)
-  caseGroup.add(sideBack)
-  caseGroup.add(shelf)
-  caseGroup.add(sideTop)
-  caseGroup.add(sideBottom)
+	sideTop.position.y = height - sideDepth * 1.5
+	sideBottom.position.y = 0 - sideDepth / 2
 
-  sideTop.position.y = height - sideDepth*1.5
-  sideBottom.position.y = 0 - sideDepth/2
+	sideRight.position.set(width / 2 - sideDepth / 2, sideY, 0)
+	sideLeft.position.set(-width / 2 + sideDepth / 2, sideY, 0)
+	sideBack.position.set(0, sideY, -depth / 2 + sideDepth)
 
-  sideRight.position.set(width / 2 - sideDepth /2, sideY, 0)
-  sideLeft.position.set(-width / 2 + sideDepth /2, sideY, 0)
-  sideBack.position.set(0, sideY, - depth / 2 + sideDepth)
+	shelf.position.set(0, sideY, 0)
 
-  shelf.position.set(0, sideY, 0)
-
-  /*
+	/*
   const facadeGroup = new Group()
   facadeGroup.position.set(-width / 2 - sideDepth /2, sideY, depth / 2)
   const facadeGeometry = new BoxGeometry(width - sideDepth /4, height - legsHeight, sideDepth )
@@ -62,13 +62,12 @@ export const w_300_720 = () => {
   facadeGroup.add(facade)
   caseGroup.add(facadeGroup)
 */
-  boxGroup.name = 'w_300_720'
-  boxGroup.userData['code'] = 'w-300-720'
-  //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
-  boxGroup.userData['configType'] = 'boxWall'
-  boxGroup.userData['openedDoors'] = false
+	boxGroup.name = "w_300_720"
+	boxGroup.userData.code = "w-300-720"
+	// boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
+	boxGroup.userData.configType = "boxWall"
+	boxGroup.userData.openedDoors = false
 
-  boxGroup.scale.set( scale, scale, scale )
-  return boxGroup
+	boxGroup.scale.set(scale, scale, scale)
+	return boxGroup
 }
-

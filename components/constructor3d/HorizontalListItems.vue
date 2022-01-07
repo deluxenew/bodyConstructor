@@ -25,134 +25,133 @@
 
 <script>
 export default {
-  name: "HorizontalListItems",
-  props: {
-    items: {
-      type: Array,
-      default: () => []
-    },
-    currentItemCode: {
-      type: String,
-      default: ''
-    },
-    selectedBox: {
-      type: Object,
-      default: null
-    },
-  },
-  data() {
-    return {
-      startScroll: 0,
-      positionX: 0,
-      scroll: 0,
-      maxScroll: 0,
-      listWidth: 0,
-      blockWidth: 0,
-      hold: false,
-      itemsTranslate: [],
-      cbDeferTs: null
-    }
-  },
-  watch: {
-    items: {
-      deep: true,
-      immediate: true,
-      async handler(v) {
-        if (v) {
-          await this.getSizes()
-        }
-      }
-    },
-    currentItemCode(v) {
-      // await this.$nextTick()
-      if (!this.items) return
-      const itemIndex = this.items.findIndex(({ code }) => code === v)
-      if (itemIndex === -1) return
-      const offset = this.itemsTranslate[itemIndex] - 98
-      if (offset < this.maxScroll ) this.scroll = offset >= 0 ? offset : 0
-      else this.scroll = this.maxScroll
-      this.positionX = this.scroll
-    }
-  },
-  computed: {
-    lines() {
-      const result = []
-      const countItems = this.items && this.items.length || 0
-      if (countItems > 2) {
-        const half = Math.round(countItems / 2)
-        result.push(this.items.slice(0, half))
-        result.push(this.items.slice(half, countItems))
-      } else result.push(this.items)
-      return result
-    },
-    listStyle() {
-      return {
-        transform: `translateX(${-this.scroll + 'px'})`,
-        transition: this.hold ? 'none' : '.2s ease'
-      }
-    }
-  },
-  methods: {
-    isDisabled(item) {
-      return (this.selectedBox && item.code.indexOf('a') > -1) || (this.selectedBox && this.currentItemCode.indexOf('a') > -1 && item.code.indexOf('a') === -1);
+	name: "HorizontalListItems",
+	props: {
+		items: {
+			type: Array,
+			default: () => [],
+		},
+		currentItemCode: {
+			type: String,
+			default: "",
+		},
+		selectedBox: {
+			type: Object,
+			default: null,
+		},
+	},
+	data() {
+		return {
+			startScroll: 0,
+			positionX: 0,
+			scroll: 0,
+			maxScroll: 0,
+			listWidth: 0,
+			blockWidth: 0,
+			hold: false,
+			itemsTranslate: [],
+			cbDeferTs: null,
+		}
+	},
+	computed: {
+		lines() {
+			const result = []
+			const countItems = this.items && this.items.length || 0
+			if (countItems > 2) {
+				const half = Math.round(countItems / 2)
+				result.push(this.items.slice(0, half))
+				result.push(this.items.slice(half, countItems))
+			} else result.push(this.items)
+			return result
+		},
+		listStyle() {
+			return {
+				transform: `translateX(${`${-this.scroll}px`})`,
+				transition: this.hold ? "none" : ".2s ease",
+			}
+		},
+	},
+	watch: {
+		items: {
+			deep: true,
+			immediate: true,
+			async handler(v) {
+				if (v) {
+					await this.getSizes()
+				}
+			},
+		},
+		currentItemCode(v) {
+			// await this.$nextTick()
+			if (!this.items) return
+			const itemIndex = this.items.findIndex(({ code }) => code === v)
+			if (itemIndex === -1) return
+			const offset = this.itemsTranslate[itemIndex] - 98
+			if (offset < this.maxScroll) this.scroll = offset >= 0 ? offset : 0
+			else this.scroll = this.maxScroll
+			this.positionX = this.scroll
+		},
+	},
+	mounted() {
+		window.addEventListener("mousedown", this.onHold)
+		window.addEventListener("mouseup", this.offHold)
+		this.$emit("selectItem", this.currentItemCode)
+	},
+	beforeUnmount() {
+		window.removeEventListener("mousedown", this.onHold)
+		window.removeEventListener("mouseup", this.offHold)
+	},
+	methods: {
+		isDisabled(item) {
+			return (this.selectedBox && item.code.indexOf("a") > -1) || (this.selectedBox && this.currentItemCode.indexOf("a") > -1 && item.code.indexOf("a") === -1)
+		},
 
-    },
+		async getSizes() {
+			await this.$nextTick()
+			this.scroll = 0
+			this.positionX = 0
+			this.startScroll = 0
+			this.blockWidth = this.$refs.block.clientWidth
+			this.listWidth = this.$refs.list.scrollWidth
+			this.maxScroll = (this.listWidth - this.blockWidth)
+			this.itemsTranslate = this.$refs.items && this.$refs.items.map((el) => el.offsetLeft)
+		},
+		selectItem(item) {
+			if (!this.hold && !this.isDisabled(item)) this.$emit("selectItem", item)
+		},
+		calcPositionMouse(event) {
+			const scroll = this.startScroll + this.positionX - event.clientX
+			if (scroll >= 0 && scroll < this.maxScroll) this.scroll = scroll
+			else if (scroll < 0) this.scroll = 0
+			else this.scroll = this.maxScroll
+			if (Math.abs(this.scroll - this.positionX) > 10) this.hold = true
 
-    async getSizes() {
-      await this.$nextTick()
-      this.scroll = 0
-      this.positionX = 0
-      this.startScroll = 0
-      this.blockWidth = this.$refs.block.clientWidth
-      this.listWidth = this.$refs.list.scrollWidth
-      this.maxScroll = (this.listWidth - this.blockWidth)
-      this.itemsTranslate = this.$refs.items && this.$refs.items.map((el) => el.offsetLeft)
-    },
-    selectItem(item) {
-      if (!this.hold && !this.isDisabled(item)) this.$emit('selectItem', item)
-    },
-    calcPositionMouse(event) {
-      const scroll =  this.startScroll + this.positionX - event.clientX
-      if (scroll >= 0 && scroll < this.maxScroll) this.scroll = scroll
-      else if (scroll < 0) this.scroll = 0
-      else this.scroll = this.maxScroll
-      if (Math.abs(this.scroll - this.positionX) > 10) this.hold = true
+			const cb = () => {
+				this.hold = false
+			}
+			this.cfDefer(cb, 50)
+		},
+		cfDefer(callback, ms = 500) {
+			const ts = Date.now()
+			this.cbDeferTs = ts
 
-      const cb = () => {
-        this.hold = false
-      }
-      this.cfDefer(cb, 50)
-    },
-    cfDefer(callback, ms = 500) {
-      const ts = Date.now()
-      this.cbDeferTs = ts
-
-      setTimeout(() => {
-        if (ts === this.cbDeferTs) {
-          callback()
-        }
-      }, ms)
-    },
-    onHold(event) {
-      if (this.$refs.list.contains(event.target) || (this.$refs.scroll && this.$refs.scroll.contains(event.target))) {
-        this.startScroll = event.clientX
-        window.addEventListener('mousemove', this.calcPositionMouse)
-      }
-    },
-    offHold() {
-      window.removeEventListener('mousemove', this.calcPositionMouse)
-      this.positionX = this.scroll
-    },
-  },
-  mounted() {
-    window.addEventListener('mousedown', this.onHold)
-    window.addEventListener('mouseup', this.offHold)
-    this.$emit('selectItem', this.currentItemCode)
-  },
-  beforeDestroy() {
-    window.removeEventListener('mousedown', this.onHold)
-    window.removeEventListener('mouseup', this.offHold)
-  }
+			setTimeout(() => {
+				if (ts === this.cbDeferTs) {
+					callback()
+				}
+			}, ms)
+		},
+		onHold(event) {
+			if (this.$refs.list.contains(event.target) || (this.$refs.scroll && this.$refs.scroll.contains(event.target))) {
+				this.startScroll = event.clientX
+				window.addEventListener("mousemove", this.calcPositionMouse)
+			}
+		},
+		offHold() {
+			window.removeEventListener("mousemove", this.calcPositionMouse)
+			this.positionX = this.scroll
+		},
+	},
 }
 </script>
 
@@ -206,7 +205,6 @@ $thumbWidth: var(--thumb-width);
   cursor: pointer;
   //transition: .3s ease-in-out;
   user-select: none;
-
 
   &.active {
     border: 2px solid #0099DC;

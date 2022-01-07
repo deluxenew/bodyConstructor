@@ -31,108 +31,107 @@
 </template>
 
 <script>
-import TransitionExpand from './TransitionExpand.vue'
+import TransitionExpand from "./TransitionExpand.vue"
 import HorizontalListItems from "./HorizontalListItems"
+
 export default {
-  name: "SelectCase",
-  components: {HorizontalListItems, TransitionExpand},
-  props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    options: {
-      type: Array,
-      default: () => []
-    },
-    selectedBoxType: {
-      type: String,
-      default: ''
-    },
-    selectedBox: {
-      type: Object,
-      default: null
-    },
-    value: {
-      type: String,
-      default: ''
-    }
-  },
-  data() {
-    return {
-      currentType: null,
-      currentItem: null,
-      opened: true
-    }
-  },
-  watch:{
-    selectedBox(v) {
-      if (v) this.currentItemModel = v.name.replaceAll('_', '-')
-    },
-    value: {
-      handler(v) {
-          this.currentItemModel = v.replaceAll('_', '-')
-          const el = this.options.find(({code}) =>  code === this.currentItemModel)
-          if (el) this.currentTypeModel = el.restrictions.type[0]
-      }
-    },
-    currentTypeModel(v) {
-      if (v) this.$emit('selectType', v)
-    }
-  },
-  computed: {
-    typeVariants() {
-      return this.options && this.options.filter(({category}) => category === 'type')
-    },
-    bodyVariants() {
-      return this.options && this.options.filter(({category, restrictions }) => {
-        return category === 'body' && restrictions.type.includes(this.currentTypeModel)
-      } ).sort((a,b) => {
-        if (a.code > b.code) return -1
-        if (a.code < b.code) return 1
-        if (a.code === b.code) return  0
-      })
-    },
-    selectedCase() {
-      return this.value
-    },
-    currentTypeModel: {
-      get() {
-        return this.currentType || this.selectedBoxType || this.typeVariants && this.typeVariants[0].code
-      },
-      set(v) {
-        this.currentType = v
-        if (!this.selectedCase) this.currentItemModel = this.bodyVariants[0].code
-      }
-    },
-    currentItemModel: {
-      get() {
-        return this.currentItem || this.bodyVariants && this.bodyVariants[0].code || null
-      },
-      set(v) {
-        this.currentItem = v
-      }
-    }
-  },
-  methods: {
-    toggleOpen() {
-      this.opened = !this.opened
-    },
-    removeItem () {
-      if (this.value && this.selectedBox) this.$emit('remove')
-    },
-    selectCurrentType(item) {
-      this.currentTypeModel = item.code
-      this.currentItemModel = this.bodyVariants && this.bodyVariants[0].code.replaceAll('_', '-')
-      this.$emit('selectType', item.code)
-      this.$emit('discardSelectBox')
-      this.$emit('selectItem', this.currentItemModel)
-    },
-    selectItem(item) {
-      this.currentItemModel = item.code
-      this.$emit('selectItem', this.currentItemModel)
-    }
-  }
+	name: "SelectCase",
+	components: { HorizontalListItems, TransitionExpand },
+	props: {
+		title: {
+			type: String,
+			default: "",
+		},
+		options: {
+			type: Array,
+			default: () => [],
+		},
+		selectedBoxType: {
+			type: String,
+			default: "",
+		},
+		selectedBox: {
+			type: Object,
+			default: null,
+		},
+		value: {
+			type: String,
+			default: "",
+		},
+	},
+	data() {
+		return {
+			currentType: null,
+			currentItem: null,
+			opened: true,
+		}
+	},
+	computed: {
+		typeVariants() {
+			return this.options && this.options.filter(({ category }) => category === "type")
+		},
+		bodyVariants() {
+			return this.options && this.options.filter(({ category, restrictions }) => category === "body" && restrictions.type.includes(this.currentTypeModel)).sort((a, b) => {
+				if (a.code > b.code) return -1
+				if (a.code < b.code) return 1
+				if (a.code === b.code) return 0
+			})
+		},
+		selectedCase() {
+			return this.value
+		},
+		currentTypeModel: {
+			get() {
+				return this.currentType || this.selectedBoxType || this.typeVariants && this.typeVariants[0].code
+			},
+			set(v) {
+				this.currentType = v
+				if (!this.selectedCase) this.currentItemModel = this.bodyVariants[0].code
+			},
+		},
+		currentItemModel: {
+			get() {
+				return this.currentItem || this.bodyVariants && this.bodyVariants[0].code || null
+			},
+			set(v) {
+				this.currentItem = v
+			},
+		},
+	},
+	watch: {
+		selectedBox(v) {
+			if (v) this.currentItemModel = v.name.replaceAll("_", "-")
+		},
+		value: {
+			handler(v) {
+				this.currentItemModel = v.replaceAll("_", "-")
+				const el = this.options.find(({ code }) => code === this.currentItemModel)
+				if (el) this.currentTypeModel = el.restrictions.type[0]
+			},
+		},
+		currentTypeModel(v) {
+			if (v) this.$emit("selectType", v)
+		},
+	},
+	methods: {
+		toggleOpen() {
+			this.opened = !this.opened
+		},
+		removeItem() {
+			if (this.value && this.selectedBox) this.$emit("remove")
+		},
+		selectCurrentType(item) {
+			this.currentTypeModel = item.code
+			this.currentItemModel = this.bodyVariants && this.bodyVariants[0].code.replaceAll("_", "-")
+			this.$emit("selectType", item.code)
+			this.$emit("discardSelectBox")
+			this.$emit("selectItem", this.currentItemModel)
+		},
+		selectItem(item) {
+			this.currentItemModel = item.code
+			this.$emit("selectItem", this.currentItemModel)
+		},
+	},
 }
 </script>
 
@@ -252,7 +251,6 @@ export default {
       cursor: pointer;
       transition: .3s ease-in-out;
       user-select: none;
-
 
       &.active {
         border: 2px solid #0099DC;

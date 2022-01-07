@@ -1,263 +1,258 @@
-import {constants}  from "./constants";
+import {
+	BoxGeometry,
+	Mesh,
+	Group,
+	BufferGeometry,
+	Math,
+	BufferAttribute,
+} from "three"
+import { constants } from "./constants"
 import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
-import {
-  BoxGeometry,
-  Mesh,
-  Group,
-  BufferGeometry,
-  Math,
-  BufferAttribute,
-} from "three";
 
-import  Materials from "../Materials";
-const { defaultMaterial } =  Materials
+import Materials from "../Materials"
 
-const width = constants.topDepth*2
+const { defaultMaterial } = Materials
+
+const width = constants.topDepth * 2
 
 const height = constants.topHeight
 
-const sideDepth = constants.sideDepth;
-const scale = constants.scale
+const { sideDepth } = constants
+const { scale } = constants
 
 const sideY = (height) / 2 - sideDepth
 
 export const w_800a = () => {
+	const wrap = topBox(width, height, width)
+	const { boxGroup } = wrap
+	const { caseGroup } = wrap
+	boxGroup.add(caseGroup)
 
-  const wrap = topBox(width, height, width)
-  const boxGroup = wrap.boxGroup
-  const caseGroup = wrap.caseGroup
-  boxGroup.add(caseGroup)
+	const bodyWidth = width
+	const bodyHeight = height
+	const bodyDepth = bodyWidth
 
-  let bodyWidth = width;
-  let bodyHeight = height;
-  let bodyDepth = bodyWidth;
+	const bD = constants.topDepth
+	const sP = 0 // катет дальнего угла
+	const bP = bD - sideDepth // глубина навесных шкафов
+	const bW = bodyWidth / 2 - sideDepth
 
-  let bD = constants.topDepth;
-  let sP = 0; //катет дальнего угла
-  let bP = bD - sideDepth; //глубина навесных шкафов
-  let bW = bodyWidth/2 - sideDepth
+	const boxWidth = bodyWidth
+	const boxHeight = bodyHeight
+	const boxDepth = bodyDepth
 
-  let boxWidth = bodyWidth;
-  let boxHeight = bodyHeight;
-  let boxDepth = bodyDepth;
+	const gSideLR = new BoxGeometry(bD, boxHeight, sideDepth)
+	const gSideBack = new BoxGeometry(boxWidth - sideDepth * 2, boxHeight, sideDepth)
+	const gSideBottom = new BoxGeometry(boxWidth - sideDepth * 2, boxDepth, sideDepth)
 
-  let gSideLR = new BoxGeometry(bD, boxHeight, sideDepth);
-  let gSideBack = new BoxGeometry(boxWidth - sideDepth * 2, boxHeight, sideDepth);
-  let gSideBottom = new BoxGeometry(boxWidth - sideDepth * 2, boxDepth, sideDepth);
+	// create a simple square shape. We duplicate the top left and bottom right
+	// vertices because each vertex needs to appear once per triangle.
 
-  // create a simple square shape. We duplicate the top left and bottom right
-  // vertices because each vertex needs to appear once per triangle.
+	const vertices = [
 
-  const vertices = [
+		// front1
+		{ pos: [-bW, sideDepth, bW], norm: [0, 0, 1], uv: [0, 0] }, // E
+		{ pos: [-bW, 0, bW], norm: [0, 0, 1], uv: [0, 0] }, // E1
+		{ pos: [-bW + bP, sideDepth, bW], norm: [0, 0, 1], uv: [0, 0] }, // D
 
-    // front1
-    { pos: [     -bW, sideDepth,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E
-    { pos: [     -bW,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E1
-    { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //D
+		{ pos: [-bW + bP, sideDepth, bW], norm: [0, 0, 1], uv: [0, 0] }, // D
+		{ pos: [-bW, 0, bW], norm: [0, 0, 1], uv: [0, 0] }, // E1
+		{ pos: [-bW + bP, 0, bW], norm: [0, 0, 1], uv: [0, 0] }, // D1
 
-    { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //D
-    { pos: [     -bW,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //E1
-    { pos: [-bW + bP,         0,      bW], norm: [ 0,  0,  1], uv: [0, 0], }, //D1
+		// front
+		{ pos: [-bW + bP, sideDepth, bW], norm: [1, 0, 1], uv: [0, 0] }, // D
+		{ pos: [-bW + bP, 0, bW], norm: [1, 0, 1], uv: [0, 0] }, // D1
+		{ pos: [bW, sideDepth, -bW + bP], norm: [1, 0, 1], uv: [0, 0] }, // C
 
+		{ pos: [bW, sideDepth, -bW + bP], norm: [1, 0, 1], uv: [0, 0] }, // C
+		{ pos: [-bW + bP, 0, bW], norm: [1, 0, 1], uv: [0, 0] }, // D1
+		{ pos: [bW, 0, -bW + bP], norm: [1, 0, 1], uv: [0, 0] }, // C1
 
-    // front
-    { pos: [-bW + bP, sideDepth,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D
-    { pos: [-bW + bP,         0,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D1
-    { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C
+		// front2
+		{ pos: [bW, sideDepth, -bW + bP], norm: [1, 0, 0], uv: [0, 0] }, // C
+		{ pos: [bW, 0, -bW + bP], norm: [1, 0, 0], uv: [0, 0] }, // C1
+		{ pos: [bW, sideDepth, -bW], norm: [1, 0, 0], uv: [0, 0] }, // B
 
-    { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C
-    { pos: [-bW + bP,         0,      bW], norm: [ 1,  0,  1], uv: [0, 0], }, //D1
-    { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  1], uv: [0, 0], }, //C1
+		{ pos: [bW, sideDepth, -bW], norm: [1, 0, 0], uv: [0, 0] }, // B
+		{ pos: [bW, 0, -bW + bP], norm: [1, 0, 0], uv: [0, 0] }, // C1
+		{ pos: [bW, 0, -bW], norm: [1, 0, 0], uv: [0, 0] }, // B1
 
+		// back1
+		{ pos: [bW, sideDepth, -bW], norm: [0, 0, -1], uv: [0, 0] }, // B
+		{ pos: [bW, 0, -bW], norm: [0, 0, -1], uv: [0, 0] }, // B1
+		{ pos: [-bW + sP, sideDepth, -bW], norm: [0, 0, -1], uv: [0, 0] }, // A
 
-    // front2
-    { pos: [      bW, sideDepth,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C
-    { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C1
-    { pos: [      bW, sideDepth,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B
+		{ pos: [-bW + sP, sideDepth, -bW], norm: [0, 0, -1], uv: [0, 0] }, // A
+		{ pos: [bW, 0, -bW], norm: [0, 0, -1], uv: [0, 0] }, // B1
+		{ pos: [-bW + sP, 0, -bW], norm: [0, 0, -1], uv: [0, 0] }, // A1
 
-    { pos: [      bW, sideDepth,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B
-    { pos: [      bW,         0,-bW + bP], norm: [ 1,  0,  0], uv: [0, 0], }, //C1
-    { pos: [      bW,         0,     -bW], norm: [ 1,  0,  0], uv: [0, 0], }, //B1
+		// back
+		{ pos: [-bW + sP, sideDepth, -bW], norm: [-1, 0, -1], uv: [0, 0] }, // A
+		{ pos: [-bW + sP, 0, -bW], norm: [-1, 0, -1], uv: [0, 0] }, // A1
+		{ pos: [-bW, sideDepth, -bW + sP], norm: [-1, 0, -1], uv: [0, 0] }, // F
 
+		{ pos: [-bW + sP, 0, -bW], norm: [-1, 0, -1], uv: [0, 0] }, // A1
+		{ pos: [-bW, 0, -bW + sP], norm: [-1, 0, -1], uv: [0, 0] }, // F1
+		{ pos: [-bW, sideDepth, -bW + sP], norm: [-1, 0, -1], uv: [0, 0] }, // F
 
-    //back1
-    { pos: [      bW, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B
-    { pos: [      bW,         0,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B1
-    { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //A
+		// back2
+		{ pos: [-bW, sideDepth, -bW + sP], norm: [-1, 0, 0], uv: [0, 0] }, // F
+		{ pos: [-bW, 0, -bW + sP], norm: [-1, 0, 0], uv: [0, 0] }, // F1
+		{ pos: [-bW, sideDepth, bW], norm: [-1, 0, 0], uv: [0, 0] }, // E
 
-    { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //A
-    { pos: [      bW,         0,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //B1
-    { pos: [-bW + sP,         0,     -bW], norm: [ 0,  0, -1], uv: [0, 0], }, //A1
+		{ pos: [-bW, sideDepth, bW], norm: [-1, 0, 0], uv: [0, 0] }, // E
+		{ pos: [-bW, 0, -bW + sP], norm: [-1, 0, 0], uv: [0, 0] }, // F1
+		{ pos: [-bW, 0, bW], norm: [-1, 0, 0], uv: [0, 0] }, // E1
 
+		// top
+		{ pos: [bW, sideDepth, -bW], norm: [0, 1, 0], uv: [0, 0] }, // B
+		{ pos: [-bW + sP, sideDepth, -bW], norm: [0, 1, 0], uv: [0, 0] }, // A
+		{ pos: [bW, sideDepth, -bW + bP], norm: [0, 1, 0], uv: [0, 0] }, // C
 
-    //back
-    { pos: [-bW + sP, sideDepth,     -bW], norm: [-1,  0, -1], uv: [0, 0], }, //A
-    { pos: [-bW + sP,         0,     -bW], norm: [-1,  0, -1], uv: [0, 0], }, //A1
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [-1,  0, -1], uv: [0, 0], }, //F
+		{ pos: [bW, sideDepth, -bW + bP], norm: [0, 1, 0], uv: [0, 0] }, // C
+		{ pos: [-bW + sP, sideDepth, -bW], norm: [0, 1, 0], uv: [0, 0] }, // A
+		{ pos: [-bW, sideDepth, -bW + sP], norm: [0, 1, 0], uv: [0, 0] }, // F
 
-    { pos: [-bW + sP,         0,     -bW], norm: [-1,  0, -1], uv: [0, 0], }, //A1
-    { pos: [     -bW,         0,-bW + sP], norm: [-1,  0, -1], uv: [0, 0], }, //F1
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [-1,  0, -1], uv: [0, 0], }, //F
+		{ pos: [-bW + bP, sideDepth, bW], norm: [0, 1, 0], uv: [0, 0] }, // D
+		{ pos: [bW, sideDepth, -bW + bP], norm: [0, 1, 0], uv: [0, 0] }, // C
+		{ pos: [-bW, sideDepth, -bW + sP], norm: [0, 1, 0], uv: [0, 0] }, // F
 
+		{ pos: [-bW, sideDepth, bW], norm: [0, 1, 0], uv: [0, 0] }, // E
+		{ pos: [-bW + bP, sideDepth, bW], norm: [0, 1, 0], uv: [0, 0] }, // D
+		{ pos: [-bW, sideDepth, -bW + sP], norm: [0, 1, 0], uv: [0, 0] }, // F
 
-    //back2
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [-1,  0,  0], uv: [0, 0], }, //F
-    { pos: [     -bW,         0,-bW + sP], norm: [-1,  0,  0], uv: [0, 0], }, //F1
-    { pos: [     -bW, sideDepth,      bW], norm: [-1,  0,  0], uv: [0, 0], }, //E
+		// bottom
+		{ pos: [-bW + sP, 0, -bW], norm: [0, -1, 0], uv: [0, 0] }, // A1
+		{ pos: [bW, 0, -bW], norm: [0, -1, 0], uv: [0, 0] }, // B1
+		{ pos: [bW, 0, -bW + bP], norm: [0, -1, 0], uv: [0, 0] }, // C1
 
-    { pos: [     -bW, sideDepth,      bW], norm: [-1,  0,  0], uv: [0, 0], }, //E
-    { pos: [     -bW,         0,-bW + sP], norm: [-1,  0,  0], uv: [0, 0], }, //F1
-    { pos: [     -bW,         0,      bW], norm: [-1,  0,  0], uv: [0, 0], }, //E1
+		{ pos: [-bW + sP, 0, -bW], norm: [0, -1, 0], uv: [0, 0] }, // A1
+		{ pos: [bW, 0, -bW + bP], norm: [0, -1, 0], uv: [0, 0] }, // C1
+		{ pos: [-bW, 0, -bW + sP], norm: [0, -1, 0], uv: [0, 0] }, // F1
 
+		{ pos: [-bW, 0, -bW + sP], norm: [0, -1, 0], uv: [0, 0] }, // F1
+		{ pos: [bW, 0, -bW + bP], norm: [0, -1, 0], uv: [0, 0] }, // C1
+		{ pos: [-bW + bP, 0, bW], norm: [0, -1, 0], uv: [0, 0] }, // D1
 
-    // top
-    { pos: [      bW, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //B
-    { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //A
-    { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
+		{ pos: [-bW, 0, bW], norm: [0, -1, 0], uv: [0, 0] }, // E1
+		{ pos: [-bW, 0, -bW + sP], norm: [0, -1, 0], uv: [0, 0] }, // F1
+		{ pos: [-bW + bP, 0, bW], norm: [0, -1, 0], uv: [0, 0] }, // D1
+	]
 
-    { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
-    { pos: [-bW + sP, sideDepth,     -bW], norm: [ 0,  1,  0], uv: [0, 0], }, //A
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F
+	const positions = []
+	const normals = []
+	const uvs = []
+	for (const vertex of vertices) {
+		positions.push(...vertex.pos)
+		normals.push(...vertex.norm)
+		uvs.push(...vertex.uv)
+	}
 
-    { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //D
-    { pos: [      bW, sideDepth,-bW + bP], norm: [ 0,  1,  0], uv: [0, 0], }, //C
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F
+	const geometry = new BufferGeometry()
+	const positionNumComponents = 3
+	const normalNumComponents = 3
+	const uvNumComponents = 2
+	geometry.setAttribute(
+		"position",
+		new BufferAttribute(new Float32Array(positions), positionNumComponents),
+	)
+	geometry.setAttribute(
+		"normal",
+		new BufferAttribute(new Float32Array(normals), normalNumComponents),
+	)
+	geometry.setAttribute(
+		"uv",
+		new BufferAttribute(new Float32Array(uvs), uvNumComponents),
+	)
 
-    { pos: [     -bW, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //E
-    { pos: [-bW + bP, sideDepth,      bW], norm: [ 0,  1,  0], uv: [0, 0], }, //D
-    { pos: [     -bW, sideDepth,-bW + sP], norm: [ 0,  1,  0], uv: [0, 0], }, //F
+	const sideV = mesh(geometry, defaultMaterial())
 
-    // bottom
-    { pos: [-bW + sP,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //A1
-    { pos: [      bW,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //B1
-    { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
+	const sideLeft = mesh(gSideLR, defaultMaterial())
+	const sideRight = mesh(gSideLR, defaultMaterial())
+	const sideBackR = mesh(gSideBack, defaultMaterial())
+	const sideBackL = mesh(gSideBack, defaultMaterial())
+	const sideBottom = mesh(geometry, defaultMaterial())
+	const sideBTop = mesh(geometry, defaultMaterial())
+	// let sideShelf = mesh(gSideBottom, defaultMaterial());
+	const facadeLeft = new Group()
+	// let facadeRight = new Group();
 
-    { pos: [-bW + sP,         0,     -bW], norm: [ 0, -1,  0], uv: [0, 0], }, //A1
-    { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
-    { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
+	const objFacadeLeft = new Group()
+	objFacadeLeft.add(facadeLeft)
+	facadeLeft.name = "doorBox"
+	facadeLeft.position.x = boxWidth / 4 - sideDepth / 2
+	objFacadeLeft.position.x = -boxWidth / 2 + sideDepth / 2
+	objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2
+	objFacadeLeft.name = "leftDoor"
 
-    { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
-    { pos: [      bW,         0,-bW + bP], norm: [ 0, -1,  0], uv: [0, 0], }, //C1
-    { pos: [-bW + bP,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //D1
-
-    { pos: [     -bW,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //E1
-    { pos: [     -bW,         0,-bW + sP], norm: [ 0, -1,  0], uv: [0, 0], }, //F1
-    { pos: [-bW + bP,         0,      bW], norm: [ 0, -1,  0], uv: [0, 0], }, //D1
-  ];
-
-  const positions = [];
-  const normals = [];
-  const uvs = [];
-  for (const vertex of vertices) {
-    positions.push(...vertex.pos);
-    normals.push(...vertex.norm);
-    uvs.push(...vertex.uv);
-  }
-
-  const geometry = new BufferGeometry();
-  const positionNumComponents = 3;
-  const normalNumComponents = 3;
-  const uvNumComponents = 2;
-  geometry.setAttribute(
-      'position',
-      new BufferAttribute(new Float32Array(positions), positionNumComponents));
-  geometry.setAttribute(
-      'normal',
-      new BufferAttribute(new Float32Array(normals), normalNumComponents));
-  geometry.setAttribute(
-      'uv',
-      new BufferAttribute(new Float32Array(uvs), uvNumComponents));
-
-  let sideV = mesh(geometry, defaultMaterial());
-
-  let sideLeft = mesh(gSideLR, defaultMaterial());
-  let sideRight = mesh(gSideLR, defaultMaterial());
-  let sideBackR = mesh(gSideBack, defaultMaterial());
-  let sideBackL = mesh(gSideBack, defaultMaterial());
-  let sideBottom = mesh(geometry, defaultMaterial());
-  let sideBTop = mesh(geometry, defaultMaterial());
-  //let sideShelf = mesh(gSideBottom, defaultMaterial());
-  let facadeLeft = new Group()
-  //let facadeRight = new Group();
-
-  let objFacadeLeft = new Group();
-  objFacadeLeft.add(facadeLeft);
-  facadeLeft.name = 'doorBox'
-  facadeLeft.position.x = boxWidth / 4 - sideDepth / 2;
-  objFacadeLeft.position.x = -boxWidth / 2 + sideDepth / 2;
-  objFacadeLeft.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacadeLeft.name = 'leftDoor'
-
-  /*let objFacadeRight = new Group();
+	/* let objFacadeRight = new Group();
   objFacadeRight.add(facadeRight);
   facadeRight.name = 'doorBox'
   facadeRight.position.x = -boxWidth / 4 + sideDepth / 2;
   objFacadeRight.position.x = boxWidth / 2 - sideDepth / 2;
   objFacadeRight.position.z = boxDepth / 2 + sideDepth / 2;
-  objFacadeRight.name = 'rightDoor'*/
+  objFacadeRight.name = 'rightDoor' */
 
-  let group = mesh();
+	const group = mesh()
 
-  sideV.position.y = 0;
-  //sideV.position.x = sideDepth / 2;
-  //sideV.position.z = sideDepth / 2;
-  //sideV.rotation.y = Math.degToRad(90);
-  group.add(sideV);
+	sideV.position.y = 0
+	// sideV.position.x = sideDepth / 2;
+	// sideV.position.z = sideDepth / 2;
+	// sideV.rotation.y = Math.degToRad(90);
+	group.add(sideV)
 
-  //sideLeft.rotation.y = Math.degToRad(-90);
-  sideLeft.position.z = (boxDepth/2 - sideDepth / 2);
-  sideLeft.position.x = -(boxDepth/4 /*- sideDepth / 2*/);
-  sideRight.rotation.y = Math.degToRad(90);
-  sideRight.position.x = (boxWidth / 2 - sideDepth / 2);
-  sideRight.position.z = -(boxDepth/4 /*- sideDepth / 2*/);
-  sideBackR.position.z = -(boxDepth / 2 - sideDepth / 2);
-  sideBackL.position.x = -(boxWidth / 2 - sideDepth / 2);
-  sideBackL.rotation.y = Math.degToRad(90);
-  //sideBottom.rotation.x = Math.degToRad(-90);
-  //sideShelf.rotation.x = Math.degToRad(-90);
-  sideBottom.position.y = -(boxHeight / 2 );
- // sideBTop.rotation.x = Math.degToRad(-90);
-  sideBTop.position.y = (boxHeight / 2 - sideDepth);
-  //sideBTop.position.z = (-boxDepth / 2 + sideTop / 2 + sideDepth);
+	// sideLeft.rotation.y = Math.degToRad(-90);
+	sideLeft.position.z = (boxDepth / 2 - sideDepth / 2)
+	sideLeft.position.x = -(boxDepth / 4 /* - sideDepth / 2 */)
+	sideRight.rotation.y = Math.degToRad(90)
+	sideRight.position.x = (boxWidth / 2 - sideDepth / 2)
+	sideRight.position.z = -(boxDepth / 4 /* - sideDepth / 2 */)
+	sideBackR.position.z = -(boxDepth / 2 - sideDepth / 2)
+	sideBackL.position.x = -(boxWidth / 2 - sideDepth / 2)
+	sideBackL.rotation.y = Math.degToRad(90)
+	// sideBottom.rotation.x = Math.degToRad(-90);
+	// sideShelf.rotation.x = Math.degToRad(-90);
+	sideBottom.position.y = -(boxHeight / 2)
+	// sideBTop.rotation.x = Math.degToRad(-90);
+	sideBTop.position.y = (boxHeight / 2 - sideDepth)
+	// sideBTop.position.z = (-boxDepth / 2 + sideTop / 2 + sideDepth);
 
-  group.add(sideLeft);
-  group.add(sideRight);
-  group.add(sideBackR);
-  group.add(sideBackL);
-  group.add(sideBottom);
-  //group.add(sideShelf);
-  group.add(sideBTop)
-  group.add(objFacadeLeft)
-  //group.add(objFacadeRight)
-  group.name = "group"
+	group.add(sideLeft)
+	group.add(sideRight)
+	group.add(sideBackR)
+	group.add(sideBackL)
+	group.add(sideBottom)
+	// group.add(sideShelf);
+	group.add(sideBTop)
+	group.add(objFacadeLeft)
+	// group.add(objFacadeRight)
+	group.name = "group"
 
-  boxGroup.add(group);
+	boxGroup.add(group)
 
-  group.position.y = boxHeight/2 - sideDepth;
+	group.position.y = boxHeight / 2 - sideDepth
 
-  /*boxGroup.userData.width = bodyWidth
+	/* boxGroup.userData.width = bodyWidth
   boxGroup.userData.depth = bodyDepth
-  boxGroup.userData.height = bodyHeight*/
+  boxGroup.userData.height = bodyHeight */
 
-  boxGroup.name = 'w_800a'
-  boxGroup.userData['code'] = 'w-800a'
-  boxGroup.userData['configType'] = 'angularBox'
-  //boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
-  // boxGroup.userData['configType'] = 'boxWall'
-  boxGroup.userData['openedDoors'] = false
+	boxGroup.name = "w_800a"
+	boxGroup.userData.code = "w-800a"
+	boxGroup.userData.configType = "angularBox"
+	// boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
+	// boxGroup.userData['configType'] = 'boxWall'
+	boxGroup.userData.openedDoors = false
 
-  boxGroup.scale.set( scale, scale, scale )
+	boxGroup.scale.set(scale, scale, scale)
 
-  // boxGroup.position.set(0,0,0);
+	// boxGroup.position.set(0,0,0);
 
-  defaultMaterial().dispose()
-  gSideLR.dispose()
-  gSideBack.dispose()
-  gSideBottom.dispose()
-  boxGroup.rotation.y = Math.degToRad(-90);
-  //gSideTop.dispose()
-  return boxGroup
-
+	defaultMaterial().dispose()
+	gSideLR.dispose()
+	gSideBack.dispose()
+	gSideBottom.dispose()
+	boxGroup.rotation.y = Math.degToRad(-90)
+	// gSideTop.dispose()
+	return boxGroup
 }
-

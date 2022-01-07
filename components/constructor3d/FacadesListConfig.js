@@ -1,94 +1,95 @@
-import {BoxGeometry, Group, Mesh, MeshStandardMaterial, TextureLoader} from "three";
+import {
+	BoxGeometry, Group, Mesh, MeshStandardMaterial, TextureLoader,
+} from "three"
 
-const sideDepth = .3;
+const sideDepth = 0.3
 
 const getMaterial = (url) => {
-  const facadeTextureLoader = new TextureLoader();
+	const facadeTextureLoader = new TextureLoader()
 
-  const facadeMaterial = new MeshStandardMaterial({
-    color: 0xffffff,
-    map: facadeTextureLoader.load(url),
-  });
+	const facadeMaterial = new MeshStandardMaterial({
+		color: 0xffffff,
+		map: facadeTextureLoader.load(url),
+	})
 
-  const material = new MeshStandardMaterial({color: 0xffffff,});
+	const material = new MeshStandardMaterial({ color: 0xffffff })
 
-  material.roughness = 0.3;
-  material.metalness = 0.05;
+	material.roughness = 0.3
+	material.metalness = 0.05
 
-  const facadeMaterials = [
-    facadeMaterial,
-    facadeMaterial,
-    facadeMaterial,
-    facadeMaterial,
-    facadeMaterial,
-    material,
-  ];
-  // facadeTextureLoader.dispose()
-  facadeMaterial.dispose()
-  material.dispose()
+	const facadeMaterials = [
+		facadeMaterial,
+		facadeMaterial,
+		facadeMaterial,
+		facadeMaterial,
+		facadeMaterial,
+		material,
+	]
+	// facadeTextureLoader.dispose()
+	facadeMaterial.dispose()
+	material.dispose()
 
-  return facadeMaterials
+	return facadeMaterials
 }
 
 const getFacade = (colorId, width, height, url) => {
+	const material = getMaterial(url)
 
-  const material = getMaterial(url)
+	const geometry = new BoxGeometry(width, height, sideDepth)
+	const facade = new Mesh(geometry, material)
+	const group = new Group()
 
-  const geometry = new BoxGeometry(width, height, sideDepth);
-  const facade = new Mesh(geometry, material);
-  const group = new Group()
+	group.add(facade)
 
-  group.add(facade)
+	group.name = "facade"
 
-  group.name = 'facade'
+	group.userData.width = width
+	group.userData.height = height
+	group.userData.colorId = colorId
 
-  group.userData.width = width
-  group.userData.height = height
-  group.userData.colorId = colorId
+	geometry.dispose()
 
-  geometry.dispose()
-
-  return group
+	return group
 }
 
 const ldsp = (colorId, width, height, url) => {
-  const facade = getFacade(colorId, width, height, url)
-  // facade.position.set(0,0,0)
-  facade.userData.facade = 'ldsp'
-  facade.userData.facadeName = 'ЛДСП'
-  facade.userData.facadeDescription = 'Ламинированная древесно - стружечная плита. Кромка 0,4 мм со всех сторон. Качественное покрытие. Устойчивость к температурным воздействиям. Упаковка: стрейч плёнка.'
-  facade.userData.types = [{
-    id: 'laminate',
-    name: 'Ламинированный',
-    description: 'Фасад с ламинированной пленкой на 5 граней'
-  },
-    {
-      id: 'lacquered',
-      name: 'Лакированный',
-      description: 'Фасад с покраской и нанесением лака'
-    }
-  ]
+	const facade = getFacade(colorId, width, height, url)
+	// facade.position.set(0,0,0)
+	facade.userData.facade = "ldsp"
+	facade.userData.facadeName = "ЛДСП"
+	facade.userData.facadeDescription = "Ламинированная древесно - стружечная плита. Кромка 0,4 мм со всех сторон. Качественное покрытие. Устойчивость к температурным воздействиям. Упаковка: стрейч плёнка."
+	facade.userData.types = [{
+		id: "laminate",
+		name: "Ламинированный",
+		description: "Фасад с ламинированной пленкой на 5 граней",
+	},
+	{
+		id: "lacquered",
+		name: "Лакированный",
+		description: "Фасад с покраской и нанесением лака",
+	},
+	]
 
-  return facade
+	return facade
 }
 
 const mdf = (colorId, width, height, url) => {
-  const facade = getFacade(colorId, width, height, url)
-  facade.userData.facade = 'mdf'
-  facade.userData.facadeName = 'МДФ'
-  facade.userData.facadeDescription = 'Покрытие - пленка ПВХ. Высокая устойчивость к УФ - лучам, сколам, истиранию, воздействию чистящих средств, изменениям влажности и высоким температурам. Упаковка: стрейч плёнка.'
-  facade.userData.types = [{
-    id: 'milled',
-    name: 'Фрезерованный',
-    description: 'Фасад с фрезерованными гранями и внутренним рельефом'
-  },
-    {
-      id: 'lacquered',
-      name: 'Лакированный',
-      description: 'Фасад с покраской и нанесением лака'
-    }
-  ]
-  return facade
+	const facade = getFacade(colorId, width, height, url)
+	facade.userData.facade = "mdf"
+	facade.userData.facadeName = "МДФ"
+	facade.userData.facadeDescription = "Покрытие - пленка ПВХ. Высокая устойчивость к УФ - лучам, сколам, истиранию, воздействию чистящих средств, изменениям влажности и высоким температурам. Упаковка: стрейч плёнка."
+	facade.userData.types = [{
+		id: "milled",
+		name: "Фрезерованный",
+		description: "Фасад с фрезерованными гранями и внутренним рельефом",
+	},
+	{
+		id: "lacquered",
+		name: "Лакированный",
+		description: "Фасад с покраской и нанесением лака",
+	},
+	]
+	return facade
 }
 
 // const getFacadeByColorId = (colorId) => {
@@ -97,7 +98,7 @@ const mdf = (colorId, width, height, url) => {
 // }
 
 export default {
-  // getFacadeByColorId,
-  ldsp,
-  mdf
+	// getFacadeByColorId,
+	ldsp,
+	mdf,
 }

@@ -4,19 +4,19 @@
 </template>
 
 <script>
-  export default {
-    name: "MessageBox",
-    props: {
-      message: {
-        type: String,
-        default: ''
-      },
-      messageType: {
-        type: String,
-        default: 'warn'
-      }
-    }
-  }
+export default {
+	name: "MessageBox",
+	props: {
+		message: {
+			type: String,
+			default: "",
+		},
+		messageType: {
+			type: String,
+			default: "warn",
+		},
+	},
+}
 </script>
 
 <style  lang="scss" scoped>

@@ -1,15 +1,15 @@
-const post =  [
-  {
-    name: 'winter_berg',
-    img: require('./img/tableTop/post/winter_berg.png')
-  }]
+const post = [
+	{
+		name: "winter_berg",
+		img: require("./img/tableTop/post/winter_berg.png"),
+	}]
 
 const ldsp = [
-  {
+	{
 
-  }]
+	}]
 
 export default {
-  post,
-  ldsp
+	post,
+	ldsp,
 }

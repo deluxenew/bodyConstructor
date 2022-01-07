@@ -44,140 +44,138 @@
 </template>
 
 <script>
-import UiInputCheckbox from './UiInputCheckbox.vue'
-import TransitionExpand from './TransitionExpand.vue'
+import UiInputCheckbox from "./UiInputCheckbox.vue"
+import TransitionExpand from "./TransitionExpand.vue"
 import HorizontalListItems from "./HorizontalListItems.vue"
 
 export default {
-  name: "SelectTabletop",
-  components: {TransitionExpand, UiInputCheckbox, HorizontalListItems},
-  props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    elementVariants: {
-      type: Array,
-      default: () => []
-    },
-    options: {
-      type: Array,
-      default: () => []
-    },
-    textures: {
-      type: Array,
-      default: () => []
-    },
-    value: {
-      type: Object,
-      default: () => null
-    }
-  },
-  data() {
-    return {
-      currentType: null,
-      currentThickness: null,
-      currentItem: null,
-      opened: true
-    }
-  },
-  computed: {
-    materialVariants() {
-      return this.options && this.options.filter(({category}) => category === 'material')
-    },
-    thicknessVariants() {
-      return this.options && this.options.filter(({dependency, category}) => category === 'thickness' && dependency[0].code === 'material' && dependency[0].values.includes(this.materialModel))
-    },
-    colorVariants() {
-      return this.options && this.options.filter(({category, restrictions  }) => {
-        return category === 'color' && restrictions.thickness && restrictions.thickness.includes(this.thicknessModel)
-      }).sort((a,b) => {
-        if (a.code > b.code) return -1
-        if (a.code < b.code) return 1
-        if (a.code === b.code) return  0
-      })
-    },
-    materialModel: {
-      get() {
-        return this.currentType || this.selectedBoxType || this.materialVariants && this.materialVariants[0].code
-      },
-      set(v) {
-        this.currentType = v
-      }
-    },
-    thicknessModel: {
-      get() {
-        return this.currentThickness || this.thicknessVariants[0]?.code
-      },
-      set(v) {
-        this.currentThickness = v
-      },
-    },
-    colorModel: {
-      get() {
-        return this.currentItem || this.colorVariants && this.colorVariants[0] && this.colorVariants[0].code || null
-      },
-      set(v) {
-        this.currentItem = v
-      }
-    },
-    colorObj() {
-      return this.colorVariants && this.colorVariants.find(({code}) => code === this.colorModel)
-    },
-    imageUrl() {
-      const item = this.textures && this.textures.find(({code}) => this.colorModel === code )
-      if (item) return 'https://cdn.akson.ru/webp' + item.path + '0.png'
-      return ''
-    },
-    config() {
-      return {
-        type: this.materialModel,
-        height: this.thicknessModel / 100,
-        color: this.colorModel,
-        url: this.imageUrl,
-        colorName: this.colorObj ? this.colorObj.name : ''
-      }
-    }
-  },
-  methods: {
-    addTableTop() {
-      this.$emit('addTableTop', {
-        url: '',
-        height: 0.3,
-        type: this.materialModel.type
-      })
-    },
-    toggleOpen() {
-      this.opened = !this.opened
-    },
-    removeItem() {
-      this.currentItem = null
-    },
-    selectMaterial({code}) {
-      if (this.materialModel === code) return
-      this.materialModel = code
-      if (this.thicknessVariants && this.thicknessVariants[0]) {
-        this.thicknessModel = this.thicknessVariants[0].code
-      }
-      if (this.colorVariants && this.colorVariants[0]) {
-        this.colorModel =  this.colorVariants[0].code
-        this.$emit('selectColor', this.config)
-      }
-    },
-    selectThickness({code}) {
-      if (this.thicknessModel === code) return
-      this.thicknessModel = code
-      if (this.colorVariants && this.colorVariants[0]) {
-        this.colorModel =  this.colorVariants[0].code
-        this.$emit('selectColor', this.config)
-      }
-    },
-    selectItem(item) {
-      if (!item) return
-      this.colorModel = item.code
-      this.$emit('selectColor', this.config)
-    }
-  },
+	name: "SelectTabletop",
+	components: { TransitionExpand, UiInputCheckbox, HorizontalListItems },
+	props: {
+		title: {
+			type: String,
+			default: "",
+		},
+		elementVariants: {
+			type: Array,
+			default: () => [],
+		},
+		options: {
+			type: Array,
+			default: () => [],
+		},
+		textures: {
+			type: Array,
+			default: () => [],
+		},
+		value: {
+			type: Object,
+			default: () => null,
+		},
+	},
+	data() {
+		return {
+			currentType: null,
+			currentThickness: null,
+			currentItem: null,
+			opened: true,
+		}
+	},
+	computed: {
+		materialVariants() {
+			return this.options && this.options.filter(({ category }) => category === "material")
+		},
+		thicknessVariants() {
+			return this.options && this.options.filter(({ dependency, category }) => category === "thickness" && dependency[0].code === "material" && dependency[0].values.includes(this.materialModel))
+		},
+		colorVariants() {
+			return this.options && this.options.filter(({ category, restrictions }) => category === "color" && restrictions.thickness && restrictions.thickness.includes(this.thicknessModel)).sort((a, b) => {
+				if (a.code > b.code) return -1
+				if (a.code < b.code) return 1
+				if (a.code === b.code) return 0
+			})
+		},
+		materialModel: {
+			get() {
+				return this.currentType || this.selectedBoxType || this.materialVariants && this.materialVariants[0].code
+			},
+			set(v) {
+				this.currentType = v
+			},
+		},
+		thicknessModel: {
+			get() {
+				return this.currentThickness || this.thicknessVariants[0]?.code
+			},
+			set(v) {
+				this.currentThickness = v
+			},
+		},
+		colorModel: {
+			get() {
+				return this.currentItem || this.colorVariants && this.colorVariants[0] && this.colorVariants[0].code || null
+			},
+			set(v) {
+				this.currentItem = v
+			},
+		},
+		colorObj() {
+			return this.colorVariants && this.colorVariants.find(({ code }) => code === this.colorModel)
+		},
+		imageUrl() {
+			const item = this.textures && this.textures.find(({ code }) => this.colorModel === code)
+			if (item) return `https://cdn.akson.ru/webp${item.path}0.png`
+			return ""
+		},
+		config() {
+			return {
+				type: this.materialModel,
+				height: this.thicknessModel / 100,
+				color: this.colorModel,
+				url: this.imageUrl,
+				colorName: this.colorObj ? this.colorObj.name : "",
+			}
+		},
+	},
+	methods: {
+		addTableTop() {
+			this.$emit("addTableTop", {
+				url: "",
+				height: 0.3,
+				type: this.materialModel.type,
+			})
+		},
+		toggleOpen() {
+			this.opened = !this.opened
+		},
+		removeItem() {
+			this.currentItem = null
+		},
+		selectMaterial({ code }) {
+			if (this.materialModel === code) return
+			this.materialModel = code
+			if (this.thicknessVariants && this.thicknessVariants[0]) {
+				this.thicknessModel = this.thicknessVariants[0].code
+			}
+			if (this.colorVariants && this.colorVariants[0]) {
+				this.colorModel = this.colorVariants[0].code
+				this.$emit("selectColor", this.config)
+			}
+		},
+		selectThickness({ code }) {
+			if (this.thicknessModel === code) return
+			this.thicknessModel = code
+			if (this.colorVariants && this.colorVariants[0]) {
+				this.colorModel = this.colorVariants[0].code
+				this.$emit("selectColor", this.config)
+			}
+		},
+		selectItem(item) {
+			if (!item) return
+			this.colorModel = item.code
+			this.$emit("selectColor", this.config)
+		},
+	},
 }
 </script>
 
@@ -328,7 +326,6 @@ export default {
     cursor: pointer;
     transition: .3s ease-in-out;
     user-select: none;
-
 
     &.active {
       border: 2px solid #0099DC;
