@@ -1,7 +1,8 @@
 import { boxWrapper } from "./BoxWrapper"
-import {BoxGeometry, CylinderGeometry, Group, Mesh} from "three";
+import {BoxGeometry, CylinderGeometry, Group} from "three";
 import Materials from "../Materials";
 import { mesh } from "./CustomMesh"
+import { GetTextMesh } from "../../configs/TextConfig";
 
 const { defaultMaterial, legMaterial } = Materials
 
@@ -34,6 +35,12 @@ export const bottomBox = (width, height, depth) => {
   legRight.position.z = -depth / 2 + legsRad / 2 + legFrontMargin;
   legRight.position.x = width / 2 - legsRad - legFrontMargin;
 
+  const sizeMesh = GetTextMesh(`${width * 100}`, width)
+  sizeMesh.position.y = -height / 2
+  sizeMesh.position.z = depth / 2 ;
+
+  console.log(sizeMesh)
+  boxGroup.add(sizeMesh)
   boxGroup.add(sideBottom)
   boxGroup.add(legFront)
   boxGroup.add(legLeft)
@@ -42,6 +49,7 @@ export const bottomBox = (width, height, depth) => {
   const caseGroup = new Group()
   caseGroup.position.y = -height / 2 + legsHeight + sideDepth
   boxGroup.position.set(-width / 2 , height / 2, depth / 2)
+
   caseGroup.name = 'caseGroup'
   boxGroup.userData['pos'] = 'floor'
 

@@ -1,89 +1,72 @@
-import * as THREE from 'three';
+import {ShapeGeometry, MeshBasicMaterial, DoubleSide, Group, Mesh, Line, LineBasicMaterial, BufferGeometry, Vector3, Math} from 'three';
 
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import url from "./font/helvetiker_regular.typeface.json";
+import {FontLoader} from 'three/examples/jsm/loaders/FontLoader.js';
 
-export const  GetText = (text) => {
-  const textObj = new THREE.Group()
+export const GetTextMesh = (text, width) => {
+  const textObj = new Group()
   const loader = new FontLoader();
-  const message = text;
 
-  const url = require('./font/helvetiker_regular.typeface.json')
-  console.log(url)
-   loader.load( url,  function ( font ) {
-     console.log(font, 'font')
-    const color = 0x006699;
+  loader.load('./helvetiker_regular.typeface.json', function (font) {
+    const color = 0x000000;
 
-    const matDark = new THREE.LineBasicMaterial( {
-      color: color,
-      side: THREE.DoubleSide
-    } );
-
-    const matLite = new THREE.MeshBasicMaterial( {
+    const matLite = new MeshBasicMaterial({
       color: color,
       transparent: true,
-      opacity: 0.4,
-      side: THREE.DoubleSide
-    } );
+      opacity: 0.6,
+      side: DoubleSide
+    });
 
-    const shapes = font.generateShapes( message, 100 );
-    const geometry = new THREE.ShapeGeometry( shapes );
-
+    const shapes = font.generateShapes(text, 0.5);
+    const geometry = new ShapeGeometry(shapes);
     geometry.computeBoundingBox();
+    const xMid = -0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x);
+    geometry.translate(xMid, 0, 0);
 
-    const xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+    const textMesh = new Mesh(geometry, matLite);
+    textMesh.position.y = 0.3
+    textObj.add(textMesh);
+    matLite.dispose()
+    geometry.dispose()
+  });
 
-    geometry.translate( xMid, 0, 0 );
+  const pointsLeft = []
+  const pointsRight = []
+  const pointsMiddle = []
 
-    // make shape ( N.B. edge view not visible )
+  pointsLeft.push(new Vector3(-width / 2, 1, 0))
+  pointsLeft.push(new Vector3(-width / 2, 0, 0))
+  pointsRight.push(new Vector3(width / 2, 1, 0))
+  pointsRight.push(new Vector3(width / 2, 0, 0))
+  pointsMiddle.push(new Vector3(-width / 2, 0.1, 0))
+  pointsMiddle.push(new Vector3(width / 2, 0.1, 0))
+  const geometryLeft = new BufferGeometry().setFromPoints( pointsLeft )
+  const geometryRight = new BufferGeometry().setFromPoints( pointsRight )
+  const geometryMiddle = new BufferGeometry().setFromPoints( pointsMiddle )
+  let lineLeft = new Line(geometryLeft, new LineBasicMaterial({ color: 0x000000 }))
+  let lineRight = new Line(geometryRight, new LineBasicMaterial({ color: 0x000000 }))
+  let lineMiddle = new Line(geometryMiddle, new LineBasicMaterial({ color: 0x000000 }))
 
-    const text = new THREE.Mesh( geometry, matLite );
-    text.position.z = - 150;
-    textObj.add( text );
+  textObj.add(lineLeft)
+  textObj.add(lineRight)
+  textObj.add(lineMiddle)
 
-    // make line shape ( N.B. edge view remains visible )
+  const pointsTriangle = []
+  pointsTriangle.push(new Vector3(-width / 2, 0.1, 0))
+  pointsTriangle.push(new Vector3(-width / 2 + 0.5, 0.2, 0))
+  pointsTriangle.push(new Vector3(-width / 2 + 0.5, 0, 0))
+  const triangleGeometry = new BufferGeometry().setFromPoints( pointsTriangle )
+  const triangleMaterial = new MeshBasicMaterial({
+    color: 0x000000,
+    side: DoubleSide
+  });
+  const triangleMesh = new Mesh(triangleGeometry, triangleMaterial);
 
-    const holeShapes = [];
+  const triangleMeshRight = triangleMesh.clone()
+  triangleMeshRight.rotateY(Math.degToRad(-180))
 
-    for ( let i = 0; i < shapes.length; i ++ ) {
+  textObj.add(triangleMesh)
+  textObj.add(triangleMeshRight)
 
-      const shape = shapes[ i ];
-
-      if ( shape.holes && shape.holes.length > 0 ) {
-
-        for ( let j = 0; j < shape.holes.length; j ++ ) {
-
-          const hole = shape.holes[ j ];
-          holeShapes.push( hole );
-
-        }
-
-      }
-
-    }
-
-    shapes.push.apply( shapes, holeShapes );
-
-    const lineText = new THREE.Object3D();
-
-    for ( let i = 0; i < shapes.length; i ++ ) {
-
-      const shape = shapes[ i ];
-
-      const points = shape.getPoints();
-      const geometry = new THREE.BufferGeometry().setFromPoints( points );
-
-      geometry.translate( xMid, 0, 0 );
-
-      const lineMesh = new THREE.Line( geometry, matDark );
-      lineText.add( lineMesh );
-
-    }
-    textObj.add( lineText );
-
-  } );
-  console.log(textObj, 'textObj')
   return textObj
 }
 
