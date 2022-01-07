@@ -47,9 +47,9 @@
 
 <script>
 import Canvas3d from "./Canvas3d"
-import boxes from "./models/boxes/BoxesList"
+import boxes from "./configs/boxes/BoxesList"
 import facades from "./FacadesListConfig"
-import tableTops from "./TableTopList"
+import tableTops from "./configs/TableTop"
 
 import Module from "./module"
 import SelectCase from "./SelectCase.vue"

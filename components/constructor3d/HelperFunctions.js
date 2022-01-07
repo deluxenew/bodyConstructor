@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import boxes from "./models/boxes/BoxesList"
+import boxes from "./configs/boxes/BoxesList"
 
 const { Math: threeMath } = THREE
 

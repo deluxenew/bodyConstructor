@@ -3,7 +3,6 @@ import {
 } from "three"
 
 const depth = 6
-// const material = new MeshStandardMaterial({color: 0x000000,});
 
 const getMaterial = (url) => {
 	const facadeTextureLoader = new TextureLoader()

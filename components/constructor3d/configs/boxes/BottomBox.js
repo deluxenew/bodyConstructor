@@ -2,7 +2,7 @@ import { BoxGeometry, CylinderGeometry, Group } from "three"
 import { boxWrapper } from "./BoxWrapper"
 import Materials from "../Materials"
 import { mesh } from "./CustomMesh"
-import { GetTextMesh } from "../../configs/Text"
+import { GetTextMesh } from "../Text"
 
 const { defaultMaterial, legMaterial } = Materials
 

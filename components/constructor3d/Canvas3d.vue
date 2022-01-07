@@ -25,10 +25,10 @@ import * as THREE from "three"
 import {
 	AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3,
 } from "three"
-import StartLoader from "./StartLoader"
+import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
-import boxes from "./models/boxes/BoxesList"
-import tableTopList from "./TableTopList"
+import boxes from "./configs/boxes/BoxesList"
+import tableTopList from "./configs/TableTop"
 
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,

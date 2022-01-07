@@ -1,6 +1,5 @@
 import {
 	BoxGeometry,
-	Mesh,
 	Group,
 	BufferGeometry,
 	Math,
@@ -9,6 +8,7 @@ import {
 import { constants } from "./constants"
 import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
+import { GetTextMesh } from "../Text"
 
 import Materials from "../Materials"
 
@@ -20,8 +20,6 @@ const height = constants.topHeight
 
 const { sideDepth } = constants
 const { scale } = constants
-
-const sideY = (height) / 2 - sideDepth
 
 export const w_800a = () => {
 	const wrap = topBox(width, height, width)
@@ -223,11 +221,17 @@ export const w_800a = () => {
 	group.add(sideBackR)
 	group.add(sideBackL)
 	group.add(sideBottom)
-	// group.add(sideShelf);
 	group.add(sideBTop)
 	group.add(objFacadeLeft)
-	// group.add(objFacadeRight)
 	group.name = "group"
+
+	const sizeMesh = GetTextMesh(`${width * 100}`, width)
+	sizeMesh.position.x = -width /2 + 0.01
+	sizeMesh.position.y = constants.topBound /2 - 1.5 * height - 1
+	sizeMesh.position.z = 0.01
+	sizeMesh.rotateY(Math.degToRad(90))
+
+	boxGroup.add(sizeMesh)
 
 	boxGroup.add(group)
 

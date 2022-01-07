@@ -142,7 +142,7 @@ export default {
 			}, ms)
 		},
 		onHold(event) {
-			if (this.$refs.list.contains(event.target) || (this.$refs.scroll && this.$refs.scroll.contains(event.target))) {
+			if (this.$refs.list && this.$refs.list.contains(event.target) || (this.$refs.scroll && this.$refs.scroll.contains(event.target))) {
 				this.startScroll = event.clientX
 				window.addEventListener("mousemove", this.calcPositionMouse)
 			}

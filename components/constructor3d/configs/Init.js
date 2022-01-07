@@ -1,9 +1,9 @@
-import RendererConfig from "./configs/Renderer"
-import CameraConfig from "./configs/Camera"
-import LightConfig from "./configs/Light"
-import SceneConfig from "./configs/Scene"
-import ControlsConfig from "./configs/Controls"
-import Walls from "./models/Walls"
+import RendererConfig from "./Renderer"
+import CameraConfig from "./Camera"
+import LightConfig from "./Light"
+import SceneConfig from "./Scene"
+import ControlsConfig from "./Controls"
+import Walls from "./Walls"
 
 const { renderer } = RendererConfig
 const { camera } = CameraConfig

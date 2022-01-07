@@ -20,18 +20,12 @@
 </template>
 
 <script>
-import HorizontalBlurShader from "three/examples/jsm/shaders/HorizontalBlurShader"
-import VerticalBlurShader from "three/examples/jsm/shaders/VerticalBlurShader"
+
 
 import * as Three from "three"
 
-import controls from "./ControlBoxConfig.js"
+import tableTop from "./configs/TableTop.js"
 
-import boxes from "./CasesListConfig.js"
-
-import tableTop from "./TableTopList.js"
-
-import select from "./SelectConfig"
 
 const {
 	Scene,
@@ -43,7 +37,6 @@ const {
 	Mesh,
 	RepeatWrapping,
 	Math: threeMath,
-	RectAreaLight,
 	SpotLight,
 	PointLight,
 	Vector2,
@@ -59,13 +52,9 @@ const TABLE_TOP_DEPTH = 7
 const TABLE_TOP_PADDING_BOTTOM = 10
 const GAP_FROM_WALL = SIDE_DEPTH
 
-const { boxControl } = controls
-
-const { boxAngularFloor } = boxes
 
 const { getTableTop } = tableTop
 
-const { selectBox } = select
 
 export default {
 	props: {
@@ -338,33 +327,6 @@ export default {
 		},
 		bodyCase() {
 			return this.caseConfig
-		},
-		addBottomRightButton() {
-			const addBottomRightButton = boxControl.clone()
-			addBottomRightButton.name = "addBottomRightButton"
-			addBottomRightButton.rotation.y = threeMath.degToRad(-90)
-			addBottomRightButton.userData.actionName = "addBottomRightToScene"
-			return addBottomRightButton
-		},
-		addBottomLeftButton() {
-			const addBottomLeftButton = boxControl.clone()
-			addBottomLeftButton.name = "addBottomLeftButton"
-			addBottomLeftButton.userData.actionName = "addBottomLeftToScene"
-			return addBottomLeftButton
-		},
-		addTopRightButton() {
-			const addTopRightButton = boxControl.clone()
-			addTopRightButton.name = "addTopRightButton"
-			addTopRightButton.rotation.y = threeMath.degToRad(-90)
-			addTopRightButton.userData.actionName = "addTopRightToScene"
-
-			return addTopRightButton
-		},
-		addTopLeftButton() {
-			const addTopLeftButton = boxControl.clone()
-			addTopLeftButton.name = "addTopLeftButton"
-			addTopLeftButton.userData.actionName = "addTopLeftToScene"
-			return addTopLeftButton
 		},
 		isMoveRightActive() {
 			const currentUuid = this.selectedCase?.uuid
@@ -1225,21 +1187,6 @@ export default {
 						vm.selectedCase = recursiveFindBox(object)
 
 						vm.$emit("setConfigName", vm.selectedCase?.name)
-
-						if (recursiveFindBox(object)) {
-							const obj = vm.scene.children.find(({ name }) => name === "selectBox")
-							vm.scene.remove(obj)
-							const { userData: { width, height, depth }, position: { x, y, z }, rotation: { y: rotate } } = vm.selectedCase
-							const leftTop = selectBox({
-								width, height, depth, x, y, z, rotate,
-							})
-							vm.scene.add(leftTop)
-							leftTop.position.set(x, y, z)
-							leftTop.rotation.y = rotate
-						} else {
-							const obj = vm.scene.children.find(({ name }) => name === "selectBox")
-							vm.scene.remove(obj)
-						}
 					}
 				}
 			}
