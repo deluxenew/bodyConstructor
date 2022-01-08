@@ -3,6 +3,7 @@ import { boxWrapper } from "./BoxWrapper"
 import Materials from "../Materials"
 import { mesh } from "./CustomMesh"
 import { GetTextMesh } from "../Text"
+import { GetArrows } from "../Arrows"
 
 const { defaultMaterial, legMaterial } = Materials
 
@@ -37,6 +38,11 @@ export const bottomBox = (width, height, depth) => {
 	const sizeMesh = GetTextMesh(`${width * 100}`, width)
 	sizeMesh.position.y = -height / 2
 	sizeMesh.position.z = depth / 2
+
+	const arrows = GetArrows(width)
+	arrows.position.y = -height / 2
+	arrows.position.z = depth / 2
+	boxGroup.add(arrows)
 
 	boxGroup.add(sizeMesh)
 	boxGroup.add(sideBottom)

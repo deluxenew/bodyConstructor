@@ -52,9 +52,7 @@ const TABLE_TOP_DEPTH = 7
 const TABLE_TOP_PADDING_BOTTOM = 10
 const GAP_FROM_WALL = SIDE_DEPTH
 
-
 const { getTableTop } = tableTop
-
 
 export default {
 	props: {
@@ -998,7 +996,7 @@ export default {
 			const addNewTableTopRight = (padding, width, height, type, url, sort) => {
 				const tableTop = getTableTop({
 					width, height, type, url,
-				})
+				}).clone()
 
 				const x = -(TABLE_TOP_DEPTH / 2)
 				const y = TABLE_TOP_PADDING_BOTTOM + height / 2

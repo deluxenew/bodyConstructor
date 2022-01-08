@@ -1,5 +1,5 @@
 import {
-	BoxGeometry, Group, Mesh, MeshStandardMaterial,
+	BoxGeometry, Group, MeshStandardMaterial,
 } from "three"
 import { constants } from "./constants"
 import { mesh } from "./CustomMesh"
@@ -30,14 +30,14 @@ export const Drawer = (bodyWidth, boxHeight, bodyDepth, drawerHeight) => {
 	drawerSideBack.position.y = drawerHeight / 2 - sideDepth / 2
 	drawerSideBack.position.z = -(drawerDepth / 2 - drawerSideDepth / 2)
 
-	const drawer_0 = new Group()
-	drawer_0.name = "drawer"
+	const drawer0 = new Group()
+	drawer0.name = "drawer"
 
-	drawer_0.add(drawerBottom)
-	drawer_0.add(drawerSideR)
-	drawer_0.add(drawerSideL)
-	drawer_0.add(drawerSideBack)
+	drawer0.add(drawerBottom)
+	drawer0.add(drawerSideR)
+	drawer0.add(drawerSideL)
+	drawer0.add(drawerSideBack)
 
-	drawer_0.position.z = sideDepth / 2
-	return drawer_0
+	drawer0.position.z = sideDepth / 2
+	return drawer0
 }

@@ -28,14 +28,14 @@ import {
 import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
 import boxes from "./configs/boxes/BoxesList"
-import tableTopList from "./configs/TableTop"
+import { getTableTop } from "./configs/TableTop"
 
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,
 } = StartLoader
-const { fromTo, camPos, animationFromTo } = HF
+const { fromTo, camPos } = HF
 
-const { getTableTop } = tableTopList
+// const { getTableTop } = tableTopList
 
 const CANVAS_WIDTH = 780
 const CANVAS_HEIGHT = 600
@@ -102,7 +102,7 @@ export default {
 					const tableX = configType === "angularBox" ? (side === "left" ? x + 1 : x) : x
 					const tableZ = configType === "angularBox" ? (side === "left" ? z : z - 1) : z
 					acc[field].push({
-						side, width: tableWidth, sort, x: tableX, z: tableZ,
+						side, width: tableWidth, sort, x: tableX, z: tableZ, configType
 					})
 				}
 				if (type) {
@@ -434,7 +434,7 @@ export default {
 
 				const leftTableTops = HF.getTableTops(leftSorted)
 				leftTableTops.forEach(({ width, x, z }) => {
-					const newTableTop = this.getTableTopModel(width).clone()
+					const newTableTop = this.getTableTopModel(width)
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
@@ -450,7 +450,7 @@ export default {
 
 				const leftTableTops = HF.getTableTops(leftSorted)
 				leftTableTops.forEach(({ width, x, z }) => {
-					const newTableTop = this.getTableTopModel(width).clone()
+					const newTableTop = this.getTableTopModel(width)
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2

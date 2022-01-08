@@ -216,14 +216,17 @@ const getTableTops = (arr) => {
 	let itemsCount = 0
 	let counter = 0
 	let padding = 0
+
 	return arr.reduce((acc, el) => {
 		itemsCount++
 		const {
-			side, width, sort, x, z,
+			side, width, sort, x, z, configType
 		} = el
+		const isAngular = configType === "angularBox"
+		console.log(isAngular)
 		if (itemsCount === 1) {
 			counter = sort
-			padding = side === "left" ? (sort === 0 ? x + 0.6 : x) + width / 2 : (sort === 0 ? z - 0.6 : z) - width / 2
+			padding = side === "left" ? (sort === 0 ? x + 0.6 : x) + width / 2 - (isAngular ? 0.6 : 0) : (sort === 0 ? z - 0.6 : z) - width / 2 + (isAngular ? 0.6 : 0)
 		}
 		tableTop.side = side
 
@@ -236,7 +239,7 @@ const getTableTops = (arr) => {
 			counter = sort
 			counter++
 		} else {
-			tableTop.width += (sort === 0 ? width + 0.6 : width)
+			tableTop.width += (sort === 0 ? width + (isAngular ? 0 : 0.6) : width)
 			tableTop.x = side === "left" ? padding - tableTop.width / 2 : x
 			tableTop.z = side === "left" ? z : padding + tableTop.width / 2
 			counter++

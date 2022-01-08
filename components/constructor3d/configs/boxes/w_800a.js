@@ -11,6 +11,7 @@ import { topBox } from "./TopBox"
 import { GetTextMesh } from "../Text"
 
 import Materials from "../Materials"
+import { GetArrows } from "../Arrows"
 
 const { defaultMaterial } = Materials
 
@@ -230,6 +231,13 @@ export const w_800a = () => {
 	sizeMesh.position.y = constants.topBound /2 - 1.5 * height - 1
 	sizeMesh.position.z = 0.01
 	sizeMesh.rotateY(Math.degToRad(90))
+
+	const arrows = GetArrows(width)
+	arrows.position.x = -width /2 + 0.01
+	arrows.position.y = constants.topBound /2 - 1.5 * height - 1
+	arrows.position.z = 0.01
+	arrows.rotateY(Math.degToRad(90))
+	boxGroup.add(arrows)
 
 	boxGroup.add(sizeMesh)
 

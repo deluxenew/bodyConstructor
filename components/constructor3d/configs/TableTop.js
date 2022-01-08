@@ -1,54 +1,45 @@
 import {
-	BoxGeometry, Mesh, MeshStandardMaterial, Group, TextureLoader,
+	BoxGeometry, Mesh, Group, Math,
 } from "three"
+import Materials from "./Materials"
+import { GetArrows } from "./Arrows"
+import { GetTextMesh } from "./Text"
+
+const { textureMaterial } = Materials
+
 
 const depth = 6
 
-const getMaterial = (url) => {
-	const facadeTextureLoader = new TextureLoader()
-	const facadeMaterial = new MeshStandardMaterial({
-		color: 0xffffff,
-		map: facadeTextureLoader.load(url),
-	})
-
-	const material = new MeshStandardMaterial({ color: 0xffffff })
-
-	material.roughness = 0.3
-	material.metalness = 0.05
-
-	const facadeMaterials = [
-		facadeMaterial,
-		facadeMaterial,
-		facadeMaterial,
-		facadeMaterial,
-		facadeMaterial,
-		material,
-	]
-
-	facadeMaterial.dispose()
-	material.dispose()
-
-	return facadeMaterials
-}
-
 const getMaxWidth = (type) => {
 	switch (type) {
-		case "post": return 30
-		case "ldsp": return 27
+		case "post":
+			return 30
+		case "ldsp":
+			return 27
 	}
 }
 
-const getTableTop = ({
-	width, height, type, url,
-}) => {
+export const getTableTop = ({ width, height, type, url }) => {
 	const tableTopBox = new BoxGeometry(width, height, depth)
-	const tableTop = new Mesh(tableTopBox, getMaterial(url))
+	const tableTop = new Mesh(tableTopBox, textureMaterial(url))
+	const tableTopGroup = new Group()
 	tableTop.castShadow = true
 	tableTop.receiveShadow = true
 	tableTop.name = "tableTop"
 
-	const tableTopGroup = new Group()
+	const arrows = GetArrows(width)
+	arrows.rotateZ(Math.degToRad(-180))
+	arrows.position.y = height + 1
+	arrows.position.x = -0.01
+	arrows.position.z = -2.99
 
+	const sizeText = GetTextMesh(`${(width * 100).toFixed(0)}`)
+	sizeText.position.y = height + 1
+	sizeText.position.x = -0.01
+	sizeText.position.z = -2.99
+	tableTopGroup.add(sizeText)
+
+	tableTopGroup.add(arrows)
 	tableTopGroup.add(tableTop)
 
 	tableTopGroup.userData.type = "tableTop"
@@ -56,8 +47,6 @@ const getTableTop = ({
 	tableTopGroup.userData.height = height
 	tableTopGroup.userData.depth = depth
 	tableTopGroup.userData.maxWidth = getMaxWidth(type)
-
-	// tableTopGroup.position.set(-depth / 2, paddingBottom + height / 2, width / 2 )
 
 	tableTopBox.dispose()
 

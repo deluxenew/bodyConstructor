@@ -1,5 +1,4 @@
 export const constants = {
-
 	sideDepth: 0.16,
 	legsHeight: 1,
 	legsRad: 0.3,
@@ -20,5 +19,4 @@ export const constants = {
 	topHeight: 7.2,
 	topDepth: 3,
 	topBound: 21.40,
-
 }

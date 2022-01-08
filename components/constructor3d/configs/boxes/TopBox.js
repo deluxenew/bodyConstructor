@@ -2,6 +2,7 @@ import { Group } from "three"
 import { constants } from "./constants"
 import { boxWrapper } from "./BoxWrapper"
 import { GetTextMesh } from "../Text"
+import { GetArrows } from "../Arrows"
 
 export const topBox = (width, height, depth) => {
 	const caseGroup = new Group()
@@ -10,6 +11,11 @@ export const topBox = (width, height, depth) => {
 	const sizeMesh = GetTextMesh(`${width * 100}`, width)
 	sizeMesh.position.y = constants.topBound /2 - 1.5 * height - 1
 	sizeMesh.position.z = - depth / 2 + 0.01
+
+	const arrows = GetArrows(width)
+	arrows.position.y = constants.topBound /2 - 1.5 * height - 1
+	arrows.position.z = - depth / 2 + 0.01
+	boxGroup.add(arrows)
 
 	boxGroup.add(sizeMesh)
 	boxGroup.userData.pos = "wall"

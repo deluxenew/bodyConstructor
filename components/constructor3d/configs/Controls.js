@@ -8,7 +8,6 @@ import {
 	MeshLambertMaterial,
 	ExtrudeBufferGeometry,
 	MeshStandardMaterial,
-	MeshBasicMaterial,
 	BoxGeometry,
 } from "three"
 
@@ -75,6 +74,7 @@ const boxControl = (name, pos) => {
 	buttonsGroup.scale.set(1, 1, 1)
 	buttonsGroup.visible = false
 
+	geometry.dispose()
 	material.dispose()
 	return buttonsGroup
 }

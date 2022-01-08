@@ -17,6 +17,8 @@ export const bottomBeams = (width) => {
 	const sideTopFront = mesh(sideTopGeometry, defaultMaterial())
 	const sideTopBack = mesh(sideTopGeometry, defaultMaterial())
 
+	sideTopGeometry.dispose()
+
 	sideTopFront.position.set(0, height - legsHeight - sideDepth * 1.5, depth / 2 - sideTop / 2)
 	sideTopBack.position.set(0, height - legsHeight - sideDepth * 1.5, -depth / 2 + sideTop / 2)
 

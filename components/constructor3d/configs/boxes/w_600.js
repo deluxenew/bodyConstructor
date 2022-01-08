@@ -1,4 +1,4 @@
-import { BoxGeometry, Mesh } from "three"
+import { BoxGeometry } from "three"
 import { constants } from "./constants"
 import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
@@ -33,6 +33,10 @@ export const w_600 = () => {
 	const shelf = mesh(shelfGeometry, defaultMaterial())
 	const sideTop = mesh(shelfGeometry, defaultMaterial())
 	const sideBottom = mesh(shelfGeometry, defaultMaterial())
+
+	sideGeometry.dispose()
+	sideBackGeometry.dispose()
+	shelfGeometry.dispose()
 
 	caseGroup.add(sideRight)
 	caseGroup.add(sideLeft)

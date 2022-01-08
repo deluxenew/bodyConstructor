@@ -3,9 +3,8 @@ import {
 } from "three"
 
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
-import { GetArrows } from "./Arrows"
 
-export const GetTextMesh = (text, width) => {
+export const GetTextMesh = (text) => {
 	const textObj = new Group()
 	const loader = new FontLoader()
 
@@ -26,14 +25,12 @@ export const GetTextMesh = (text, width) => {
 		geometry.translate(xMid, 0, 0)
 
 		const textMesh = new Mesh(geometry, matLite)
-		textMesh.position.y = 0.3
 		textObj.add(textMesh)
+		textMesh.position.y = 0.3
+
 		matLite.dispose()
 		geometry.dispose()
 	})
-
-	const arrows = GetArrows(width)
-	textObj.add(arrows)
 
 	return textObj
 }
