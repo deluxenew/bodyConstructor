@@ -426,13 +426,14 @@ export default {
 			if (!this.tableTopConfig) return
 			await this.$nextTick()
 			if (this.sceneObjects.leftTableTop) {
+				const isRightTableTop = !!this.sceneObjects.rightTableTop
 				const leftSorted = this.sceneObjects.leftTableTop
 					.sort((a, b) => a.sort - b.sort)
 					.filter((el, index) => {
 						if ((index === this.sceneObjects.leftTableTop.length - 1 && el.width === 0) || el.width !== 0) return el
 					})
 
-				const leftTableTops = HF.getTableTops(leftSorted)
+				const leftTableTops = HF.getTableTops(leftSorted, isRightTableTop)
 				leftTableTops.forEach(({ width, x, z }) => {
 					const newTableTop = this.getTableTopModel(width)
 					newTableTop.position.x = x
@@ -442,13 +443,14 @@ export default {
 				})
 			}
 			if (this.sceneObjects.rightTableTop) {
+				const isLeftTableTop = !!this.sceneObjects.leftTableTop
 				const leftSorted = this.sceneObjects.rightTableTop
 					.sort((a, b) => a.sort - b.sort)
 					.filter((el, index) => {
 						if ((index === this.sceneObjects.rightTableTop.length - 1 && el.width === 0) || el.width !== 0) return el
 					})
 
-				const leftTableTops = HF.getTableTops(leftSorted)
+				const leftTableTops = HF.getTableTops(leftSorted, isLeftTableTop)
 				leftTableTops.forEach(({ width, x, z }) => {
 					const newTableTop = this.getTableTopModel(width)
 					newTableTop.position.x = x

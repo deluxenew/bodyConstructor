@@ -206,7 +206,7 @@ const getAddMethodName = (arrAddMethods, val) => {
 	return name || ""
 }
 
-const getTableTops = (arr) => {
+const getTableTops = (arr, across) => {
 	const tableTop = {
 		width: 0,
 		side: "",
@@ -216,14 +216,15 @@ const getTableTops = (arr) => {
 	let itemsCount = 0
 	let counter = 0
 	let padding = 0
-
+	let angularExist = false
 	return arr.reduce((acc, el) => {
 		itemsCount++
 		const {
 			side, width, sort, x, z, configType
 		} = el
 		const isAngular = configType === "angularBox"
-		console.log(isAngular)
+		if (isAngular) angularExist = true
+
 		if (itemsCount === 1) {
 			counter = sort
 			padding = side === "left" ? (sort === 0 ? x + 0.6 : x) + width / 2 - (isAngular ? 0.6 : 0) : (sort === 0 ? z - 0.6 : z) - width / 2 + (isAngular ? 0.6 : 0)
@@ -239,9 +240,9 @@ const getTableTops = (arr) => {
 			counter = sort
 			counter++
 		} else {
-			tableTop.width += (sort === 0 ? width + (isAngular ? 0 : 0.6) : width)
-			tableTop.x = side === "left" ? padding - tableTop.width / 2 : x
-			tableTop.z = side === "left" ? z : padding + tableTop.width / 2
+			tableTop.width += (sort === 0 ? width + (isAngular ? 0 : (across? 0 : 0.6)) : width)
+			tableTop.x = side === "left" ? padding - tableTop.width / 2 - (!angularExist && across ? 0.6 : 0): x
+			tableTop.z = side === "left" ? z : padding + tableTop.width / 2 + (!angularExist && across ? 0.6 : 0)
 			counter++
 		}
 		if (arr.length === itemsCount) {
