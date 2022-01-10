@@ -227,7 +227,7 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 		} = el
 		const isAngular = configType === "angularBox"
 		if (isAngular) angularExist = true
-		console.log(angularExist)
+
 		if (itemsCount === 1) {
 			counter = sort
 			padding = side === "left" ? (sort === 0 ? x + 0.6 : x) + width / 2 - (isAngular ? 0.6 : 0) : (sort === 0 ? z - 0.6 : z) - width / 2 + (isAngular ? 0.6 : 0)
@@ -246,14 +246,8 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 
 		} else {
 			if (tableTop.width + width >= maxWidth / 100) {
-				// if (arr.length === itemsCount && tableTop.width + width === maxWidth / 100) {
-				// 	remains = tableTop.width + width - maxWidth / 100 + minWidth / 100
-				// 	tableTop.width = maxWidth / 100 - minWidth / 100
-				// } else {
-				//
-				// }
 				remains += tableTop.width + width - maxWidth / 100
-					tableTop.width = maxWidth / 100
+				tableTop.width = maxWidth / 100
 				tableTop.x = side === "left" ? padding - maxWidth / 200 : x
 				tableTop.z = side === "left" ? z : padding + maxWidth / 200
 
@@ -276,12 +270,11 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 		if (arr.length === itemsCount) {
 			if (width !== 0) {
 				tableTop.width += 0.02
-				console.log(tableTop.width, 'tableTop.width')
-				console.log(minWidth / 100, 'minWidth / 100')
+
 				if (tableTop.width < minWidth / 100) {
 
 					const missing = minWidth / 100 - tableTop.width
-					console.log(missing)
+
 					acc[acc.length - 1].width -= missing
 					acc[acc.length - 1].x -= side === "left" ? -missing / 2 : 0
 					acc[acc.length - 1].z += side === "left" ? 0 : -missing / 2
