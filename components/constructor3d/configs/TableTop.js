@@ -19,7 +19,7 @@ const getMaxWidth = (type) => {
 	}
 }
 
-export const getTableTop = ({ width, height, type, url }) => {
+export const getTableTop = ({ width, height, type, url, maxWidth }) => {
 	const tableTopBox = new BoxGeometry(width, height, depth)
 	const tableTop = new Mesh(tableTopBox, textureMaterial(url))
 	const tableTopGroup = new Group()
@@ -46,7 +46,8 @@ export const getTableTop = ({ width, height, type, url }) => {
 	tableTopGroup.userData.width = width
 	tableTopGroup.userData.height = height
 	tableTopGroup.userData.depth = depth
-	tableTopGroup.userData.maxWidth = getMaxWidth(type)
+	tableTopGroup.userData.material = type
+	tableTopGroup.userData.maxWidth = maxWidth
 
 	tableTopBox.dispose()
 

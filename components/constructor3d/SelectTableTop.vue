@@ -89,7 +89,7 @@ export default {
 			return this.options && this.options.filter(({ dependency, category }) => category === "thickness" && dependency[0].code === "material" && dependency[0].values.includes(this.materialModel))
 		},
 		colorVariants() {
-			return this.options && this.options.filter(({ category, restrictions }) => category === "color" && restrictions.thickness && restrictions.thickness.includes(this.thicknessModel)).sort((a, b) => {
+			return this.options && this.options.filter(({ category, dependency }) => category === "color" && dependency[0] && dependency[0].values.includes(this.thicknessModel)).sort((a, b) => {
 				if (a.code > b.code) return -1
 				if (a.code < b.code) return 1
 				if (a.code === b.code) return 0
@@ -127,12 +127,28 @@ export default {
 			if (item) return `https://cdn.akson.ru/webp${item.path}0.png`
 			return ""
 		},
+		materialRestrictions() {
+			const currentMaterial = this.materialVariants.find(({code}) => code === this.materialModel)
+			if (currentMaterial) {
+				const {maxWidth, minWidth} = currentMaterial.restrictions.limitSize
+				return {
+					maxWidth,
+					minWidth
+				}
+			}
+			return {
+				maxWidth: 0,
+				minWidth: 0
+			}
+		},
 		config() {
 			return {
 				type: this.materialModel,
 				height: this.thicknessModel / 100,
 				color: this.colorModel,
 				url: this.imageUrl,
+				maxWidth: this.materialRestrictions.maxWidth,
+				minWidth: this.materialRestrictions.minWidth,
 				colorName: this.colorObj ? this.colorObj.name : "",
 			}
 		},

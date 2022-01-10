@@ -282,10 +282,10 @@ export default {
 				const clipAction = this.mixer.clipAction(clip)
 				clipAction.loop = THREE.LoopOnce
 				clipAction.clampWhenFinished = true
-				console.log(clipAction.getClip())
+
 				clipAction.play()
 				this.mixer.addEventListener("finished", (e) => {
-					console.log(e)
+					// console.log(e)
 				})
 
 				this.selectedBox.userData.openedDoors = !openedDoors
@@ -301,7 +301,7 @@ export default {
 
 				if (!this.sceneObjects[type]) return
 				this.sceneObjects[type].forEach((el) => {
-					console.log(el.userData.sort > sort)
+					// console.log(el.userData.sort > sort)
 					if (el.userData.sort > sort) el.userData.sort--
 				})
 				// this.$emit('removeItem', {uuid: selectedObject.uuid, type: 'cases'})
@@ -433,7 +433,7 @@ export default {
 						if ((index === this.sceneObjects.leftTableTop.length - 1 && el.width === 0) || el.width !== 0) return el
 					})
 
-				const leftTableTops = HF.getTableTops(leftSorted, isRightTableTop)
+				const leftTableTops = HF.getTableTops(leftSorted, isRightTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
 				leftTableTops.forEach(({ width, x, z }) => {
 					const newTableTop = this.getTableTopModel(width)
 					newTableTop.position.x = x
@@ -450,7 +450,7 @@ export default {
 						if ((index === this.sceneObjects.rightTableTop.length - 1 && el.width === 0) || el.width !== 0) return el
 					})
 
-				const leftTableTops = HF.getTableTops(leftSorted, isLeftTableTop)
+				const leftTableTops = HF.getTableTops(leftSorted, isLeftTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
 				leftTableTops.forEach(({ width, x, z }) => {
 					const newTableTop = this.getTableTopModel(width)
 					newTableTop.position.x = x
@@ -461,9 +461,9 @@ export default {
 			}
 		},
 		getTableTopModel(width) {
-			const { url, height, type } = this.tableTopConfig
+			const { url, height, type, maxWidth } = this.tableTopConfig
 			return getTableTop({
-				width, url, height, type,
+				width, url, height, type, maxWidth
 			})
 		},
 		replaceTableTops() {

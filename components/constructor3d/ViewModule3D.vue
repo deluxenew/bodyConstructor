@@ -243,7 +243,7 @@ export default {
 			}
 
 			const {
-				color, type, maxWidth, typeName, url, name, variantType, height,
+				color, type, maxWidth, minWidth, typeName, url, name, variantType, height,
 			} = item
 
 			const loadedUrl = await getImage(url)
@@ -254,6 +254,7 @@ export default {
 			this.tableTopConfig.color = color
 			this.tableTopConfig.url = loadedUrl
 			this.tableTopConfig.maxWidth = maxWidth
+			this.tableTopConfig.minWidth = minWidth
 		},
 		removeCase() {
 			this.$refs.canvas.removeCase(false)
