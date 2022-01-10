@@ -251,14 +251,14 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 				// } else {
 				//
 				// }
-				remains = tableTop.width + width - maxWidth / 100
+				remains += tableTop.width + width - maxWidth / 100
 				tableTop.width = maxWidth / 100
 				tableTop.x = side === "left" ? padding - maxWidth / 200 : x
 				tableTop.z = side === "left" ? z : padding + maxWidth / 200
 
 				acc.push({...tableTop})
 
-				padding += maxWidth / 100 - (!startPenalBox && across ? 0.6 : 0)
+				padding += side === "left" ? -(maxWidth / 100 - (!startPenalBox && across ? 0.6 : 0)) : maxWidth / 100 - (!startPenalBox && across ? 0.6 : 0)
 				tableTop.width = remains + (!startPenalBox && across ? 0.6 : 0)
 				console.log(startPenalBox, 'startPenalBox')
 			} else {
