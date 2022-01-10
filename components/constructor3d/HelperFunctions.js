@@ -227,6 +227,7 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 		} = el
 		const isAngular = configType === "angularBox"
 		if (isAngular) angularExist = true
+		console.log(angularExist)
 		if (itemsCount === 1) {
 			counter = sort
 			padding = side === "left" ? (sort === 0 ? x + 0.6 : x) + width / 2 - (isAngular ? 0.6 : 0) : (sort === 0 ? z - 0.6 : z) - width / 2 + (isAngular ? 0.6 : 0)
@@ -245,26 +246,28 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 
 		} else {
 			if (tableTop.width + width >= maxWidth / 100) {
-				// if (arr.length === itemsCount && tableTop.width + width === maxWidth / 100 && width !== 0) {
+				// if (arr.length === itemsCount && tableTop.width + width === maxWidth / 100) {
 				// 	remains = tableTop.width + width - maxWidth / 100 + minWidth / 100
 				// 	tableTop.width = maxWidth / 100 - minWidth / 100
 				// } else {
 				//
 				// }
 				remains += tableTop.width + width - maxWidth / 100
-				tableTop.width = maxWidth / 100
+					tableTop.width = maxWidth / 100
 				tableTop.x = side === "left" ? padding - maxWidth / 200 : x
 				tableTop.z = side === "left" ? z : padding + maxWidth / 200
 
+
 				acc.push({...tableTop})
 
-				padding += side === "left" ? -(maxWidth / 100 - (!startPenalBox && across ? 0.6 : 0)) : maxWidth / 100 - (!startPenalBox && across ? 0.6 : 0)
-				tableTop.width = remains + (!startPenalBox && across ? 0.6 : 0)
-				console.log(startPenalBox, 'startPenalBox')
+				padding += side === "left" ? -(maxWidth / 100 - (!startPenalBox && !angularExist && across ? 0.6 : 0)) : maxWidth / 100 - (!startPenalBox && !angularExist && across ? 0.6 : 0)
+				tableTop.width = remains + (!startPenalBox && !angularExist && across ? 0.6 : 0)
+
+
 			} else {
 				tableTop.width += (sort === 0 ? width + (angularExist ? 0 : (across ? 0 : 0.6)) : width)
 			}
-			console.log(startPenalBox, 'startPenalBox')
+
 			tableTop.x = side === "left" ? padding - tableTop.width / 2 - (!startPenalBox && !angularExist && across ? 0.6 : 0) : x
 			tableTop.z = side === "left" ? z : padding + tableTop.width / 2 + (!startPenalBox && !angularExist && across ? 0.6 : 0)
 			counter++
@@ -273,9 +276,28 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 		if (arr.length === itemsCount) {
 			if (width !== 0) {
 				tableTop.width += 0.02
-				tableTop.x += side === "left" ? -0.01 : 0
-				tableTop.z += side === "left" ? 0 : 0.01
+				console.log(tableTop.width, 'tableTop.width')
+				console.log(minWidth / 100, 'minWidth / 100')
+				if (tableTop.width < minWidth / 100) {
+
+					const missing = minWidth / 100 - tableTop.width
+					console.log(missing)
+					acc[acc.length - 1].width -= missing
+					acc[acc.length - 1].x -= side === "left" ? -missing / 2 : 0
+					acc[acc.length - 1].z += side === "left" ? 0 : -missing / 2
+
+					tableTop.width = minWidth / 100
+
+					tableTop.x += side === "left" ? -0.01 + missing / 2 : 0
+					tableTop.z += side === "left" ? 0 : 0.01 - missing / 2
+
+				} else {
+					tableTop.x += side === "left" ? -0.01 : 0
+					tableTop.z += side === "left" ? 0 : 0.01
+				}
+
 			}
+
 			acc.push({...tableTop})
 			startPenalBox = false
 
