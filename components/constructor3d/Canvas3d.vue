@@ -8,7 +8,7 @@
             div.item(v-for="item in 3")
               svg(width="7" height="4" viewBox="0 0 7 4" fill="none")
                 path(d="M0 2C0 0.895431 0.89543 0 2 0H4.66667C5.77124 0 6.66667 0.895431 6.66667 2C6.66667 3.10457 5.77124 4 4.66667 4H2C0.895429 4 0 3.10457 0 2Z" :fill="item <= positionNumber ? '#5C6270' : '#E3E5E8'")
-        div.box-control
+        div.box-control(:class="{active: selectedBox}")
           button.button.left(:disabled="!selectedBox || !isMoveLeftActive" @click="moveLeft")
             img(:src="require('./img/arrow.svg')")
           button.button.right(:disabled="!selectedBox || !isMoveRightActive" @click="moveRight")
@@ -384,6 +384,12 @@ export default {
 					if (controlActionName) {
 						vm[controlActionName]()
 					} else {
+						const findTableTop = HF.recursiveFindBox(object)
+						if (findTableTop && findTableTop.name === "tableTop") {
+							console.log(findTableTop)
+							vm.selectedBox = null
+							return;
+						}
 						const findBox = HF.recursiveFindBox(object)
 
 						vm.selectedBox = findBox
@@ -512,8 +518,8 @@ export default {
     justify-content: center;
     flex-direction: column;
     padding: 6px;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     background: #FFFFFF;
     border-radius: 4px;
     cursor: pointer;
@@ -522,7 +528,7 @@ export default {
     outline: none;
 
     &:disabled {
-      opacity: .4;
+      opacity: 0;
     }
 
     &:hover:not(:disabled) {
@@ -538,11 +544,12 @@ export default {
 
     &__variants {
       height: 4px;
+			margin-top: auto;
       display: flex;
       justify-content: center;
 
       .item + .item {
-        padding-left: 4px;
+        padding-left: 3px;
       }
 
       .item {
@@ -562,13 +569,40 @@ export default {
     bottom: 10px;
     left: calc(50% - 108px);
 
-    .left {
 
+
+    .left {
+			&:disabled {
+				opacity: 0;
+			}
     }
+
+		.open {
+			&:disabled {
+				opacity: 0;
+			}
+		}
+
+		.remove {
+			&:disabled {
+				opacity: 0;
+			}
+		}
 
     .right {
+			&:disabled {
+				opacity: 0;
+			}
       transform: rotateY(180deg);
     }
+
+		&.active {
+			.left, .right {
+				&:disabled {
+					opacity: 0.4;
+				}
+			}
+		}
   }
 }
 </style>

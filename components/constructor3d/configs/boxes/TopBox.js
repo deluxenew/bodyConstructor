@@ -9,11 +9,11 @@ export const topBox = (width, height, depth) => {
 	const boxGroup = boxWrapper(width, height, depth, true)
 
 	const sizeMesh = GetTextMesh(`${width * 100}`, width)
-	sizeMesh.position.y = - 1
+	sizeMesh.position.y = - 1.1
 	sizeMesh.position.z = - depth / 2 + 0.01
 
 	const arrows = GetArrows(width)
-	arrows.position.y = - 1
+	arrows.position.y = - 1.1
 	arrows.position.z = - depth / 2 + 0.01
 	caseGroup.add(arrows)
 

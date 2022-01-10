@@ -7,17 +7,7 @@ import { GetTextMesh } from "./Text"
 
 const { textureMaterial } = Materials
 
-
 const depth = 6
-
-const getMaxWidth = (type) => {
-	switch (type) {
-		case "post":
-			return 30
-		case "ldsp":
-			return 27
-	}
-}
 
 export const getTableTop = ({ width, height, type, url, maxWidth }) => {
 	const tableTopBox = new BoxGeometry(width, height, depth)
@@ -42,6 +32,7 @@ export const getTableTop = ({ width, height, type, url, maxWidth }) => {
 	tableTopGroup.add(arrows)
 	tableTopGroup.add(tableTop)
 
+	tableTopGroup.name = "tableTop"
 	tableTopGroup.userData.type = "tableTop"
 	tableTopGroup.userData.width = width
 	tableTopGroup.userData.height = height

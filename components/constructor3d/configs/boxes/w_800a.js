@@ -228,13 +228,13 @@ export const w_800a = () => {
 
 	const sizeMesh = GetTextMesh(`${width * 100}`, width)
 	sizeMesh.position.x = -width /2 + 0.01
-	sizeMesh.position.y = - 1
+	sizeMesh.position.y = - 1.1
 	sizeMesh.position.z = 0.01
 	sizeMesh.rotateY(Math.degToRad(90))
 
 	const arrows = GetArrows(width)
 	arrows.position.x = -width /2 + 0.01
-	arrows.position.y = - 1
+	arrows.position.y = - 1.1
 	arrows.position.z = 0.01
 	arrows.rotateY(Math.degToRad(90))
 	boxGroup.add(arrows)

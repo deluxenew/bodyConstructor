@@ -95,7 +95,7 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 const recursiveFindBox = (obj) => {
 	if (!obj || !obj.parent) return null
 	const {parent} = obj
-	if ([...new Set(Object.keys(boxes))].includes(parent.name)) return parent
+	if ([...new Set(Object.keys(boxes))].includes(parent.name) || parent.name === "tableTop") return parent
 	return recursiveFindBox(parent)
 }
 
