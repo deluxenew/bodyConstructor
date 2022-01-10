@@ -1,6 +1,6 @@
 import { Group } from "three"
 
-import {edgesHelper} from "../EdgesHelper"
+import { edgesHelper } from "../EdgesHelper"
 
 
 export const boxWrapper = (width, height, depth, isTop) => {

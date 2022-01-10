@@ -64,6 +64,7 @@ export default {
 			camera: camera(CANVAS_WIDTH, CANVAS_HEIGHT),
 			positionNumber: 1,
 			selectedBox: null,
+			selectedTableTop: null,
 			mixer: null,
 			clock: new THREE.Clock(),
 			animations: [],
@@ -354,16 +355,41 @@ export default {
 			const raycaster = new THREE.Raycaster()
 
 			this.$refs.canvas.addEventListener("pointerdown", onPointerDown)
+			this.$refs.canvas.addEventListener("pointermove", onSelectGroup)
 
-			function clearHelpers() {
+			function clearHelpers(clearEdges, clearTransparent) {
 				vm.scene.children.forEach((el) => {
 					const edges = el.children.find(({ name }) => name === "edges")
 					const transparent = el.children.find(({ name }) => name === "transparent")
-					if (edges) {
-						edges.visible = false
-						transparent.visible = false
+					if (edges && transparent) {
+						if (clearEdges) edges.visible = false
+						if (clearTransparent) transparent.visible = false
 					}
 				})
+			}
+
+			function onSelectGroup(event) {
+				if (event.target.className !== "controls") return
+				const canvasPos = vm.$refs.canvas.getBoundingClientRect()
+				mouse.x = ((event.clientX - canvasPos.x) / CANVAS_WIDTH) * 2 - 1
+				mouse.y = -((event.clientY - canvasPos.y) / CANVAS_HEIGHT) * 2 + 1
+
+				raycaster.setFromCamera(mouse, vm.camera)
+
+				const intersects = raycaster.intersectObjects(vm.scene.children, true)
+
+				if (intersects.length > 0) {
+					const { object } = intersects[0]
+					const obj = HF.recursiveFindBox(object)
+					if (obj) {
+						clearHelpers(true, false)
+						const edges = obj.children.find(({ name }) => name === "edges")
+						edges.visible = true
+					}
+					if (!obj) {
+						clearHelpers(true, false)
+					}
+				}
 			}
 
 			function onPointerDown(event) {
@@ -386,16 +412,20 @@ export default {
 					} else {
 						const findTableTop = HF.recursiveFindBox(object)
 						if (findTableTop && findTableTop.name === "tableTop") {
-							console.log(findTableTop)
+							clearHelpers(true, true)
+							const edges = findTableTop.children.find(({ name }) => name === "edges")
+							const transparent = findTableTop.children.find(({ name }) => name === "transparent")
+							edges.visible = true
+							transparent.visible = true
 							vm.selectedBox = null
-							return;
+							return
 						}
 						const findBox = HF.recursiveFindBox(object)
 
 						vm.selectedBox = findBox
 
 						if (findBox) {
-							clearHelpers()
+							clearHelpers(true, true)
 							vm.$emit("getBoxName", vm.selectedBox?.name || null)
 
 							const edges = findBox.children.find(({ name }) => name === "edges")

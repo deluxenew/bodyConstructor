@@ -82,7 +82,6 @@ export default {
 			},
 		},
 		currentItemCode(v) {
-			// await this.$nextTick()
 			if (!this.items) return
 			const itemIndex = this.items.findIndex(({ code }) => code === v)
 			if (itemIndex === -1) return

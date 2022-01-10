@@ -7,6 +7,8 @@ import { GetTextMesh } from "./Text"
 
 const { textureMaterial } = Materials
 
+import { edgesHelper } from "./EdgesHelper"
+
 const depth = 6
 
 export const getTableTop = ({ width, height, type, url, maxWidth }) => {
@@ -30,6 +32,12 @@ export const getTableTop = ({ width, height, type, url, maxWidth }) => {
 	tableTopGroup.add(sizeText)
 
 	tableTopGroup.add(arrows)
+
+	const {	boxHelper, line } = edgesHelper(width, height, depth, false)
+
+
+	tableTopGroup.add(boxHelper)
+	tableTopGroup.add(line)
 	tableTopGroup.add(tableTop)
 
 	tableTopGroup.name = "tableTop"
