@@ -47,6 +47,8 @@ export const GetArrows = (width) => {
 
 	arrowsObj.add(triangleMesh)
 	arrowsObj.add(triangleMeshRight)
+	arrowsObj.name = 'arrows'
+	// arrowsObj.visible = false
 
 	return arrowsObj
 }

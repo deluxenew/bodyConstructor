@@ -15,9 +15,9 @@ export const topBox = (width, height, depth) => {
 	const arrows = GetArrows(width)
 	arrows.position.y = - 1.1
 	arrows.position.z = - depth / 2 + 0.01
-	caseGroup.add(arrows)
+	boxGroup.add(arrows)
 
-	caseGroup.add(sizeMesh)
+	boxGroup.add(sizeMesh)
 	boxGroup.userData.pos = "wall"
 
 	boxGroup.position.set(-width / 2, height / 2, depth / 2)

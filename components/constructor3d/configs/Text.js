@@ -32,5 +32,8 @@ export const GetTextMesh = (text) => {
 		geometry.dispose()
 	})
 
+	textObj.name = 'text'
+	// textObj.visible	= false
+
 	return textObj
 }
