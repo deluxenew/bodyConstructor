@@ -9,6 +9,7 @@
 						ref="canvas"
 						@getBoxName="selectedBoxName = $event"
 						@selectBox="selectBox"
+						@removeTableTops="removeAllTableTops"
 					)
 				div.column.config
 					select-case(

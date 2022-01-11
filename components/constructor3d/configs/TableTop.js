@@ -36,13 +36,13 @@ export const getTableTop = ({ width, height, type, url, maxWidth }, needDepthSiz
 	depthArrows.rotateZ(Math.degToRad(-180))
 	depthArrows.rotateY(Math.degToRad(90))
 	depthArrows.position.y = height + .8
-	depthArrows.position.x = isLeft ? width / 2 - 0.01 : -width / 2
-	depthArrows.position.z = 0.02
+	depthArrows.position.x = isLeft ? width / 2 - 0.01 : -width / 2 + 0.01
+	depthArrows.position.z = 0.01
 
 	const depthSizeText = GetTextMesh(`${(depth * 100).toFixed(0)}`)
 	depthSizeText.rotateY(Math.degToRad(isLeft? -90 : 90))
 	depthSizeText.position.y = height + .8
-	depthSizeText.position.x = isLeft ? width / 2 - 0.01 : -width / 2
+	depthSizeText.position.x = isLeft ? width / 2 - 0.01 : -width / 2 + 0.01
 	depthSizeText.position.z = 0.01
 
 	if (needDepthSize) {

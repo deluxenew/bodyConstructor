@@ -19,9 +19,9 @@ export const GetArrows = (width) => {
 	const geometryRight = new BufferGeometry().setFromPoints(pointsRight)
 	const geometryMiddle = new BufferGeometry().setFromPoints(pointsMiddle)
 
-	const lineLeft = new Line(geometryLeft, new LineBasicMaterial({ color: 0x000000 }))
-	const lineRight = new Line(geometryRight, new LineBasicMaterial({ color: 0x000000 }))
-	const lineMiddle = new Line(geometryMiddle, new LineBasicMaterial({ color: 0x000000 }))
+	const lineLeft = new Line(geometryLeft, new LineBasicMaterial({ color: 0x5C6270 }))
+	const lineRight = new Line(geometryRight, new LineBasicMaterial({ color: 0x5C6270 }))
+	const lineMiddle = new Line(geometryMiddle, new LineBasicMaterial({ color: 0x5C6270 }))
 
 	lineLeft.computeLineDistances();
 	lineRight.computeLineDistances();
@@ -37,7 +37,7 @@ export const GetArrows = (width) => {
 	pointsTriangle.push(new Vector3(-width / 2 + 0.5, 0, 0))
 	const triangleGeometry = new BufferGeometry().setFromPoints(pointsTriangle)
 	const triangleMaterial = new MeshBasicMaterial({
-		color: 0x000000,
+		color: 0x5C6270,
 		side: DoubleSide,
 	})
 	const triangleMesh = new Mesh(triangleGeometry, triangleMaterial)

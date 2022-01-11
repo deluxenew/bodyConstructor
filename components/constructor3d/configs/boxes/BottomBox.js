@@ -37,11 +37,11 @@ export const bottomBox = (width, height, depth) => {
 
 	const sizeMesh = GetTextMesh(`${width * 100}`, width)
 	sizeMesh.position.y = -height / 2
-	sizeMesh.position.z = depth / 2
+	sizeMesh.position.z = depth / 2 + 0.02
 
 	const arrows = GetArrows(width)
 	arrows.position.y = -height / 2
-	arrows.position.z = depth / 2
+	arrows.position.z = depth / 2 + 0.02
 	boxGroup.add(arrows)
 
 	boxGroup.add(sizeMesh)

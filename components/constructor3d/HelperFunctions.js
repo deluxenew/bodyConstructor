@@ -121,45 +121,78 @@ const setCasesPosition = (boxes) => {
 	}, {})
 	const groupedBoxes = groupBy(boxes, "type")
 
-	const getPaddingBySort = (arr, elSort, elWidth, padding) => arr.reduce((acc, {userData: {sort, width}}) => {
-		if (elSort > sort) acc += width
-		return acc
-	}, 0) + elWidth / 2 + padding
+	const getPaddingBySort = (arr, elSort, elWidth, padding, penalBoxes) => {
+		const penalParams = penalBoxes && penalBoxes.map(({ userData: {width, startPadding }}) => {
+			return {
+				start: startPadding - width / 2,
+				end: startPadding + width / 2,
+				penalWidth: width,
+			}
+		})
+
+		const elPadding = arr.reduce((acc, el) => {
+			const { userData: {sort, width, penalPadding = 0 }} = el
+			if (elSort > sort) acc += width + penalPadding
+			const middle = acc + elWidth / 2
+			console.log(middle, 'middle')
+			const elEnd = acc + elWidth
+			const intersection = penalParams && penalParams.find(({start, end}) => (acc >= start && acc < end) || (middle >= start && middle < end) || (elEnd >= start && elEnd <= end))
+			if (intersection) {
+				console.log(intersection)
+				const {penalWidth, start, end } = intersection
+				el.userData['penalPadding'] += start - acc + penalWidth
+				acc += start - acc + penalWidth
+			}
+			 // if (elSort < sort) acc[acc.length - 1].userData['penalPadding'] = penalPadding
+			return acc
+		}, 0)
+
+		let result = elPadding + elWidth / 2 + padding
+
+		return result
+	}
 
 	const wallPadding = 0.6
 	const angularPadding = 1.4
 
 	if (groupedBoxes.bottomLeft) {
 		const isAngular = groupedBoxes.bottomRight && groupedBoxes.bottomRight.find(({userData: {configType}}) => configType === "angularBox")
-		const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0].userData.depth + (isAngular ? 0.6 : 0) || 0
+		const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0].userData.depth + (isAngular ? wallPadding : 0) || 0
 		const angularBox = groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === "angularBox")
+
 
 		groupedBoxes.bottomLeft.forEach((el) => {
 			const {userData: {sort, width, depth}} = el
-			el.position.x = -getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
+			const startPadding = getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
+			el.position.x = -startPadding
 			el.position.z = depth / 2 + wallPadding
+			el.userData['startPadding'] = startPadding
 		})
 	}
 
 	if (groupedBoxes.bottomRight) {
 		const isAngular = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft.find(({userData: {configType}}) => configType === "angularBox")
-		const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0].userData.depth + (isAngular ? 0.6 : 0) || 0
+		const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0].userData.depth + (isAngular ? wallPadding : 0) || 0
 		const angularBox = groupedBoxes.bottomRight.find(({userData: {configType}}) => configType === "angularBox")
+
 
 		groupedBoxes.bottomRight.forEach((el) => {
 			const {userData: {sort, width, depth}} = el
-			el.position.z = getPaddingBySort(groupedBoxes.bottomRight, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
+			const startPadding = getPaddingBySort(groupedBoxes.bottomRight, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
+			el.position.z = startPadding
 			el.position.x = -(depth / 2 + wallPadding)
+			el.userData['startPadding'] = startPadding
 		})
 	}
 
 	if (groupedBoxes.topLeft) {
 		const padding = groupedBoxes.topRight && groupedBoxes.topRight[0].userData.depth || 0
 		const angularBox = groupedBoxes.topLeft.find(({userData: {configType}}) => configType === "angularBox")
+		const penalBoxes = groupedBoxes.bottomRight && groupedBoxes.bottomRight.filter(({userData: {configType}}) => configType === "penalBox")
 
 		groupedBoxes.topLeft.forEach((el) => {
 			const {userData: {sort, width, depth}} = el
-			el.position.x = -getPaddingBySort(groupedBoxes.topLeft, sort, width, angularBox ? 0 : padding)
+			el.position.x = -getPaddingBySort(groupedBoxes.topLeft, sort, width, angularBox ? 0 : padding, penalBoxes)
 			el.position.z = depth / 2
 		})
 	}
@@ -167,10 +200,12 @@ const setCasesPosition = (boxes) => {
 	if (groupedBoxes.topRight) {
 		const padding = groupedBoxes.topLeft && groupedBoxes.topLeft[0].userData.depth || 0
 		const angularBox = groupedBoxes.topRight.find(({userData: {configType}}) => configType === "angularBox")
+		const penalBoxes =  groupedBoxes.bottomRight && groupedBoxes.bottomRight.filter(({userData: {configType}}) => configType === "penalBox")
+
 
 		groupedBoxes.topRight.forEach((el) => {
 			const {userData: {sort, width, depth}} = el
-			el.position.z = getPaddingBySort(groupedBoxes.topRight, sort, width, angularBox ? 0 : padding)
+			el.position.z = getPaddingBySort(groupedBoxes.topRight, sort, width, angularBox ? 0 : padding, penalBoxes)
 			el.position.x = -(depth / 2)
 		})
 	}
@@ -290,8 +325,8 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 				}
 
 			}
+			if (tableTop.width > 0.02) acc.push({...tableTop})
 
-			acc.push({...tableTop})
 			startPenalBox = false
 
 		}

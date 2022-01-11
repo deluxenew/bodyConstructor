@@ -272,6 +272,35 @@ export default {
 			if (this.positionNumber < 3) this.positionNumber += 1
 			else this.positionNumber = 1
 		},
+		isMoveButtonActive(isLeft) {
+			if (!this.sceneObjects.selectedBox) return false
+			const {
+				userData: {
+					type, sort: selectedSort, side, configType: selectType,
+				},
+			} = this.sceneObjects.selectedBox
+			if (!["boxFloor", "penalBox", "boxWall"].includes(selectType)) return false
+
+			const currentType = this.sceneObjects.selectedBox.userData.type
+			const penalBox = this.sceneObjects[currentType].find(({userData: {configType}}) => configType === 'penalBox')
+			const disableMoveBox = penalBox && penalBox.userData.sort === 1 && selectType === "boxFloor" && this.sceneObjects.selectedBox.userData.sort === 0
+			const disableMovePenalBox = selectType === "penalBox" && this.sceneObjects.selectedBox.userData.sort < 2
+			const findAngularRight = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({userData: {configType}}) => configType === 'angularBox')
+			const findAngularLeft = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
+			if (findAngularRight && (isLeft && disableMoveBox || disableMovePenalBox) || (findAngularLeft && (isLeft && disableMovePenalBox || disableMoveBox ) )) {
+				return false
+			}
+
+			const increment = (side === "left" && isLeft) || (side !== "left" && !isLeft) ? 1 : -1
+			const obj = this.sceneObjects[type].find(({userData: {sort}}) => sort - increment === selectedSort)
+			if (!obj) return false
+			const {userData: {configType}} = obj
+			const isPenalBox = configType === "penalBox"
+			if (isPenalBox) {
+
+			}
+			return obj && ["boxFloor", "penalBox", "boxWall"].includes(configType)
+		},
 		moveBox(toLeft) {
 			if (!this.selectedBox) return
 			const {userData: {sort: replaceSort, type}} = this.selectedBox
@@ -283,6 +312,7 @@ export default {
 				this.selectedBox.userData.sort += increment
 			}
 			HF.setCasesPosition(this.scene.children)
+			this.replaceTableTops()
 		},
 		moveLeft() {
 			this.moveBox(true)
@@ -473,24 +503,7 @@ export default {
 				}
 			}
 		},
-		isMoveButtonActive(isLeft) {
-			if (!this.sceneObjects.selectedBox) return false
-			const {
-				userData: {
-					type, sort: selectedSort, side, configType: selectType,
-				},
-			} = this.sceneObjects.selectedBox
-			if (!["boxFloor", "penalBox", "boxWall"].includes(selectType)) return false
-			const increment = (side === "left" && isLeft) || (side !== "left" && !isLeft) ? 1 : -1
-			const obj = this.sceneObjects[type].find(({userData: {sort}}) => sort - increment === selectedSort)
-			if (!obj) return false
-			const {userData: {configType}} = obj
-			const isPenalBox = configType === "penalBox"
-			if (isPenalBox) {
 
-			}
-			return obj && ["boxFloor", "penalBox", "boxWall"].includes(configType)
-		},
 		async addTableTop() {
 			if (!this.tableTopConfig) return
 			await this.$nextTick()
@@ -510,9 +523,6 @@ export default {
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
-					// const arrows = GetArrows(width)
-					// const sizeText = GetTextMesh(`${(width * 100).toFixed(0)}`)
-					// if (isExistAngular) newTableTop.add()
 					this.scene.add(newTableTop)
 				})
 			}
@@ -532,9 +542,6 @@ export default {
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
-					// const arrows = GetArrows(width)
-					// const sizeText = GetTextMesh(`${(width * 100).toFixed(0)}`)
-					// if (isExistAngular) newTableTop.add()
 					this.scene.add(HF.rotationY(newTableTop))
 				})
 			}
@@ -542,7 +549,7 @@ export default {
 		changeTableTopSize() {
 			if (!this.selectedTableTop) return
 		},
-		removeTableTop(uuid) {
+		async removeTableTop(uuid) {
 			if (uuid) {
 				const selectedTableTop = this.scene.getObjectByProperty("uuid", uuid)
 				this.scene.remove(selectedTableTop)
@@ -550,6 +557,8 @@ export default {
 			}
 			const selectedTableTop = this.scene.getObjectByProperty("uuid", this.selectedTableTop.uuid)
 			this.scene.remove(selectedTableTop)
+			await this.$nextTick()
+			if (!this.sceneObjects.tableTop) this.$emit('removeTableTops')
 		},
 		removeAllTableTops() {
 			this.replaceTableTops(true)

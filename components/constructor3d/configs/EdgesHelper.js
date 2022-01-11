@@ -4,7 +4,7 @@ import {
 import {constants} from "./boxes/constants";
 
 export const edgesHelper = (width, height, depth, isTop) => {
-	const boxGeometry = new BoxGeometry(width, height, depth)
+	const boxGeometry = new BoxGeometry(width + 0.01, height + 0.01, depth + 0.01)
 	const matcapMaterial = new MeshMatcapMaterial({
 		color: 0x0099DC, transparent: true, opacity: 0.15,
 	})
