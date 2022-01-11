@@ -23,6 +23,10 @@ export const GetArrows = (width) => {
 	const lineRight = new Line(geometryRight, new LineBasicMaterial({ color: 0x000000 }))
 	const lineMiddle = new Line(geometryMiddle, new LineBasicMaterial({ color: 0x000000 }))
 
+	lineLeft.computeLineDistances();
+	lineRight.computeLineDistances();
+	lineMiddle.computeLineDistances();
+
 	arrowsObj.add(lineLeft)
 	arrowsObj.add(lineRight)
 	arrowsObj.add(lineMiddle)

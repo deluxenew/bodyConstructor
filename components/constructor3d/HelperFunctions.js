@@ -275,9 +275,9 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 
 					const missing = minWidth / 100 - tableTop.width
 
-					acc[acc.length - 1].width -= missing
-					acc[acc.length - 1].x -= side === "left" ? -missing / 2 : 0
-					acc[acc.length - 1].z += side === "left" ? 0 : -missing / 2
+					acc[acc.length - 1].width -= missing + (!startPenalBox && !angularExist && across ? 0.6 : 0)
+					acc[acc.length - 1].x -= side === "left" ? -missing / 2 + (!startPenalBox && !angularExist && across ? 0.6 : 0) /2 : 0
+					acc[acc.length - 1].z += side === "left" ? 0 : -missing / 2 + (!startPenalBox && !angularExist && across ? 0.6 : 0) /2
 
 					tableTop.width = minWidth / 100
 
