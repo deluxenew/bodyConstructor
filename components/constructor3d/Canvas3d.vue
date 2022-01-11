@@ -39,14 +39,14 @@ import {
 import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
 import boxes from "./configs/boxes/BoxesList"
-import {getTableTop} from "./configs/TableTop"
-import {GetArrows} from "@/components/constructor3d/configs/Arrows";
-import {GetTextMesh} from "@/components/constructor3d/configs/Text";
+import { getTableTop } from "./configs/TableTop"
+import { GetArrows } from "@/components/constructor3d/configs/Arrows"
+import { GetTextMesh } from "@/components/constructor3d/configs/Text"
 
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,
 } = StartLoader
-const {fromTo, camPos} = HF
+const { fromTo, camPos } = HF
 
 const CANVAS_WIDTH = 780
 const CANVAS_HEIGHT = 600
@@ -100,13 +100,13 @@ export default {
 				const {
 					userData: {
 						type, pos, side, sort, width, noTableTop, configType,
-					}, position: {x, z},
+					}, position: { x, z },
 				} = el
 
 				if (el.children) {
-					const text = el.children.filter(({name}) => name === 'text')
-					const arrows = el.children.filter(({name}) =>  name === 'arrows')
-					if (!acc['sizes']) acc['sizes'] = []
+					const text = el.children.filter(({ name }) => name === "text")
+					const arrows = el.children.filter(({ name }) => name === "arrows")
+					if (!acc["sizes"]) acc["sizes"] = []
 					if (text) text.forEach((el) => acc.sizes.push(el))
 					if (arrows) arrows.forEach((el) => acc.sizes.push(el))
 				}
@@ -167,7 +167,7 @@ export default {
 				this.setControlsVisible()
 			},
 		},
-		"sceneObjects.floor.length": async function () {
+		"sceneObjects.floor.length": async function() {
 			if (!this.tableTopConfig) return
 			await this.$nextTick()
 			this.replaceTableTops()
@@ -181,7 +181,7 @@ export default {
 			await this.$nextTick()
 			this.setControlsVisible()
 			if (this.selectedBox && this.selectedBox.userData.code !== v) {
-				const {userData: {sort, type}} = this.selectedBox
+				const { userData: { sort, type } } = this.selectedBox
 				this.replaceBox(sort, type)
 				HF.setCasesPosition(this.scene.children)
 				this.setControlsPosition()
@@ -248,8 +248,8 @@ export default {
 
 			function clearHelpers() {
 				vm.scene.children.forEach((el) => {
-					const edges = el.children.find(({name}) => name === "edges")
-					const transparent = el.children.find(({name}) => name === "transparent")
+					const edges = el.children.find(({ name }) => name === "edges")
+					const transparent = el.children.find(({ name }) => name === "transparent")
 					if (edges) {
 						edges.visible = false
 						transparent.visible = false
@@ -282,19 +282,19 @@ export default {
 			if (!["boxFloor", "penalBox", "boxWall"].includes(selectType)) return false
 
 			const currentType = this.sceneObjects.selectedBox.userData.type
-			const penalBox = this.sceneObjects[currentType].find(({userData: {configType}}) => configType === 'penalBox')
+			const penalBox = this.sceneObjects[currentType].find(({ userData: { configType } }) => configType === "penalBox")
 			const disableMoveBox = penalBox && penalBox.userData.sort === 1 && selectType === "boxFloor" && this.sceneObjects.selectedBox.userData.sort === 0
 			const disableMovePenalBox = selectType === "penalBox" && this.sceneObjects.selectedBox.userData.sort < 2
-			const findAngularRight = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({userData: {configType}}) => configType === 'angularBox')
-			const findAngularLeft = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
+			const findAngularRight = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
+			const findAngularLeft = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
 			if (findAngularRight && (isLeft && disableMoveBox || disableMovePenalBox) || (findAngularLeft && (isLeft && disableMovePenalBox || disableMoveBox ) )) {
 				return false
 			}
 
 			const increment = (side === "left" && isLeft) || (side !== "left" && !isLeft) ? 1 : -1
-			const obj = this.sceneObjects[type].find(({userData: {sort}}) => sort - increment === selectedSort)
+			const obj = this.sceneObjects[type].find(({ userData: { sort } }) => sort - increment === selectedSort)
 			if (!obj) return false
-			const {userData: {configType}} = obj
+			const { userData: { configType } } = obj
 			const isPenalBox = configType === "penalBox"
 			if (isPenalBox) {
 
@@ -303,10 +303,10 @@ export default {
 		},
 		moveBox(toLeft) {
 			if (!this.selectedBox) return
-			const {userData: {sort: replaceSort, type}} = this.selectedBox
+			const { userData: { sort: replaceSort, type } } = this.selectedBox
 			const isLeft = type.toLowerCase().indexOf("left") > -1
 			const increment = (isLeft && toLeft) || (!isLeft && !toLeft) ? 1 : -1
-			const obj = this.sceneObjects[type].find(({userData: {sort}}) => sort - increment === replaceSort)
+			const obj = this.sceneObjects[type].find(({ userData: { sort } }) => sort - increment === replaceSort)
 			if (obj) {
 				obj.userData.sort -= increment
 				this.selectedBox.userData.sort += increment
@@ -322,7 +322,7 @@ export default {
 		},
 		openDoors() {
 			if (this.selectedBox) {
-				const {userData: {openedDoors}} = this.selectedBox
+				const { userData: { openedDoors } } = this.selectedBox
 
 				const facade = HF.getFacadeGroup(this.selectedBox)
 				if (!facade) return
@@ -352,7 +352,7 @@ export default {
 		removeCase(isReplace = false) {
 			const selectedObject = this.scene.getObjectByProperty("uuid", this.selectedBox.uuid)
 			if (selectedObject) {
-				const {userData: {type, sort}} = selectedObject
+				const { userData: { type, sort } } = selectedObject
 				this.scene.remove(selectedObject)
 				this.selectedBox = null
 				if (isReplace) return
@@ -368,8 +368,8 @@ export default {
 		setControlsVisible() {
 			const isAngular = this.caseModel && this.caseModel.userData.configType === "angularBox"
 			this.sceneObjects.control.forEach((el) => {
-				const {userData: {pos, watcher, position}} = el
-				const isExistAngular = this.sceneObjects[pos] && this.sceneObjects[pos].find(({userData: {configType}}) => configType === "angularBox")
+				const { userData: { pos, watcher, position } } = el
+				const isExistAngular = this.sceneObjects[pos] && this.sceneObjects[pos].find(({ userData: { configType } }) => configType === "angularBox")
 				const noAddAngularMoreOne = isAngular && isExistAngular
 				const correctVerticalPosition = pos === this.controlsVerticalPosition
 				const noAddBoxToAnotherSide = this.sceneObjects[pos] && !isAngular && !isExistAngular && !this.sceneObjects[position] && correctVerticalPosition
@@ -379,7 +379,7 @@ export default {
 		},
 		setControlsPosition() {
 			this.sceneObjects.control.forEach((el) => {
-				const {userData: {getCoords, watcher}, position: {x, y, z}} = el
+				const { userData: { getCoords, watcher }, position: { x, y, z } } = el
 				el.position.set(...getCoords(x, y, z, this.sceneObjects[this.controlsVerticalPosition] ? this[watcher] : 2))
 			})
 		},
@@ -392,8 +392,8 @@ export default {
 			box.userData.type = pos
 			box.userData.side = side
 			box.userData.sort = isAngular ? 0 : (sort !== undefined ? sort : count)
-			const text = box.children.find(({name}) => name === 'text')
-			const arrows = box.children.find(({name}) =>  name === 'arrows')
+			const text = box.children.find(({ name }) => name === "text")
+			const arrows = box.children.find(({ name }) => name === "arrows")
 			text.visible = this.isShowSizes
 			arrows.visible = this.isShowSizes
 			return box
@@ -420,8 +420,8 @@ export default {
 
 			function clearHelpers(clearEdges, clearTransparent) {
 				vm.scene.children.forEach((el) => {
-					const edges = el.children.find(({name}) => name === "edges")
-					const transparent = el.children.find(({name}) => name === "transparent")
+					const edges = el.children.find(({ name }) => name === "edges")
+					const transparent = el.children.find(({ name }) => name === "transparent")
 					if (edges && transparent) {
 						if (clearEdges) edges.visible = false
 						if (clearTransparent) transparent.visible = false
@@ -440,11 +440,11 @@ export default {
 				const intersects = raycaster.intersectObjects(vm.scene.children, true)
 
 				if (intersects.length > 0) {
-					const {object} = intersects[0]
+					const { object } = intersects[0]
 					const obj = HF.recursiveFindBox(object)
 					if (obj) {
 						clearHelpers(true, false)
-						const edges = obj.children.find(({name}) => name === "edges")
+						const edges = obj.children.find(({ name }) => name === "edges")
 						edges.visible = true
 					}
 					if (!obj) {
@@ -463,7 +463,7 @@ export default {
 
 				const intersects = raycaster.intersectObjects(vm.scene.children, true)
 				if (intersects.length > 0) {
-					const {object} = intersects[0]
+					const { object } = intersects[0]
 					const controlActionName = HF.findActionName(object)
 
 					vm.$emit("setConfigName", "")
@@ -474,8 +474,8 @@ export default {
 						const findTableTop = HF.recursiveFindBox(object)
 						if (findTableTop && findTableTop.name === "tableTop") {
 							clearHelpers(true, true)
-							const edges = findTableTop.children.find(({name}) => name === "edges")
-							const transparent = findTableTop.children.find(({name}) => name === "transparent")
+							const edges = findTableTop.children.find(({ name }) => name === "edges")
+							const transparent = findTableTop.children.find(({ name }) => name === "transparent")
 							edges.visible = true
 							transparent.visible = true
 							vm.selectedTableTop = findTableTop
@@ -491,8 +491,8 @@ export default {
 							clearHelpers(true, true)
 							vm.$emit("getBoxName", vm.selectedBox?.name || null)
 
-							const edges = findBox.children.find(({name}) => name === "edges")
-							const transparent = findBox.children.find(({name}) => name === "transparent")
+							const edges = findBox.children.find(({ name }) => name === "edges")
+							const transparent = findBox.children.find(({ name }) => name === "transparent")
 
 							edges.visible = true
 							transparent.visible = true
@@ -509,7 +509,7 @@ export default {
 			await this.$nextTick()
 			if (this.sceneObjects.leftTableTop) {
 				const isRightTableTop = !!this.sceneObjects.rightTableTop
-				const isExistAngular = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
+				const isExistAngular = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
 				const leftSorted = this.sceneObjects.leftTableTop
 					.sort((a, b) => a.sort - b.sort)
 					.filter((el, index) => {
@@ -517,7 +517,7 @@ export default {
 					})
 
 				const leftTableTops = HF.getTableTops(leftSorted, isRightTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
-				leftTableTops.forEach(({width, x, z}, index) => {
+				leftTableTops.forEach(({ width, x, z }, index) => {
 					const needDepthSize = (isExistAngular || !isRightTableTop) && index === 0 && this.isShowSizes
 					const newTableTop = this.getTableTopModel(width, needDepthSize, true)
 					newTableTop.position.x = x
@@ -528,7 +528,7 @@ export default {
 			}
 			if (this.sceneObjects.rightTableTop) {
 				const isLeftTableTop = !!this.sceneObjects.leftTableTop
-				const isExistAngular = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({userData: {configType}}) => configType === 'angularBox')
+				const isExistAngular = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
 				const leftSorted = this.sceneObjects.rightTableTop
 					.sort((a, b) => a.sort - b.sort)
 					.filter((el, index) => {
@@ -536,7 +536,7 @@ export default {
 					})
 
 				const leftTableTops = HF.getTableTops(leftSorted, isLeftTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
-				leftTableTops.forEach(({width, x, z}, index) => {
+				leftTableTops.forEach(({ width, x, z }, index) => {
 					const needDepthSize = (isExistAngular || !isLeftTableTop) && index === 0 && this.isShowSizes
 					const newTableTop = this.getTableTopModel(width, needDepthSize)
 					newTableTop.position.x = x
@@ -558,13 +558,13 @@ export default {
 			const selectedTableTop = this.scene.getObjectByProperty("uuid", this.selectedTableTop.uuid)
 			this.scene.remove(selectedTableTop)
 			await this.$nextTick()
-			if (!this.sceneObjects.tableTop) this.$emit('removeTableTops')
+			if (!this.sceneObjects.tableTop) this.$emit("removeTableTops")
 		},
 		removeAllTableTops() {
 			this.replaceTableTops(true)
 		},
 		getTableTopModel(width, needDepthSize, isLeft) {
-			const {url, height, type, maxWidth} = this.tableTopConfig
+			const { url, height, type, maxWidth } = this.tableTopConfig
 			return getTableTop({
 				width, url, height, type, maxWidth
 			}, needDepthSize, isLeft)
@@ -586,7 +586,6 @@ export default {
 		},
 		showSizes() {
 			this.isShowSizes = !this.isShowSizes
-
 		}
 	},
 }
