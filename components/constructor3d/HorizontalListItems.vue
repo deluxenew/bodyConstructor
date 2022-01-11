@@ -54,6 +54,7 @@ export default {
 		}
 	},
 	computed: {
+
 		lines() {
 			const result = []
 			const countItems = this.items && this.items.length || 0

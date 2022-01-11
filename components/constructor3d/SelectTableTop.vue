@@ -1,46 +1,46 @@
 <template lang="pug">
-  div.select-elements
-    div.select-elements__header
-      div.select-elements__title Столешница
-        img.select-elements__chevron(
-          :src="require('./img/chevron.svg')"
-          :class="{reverse: !opened}"
-          @click="toggleOpen"
-        )
-      div.select-elements__remove(
-        v-if="value"
-        @click="removeItem"
-      )
-        span Убрать
-        img.select-elements__icon(:src="require('./img/close.svg')")
-      div.select-elements__remove(
-        v-else
-        @click="addTableTop"
-      )
-        span Добавить
-        img.select-elements__icon(:src="require('./img/add.svg')")
-    transition-expand
-      div.select-elements__group(v-show="opened")
-        div.select-elements__tabs
-          div.select-elements__tabs-item(
-            v-for="item in materialVariants"
-            :class="{active: item.code === materialModel}"
-            @click="selectMaterial(item)"
-          )
-            div.tab__title {{item.name}}
-        div.select-elements__tabs.select-elements__buttons
-          | Толщина:
-          div.select-elements__tabs-item.select-elements__buttons-item(
-            v-for="item in thicknessVariants"
-            :class="{active: item.code === thicknessModel}"
-            @click="selectThickness(item)"
-          )
-            div.tab__title {{item.name}}
-        horizontal-list-items(
-          :items="colorVariants"
-          :currentItemCode="colorModel"
-          @selectItem="selectItem"
-        )
+	div.select-elements
+		div.select-elements__header
+			div.select-elements__title Столешница
+				img.select-elements__chevron(
+					:src="require('./img/chevron.svg')"
+					:class="{reverse: !opened}"
+					@click="toggleOpen"
+				)
+			div.select-elements__remove(
+				v-if="value"
+				@click="removeItem"
+			)
+				span Убрать
+				img.select-elements__icon(:src="require('./img/close.svg')")
+			div.select-elements__remove(
+				v-else
+				@click="addTableTop"
+			)
+				span Добавить
+				img.select-elements__icon(:src="require('./img/add.svg')")
+		transition-expand
+			div.select-elements__group(v-show="opened")
+				div.select-elements__tabs
+					div.select-elements__tabs-item(
+						v-for="item in materialVariants"
+						:class="{active: item.code === materialModel}"
+						@click="selectMaterial(item)"
+					)
+						div.tab__title {{item.name}}
+				div.select-elements__tabs.select-elements__buttons
+					| Толщина:
+					div.select-elements__tabs-item.select-elements__buttons-item(
+						v-for="item in thicknessVariants"
+						:class="{active: item.code === thicknessModel}"
+						@click="selectThickness(item)"
+					)
+						div.tab__title {{item.name}}
+				horizontal-list-items(
+					:items="colorVariants"
+					:currentItemCode="colorModel"
+					@selectItem="selectItem"
+				)
 </template>
 
 <script>
@@ -50,7 +50,7 @@ import HorizontalListItems from "./HorizontalListItems.vue"
 
 export default {
 	name: "SelectTabletop",
-	components: { TransitionExpand, UiInputCheckbox, HorizontalListItems },
+	components: {TransitionExpand, UiInputCheckbox, HorizontalListItems},
 	props: {
 		title: {
 			type: String,
@@ -83,13 +83,19 @@ export default {
 	},
 	computed: {
 		materialVariants() {
-			return this.options && this.options.filter(({ category }) => category === "material")
+			return this.options && this.options.filter(({category}) => category === "material")
 		},
 		thicknessVariants() {
-			return this.options && this.options.filter(({ dependency, category }) => category === "thickness" && dependency[0].code === "material" && dependency[0].values.includes(this.materialModel))
+			return this.options && this.options.filter(({
+																										dependency,
+																										category
+																									}) => category === "thickness" && dependency[0].code === "material" && dependency[0].values.includes(this.materialModel))
 		},
 		colorVariants() {
-			return this.options && this.options.filter(({ category, dependency }) => category === "color" && dependency[0] && dependency[0].values.includes(this.thicknessModel)).sort((a, b) => {
+			return this.options && this.options.filter(({
+																										category,
+																										dependency
+																									}) => category === "color" && dependency[0] && dependency[0].values.includes(this.thicknessModel)).sort((a, b) => {
 				if (a.code > b.code) return -1
 				if (a.code < b.code) return 1
 				if (a.code === b.code) return 0
@@ -120,10 +126,10 @@ export default {
 			},
 		},
 		colorObj() {
-			return this.colorVariants && this.colorVariants.find(({ code }) => code === this.colorModel)
+			return this.colorVariants && this.colorVariants.find(({code}) => code === this.colorModel)
 		},
 		imageUrl() {
-			const item = this.textures && this.textures.find(({ code }) => this.colorModel === code)
+			const item = this.textures && this.textures.find(({code}) => this.colorModel === code)
 			if (item) return `https://cdn.akson.ru/webp${item.path}0.png`
 			return ""
 		},
@@ -155,19 +161,16 @@ export default {
 	},
 	methods: {
 		addTableTop() {
-			this.$emit("addTableTop", {
-				url: "",
-				height: 0.3,
-				type: this.materialModel.type,
-			})
+			this.$emit("selectColor", this.config)
 		},
 		toggleOpen() {
 			this.opened = !this.opened
 		},
 		removeItem() {
+			this.$emit('remove')
 			this.currentItem = null
 		},
-		selectMaterial({ code }) {
+		selectMaterial({code}) {
 			if (this.materialModel === code) return
 			this.materialModel = code
 			if (this.thicknessVariants && this.thicknessVariants[0]) {
@@ -178,7 +181,7 @@ export default {
 				this.$emit("selectColor", this.config)
 			}
 		},
-		selectThickness({ code }) {
+		selectThickness({code}) {
 			if (this.thicknessModel === code) return
 			this.thicknessModel = code
 			if (this.colorVariants && this.colorVariants[0]) {
@@ -196,160 +199,162 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.select-elements+ .select-elements {
-  padding-top: 24px;
+.select-elements + .select-elements {
+	padding-top: 24px;
 }
 
 .select-elements {
-  width: 100%;
+	width: 100%;
 
-  &__icon {
-    flex: 0 0 24px;
-    margin-left: 8px;
-  }
+	&__icon {
+		flex: 0 0 24px;
+		margin-left: 8px;
+	}
 
-  &__header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 16px;
-  }
+	&__header {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 16px;
+	}
 
-  &__title {
-    font-size: 18px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-  }
+	&__title {
+		font-size: 18px;
+		font-weight: bold;
+		display: flex;
+		align-items: center;
+	}
 
-  &__chevron {
-    transition: .2s ease-in-out;
-    cursor: pointer;
+	&__chevron {
+		transition: .2s ease-in-out;
+		cursor: pointer;
 
-    &.reverse {
-      transform: rotate(180deg);
-    }
-  }
+		&.reverse {
+			transform: rotate(180deg);
+		}
+	}
 
-  &__remove {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: .3s ease-in-out;
+	&__remove {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		transition: .3s ease-in-out;
 
-    &.disabled {
-      opacity: .5;
-    }
+		&.disabled {
+			opacity: .5;
+		}
 
-    &:hover:not(&.disabled) {
-      text-decoration: underline;
-    }
-  }
-  &__group {
-    width: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-direction: column;
-  }
+		&:hover:not(&.disabled) {
+			text-decoration: underline;
+		}
+	}
 
-  &__tabs {
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+	&__group {
+		width: 100%;
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		flex-direction: column;
+	}
 
-    &-item {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-bottom: 2px solid #D5D7DC;
-      transition: .3s ease-in-out;
+	&__tabs {
+		width: 100%;
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
 
-      &.active {
-        border-bottom: 2px solid #0099DC;
-      }
-    }
+		&-item {
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			padding: 4px 8px;
+			border-bottom: 2px solid #D5D7DC;
+			transition: .3s ease-in-out;
 
-    &.pt-16 {
-      padding-top: 16px;
-    }
-  }
+			&.active {
+				border-bottom: 2px solid #0099DC;
+			}
+		}
 
-  &__buttons {
-    padding-top: 16px;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 16px;
-    line-height: 24px;
-    color: #454A54;
+		&.pt-16 {
+			padding-top: 16px;
+		}
+	}
 
-    &-item {
-      margin-left: 16px;
-      flex-grow: 0;
-      border-bottom: none;
-      border-radius: 4px;
-      font-size: 16px;
-      line-height: 22px;
-      color: #454A54;
+	&__buttons {
+		padding-top: 16px;
+		justify-content: flex-start;
+		align-items: center;
+		font-size: 16px;
+		line-height: 24px;
+		color: #454A54;
 
-      &.active {
-       background-color: #0099DC;
-        border-bottom: none;
-        font-style: normal;
-        font-weight: normal;
-        color: #ffffff;
-      }
-    }
-  }
+		&-item {
+			margin-left: 16px;
+			flex-grow: 0;
+			border-bottom: none;
+			border-radius: 4px;
+			font-size: 16px;
+			line-height: 22px;
+			color: #454A54;
 
-  &__name {
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 16px;
-    text-align: center;
-    letter-spacing: 0.2px;
-    color: #454A54;
-  }
+			&.active {
+				background-color: #0099DC;
+				border-bottom: none;
+				font-style: normal;
+				font-weight: normal;
+				color: #ffffff;
+			}
+		}
+	}
 
-  &__list {
-    padding-top: 16px;
-    width: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
+	&__name {
+		font-weight: 600;
+		font-size: 14px;
+		line-height: 16px;
+		text-align: center;
+		letter-spacing: 0.2px;
+		color: #454A54;
+	}
 
-  &__item + &__item {
-    margin-left: 8px;
-  }
+	&__list {
+		padding-top: 16px;
+		width: 100%;
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		flex-wrap: wrap;
+	}
 
-  &__item {
-    border: 1px solid #D5D7DC;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    flex-direction: column;
-    width: 150px;
-    height: 150px;
-    cursor: pointer;
-    transition: .3s ease-in-out;
-    user-select: none;
+	&__item + &__item {
+		margin-left: 8px;
+	}
 
-    &.active {
-      border: 2px solid #0099DC;
-    }
-  }
-  &__img {
-    width: 100px;
-    padding-bottom: 20px;
-  }
+	&__item {
+		border: 1px solid #D5D7DC;
+		border-radius: 4px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		flex-direction: column;
+		width: 150px;
+		height: 150px;
+		cursor: pointer;
+		transition: .3s ease-in-out;
+		user-select: none;
+
+		&.active {
+			border: 2px solid #0099DC;
+		}
+	}
+
+	&__img {
+		width: 100px;
+		padding-bottom: 20px;
+	}
 }
 </style>

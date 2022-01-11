@@ -1,48 +1,48 @@
 <template lang="pug">
-  div.inner-page
-    div.page
-      div.title Кухонные шкафы по индивидуальным размерам
-      div.constructor
-        div.column.preview
-          canvas3d(
-            v-bind="canvas3DBind"
-            ref="canvas"
-            @getBoxName="selectedBoxName = $event"
-            @selectBox="selectBox"
-          )
-        div.column.config
-          select-case(
-            v-model="selectedBoxName"
-            :options="bodyOptions"
-            :selectedBox="selectedBox"
-            :selectedBoxType="selectedBoxType"
-            @selectItem="selectCaseConfig"
-            @remove="removeCase"
-            @selectType="setControlsVerticalPosition"
-            @discardSelectBox="discardSelectBox"
-          )
-          select-table-top(
-            v-model="tableTopConfig"
-            :options="tableTopOptions"
-            :textures="tableTopTextures"
-            :elementVariants="tableTops"
-            @selectColor="selectTableTopConfig"
-            @addTableTop="addTableTop"
-          )
-      //    select-facade(
-      //      v-model="kitchen.currentConfig.facadeConfig"
-      //      :parentVariants="parentVariants"
-      //      :elementVariants="facades"
-      //      @remove="$refs.kitchen.removeCase()"
-      //      @selectItem="selectFacadeConfig"
-      //      @selectColor="selectFacadeColor"
-      //      @selectChildConfig="selectChildConfig"
-      //    )
+	div.inner-page
+		div.page
+			div.title Кухонные шкафы по индивидуальным размерам
+			div.constructor
+				div.column.preview
+					canvas3d(
+						v-bind="canvas3DBind"
+						ref="canvas"
+						@getBoxName="selectedBoxName = $event"
+						@selectBox="selectBox"
+					)
+				div.column.config
+					select-case(
+						v-model="selectedBoxName"
+						:options="bodyOptions"
+						:selectedBox="selectedBox"
+						:selectedBoxType="selectedBoxType"
+						@selectItem="selectCaseConfig"
+						@remove="removeCase"
+						@selectType="setControlsVerticalPosition"
+						@discardSelectBox="discardSelectBox"
+					)
+					select-table-top(
+						v-model="tableTopConfig"
+						:options="tableTopOptions"
+						:textures="tableTopTextures"
+						:elementVariants="tableTops"
+						@remove="removeAllTableTops"
+						@selectColor="selectTableTopConfig"
+					)
+			//    select-facade(
+			//      v-model="kitchen.currentConfig.facadeConfig"
+			//      :parentVariants="parentVariants"
+			//      :elementVariants="facades"
+			//      @remove="$refs.kitchen.removeCase()"
+			//      @selectItem="selectFacadeConfig"
+			//      @selectColor="selectFacadeColor"
+			//      @selectChildConfig="selectChildConfig"
+			//    )
 
-      //calculate-order(
-      //  :kitchen="kitchen"
-      //  @removeItem="removeItem"
-      //)
+			//calculate-order(
+			//  :kitchen="kitchen"
+			//  @removeItem="removeItem"
+			//)
 </template>
 
 <script>
@@ -102,7 +102,7 @@ export default {
 			return this.config && this.config.tabletop.imgLayers[0].images || null
 		},
 		boxes() {
-			const { cases } = boxes
+			const {cases} = boxes
 			return cases
 		},
 		// parentVariants() {
@@ -141,7 +141,7 @@ export default {
 		//   return colors
 		// },
 		tableTops() {
-			const { colors } = tableTops
+			const {colors} = tableTops
 			return colors
 		},
 	},
@@ -157,11 +157,6 @@ export default {
 	methods: {
 		discardSelectBox() {
 			this.$refs.canvas.clearSelect()
-		},
-		addTableTop(val) {
-			this.tableTopConfig = val
-			this.$nextTick()
-			this.$refs.canvas.addTableTop()
 		},
 		setControlsVerticalPosition(v) {
 			this.controlsVerticalPosition = v
@@ -232,10 +227,10 @@ export default {
 			function getImage(url) {
 				return new Promise((resolve, reject) => {
 					const img = new Image()
-					img.onload = function() {
+					img.onload = function () {
 						resolve(url)
 					}
-					img.onerror = function() {
+					img.onerror = function () {
 						reject(url)
 					}
 					img.src = url
@@ -243,7 +238,7 @@ export default {
 			}
 
 			const {
-				color, type, maxWidth, minWidth, typeName, url, name, variantType, height,
+				color, type, maxWidth, minWidth, url, height,
 			} = item
 
 			const loadedUrl = await getImage(url)
@@ -259,6 +254,10 @@ export default {
 		removeCase() {
 			this.$refs.canvas.removeCase(false)
 		},
+		removeAllTableTops() {
+			this.$refs.canvas.removeAllTableTops()
+			this.tableTopConfig = null
+		}
 	},
 }
 </script>
@@ -266,41 +265,41 @@ export default {
 <style lang="scss">
 
 .column {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
 }
 
 .constructor {
-  padding-top: 24px;
-  padding-bottom: 24px;
+	padding-top: 24px;
+	padding-bottom: 24px;
 }
 
 .preview {
-  width: 780px;
+	width: 780px;
 }
 
 .config {
-  width: 380px;
+	width: 380px;
 	margin-left: 40px;
 }
 
 .page {
-  width: 1200px;
-  margin: 0 auto;
+	width: 1200px;
+	margin: 0 auto;
 
-  .title {
-    font-weight: bold;
-    font-size: 32px;
-    line-height: 48px;
-    letter-spacing: 0.4px;
-    color: #23252A;
-  }
+	.title {
+		font-weight: bold;
+		font-size: 32px;
+		line-height: 48px;
+		letter-spacing: 0.4px;
+		color: #23252A;
+	}
 
-  .constructor {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
+	.constructor {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+	}
 }
 </style>

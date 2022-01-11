@@ -516,18 +516,21 @@ export default {
 			const selectedTableTop = this.scene.getObjectByProperty("uuid", this.selectedTableTop.uuid)
 			this.scene.remove(selectedTableTop)
 		},
+		removeAllTableTops() {
+			this.replaceTableTops(true)
+		},
 		getTableTopModel(width) {
 			const {url, height, type, maxWidth} = this.tableTopConfig
 			return getTableTop({
 				width, url, height, type, maxWidth
 			})
 		},
-		replaceTableTops() {
+		replaceTableTops(onlyRemove) {
 			const tableTops = this.sceneObjects.tableTop
 			if (tableTops) {
 				tableTops.forEach((el) => el.userData.old = true)
 			}
-			this.addTableTop()
+			if (!onlyRemove) this.addTableTop()
 
 			if (tableTops) {
 				setTimeout(() => {
