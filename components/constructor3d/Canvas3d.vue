@@ -18,8 +18,8 @@
 					button.button.remove(:disabled="!selectedBox" @click="removeCase(false)")
 						img(:src="require('./img/trash.svg')")
 				div.box-control.tabletop(v-if="selectedTableTop")
-					button.button(:disabled="!selectedTableTop" @click="changeTableTopSize")
-						img(:src="require('./img/add.svg')")
+					//button.button(:disabled="!selectedTableTop" @click="changeTableTopSize")
+					//	img(:src="require('./img/add.svg')")
 					button.button(:disabled="!selectedTableTop" @click="removeTableTop()")
 						img(:src="require('./img/trash.svg')")
 				div.box-control.sizes
@@ -40,6 +40,8 @@ import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
 import boxes from "./configs/boxes/BoxesList"
 import {getTableTop} from "./configs/TableTop"
+import {GetArrows} from "@/components/constructor3d/configs/Arrows";
+import {GetTextMesh} from "@/components/constructor3d/configs/Text";
 
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,
@@ -494,6 +496,7 @@ export default {
 			await this.$nextTick()
 			if (this.sceneObjects.leftTableTop) {
 				const isRightTableTop = !!this.sceneObjects.rightTableTop
+				const isExistAngular = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({userData: {configType}}) => configType === 'angularBox')
 				const leftSorted = this.sceneObjects.leftTableTop
 					.sort((a, b) => a.sort - b.sort)
 					.filter((el, index) => {
@@ -501,16 +504,21 @@ export default {
 					})
 
 				const leftTableTops = HF.getTableTops(leftSorted, isRightTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
-				leftTableTops.forEach(({width, x, z}) => {
-					const newTableTop = this.getTableTopModel(width)
+				leftTableTops.forEach(({width, x, z}, index) => {
+					const needDepthSize = (isExistAngular || !isRightTableTop) && index === 0 && this.isShowSizes
+					const newTableTop = this.getTableTopModel(width, needDepthSize, true)
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
+					// const arrows = GetArrows(width)
+					// const sizeText = GetTextMesh(`${(width * 100).toFixed(0)}`)
+					// if (isExistAngular) newTableTop.add()
 					this.scene.add(newTableTop)
 				})
 			}
 			if (this.sceneObjects.rightTableTop) {
 				const isLeftTableTop = !!this.sceneObjects.leftTableTop
+				const isExistAngular = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({userData: {configType}}) => configType === 'angularBox')
 				const leftSorted = this.sceneObjects.rightTableTop
 					.sort((a, b) => a.sort - b.sort)
 					.filter((el, index) => {
@@ -518,11 +526,15 @@ export default {
 					})
 
 				const leftTableTops = HF.getTableTops(leftSorted, isLeftTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
-				leftTableTops.forEach(({width, x, z}) => {
-					const newTableTop = this.getTableTopModel(width)
+				leftTableTops.forEach(({width, x, z}, index) => {
+					const needDepthSize = (isExistAngular || !isLeftTableTop) && index === 0 && this.isShowSizes
+					const newTableTop = this.getTableTopModel(width, needDepthSize)
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
+					// const arrows = GetArrows(width)
+					// const sizeText = GetTextMesh(`${(width * 100).toFixed(0)}`)
+					// if (isExistAngular) newTableTop.add()
 					this.scene.add(HF.rotationY(newTableTop))
 				})
 			}
@@ -542,11 +554,11 @@ export default {
 		removeAllTableTops() {
 			this.replaceTableTops(true)
 		},
-		getTableTopModel(width) {
+		getTableTopModel(width, needDepthSize, isLeft) {
 			const {url, height, type, maxWidth} = this.tableTopConfig
 			return getTableTop({
 				width, url, height, type, maxWidth
-			})
+			}, needDepthSize, isLeft)
 		},
 		replaceTableTops(onlyRemove) {
 			const tableTops = this.sceneObjects.tableTop

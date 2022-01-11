@@ -1,7 +1,7 @@
 <template lang="pug">
 	div.inner-page
 		div.page
-			div.title Кухонные шкафы по индивидуальным размерам
+			div.title Кухни по индивидуальным размерам
 			div.constructor
 				div.column.preview
 					canvas3d(

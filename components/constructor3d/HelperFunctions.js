@@ -107,7 +107,7 @@ const findActionName = (obj) => {
 }
 
 const rotationY = (obj) => {
-	obj.rotation.y = threeMath.degToRad(-90)
+	obj.rotation.y = threeMath.degToRad( -90)
 	return obj
 }
 
