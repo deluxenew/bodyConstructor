@@ -170,7 +170,7 @@ export default {
 			await this.$nextTick()
 			this.replaceTableTops()
 		},
-		"sceneObjects.length": function () {
+		"sceneObjects.length": function() {
 			this.setControlsVisible()
 			this.setControlsPosition()
 			HF.setCasesPosition(this.scene.children)
