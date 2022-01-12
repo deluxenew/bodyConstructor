@@ -40,8 +40,6 @@ import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
 import boxes from "./configs/boxes/BoxesList"
 import { getTableTop } from "./configs/TableTop"
-import { GetArrows } from "@/components/constructor3d/configs/Arrows"
-import { GetTextMesh } from "@/components/constructor3d/configs/Text"
 
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,
@@ -172,7 +170,7 @@ export default {
 			await this.$nextTick()
 			this.replaceTableTops()
 		},
-		sceneObjects() {
+		"sceneObjects.length": function () {
 			this.setControlsVisible()
 			this.setControlsPosition()
 			HF.setCasesPosition(this.scene.children)

@@ -121,35 +121,15 @@ const setCasesPosition = (boxes) => {
 	}, {})
 	const groupedBoxes = groupBy(boxes, "type")
 
-	const getPaddingBySort = (arr, elSort, elWidth, padding, penalBoxes) => {
-		const penalParams = penalBoxes && penalBoxes.map(({ userData: { width, startPadding } }) => {
-			return {
-				start: startPadding - width / 2,
-				end: startPadding + width / 2,
-				penalWidth: width,
-			}
-		})
+	const getPaddingBySort = (arr, elSort, elWidth, padding) => {
 
 		const elPadding = arr.reduce((acc, el) => {
-			const { userData: { sort, width, penalPadding } } = el
-			console.log(penalPadding, "penalPadding")
+			const { userData: { sort, width , penalPadding } } = el
 			if (elSort > sort) acc += width
-			if (penalPadding) acc += penalPadding
+			// if (penalPadding) acc += penalPadding
 			return acc
 		}, 0)
 
-		let middle = elPadding + elWidth / 2
-		let elEnd = elPadding + elWidth
-
-		const intersection = penalParams && penalParams.find(({ start, end }) => {
-			return (elPadding >= start && elPadding < end) || (middle >= start && middle < end) || (elEnd >= start && elEnd <= end)
-		})
-		if (intersection) {
-			const { penalWidth, start } = intersection
-			const el = arr.find(({ userData: { sort } }) => sort === elSort)
-			console.log(el)
-			el.userData["penalPadding"] = start - elPadding + penalWidth
-		}
 
 		let result = elPadding + elWidth / 2 + padding
 
@@ -163,7 +143,6 @@ const setCasesPosition = (boxes) => {
 		const isAngular = groupedBoxes.bottomRight && groupedBoxes.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
 		const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0].userData.depth + (isAngular ? wallPadding : 0) || 0
 		const angularBox = groupedBoxes.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
-
 
 		groupedBoxes.bottomLeft.forEach((el) => {
 			const { userData: { sort, width, depth } } = el
@@ -194,9 +173,37 @@ const setCasesPosition = (boxes) => {
 		const angularBox = groupedBoxes.topLeft.find(({ userData: { configType } }) => configType === "angularBox")
 		const penalBoxes = groupedBoxes.bottomRight && groupedBoxes.bottomRight.filter(({ userData: { configType } }) => configType === "penalBox")
 
+		let penalPadding = 0
+
 		groupedBoxes.topLeft.forEach((el) => {
 			const { userData: { sort, width, depth } } = el
-			el.position.x = -getPaddingBySort(groupedBoxes.topLeft, sort, width, angularBox ? 0 : padding, penalBoxes)
+			let position = getPaddingBySort(groupedBoxes.topLeft, sort, width, angularBox ? 0 : padding)
+			const penalParams = penalBoxes && penalBoxes.map(({ userData: { width, startPadding } }) => {
+				return {
+					start: startPadding - width / 2,
+					end: startPadding + width / 2,
+					penalWidth: width,
+				}
+			})
+			let elStart = position - width / 2 + penalPadding
+			let middle = position + penalPadding
+			let elEnd = position + width / 2 + penalPadding
+
+			const intersection = penalParams && penalParams.find(({ start, end }) => {
+				return (elStart >= start && elStart < end) || (middle >= start && middle < end) || (elEnd >= start && elEnd <= end)
+			})
+
+			if (intersection) {
+				const { penalWidth, start } = intersection
+				penalPadding += start - elStart + penalWidth
+			}
+
+
+			position += penalPadding
+
+			if (!intersection) el.userData.penalPadding = penalPadding
+
+			el.position.x = -position
 			el.position.z = depth / 2
 		})
 	}
@@ -207,9 +214,42 @@ const setCasesPosition = (boxes) => {
 		const penalBoxes = groupedBoxes.bottomRight && groupedBoxes.bottomRight.filter(({ userData: { configType } }) => configType === "penalBox")
 
 
+		let penalPadding = 0
+
 		groupedBoxes.topRight.forEach((el) => {
 			const { userData: { sort, width, depth } } = el
-			el.position.z = getPaddingBySort(groupedBoxes.topRight, sort, width, angularBox ? 0 : padding, penalBoxes)
+			let position = getPaddingBySort(groupedBoxes.topRight, sort, width, angularBox ? 0 : padding)
+
+			//
+
+			const penalParams = penalBoxes && penalBoxes.map(({ userData: { width, startPadding } }) => {
+				return {
+					start: startPadding - width / 2,
+					end: startPadding + width / 2,
+					penalWidth: width,
+				}
+			})
+			let elStart = position - width / 2 + penalPadding
+			let middle = position + penalPadding
+			let elEnd = position + width / 2 + penalPadding
+
+			const intersection = penalParams && penalParams.find(({ start, end }) => {
+				return (elStart >= start && elStart < end) || (middle >= start && middle < end) || (elEnd >= start && elEnd <= end)
+			})
+
+			if (intersection) {
+				const { penalWidth, start } = intersection
+				penalPadding += start - elStart + penalWidth
+			}
+
+
+			position += penalPadding
+
+			if (!intersection) el.userData.penalPadding = penalPadding
+
+			//
+
+			el.position.z = position
 			el.position.x = -(depth / 2)
 		})
 	}
@@ -221,9 +261,10 @@ const getPlaceWidth = (arr, additionalArr) => {
 		padding = additionalArr[0].userData.depth
 	}
 	if (!arr) return padding
-	const width = arr.reduce((acc, { userData: { width, configType } }) => {
+	const width = arr.reduce((acc, { userData: { width, configType, penalPadding } }) => {
 		if (configType === "angularBox") acc += 2
 		acc += width
+		if (penalPadding) acc +=  penalPadding
 		return acc
 	}, 0)
 
