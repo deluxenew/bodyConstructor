@@ -111,6 +111,38 @@ const rotationY = (obj) => {
 	return obj
 }
 
+const getPenalPadding = (position, width, penalPadding, penalBoxes) => {
+	const penalParams = penalBoxes && penalBoxes.map(({ userData: { width: penalWidth, startPadding } }) => {
+		return {
+			start: startPadding - penalWidth / 2,
+			end: startPadding + penalWidth / 2,
+			penalWidth,
+		}
+	})
+	// console.log(position, "position")
+	const elStart = position - width / 2 + penalPadding
+	const middle = position + penalPadding
+	const elEnd = position + width / 2 + penalPadding
+
+	// console.log(elStart, middle, elEnd, "elStart, middle, elEnd")
+
+	let padding = penalPadding
+
+	if (penalParams) {
+		let paddingSum = 0
+		penalParams.forEach(({ penalWidth, start, end }) => {
+			const intersectStart = elStart + paddingSum >= start && elStart + paddingSum < end
+			const intersectMiddle = middle + paddingSum >= start && middle + paddingSum < end
+			const intersectEnd = elEnd + paddingSum > start && elEnd + paddingSum <= end
+			if (intersectStart || intersectMiddle || intersectEnd) {
+				paddingSum = start - elStart + penalWidth
+			}
+		})
+		padding += paddingSum
+	}
+	return padding
+}
+
 const setCasesPosition = (boxes) => {
 	const places = ["bottomLeft", "bottomRight", "topLeft", "topRight"]
 	const groupBy = (list, key) => list.reduce((acc, el) => {
@@ -165,36 +197,6 @@ const setCasesPosition = (boxes) => {
 		})
 	}
 
-	const getPenalPadding = (position, width, penalPadding, penalBoxes) => {
-		const penalParams = penalBoxes && penalBoxes.map(({ userData: { width, startPadding } }) => {
-			return {
-				start: startPadding - width / 2,
-				end: startPadding + width / 2,
-				penalWidth: width,
-			}
-		})
-
-		const elStart = position - width / 2 + penalPadding
-		const middle = position + penalPadding
-		const elEnd = position + width / 2 + penalPadding
-
-		let padding = penalPadding
-
-		if (penalParams) {
-			let paddingSum = 0
-			penalParams.forEach(({ penalWidth, start, end }) => {
-				const intersectStart = elStart + paddingSum >= start && elStart + paddingSum < end
-				const intersectMiddle = middle + paddingSum >= start && middle + paddingSum < end
-				const intersectEnd = elEnd + paddingSum > start && elEnd + paddingSum <= end
-				if (intersectStart || intersectMiddle || intersectEnd) {
-					paddingSum = start - elStart + penalWidth
-				}
-			})
-			padding += paddingSum
-		}
-		return padding
-	}
-
 	if (groupedBoxes.topLeft) {
 		const padding = groupedBoxes.topRight && groupedBoxes.topRight[0].userData.depth || 0
 		const angularBox = groupedBoxes.topLeft.find(({ userData: { configType } }) => configType === "angularBox")
@@ -236,20 +238,42 @@ const setCasesPosition = (boxes) => {
 	}
 }
 
-const getPlaceWidth = (arr, additionalArr) => {
+const getPlaceWidth = function({ arr, additionalArr, penalBoxes, modelWidth }) {
+	// console.log(arr, "arr")
 	let padding = 0
 	if (additionalArr && !(arr && arr.find(({ userData: { configType } }) => configType === "angularBox"))) {
 		padding = additionalArr[0].userData.depth
 	}
-	if (!arr) return padding
-	const width = arr.reduce((acc, { userData: { width, configType, penalPadding } }, index) => {
-		if (configType === "angularBox") acc += 2
-		acc += width
-		if (penalPadding && index === arr.length - 1) padding += penalPadding
-		return acc
-	}, 0)
 
-	return width + padding
+
+	// let paddingVariants = 0
+	let currentPadding = 0
+	let fullWidth = 0
+
+	if (arr) {
+		arr.forEach(({ userData: { width, configType, penalPadding } }) => {
+			console.log(configType, "configType")
+			// if (configType === "angularBox") fullWidth += 2
+			fullWidth += width
+			if (penalPadding && currentPadding !== penalPadding) {
+				currentPadding = penalPadding
+				// paddingVariants++
+			}
+			// if (penalPadding && index === arr.length - 1) fullWidth += penalPadding
+		})
+	}
+
+	if (penalBoxes) {
+		// console.log(currentPadding, "currentPadding")
+		// console.log(currentPadding, "currentPadding")
+		// console.log(fullWidth, "fullWidth")
+		const penalBoxPadding = getPenalPadding(fullWidth + modelWidth / 2, modelWidth, currentPadding, penalBoxes)
+		// console.log(penalBoxPadding, "penalBoxPadding")
+		if (penalBoxPadding) fullWidth += penalBoxPadding
+	}
+
+
+	return fullWidth + padding
 }
 
 const getFacadeGroup = (obj) => {

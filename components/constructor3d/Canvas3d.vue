@@ -136,16 +136,42 @@ export default {
 			return result
 		},
 		widthLeftBottom() {
-			return HF.getPlaceWidth(this.sceneObjects.bottomLeft, this.sceneObjects.bottomRight)
+			return HF.getPlaceWidth({
+				arr: this.sceneObjects.bottomLeft,
+				additionalArr: this.sceneObjects.bottomRight,
+				penalBoxes: null,
+				modelWidth: null
+			})
 		},
 		widthRightBottom() {
-			return HF.getPlaceWidth(this.sceneObjects.bottomRight, this.sceneObjects.bottomLeft)
+			return HF.getPlaceWidth({
+				arr: this.sceneObjects.bottomRight,
+				additionalArr: this.sceneObjects.bottomLeft,
+				penalBoxes: null,
+				modelWidth: null
+			})
 		},
 		widthLeftTop() {
-			return HF.getPlaceWidth(this.sceneObjects.topLeft, this.sceneObjects.topRight)
+			const penalBoxes = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft
+				.filter(({ userData: { configType } }) => configType === "penalBox")
+			const modelWidth = this.caseModel && this.caseModel.userData.width || 10
+			return HF.getPlaceWidth({
+				arr: this.sceneObjects.topLeft,
+				additionalArr: this.sceneObjects.topRight,
+				penalBoxes,
+				modelWidth
+			})
 		},
 		widthRightTop() {
-			return HF.getPlaceWidth(this.sceneObjects.topRight, this.sceneObjects.topLeft)
+			const penalBoxes = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight
+				.filter(({ userData: { configType } }) => configType === "penalBox")
+			const modelWidth = this.caseModel && this.caseModel.userData.width || 10
+			return HF.getPlaceWidth({
+				arr: this.sceneObjects.topRight,
+				additionalArr: this.sceneObjects.topLeft,
+				penalBoxes,
+				modelWidth
+			})
 		},
 		camPosition() {
 			return camPos(this.positionNumber, this.widthRightBottom, this.widthLeftBottom, this.widthRightTop, this.widthLeftTop)
@@ -154,6 +180,7 @@ export default {
 	watch: {
 		selectedBox(v) {
 			this.$emit("selectBox", v)
+			this.setControlsPosition()
 		},
 		tableTopConfig() {
 			this.replaceTableTops()
@@ -163,6 +190,7 @@ export default {
 			async handler() {
 				await this.$nextTick()
 				this.setControlsVisible()
+				this.setControlsPosition()
 			},
 		},
 		"sceneObjects.floor.length": async function() {
@@ -171,9 +199,9 @@ export default {
 			this.replaceTableTops()
 		},
 		"sceneObjects.length": function() {
+			HF.setCasesPosition(this.scene.children)
 			this.setControlsVisible()
 			this.setControlsPosition()
-			HF.setCasesPosition(this.scene.children)
 		},
 		async caseModelCode(v) {
 			await this.$nextTick()
@@ -182,8 +210,8 @@ export default {
 				const { userData: { sort, type } } = this.selectedBox
 				this.replaceBox(sort, type)
 				HF.setCasesPosition(this.scene.children)
-				this.setControlsPosition()
 			}
+			this.setControlsPosition()
 		},
 		isShowSizes(v) {
 			this.sceneObjects.sizes.forEach((el) => el.visible = v)
@@ -285,7 +313,7 @@ export default {
 			const disableMovePenalBox = selectType === "penalBox" && this.sceneObjects.selectedBox.userData.sort < 2
 			const findAngularRight = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
 			const findAngularLeft = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
-			if (findAngularRight && (isLeft && disableMoveBox || disableMovePenalBox) || (findAngularLeft && (isLeft && disableMovePenalBox || disableMoveBox ) )) {
+			if (findAngularRight && (isLeft && disableMoveBox || disableMovePenalBox) || (findAngularLeft && (isLeft && disableMovePenalBox || disableMoveBox))) {
 				return false
 			}
 
@@ -310,6 +338,7 @@ export default {
 				this.selectedBox.userData.sort += increment
 			}
 			HF.setCasesPosition(this.scene.children)
+			this.setControlsPosition()
 			this.replaceTableTops()
 		},
 		moveLeft() {
@@ -378,7 +407,7 @@ export default {
 		setControlsPosition() {
 			this.sceneObjects.control.forEach((el) => {
 				const { userData: { getCoords, watcher }, position: { x, y, z } } = el
-				el.position.set(...getCoords(x, y, z, this.sceneObjects[this.controlsVerticalPosition] ? this[watcher] : 2))
+				el.position.set(...getCoords(x, y, z, this[watcher]))
 			})
 		},
 		addBoxToScene(pos, side, sort) {
@@ -677,12 +706,15 @@ export default {
 
 			.size {
 				transition: .2s ease;
+
 				svg path {
 					transition: .2s ease;
 					fill: #5C6270;
 				}
+
 				&.active {
 					background: #0099DC;
+
 					svg path {
 						fill: #ffffff;
 					}
