@@ -1,12 +1,13 @@
 import { PerspectiveCamera } from "three"
+import { constants } from "./boxes/constants"
 
-const FOV = 45
+const FOV = constants.camAngle
 const FAR = 200
 
 const camera = (width, height) => {
 	const pCamera = new PerspectiveCamera(FOV, width / height, 1, FAR)
-	pCamera.position.z = 80
-	pCamera.position.y = 13
+	pCamera.position.z = constants.camPositionZ + 20
+	pCamera.position.y = constants.camPositionY
 	return pCamera
 }
 
