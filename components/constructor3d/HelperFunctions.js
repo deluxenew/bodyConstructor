@@ -252,7 +252,6 @@ const getPlaceWidth = function({ arr, additionalArr, penalBoxes, modelWidth }) {
 
 	if (arr) {
 		arr.forEach(({ userData: { width, configType, penalPadding } }) => {
-			console.log(configType, "configType")
 			// if (configType === "angularBox") fullWidth += 2
 			fullWidth += width
 			if (penalPadding && currentPadding !== penalPadding) {

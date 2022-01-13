@@ -442,8 +442,13 @@ export default {
 			const mouse = new THREE.Vector2()
 			const raycaster = new THREE.Raycaster()
 
+			window.addEventListener('click', onOuterClickHandler)
 			this.$refs.canvas.addEventListener("pointerdown", onPointerDown)
 			this.$refs.canvas.addEventListener("pointermove", onSelectGroup)
+
+			function onOuterClickHandler(event) {
+				// canvas
+			}
 
 			function clearHelpers(clearEdges, clearTransparent) {
 				vm.scene.children.forEach((el) => {
@@ -550,6 +555,7 @@ export default {
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
+					newTableTop.userData.pos = 'left'
 					this.scene.add(newTableTop)
 				})
 			}
@@ -569,6 +575,7 @@ export default {
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
+					newTableTop.userData.pos = 'right'
 					this.scene.add(HF.rotationY(newTableTop))
 				})
 			}
