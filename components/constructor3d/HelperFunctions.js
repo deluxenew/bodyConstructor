@@ -270,6 +270,8 @@ const getPlaceWidth = function({ arr, additionalArr, penalBoxes, modelWidth }) {
 		const penalBoxPadding = getPenalPadding(fullWidth + modelWidth / 2, modelWidth, currentPadding, penalBoxes)
 		// console.log(penalBoxPadding, "penalBoxPadding")
 		if (penalBoxPadding) fullWidth += penalBoxPadding
+	} else {
+		fullWidth += 2
 	}
 
 
