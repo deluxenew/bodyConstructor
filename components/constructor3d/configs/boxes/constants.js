@@ -19,4 +19,11 @@ export const constants = {
 	topHeight: 7.2,
 	topDepth: 3,
 	topBound: 21.40,
+
+	camPositionX: 0,
+	camPositionY: 13,
+	camPositionZ: 50,
+	camAngle: 45,
+
+	tableTopDepth: 6
 }

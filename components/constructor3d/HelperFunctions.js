@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import boxes from "./configs/boxes/BoxesList"
+import { constants } from "./configs/boxes/constants"
 
 const { Math: threeMath } = THREE
 
@@ -38,6 +39,24 @@ const fromTo = (value, from, to, steps) => {
 		}
 	}
 }
+const camToTableTop = (selectedTableTop) => {
+	const {userData: {width, pos}, position:{x,z}} = selectedTableTop
+	console.log( {width, pos}, {x,z})
+
+	const h2 = Math.tan(threeMath.degToRad(90 - constants.camAngle / 2)) * width / 2 //+ constants.tableTopDepth / 2
+
+	console.log(h2)
+
+	return {
+		cameraPositionX: 0,
+		cameraPositionY: h2 > 18 ? h2 : 18,
+		cameraPositionZ: h2 > 18 ? h2 : 18,
+		cameraRotationX: threeMath.degToRad(-40),
+		sceneRotationY: pos === 'right' ? threeMath.degToRad(90) : 0,
+		scenePositionX: pos === 'right' ? -z : -x
+	}
+}
+
 
 const camPos = (position, wrb, wlb, wrt, wlt) => {
 	function povSet(wL, wR, camAngle, camZ, pos) {
@@ -66,18 +85,20 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 		const h = Math.sqrt(a * b)
 		const h2 = Math.tan(threeMath.degToRad(90 - camAngle / 2)) * g / 2 + h / 2
 
-		let cPz = 0
+		let cameraPositionZ = 0
 		if (h2 > camZ) {
-			cPz = h2
+			cameraPositionZ = h2
 		} else {
-			cPz = camZ
+			cameraPositionZ = camZ
 		}
-
+		//console.log(threeMath.degToRad(45 * 2) - Math.atan(Math.sqrt((h2 + h) * 2 + heightForCam ** 2) / (h2 + h)) * 2)
 		return {
-			x: threeMath.degToRad(45 * 2) - Math.atan(Math.sqrt((h2 + h) ** 2 + heightForCam ** 2) / (h2 + h)) * 2 /* - threeMath.degToRad(18) */,
-			y: threeMath.degToRad(90) - alfa,
-			sPx: (a - b) / 2,
-			cPz,
+			cameraPositionX: 0,
+			cameraPositionY: 13,
+			cameraPositionZ,
+			cameraRotationX: threeMath.degToRad(0),
+			sceneRotationY: threeMath.degToRad(90) - alfa,
+			scenePositionX: (a - b) / 2	- (threeMath.degToRad(45 * 2) - Math.atan(Math.sqrt((h2 + h) ** 2 + heightForCam ** 2) / (h2 + h)) * 2 )
 		}
 	}
 
@@ -85,9 +106,9 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 	const wl = Math.max(wlb, wlt)
 
 	const cameraPositions = {
-		pos1: povSet(wl, wr, 45, 50, position),
-		pos2: povSet(wl, wr, 45, 50, position),
-		pos3: povSet(wl, wr, 45, 50, position),
+		pos1: povSet(wl, wr, constants.camAngle, constants.camPositionZ, position),
+		pos2: povSet(wl, wr, constants.camAngle, constants.camPositionZ, position),
+		pos3: povSet(wl, wr, constants.camAngle, constants.camPositionZ, position),
 	}
 	return cameraPositions[`pos${position}`]
 }
@@ -379,6 +400,7 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 
 export default {
 	animationFromTo,
+	camToTableTop,
 	fromTo,
 	camPos,
 	recursiveFindBox,

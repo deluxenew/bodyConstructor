@@ -4,12 +4,13 @@ import {
 import Materials from "./Materials"
 import { GetArrows } from "./Arrows"
 import { GetTextMesh } from "./Text"
+import { constants } from "./boxes/constants"
 
 const { textureMaterial } = Materials
 
 import { edgesHelper } from "./EdgesHelper"
 
-const depth = 6
+const depth = constants.tableTopDepth
 
 export const getTableTop = ({ width, height, type, url, maxWidth, minWidth }, needDepthSize, isLeft) => {
 	const tableTopBox = new BoxGeometry(width, height, depth)

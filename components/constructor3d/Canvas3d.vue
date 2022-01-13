@@ -43,7 +43,7 @@
 
 import * as THREE from "three"
 import {
-	AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3,
+	AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3, Math
 } from "three"
 import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
@@ -54,7 +54,7 @@ import TableTopResizer from "@/components/constructor3d/TableTopResizer";
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,
 } = StartLoader
-const { fromTo, camPos } = HF
+const { fromTo, camPos, camToTableTop } = HF
 
 const CANVAS_WIDTH = 780
 const CANVAS_HEIGHT = 600
@@ -186,7 +186,12 @@ export default {
 			})
 		},
 		camPosition() {
-			return camPos(this.positionNumber, this.widthRightBottom, this.widthLeftBottom, this.widthRightTop, this.widthLeftTop)
+			if (!this.selectedTableTop) {
+				return camPos(this.positionNumber, this.widthRightBottom, this.widthLeftBottom, this.widthRightTop, this.widthLeftTop)
+			}
+			else{
+				return camToTableTop(this.selectedTableTop)
+			}
 		},
 	},
 	watch: {
@@ -252,15 +257,13 @@ export default {
 			const steps = 13
 			requestAnimationFrame(render)
 
-			vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, vm.camPosition.y, steps)
-			vm.scene.position.x = fromTo(vm.scene.position.x, vm.scene.position.x, vm.camPosition.sPx, steps)
-			vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPosition.x, steps)
-			vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPosition.cPz, steps)
+			vm.scene.rotation.y = fromTo(vm.scene.rotation.y, vm.scene.rotation.y, vm.camPosition.sceneRotationY, steps)
+			vm.scene.position.x = fromTo(vm.scene.position.x, vm.scene.position.x, vm.camPosition.scenePositionX, steps)
+			vm.camera.position.x = fromTo(vm.camera.position.x, vm.camera.position.x, vm.camPosition.cameraPositionX, steps)
+			vm.camera.position.z = fromTo(vm.camera.position.z, vm.camera.position.z, vm.camPosition.cameraPositionZ, steps)
+			vm.camera.rotation.x = fromTo(vm.camera.rotation.x, vm.camera.rotation.x, vm.camPosition.cameraRotationX, steps)
+			vm.camera.position.y = fromTo(vm.camera.position.y, vm.camera.position.y, vm.camPosition.cameraPositionY, steps)
 
-			/* vm.scene.rotation.y = vm.camPosition.y;
-      vm.scene.position.x = vm.camPosition.sPx;
-      vm.camera.position.x = vm.camPosition.x;
-      vm.camera.position.z = vm.camPosition.cPz; */
 			vm.renderer.render(vm.scene, vm.camera)
 
 			const delta = vm.clock.getDelta()
