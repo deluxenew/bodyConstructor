@@ -11,7 +11,7 @@ import { edgesHelper } from "./EdgesHelper"
 
 const depth = 6
 
-export const getTableTop = ({ width, height, type, url, maxWidth }, needDepthSize, isLeft) => {
+export const getTableTop = ({ width, height, type, url, maxWidth, minWidth }, needDepthSize, isLeft) => {
 	const tableTopBox = new BoxGeometry(width, height, depth)
 	const tableTop = new Mesh(tableTopBox, textureMaterial(url))
 	const tableTopGroup = new Group()
@@ -64,6 +64,7 @@ export const getTableTop = ({ width, height, type, url, maxWidth }, needDepthSiz
 	tableTopGroup.userData.depth = depth
 	tableTopGroup.userData.material = type
 	tableTopGroup.userData.maxWidth = maxWidth
+	tableTopGroup.userData.minWidth = minWidth
 
 	tableTopBox.dispose()
 
