@@ -196,7 +196,7 @@ export default {
 
 	&__scale {
 		position: relative;
-		width: calc(100% - 40px);
+		width: calc(100% - 32px);
 		height: 20px;
 		background: url("img/scale.svg") repeat-x left top;
 		cursor: pointer;
@@ -205,7 +205,7 @@ export default {
 
 	&__handler {
 		position: absolute;
-		top: -5px;
+		top: -2px;
 		transform: translate(-50%, 50%);
 		z-index: 1;
 		cursor: pointer;
@@ -277,8 +277,9 @@ export default {
 }
 
 .handler {
-	width: 15px;
-	height: 24px;
+
+	width: 11px;
+	height: 13px;
 
 	&__img {
 		display: block;
@@ -289,17 +290,17 @@ export default {
 		z-index: 2;
 	}
 
-	&__shadow {
-		display: block;
-		position: absolute;
-		left: 13px;
-		top: 11px;
-		transform: skew(-10deg, 40deg);
-		width: 0;
-		height: 0;
-		box-shadow: 0 0 2px 4px #3a3e46;
-		filter: blur(2px);
-		z-index: 1;
-	}
+	//&__shadow {
+	//	display: block;
+	//	position: absolute;
+	//	left: 13px;
+	//	top: 11px;
+	//	transform: skew(-10deg, 40deg);
+	//	width: 0;
+	//	height: 0;
+	//	box-shadow: 0 0 2px 4px #3a3e46;
+	//	filter: blur(2px);
+	//	z-index: 1;
+	//}
 }
 </style>
