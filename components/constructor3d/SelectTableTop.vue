@@ -11,14 +11,14 @@
 				v-if="value"
 				@click="removeItem"
 			)
-				span Убрать
+				span Убрать столешницы
 				img.select-elements__icon(:src="require('./img/close.svg')")
 			div.select-elements__remove(
 				v-else
 				@click="addTableTop"
 			)
 				span Добавить
-				img.select-elements__icon(:src="require('./img/add.svg')")
+				img.select-elements__icon.select-elements__icon-add(:src="require('./img/close.svg')")
 		transition-expand
 			div.select-elements__group(v-show="opened")
 				div.select-elements__tabs
@@ -83,23 +83,27 @@ export default {
 	},
 	computed: {
 		materialVariants() {
-			return this.options && this.options.filter(({category}) => category === "material")
+			return this.options && this.options
+				.filter(({category}) => category === "material")
 		},
 		thicknessVariants() {
-			return this.options && this.options.filter(({
-																										dependency,
-																										category
-																									}) => category === "thickness" && dependency[0].code === "material" && dependency[0].values.includes(this.materialModel))
+			return this.options && this.options
+				.filter(({
+									 dependency,
+									 category
+								 }) => category === "thickness" && dependency[0].code === "material" && dependency[0].values.includes(this.materialModel))
 		},
 		colorVariants() {
-			return this.options && this.options.filter(({
-																										category,
-																										dependency
-																									}) => category === "color" && dependency[0] && dependency[0].values.includes(this.thicknessModel)).sort((a, b) => {
-				if (a.code > b.code) return -1
-				if (a.code < b.code) return 1
-				if (a.code === b.code) return 0
-			})
+			return this.options && this.options
+				.filter(({
+									 category,
+									 dependency
+								 }) => category === "color" && dependency[0] && dependency[0].values.includes(this.thicknessModel))
+				.sort((a, b) => {
+					if (a.code > b.code) return -1
+					if (a.code < b.code) return 1
+					if (a.code === b.code) return 0
+				})
 		},
 		materialModel: {
 			get() {
@@ -209,6 +213,11 @@ export default {
 	&__icon {
 		flex: 0 0 24px;
 		margin-left: 8px;
+		transition: .2s ease;
+
+		&-add {
+			transform: rotate(45deg);
+		}
 	}
 
 	&__header {
@@ -240,6 +249,7 @@ export default {
 		align-items: center;
 		cursor: pointer;
 		transition: .3s ease-in-out;
+		user-select: none;
 
 		&.disabled {
 			opacity: .5;

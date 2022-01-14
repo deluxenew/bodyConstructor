@@ -203,6 +203,7 @@ $thumbWidth: var(--thumb-width);
   width: 150px;
   height: 150px;
   cursor: pointer;
+	font-size: 14px;
   //transition: .3s ease-in-out;
   user-select: none;
 

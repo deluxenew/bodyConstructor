@@ -17,13 +17,12 @@
 						img(:src="require('./img/doors.svg')")
 					button.button.remove(:disabled="!selectedBox" @click="removeCase(false)")
 						img(:src="require('./img/trash.svg')")
-				div.box-control.tabletop(v-if="selectedTableTop")
-					//button.button(:disabled="!selectedTableTop" @click="changeTableTopSize")
-					//	img(:src="require('./img/add.svg')")
-					button.size(:class="{active: isShowSizes}" @click="showSizes")
-						| Редактировать
-					button.button(:disabled="!selectedTableTop" @click="removeTableTop()")
-						img(:src="require('./img/trash.svg')")
+				//div.box-control.tabletop(v-if="selectedTableTop")
+				//	//button.button(:disabled="!selectedTableTop" @click="changeTableTopSize")
+				//	//	img(:src="require('./img/add.svg')")
+				//	ui-button.size(:class="{active: isShowSizes}" size="small" appearance="secondary" @click="" text="Редактировать")
+				//	button.button(:disabled="!selectedTableTop" @click="removeTableTop()")
+				//		img(:src="require('./img/trash.svg')")
 				div.box-control.sizes
 					button.button.size(:class="{active: isShowSizes}" @click="showSizes")
 						svg( width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg")
@@ -32,10 +31,13 @@
 				table-top-resizer(
 					v-if="selectedTableTop"
 					:currentTableTop="selectedTableTop"
-					:max="10"
+					:tableTopConfig="tableTopConfig"
+					:maxWidth="maxWidthTableTop"
 					@cancelResize="cancelResize"
 					@replaceTableTop="replaceTableTop"
+					@removeTableTop="removeTableTop"
 				)
+
 
 </template>
 
@@ -43,26 +45,27 @@
 
 import * as THREE from "three"
 import {
-	AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3, Math
+	AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3
 } from "three"
 import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
 import boxes from "./configs/boxes/BoxesList"
 import { getTableTop } from "./configs/TableTop"
-import TableTopResizer from "@/components/constructor3d/TableTopResizer";
+import TableTopResizer from "./TableTopResizer";
+import { UiButton } from "@aksonorg/design"
 
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,
 } = StartLoader
 const { fromTo, camPos, camToTableTop } = HF
 
-const CANVAS_WIDTH = 780
+const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 600
 const MAX_PLACE_WIDTH = 50
 
 export default {
 	name: "Canvas3d",
-	components: {TableTopResizer},
+	components: {TableTopResizer, UiButton},
 	props: {
 		controlsVerticalPosition: {
 			type: String,
@@ -85,14 +88,37 @@ export default {
 			positionNumber: 1,
 			selectedBox: null,
 			selectedTableTop: null,
-			resizeMode: false,
+			tableTops: {
+				left: [],
+				right: [],
+			},
 			mixer: null,
 			clock: new THREE.Clock(),
 			animations: [],
 			isShowSizes: true,
+
 		}
 	},
 	computed: {
+		maxWidthTableTop() {
+			const materialMaxWidth = this.tableTopConfig.maxWidth
+			const {
+				userData: {
+					commonIndex: tableTopCommonIndex,
+					index: tableTopIndex,
+					width: tableTopWidth,
+					pos,
+				},
+				position: { x, y, z }} = this.selectedTableTop
+			const TableTopTotalWidth = this.tableTops[pos].reduce((acc, {commonIndex, width, index, difference}) => {
+				if (tableTopCommonIndex === commonIndex) {
+					if (tableTopIndex === index) acc += width
+					if (difference && tableTopIndex > index) acc += difference
+				}
+				return acc
+			}, 0)
+			return TableTopTotalWidth * 100
+		},
 		caseModel() {
 			if (this.selectedBox) return boxes[this.selectedBox.userData.code.replaceAll("-", "_")]
 			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "_") || ""
@@ -189,7 +215,7 @@ export default {
 			if (!this.selectedTableTop) {
 				return camPos(this.positionNumber, this.widthRightBottom, this.widthLeftBottom, this.widthRightTop, this.widthLeftTop)
 			}
-			else{
+			else {
 				return camToTableTop(this.selectedTableTop)
 			}
 		},
@@ -371,7 +397,7 @@ export default {
 				const xAxis = new Vector3(0, -1, 0)
 
 				const qInitial = new Quaternion().setFromAxisAngle(xAxis, 0)
-				const qFinal = new Quaternion().setFromAxisAngle(xAxis, Math.PI / 2)
+				const qFinal = new Quaternion().setFromAxisAngle(xAxis, THREE.Math.PI / 2)
 				const quaternionKF = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w])
 				const quaternionKFR = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w])
 				const anim = openedDoors ? quaternionKFR : quaternionKF
@@ -552,6 +578,8 @@ export default {
 		},
 
 		async addTableTop() {
+			this.tableTops.left = []
+			this.tableTops.right = []
 			if (!this.tableTopConfig) return
 			await this.$nextTick()
 			if (this.sceneObjects.leftTableTop) {
@@ -564,13 +592,18 @@ export default {
 					})
 
 				const leftTableTops = HF.getTableTops(leftSorted, isRightTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
-				leftTableTops.forEach(({ width, x, z }, index) => {
-					const needDepthSize = (isExistAngular || !isRightTableTop) && index === 0 && this.isShowSizes
+				leftTableTops.forEach(({ width, x, z, commonIndex, index }, i) => {
+					const needDepthSize = (isExistAngular || !isRightTableTop) && i === 0 && this.isShowSizes
 					const newTableTop = this.getTableTopModel(width, needDepthSize, true)
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
 					newTableTop.userData.pos = 'left'
+					newTableTop.userData.existDepthSize = needDepthSize
+					newTableTop.userData.commonIndex = commonIndex
+					newTableTop.userData.index = index
+					newTableTop.userData.initWidth = width
+					this.tableTops.left.push({ commonIndex, width, index })
 					this.scene.add(newTableTop)
 				})
 			}
@@ -584,13 +617,18 @@ export default {
 					})
 
 				const leftTableTops = HF.getTableTops(leftSorted, isLeftTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
-				leftTableTops.forEach(({ width, x, z }, index) => {
-					const needDepthSize = (isExistAngular || !isLeftTableTop) && index === 0 && this.isShowSizes
+				leftTableTops.forEach(({ width, x, z, commonIndex, index }, i) => {
+					const needDepthSize = (isExistAngular || !isLeftTableTop) && i === 0 && this.isShowSizes
 					const newTableTop = this.getTableTopModel(width, needDepthSize)
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
 					newTableTop.userData.pos = 'right'
+					newTableTop.userData.existDepthSize = needDepthSize
+					newTableTop.userData.commonIndex = commonIndex
+					newTableTop.userData.index = index
+					newTableTop.userData.initWidth = width
+					this.tableTops.right.push({ commonIndex, width, index})
 					this.scene.add(HF.rotationY(newTableTop))
 				})
 			}
@@ -608,6 +646,7 @@ export default {
 			this.scene.remove(selectedTableTop)
 			await this.$nextTick()
 			if (!this.sceneObjects.tableTop) this.$emit("removeTableTops")
+			this.selectedTableTop = null
 		},
 		removeAllTableTops() {
 			this.replaceTableTops(true)
@@ -634,7 +673,6 @@ export default {
 			}
 		},
 		cancelResize() {
-			this.resizeMode = false
 			const edges = this.selectedTableTop.children.find(({ name }) => name === "edges")
 			const transparent = this.selectedTableTop.children.find(({ name }) => name === "transparent")
 			if (edges && transparent) {
@@ -643,9 +681,31 @@ export default {
 			}
 			this.selectedTableTop = null
 		},
-		replaceTableTop(newTableTop) {
+		async replaceTableTop(newTableTop) {
+			const { userData: {index, commonIndex, pos, difference, width, initWidth, otherDiff } } = newTableTop
+			console.log(index, commonIndex, pos, difference, width, 'index, commonIndex, pos, difference, width')
+			const findItem = this.tableTops[pos].find(({index: findIndex, commonIndex: findCommonIndex}) => index === findIndex && commonIndex === findCommonIndex)
+			findItem.difference = difference
+			console.log(otherDiff, 'otherDiff')
+			if (otherDiff) {
+				this.tableTops[pos].forEach((el) => {
+					const {index: findIndex, commonIndex: findCommonIndex} = el
+					if (findCommonIndex === commonIndex && findIndex < index) {
+						el.width -= otherDiff
+					}
+				})
+			}
+
+
+
 			this.scene.add(newTableTop)
+
 			this.scene.remove(this.selectedTableTop)
+			// await this.$nextTick()
+
+			this.selectedTableTop = this.scene.children.find(({userData: {index: findIndex, commonIndex: findCommonIndex}}) => index === findIndex && commonIndex === findCommonIndex)
+
+
 		},
 		showSizes() {
 			this.isShowSizes = !this.isShowSizes

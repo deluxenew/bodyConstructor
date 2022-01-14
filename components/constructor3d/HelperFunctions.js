@@ -320,6 +320,8 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 		side: "",
 		x: 0,
 		z: 0,
+		commonIndex: 0,
+		index: 0,
 	}
 	let itemsCount = 0
 	let counter = 0
@@ -343,10 +345,13 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 
 		if (counter !== sort) {
 			acc.push({ ...tableTop })
+			tableTop.commonIndex += 1
+			tableTop.index = 0
 			tableTop.width = width
 			padding = side === "left" ? x + width / 2 : z - width / 2
 			tableTop.x = side === "left" ? padding - width / 2 : x
 			tableTop.z = side === "left" ? z : padding + width / 2
+
 			counter = sort
 			counter++
 			startPenalBox = true
@@ -357,8 +362,8 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 				tableTop.x = side === "left" ? padding - maxWidth / 200 : x
 				tableTop.z = side === "left" ? z : padding + maxWidth / 200
 
-
 				acc.push({ ...tableTop })
+				tableTop.index += 1
 
 				padding += side === "left" ? -(maxWidth / 100 - (!startPenalBox && !angularExist && across ? 0.6 : 0)) : maxWidth / 100 - (!startPenalBox && !angularExist && across ? 0.6 : 0)
 				tableTop.width = remains + (!startPenalBox && !angularExist && across ? 0.6 : 0)
@@ -390,7 +395,10 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 					tableTop.z += side === "left" ? 0 : 0.01
 				}
 			}
-			if (tableTop.width > 0.02) acc.push({ ...tableTop })
+			if (tableTop.width > 0.02) {
+				acc.push({...tableTop})
+				tableTop.index += 1
+			}
 
 			startPenalBox = false
 		}
