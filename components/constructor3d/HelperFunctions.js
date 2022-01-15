@@ -40,8 +40,8 @@ const fromTo = (value, from, to, steps) => {
 	}
 }
 const camToTableTop = (selectedTableTop) => {
-	const {userData: {width, pos}, position:{x,z}} = selectedTableTop
-	console.log( {width, pos}, {x,z})
+	const { userData: { width, pos }, position: { x, z } } = selectedTableTop
+	console.log({ width, pos }, { x, z })
 
 	const h2 = Math.tan(threeMath.degToRad(90 - constants.camAngle / 2)) * width / 2 //+ constants.tableTopDepth / 2
 
@@ -52,8 +52,8 @@ const camToTableTop = (selectedTableTop) => {
 		cameraPositionY: h2 > 18 ? h2 : 18,
 		cameraPositionZ: h2 > 18 ? h2 : 18,
 		cameraRotationX: threeMath.degToRad(-40),
-		sceneRotationY: pos === 'right' ? threeMath.degToRad(90) : 0,
-		scenePositionX: pos === 'right' ? -z : -x
+		sceneRotationY: pos === "right" ? threeMath.degToRad(90) : 0,
+		scenePositionX: pos === "right" ? -z : -x
 	}
 }
 
@@ -98,7 +98,7 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 			cameraPositionZ,
 			cameraRotationX: threeMath.degToRad(0),
 			sceneRotationY: threeMath.degToRad(90) - alfa,
-			scenePositionX: (a - b) / 2	- (threeMath.degToRad(45 * 2) - Math.atan(Math.sqrt((h2 + h) ** 2 + heightForCam ** 2) / (h2 + h)) * 2 )
+			scenePositionX: (a - b) / 2 - (threeMath.degToRad(45 * 2) - Math.atan(Math.sqrt((h2 + h) ** 2 + heightForCam ** 2) / (h2 + h)) * 2)
 		}
 	}
 
@@ -188,6 +188,7 @@ const setCasesPosition = (boxes) => {
 	}
 
 	const wallPadding = 0.6
+	const wallSidePadding = 0.02
 	const angularPadding = 1.4
 
 	if (groupedBoxes.bottomLeft) {
@@ -197,7 +198,7 @@ const setCasesPosition = (boxes) => {
 
 		groupedBoxes.bottomLeft.forEach((el) => {
 			const { userData: { sort, width, depth } } = el
-			const startPadding = getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
+			const startPadding = getPaddingBySort(groupedBoxes.bottomLeft, sort, width, angularBox ? wallPadding + angularPadding : padding + wallSidePadding)
 			el.position.x = -startPadding
 			el.position.z = depth / 2 + wallPadding
 			el.userData["startPadding"] = startPadding
@@ -211,7 +212,7 @@ const setCasesPosition = (boxes) => {
 
 		groupedBoxes.bottomRight.forEach((el) => {
 			const { userData: { sort, width, depth } } = el
-			const startPadding = getPaddingBySort(groupedBoxes.bottomRight, sort, width, angularBox ? wallPadding + angularPadding : padding + wallPadding)
+			const startPadding = getPaddingBySort(groupedBoxes.bottomRight, sort, width, angularBox ? wallPadding + angularPadding : padding + wallSidePadding)
 			el.position.z = startPadding
 			el.position.x = -(depth / 2 + wallPadding)
 			el.userData["startPadding"] = startPadding
@@ -260,40 +261,29 @@ const setCasesPosition = (boxes) => {
 }
 
 const getPlaceWidth = function({ arr, additionalArr, penalBoxes, modelWidth }) {
-	// console.log(arr, "arr")
 	let padding = 0
 	if (additionalArr && !(arr && arr.find(({ userData: { configType } }) => configType === "angularBox"))) {
 		padding = additionalArr[0].userData.depth
 	}
 
-
-	// let paddingVariants = 0
 	let currentPadding = 0
 	let fullWidth = 0
 
 	if (arr) {
 		arr.forEach(({ userData: { width, configType, penalPadding } }) => {
-			// if (configType === "angularBox") fullWidth += 2
 			fullWidth += width
 			if (penalPadding && currentPadding !== penalPadding) {
 				currentPadding = penalPadding
-				// paddingVariants++
 			}
-			// if (penalPadding && index === arr.length - 1) fullWidth += penalPadding
 		})
 	}
 
 	if (penalBoxes) {
-		// console.log(currentPadding, "currentPadding")
-		// console.log(currentPadding, "currentPadding")
-		// console.log(fullWidth, "fullWidth")
 		const penalBoxPadding = getPenalPadding(fullWidth + modelWidth / 2, modelWidth, currentPadding, penalBoxes)
-		// console.log(penalBoxPadding, "penalBoxPadding")
 		if (penalBoxPadding) fullWidth += penalBoxPadding
 	} else {
 		fullWidth += 2
 	}
-
 
 	return fullWidth + padding
 }
@@ -322,86 +312,155 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 		z: 0,
 		commonIndex: 0,
 		index: 0,
+		locked: false,
 	}
-	let itemsCount = 0
-	let counter = 0
 	let padding = 0
 	let angularExist = false
 	let startPenalBox = false
-	let remains = 0
+	let needAdditionalPadding = true
+	const wallSidePadding = 0.02
+	const penalWidth = 6
+	const tableTopDepth = 6
+
 	return arr.reduce((acc, el) => {
-		itemsCount++
-		const {
-			side, width, sort, x, z, configType
-		} = el
+		const { side, width, sort, x, z, configType } = el
 		const isAngular = configType === "angularBox"
-		if (isAngular) angularExist = true
-
-		if (itemsCount === 1) {
-			counter = sort
-			padding = side === "left" ? (sort === 0 ? x + 0.6 : x) + width / 2 - (isAngular ? 0.6 : 0) : (sort === 0 ? z - 0.6 : z) - width / 2 + (isAngular ? 0.6 : 0)
+		const isLeft = side === "left"
+		const getAccLength = (acc) => acc.length
+		const fullWidth = (acc) => {
+			return acc.reduce((full, { width: elWidth }) => {
+				full += elWidth
+				return full
+			}, 0)
 		}
-		tableTop.side = side
+		if (sort === 0 && width === 0) startPenalBox = true
 
-		if (counter !== sort) {
-			acc.push({ ...tableTop })
-			tableTop.commonIndex += 1
-			tableTop.index = 0
-			tableTop.width = width
-			padding = side === "left" ? x + width / 2 : z - width / 2
-			tableTop.x = side === "left" ? padding - width / 2 : x
-			tableTop.z = side === "left" ? z : padding + width / 2
+		if (isAngular) angularExist = true
+		if (angularExist) needAdditionalPadding = false
 
-			counter = sort
-			counter++
-			startPenalBox = true
-		} else {
-			if (tableTop.width + width >= maxWidth / 100) {
-				remains += tableTop.width + width - maxWidth / 100
-				tableTop.width = maxWidth / 100
-				tableTop.x = side === "left" ? padding - maxWidth / 200 : x
-				tableTop.z = side === "left" ? z : padding + maxWidth / 200
+		function calcPadding() {
+			if (sort === 0) {
+				padding = wallSidePadding
+
+				if (angularExist) padding = 0
+				if (across && !angularExist) padding = tableTopDepth
+			}
+			if (width === 0) padding += penalWidth
+		}
+
+		function checkMaxWidth(isPenal) {
+			if (tableTop.width >= maxWidth / 100) {
+				const overage = tableTop.width - maxWidth / 100
+
+				tableTop.width -= overage
+
+				if (isLeft) tableTop.x += overage / 2
+				else tableTop.z -= overage / 2
 
 				acc.push({ ...tableTop })
+
 				tableTop.index += 1
+				tableTop.width = overage
 
-				padding += side === "left" ? -(maxWidth / 100 - (!startPenalBox && !angularExist && across ? 0.6 : 0)) : maxWidth / 100 - (!startPenalBox && !angularExist && across ? 0.6 : 0)
-				tableTop.width = remains + (!startPenalBox && !angularExist && across ? 0.6 : 0)
-			} else {
-				tableTop.width += (sort === 0 ? width + (angularExist ? 0 : (across ? 0 : 0.6)) : width)
+				const position = fullWidth(acc) + padding + tableTop.width / 2
+
+				if (isLeft) tableTop.x = -position + (isPenal ? penalWidth : 0)
+				else tableTop.z = position - (isPenal ? penalWidth : 0)
 			}
-
-			tableTop.x = side === "left" ? padding - tableTop.width / 2 - (!startPenalBox && !angularExist && across ? 0.6 : 0) : x
-			tableTop.z = side === "left" ? z : padding + tableTop.width / 2 + (!startPenalBox && !angularExist && across ? 0.6 : 0)
-			counter++
 		}
-		if (arr.length === itemsCount) {
-			if (width !== 0) {
-				tableTop.width += 0.02
 
-				if (tableTop.width < minWidth / 100) {
-					const missing = minWidth / 100 - tableTop.width
+		function correctLastTableTop() {
+			if (tableTop.width < minWidth / 100 && tableTop.width !== 0 && acc[acc.length - 1]) {
+				const missing = minWidth / 100 - tableTop.width
 
-					acc[acc.length - 1].width -= missing + (!startPenalBox && !angularExist && across ? 0.6 : 0)
-					acc[acc.length - 1].x -= side === "left" ? -missing / 2 + (!startPenalBox && !angularExist && across ? 0.6 : 0) / 2 : 0
-					acc[acc.length - 1].z += side === "left" ? 0 : -missing / 2 + (!startPenalBox && !angularExist && across ? 0.6 : 0) / 2
+				acc[acc.length - 1].width -= missing
 
-					tableTop.width = minWidth / 100
-
-					tableTop.x += side === "left" ? -0.01 + missing / 2 : 0
-					tableTop.z += side === "left" ? 0 : 0.01 - missing / 2
+				if (isLeft) {
+					acc[acc.length - 1].x += missing /2
 				} else {
-					tableTop.x += side === "left" ? -0.01 : 0
-					tableTop.z += side === "left" ? 0 : 0.01
+					acc[acc.length - 1].z -= missing /2
+				}
+				tableTop.width = minWidth / 100
+
+				if (isLeft) {
+					tableTop.x += missing /2
+				} else {
+					tableTop.z -= missing /2
 				}
 			}
-			if (tableTop.width > 0.02) {
-				acc.push({...tableTop})
-				tableTop.index += 1
+		}
+
+		function additionalWidthForFirst() {
+			if (!across && !angularExist) {
+				tableTop.width += wallSidePadding
+				if (isLeft) {
+					tableTop.x += wallSidePadding /2
+				} else {
+					tableTop.z -= wallSidePadding /2
+				}
+			}
+		}
+
+		function setTableTop() {
+			if (width !== 0) {
+				tableTop.width += width
+				const position = padding + fullWidth(acc) + tableTop.width / 2
+
+				if (isLeft) {
+					tableTop.x = -position
+					tableTop.z = z
+				} else {
+					tableTop.x = x
+					tableTop.z = position
+				}
 			}
 
-			startPenalBox = false
+			if (sort === arr.length - 1 && tableTop.width !== 0 && width !==0) {
+				tableTop.width += 0.02
+				if (isLeft) {
+					tableTop.x -= 0.01
+				} else {
+					tableTop.z += 0.01
+				}
+				if ((!getAccLength(acc) && !startPenalBox && needAdditionalPadding) || (sort === 0 && width && needAdditionalPadding)) {
+					additionalWidthForFirst()
+					padding -= wallSidePadding
+					needAdditionalPadding = false
+				}
+
+				checkMaxWidth(false)
+				correctLastTableTop()
+
+				if (tableTop.width) {
+					acc.push({ ...tableTop })
+					tableTop.index = 0
+				}
+				tableTop.width = 0
+			}
+			if (width === 0) {
+				if (needAdditionalPadding && !startPenalBox) {
+					additionalWidthForFirst()
+					needAdditionalPadding = false
+					padding -= wallSidePadding
+				}
+
+				checkMaxWidth(true)
+				correctLastTableTop()
+
+				if (tableTop.width !== 0) {
+					tableTop.locked = true
+					acc.push({ ...tableTop })
+
+					tableTop.index = 0
+					tableTop.commonIndex += 1
+				}
+				tableTop.width = 0
+			}
 		}
+
+		calcPadding()
+		setTableTop()
+
 		return acc
 	}, [])
 }

@@ -45,8 +45,9 @@
 import "@aksonorg/design/lib/index.css"
 import HF from "./HelperFunctions"
 import { UiInputSpinner, UiButton } from "@aksonorg/design"
-import Resizer from "./Resizer";
-import { getTableTop } from "./configs/TableTop";
+import Resizer from "./Resizer"
+import { getTableTop } from "./configs/TableTop"
+
 export default {
 	name: "TableTopResizer",
 	components: {
@@ -96,48 +97,56 @@ export default {
 	},
 	methods: {
 		cancelResize() {
-			this.$emit('cancelResize')
+			this.$emit("cancelResize")
 		},
 		applyResize() {
-			const isLeft = this.currentTableTop.userData.pos === 'left'
+			const isLeft = this.currentTableTop.userData.pos === "left"
 			const existDepthSize = this.currentTableTop.userData.existDepthSize
 			const { url, height, type, maxWidth, minWidth } = this.tableTopConfig
 
-			const { position: { x, y, z }, userData: {width, difference: currentDifference, pos, commonIndex, index, initWidth} } = this.currentTableTop
+			const {
+				position: { x, y, z },
+				userData: {
+					width,
+					difference: currentDifference,
+					leftDifference: currentLeftDifference,
+					pos,
+					commonIndex,
+					index,
+					locked
+				}
+			} = this.currentTableTop
 
 			let newTableTop = getTableTop({
-				width: this.widthModel / 100, url, height, type, maxWidth, minWidth
+				width: Math.round(this.widthModel / 100), url, height, type, maxWidth, minWidth
 			}, existDepthSize, false)
 
 			const defaultWidth = width * 100
-			const difference = (defaultWidth - this.widthModel ) / 100
-			newTableTop.userData.initWidth = initWidth
+			const difference = Math.round((defaultWidth - this.widthModel) / 100)
+			const leftDifference = difference
 
-			newTableTop.position.set(x, y, z - difference / 2 - (newTableTop.userData.initWidth < this.widthModel / 100 ? (this.widthModel / 100 - newTableTop.userData.initWidth)   : 0) )
+			newTableTop.position.set(x, y, z - Math.round(difference / 2))
 			if (!isLeft) newTableTop = HF.rotationY(newTableTop)
-			if (newTableTop.userData.initWidth < this.widthModel / 100 ) {
-				newTableTop.userData.otherDiff = this.widthModel / 100 - newTableTop.userData.initWidth
-				newTableTop.userData.initWidth = this.widthModel / 100
 
-			}
-			console.log(newTableTop.userData.initWidth , width, 'newTableTop.userData.initWidth , width')
 			newTableTop.userData.pos = pos
 			newTableTop.userData.difference = difference
+			newTableTop.userData.leftDifference = leftDifference
 			newTableTop.userData.existDepthSize = existDepthSize
 			newTableTop.userData.commonIndex = commonIndex
 			newTableTop.userData.index = index
+			newTableTop.userData.locked = locked
 
 
-			this.$emit('replaceTableTop', newTableTop)
+			this.$emit("replaceTableTop", newTableTop)
 		}
 	}
 }
 </script>
 
 
-
 <style lang="scss" scoped>
 @import "@aksonorg/design/lib/index.css";
+
 .tt-resizer {
 	position: absolute;
 	width: 526px;

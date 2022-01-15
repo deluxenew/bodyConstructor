@@ -51,7 +51,7 @@ import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
 import boxes from "./configs/boxes/BoxesList"
 import { getTableTop } from "./configs/TableTop"
-import TableTopResizer from "./TableTopResizer";
+import TableTopResizer from "./TableTopResizer"
 import { UiButton } from "@aksonorg/design"
 
 const {
@@ -65,7 +65,7 @@ const MAX_PLACE_WIDTH = 50
 
 export default {
 	name: "Canvas3d",
-	components: {TableTopResizer, UiButton},
+	components: { TableTopResizer, UiButton },
 	props: {
 		controlsVerticalPosition: {
 			type: String,
@@ -107,16 +107,38 @@ export default {
 					commonIndex: tableTopCommonIndex,
 					index: tableTopIndex,
 					width: tableTopWidth,
+					locked: tableTopLocked,
+					pos: TableTopPos,
+					difference: tableTopDifference,
+					leftDifference: tableTopLeftDifference
+				}
+			} = this.selectedTableTop
+			let TableTopTotalWidth = this.sceneObjects.tableTop.reduce((acc, {
+				userData: {
+					commonIndex,
+					width,
+					index,
+					difference,
+					leftDifference,
 					pos,
-				},
-				position: { x, y, z }} = this.selectedTableTop
-			const TableTopTotalWidth = this.tableTops[pos].reduce((acc, {commonIndex, width, index, difference}) => {
-				if (tableTopCommonIndex === commonIndex) {
-					if (tableTopIndex === index) acc += width
-					if (difference && tableTopIndex > index) acc += difference
+					locked
+				}
+			}) => {
+				if (tableTopCommonIndex === commonIndex && pos === TableTopPos) {
+					if (index === 0) {
+						if (tableTopIndex === 0) acc += tableTopWidth
+					}
+					if (index === 1 && tableTopIndex === 1) {
+						console.log(	tableTopDifference, tableTopLeftDifference, "difference, leftDifference" )
+						acc += width
+						if (tableTopDifference) acc += tableTopDifference
+						if (tableTopLeftDifference) acc += tableTopLeftDifference
+					}
 				}
 				return acc
 			}, 0)
+			const additional = Math.round(materialMaxWidth / 100) - TableTopTotalWidth
+			if (!tableTopLocked) TableTopTotalWidth += additional
 			return TableTopTotalWidth * 100
 		},
 		caseModel() {
@@ -214,8 +236,7 @@ export default {
 		camPosition() {
 			if (!this.selectedTableTop) {
 				return camPos(this.positionNumber, this.widthRightBottom, this.widthLeftBottom, this.widthRightTop, this.widthLeftTop)
-			}
-			else {
+			} else {
 				return camToTableTop(this.selectedTableTop)
 			}
 		},
@@ -483,7 +504,7 @@ export default {
 			const mouse = new THREE.Vector2()
 			const raycaster = new THREE.Raycaster()
 
-			window.addEventListener('click', onOuterClickHandler)
+			window.addEventListener("click", onOuterClickHandler)
 			this.$refs.canvas.addEventListener("pointerdown", onPointerDown)
 			this.$refs.canvas.addEventListener("pointermove", onSelectGroup)
 
@@ -587,22 +608,19 @@ export default {
 				const isExistAngular = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
 				const leftSorted = this.sceneObjects.leftTableTop
 					.sort((a, b) => a.sort - b.sort)
-					.filter((el, index) => {
-						if ((index === this.sceneObjects.leftTableTop.length - 1 && el.width === 0) || el.width !== 0) return el
-					})
 
 				const leftTableTops = HF.getTableTops(leftSorted, isRightTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
-				leftTableTops.forEach(({ width, x, z, commonIndex, index }, i) => {
+				leftTableTops.forEach(({ width, x, z, commonIndex, index, locked }, i) => {
 					const needDepthSize = (isExistAngular || !isRightTableTop) && i === 0 && this.isShowSizes
 					const newTableTop = this.getTableTopModel(width, needDepthSize, true)
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
-					newTableTop.userData.pos = 'left'
+					newTableTop.userData.pos = "left"
 					newTableTop.userData.existDepthSize = needDepthSize
 					newTableTop.userData.commonIndex = commonIndex
 					newTableTop.userData.index = index
-					newTableTop.userData.initWidth = width
+					newTableTop.userData.locked = locked
 					this.tableTops.left.push({ commonIndex, width, index })
 					this.scene.add(newTableTop)
 				})
@@ -612,23 +630,20 @@ export default {
 				const isExistAngular = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
 				const leftSorted = this.sceneObjects.rightTableTop
 					.sort((a, b) => a.sort - b.sort)
-					.filter((el, index) => {
-						if ((index === this.sceneObjects.rightTableTop.length - 1 && el.width === 0) || el.width !== 0) return el
-					})
 
 				const leftTableTops = HF.getTableTops(leftSorted, isLeftTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
-				leftTableTops.forEach(({ width, x, z, commonIndex, index }, i) => {
+				leftTableTops.forEach(({ width, x, z, commonIndex, index, locked }, i) => {
 					const needDepthSize = (isExistAngular || !isLeftTableTop) && i === 0 && this.isShowSizes
 					const newTableTop = this.getTableTopModel(width, needDepthSize)
 					newTableTop.position.x = x
 					newTableTop.position.z = z
 					newTableTop.position.y = 8.2 + this.tableTopConfig.height / 2
-					newTableTop.userData.pos = 'right'
+					newTableTop.userData.pos = "right"
 					newTableTop.userData.existDepthSize = needDepthSize
 					newTableTop.userData.commonIndex = commonIndex
 					newTableTop.userData.index = index
-					newTableTop.userData.initWidth = width
-					this.tableTops.right.push({ commonIndex, width, index})
+					newTableTop.userData.locked = locked
+					this.tableTops.right.push({ commonIndex, width, index })
 					this.scene.add(HF.rotationY(newTableTop))
 				})
 			}
@@ -682,20 +697,21 @@ export default {
 			this.selectedTableTop = null
 		},
 		async replaceTableTop(newTableTop) {
-			const { userData: {index, commonIndex, pos, difference, width, initWidth, otherDiff } } = newTableTop
-			console.log(index, commonIndex, pos, difference, width, 'index, commonIndex, pos, difference, width')
-			const findItem = this.tableTops[pos].find(({index: findIndex, commonIndex: findCommonIndex}) => index === findIndex && commonIndex === findCommonIndex)
-			findItem.difference = difference
-			console.log(otherDiff, 'otherDiff')
-			if (otherDiff) {
-				this.tableTops[pos].forEach((el) => {
-					const {index: findIndex, commonIndex: findCommonIndex} = el
-					if (findCommonIndex === commonIndex && findIndex < index) {
-						el.width -= otherDiff
+			const { userData: { index, commonIndex, pos, difference, leftDifference } } = newTableTop
+			console.log(newTableTop.userData, "newTableTop")
+			if (leftDifference && index === 0) {
+				this.sceneObjects.tableTop.forEach((el) => {
+					const { userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos, leftDifference: findLeftDifference } } = el
+					if (findCommonIndex === commonIndex && findPos === pos) {
+						if (findIndex > index) el.userData.leftDifference = findLeftDifference ? leftDifference + findLeftDifference : findLeftDifference
+						// if (findIndex === index) el.userData.difference = 0
 					}
 				})
 			}
 
+			if (difference) {
+
+			}
 
 
 			this.scene.add(newTableTop)
@@ -703,9 +719,8 @@ export default {
 			this.scene.remove(this.selectedTableTop)
 			// await this.$nextTick()
 
-			this.selectedTableTop = this.scene.children.find(({userData: {index: findIndex, commonIndex: findCommonIndex}}) => index === findIndex && commonIndex === findCommonIndex)
-
-
+			this.selectedTableTop = this.scene.children
+				.find(({ userData: { index: findIndex, commonIndex: findCommonIndex } }) => index === findIndex && commonIndex === findCommonIndex)
 		},
 		showSizes() {
 			this.isShowSizes = !this.isShowSizes
