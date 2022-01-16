@@ -72,15 +72,12 @@ export default {
 	data() {
 		return {
 			width: this.currentTableTop.userData.width * 100,
-			newTableTop: null
 		}
 	},
 	watch: {
 		currentTableTop: {
 			immediate: true,
-			// deep: true,
 			handler() {
-				// this.newTableTop = JSON.parse(JSON.stringify(this.currentTableTop))
 				this.width = this.currentTableTop.userData.width * 100
 			},
 		},
@@ -118,14 +115,28 @@ export default {
 			} = this.currentTableTop
 
 			let newTableTop = getTableTop({
-				width: Math.round(this.widthModel / 100), url, height, type, maxWidth, minWidth
+				width: this.widthModel / 100, url, height, type, maxWidth, minWidth
 			}, existDepthSize, false)
 
 			const defaultWidth = width * 100
-			const difference = Math.round((defaultWidth - this.widthModel) / 100)
-			const leftDifference = difference
+			let difference = currentDifference || (defaultWidth - this.widthModel) / 100
+			let leftDifference = currentLeftDifference || 0
+			const diff = (defaultWidth - this.widthModel) / 100
+			if (currentLeftDifference > 0 && locked && defaultWidth < this.widthModel) {
+				newTableTop.position.set(x, y, z - difference / 2 - currentLeftDifference)
+				difference += leftDifference
+				leftDifference = 0
+			} else {
+				newTableTop.position.set(x, y, z - diff / 2)
+				if (currentDifference) difference += diff
+				// if (diff > 0) {
+				//
+				// } else {
+				// 	if (currentDifference) difference += diff
+				// }
+			}
 
-			newTableTop.position.set(x, y, z - Math.round(difference / 2))
+
 			if (!isLeft) newTableTop = HF.rotationY(newTableTop)
 
 			newTableTop.userData.pos = pos

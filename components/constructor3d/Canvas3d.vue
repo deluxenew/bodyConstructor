@@ -697,30 +697,24 @@ export default {
 			this.selectedTableTop = null
 		},
 		async replaceTableTop(newTableTop) {
-			const { userData: { index, commonIndex, pos, difference, leftDifference } } = newTableTop
+			const { userData: { index, commonIndex, pos, difference } } = newTableTop
 			console.log(newTableTop.userData, "newTableTop")
-			if (leftDifference && index === 0) {
-				this.sceneObjects.tableTop.forEach((el) => {
+			if (difference && index === 0) {
+				this.scene.children.forEach((el) => {
 					const { userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos, leftDifference: findLeftDifference } } = el
 					if (findCommonIndex === commonIndex && findPos === pos) {
-						if (findIndex > index) el.userData.leftDifference = findLeftDifference ? leftDifference + findLeftDifference : findLeftDifference
+						if (findIndex > index) el.userData.leftDifference = findLeftDifference ? difference + findLeftDifference : difference
 						// if (findIndex === index) el.userData.difference = 0
 					}
 				})
 			}
 
-			if (difference) {
-
-			}
-
-
 			this.scene.add(newTableTop)
-
+			await this.$nextTick()
 			this.scene.remove(this.selectedTableTop)
-			// await this.$nextTick()
 
 			this.selectedTableTop = this.scene.children
-				.find(({ userData: { index: findIndex, commonIndex: findCommonIndex } }) => index === findIndex && commonIndex === findCommonIndex)
+				.find(({ userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos } }) => index === findIndex && commonIndex === findCommonIndex && findPos === pos)
 		},
 		showSizes() {
 			this.isShowSizes = !this.isShowSizes
