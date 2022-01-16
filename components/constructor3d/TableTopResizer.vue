@@ -1,5 +1,7 @@
 <template lang="pug">
 	div.tt-resizer(:key="currentTableTop.uuid")
+		| diff {{ currentTableTop ? currentTableTop.userData.difference: '' }}
+		| left {{ currentTableTop ? currentTableTop.userData.leftDifference: '' }}
 		div.tt-resizer__ruler
 			resizer(
 				v-model="widthModel"
@@ -116,24 +118,23 @@ export default {
 
 			let newTableTop = getTableTop({
 				width: this.widthModel / 100, url, height, type, maxWidth, minWidth
-			}, existDepthSize, false)
+			}, existDepthSize, isLeft)
 
 			const defaultWidth = width * 100
 			let difference = currentDifference || (defaultWidth - this.widthModel) / 100
 			let leftDifference = currentLeftDifference || 0
 			const diff = (defaultWidth - this.widthModel) / 100
-			if (currentLeftDifference > 0 && locked && defaultWidth < this.widthModel) {
-				newTableTop.position.set(x, y, z - difference / 2 - currentLeftDifference)
-				difference += leftDifference
+
+			if (currentLeftDifference > 0 && locked) {
+				const diffPosition = diff / 2 + currentLeftDifference
+				if (!isLeft) newTableTop.position.set(x, y, z - diffPosition)
+				else newTableTop.position.set(x + diffPosition, y, z)
+				difference += leftDifference + diff
 				leftDifference = 0
 			} else {
-				newTableTop.position.set(x, y, z - diff / 2)
+				if (!isLeft) newTableTop.position.set(x, y, z - diff / 2)
+				else newTableTop.position.set(x + diff / 2, y, z)
 				if (currentDifference) difference += diff
-				// if (diff > 0) {
-				//
-				// } else {
-				// 	if (currentDifference) difference += diff
-				// }
 			}
 
 

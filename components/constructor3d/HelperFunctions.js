@@ -320,7 +320,7 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 	let needAdditionalPadding = true
 	const wallSidePadding = 0.02
 	const penalWidth = 6
-	const tableTopDepth = 6
+	const tableTopDepth = 5.4
 
 	return arr.reduce((acc, el) => {
 		const { side, width, sort, x, z, configType } = el

@@ -126,7 +126,10 @@ export default {
 			}) => {
 				if (tableTopCommonIndex === commonIndex && pos === TableTopPos) {
 					if (index === 0) {
-						if (tableTopIndex === 0) acc += tableTopWidth
+						if (tableTopIndex === 0) {
+							acc += tableTopWidth
+							if (difference) acc += difference
+						}
 					}
 					if (index === 1 && tableTopIndex === 1) {
 						console.log(	tableTopDifference, tableTopLeftDifference, "difference, leftDifference" )
@@ -137,7 +140,7 @@ export default {
 				}
 				return acc
 			}, 0)
-			const additional = Math.round(materialMaxWidth / 100) - TableTopTotalWidth
+			const additional = materialMaxWidth / 100 - TableTopTotalWidth
 			if (!tableTopLocked) TableTopTotalWidth += additional
 			return TableTopTotalWidth * 100
 		},
@@ -707,7 +710,16 @@ export default {
 						// if (findIndex === 0) el.userData.difference = 0
 					}
 				})
-				newTableTop.userData.difference = 0
+				// newTableTop.userData.difference = 0
+			}
+			if (difference && index === 1) {
+				this.scene.children.forEach((el) => {
+					const { userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos, leftDifference: findLeftDifference } } = el
+					if (findCommonIndex === commonIndex && findPos === pos) {
+						// if (findIndex > index) el.userData.leftDifference = findLeftDifference ? difference + findLeftDifference : difference
+						if (findIndex === 0) el.userData.difference = 0
+					}
+				})
 			}
 
 
