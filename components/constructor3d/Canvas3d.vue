@@ -704,10 +704,12 @@ export default {
 					const { userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos, leftDifference: findLeftDifference } } = el
 					if (findCommonIndex === commonIndex && findPos === pos) {
 						if (findIndex > index) el.userData.leftDifference = findLeftDifference ? difference + findLeftDifference : difference
-						// if (findIndex === index) el.userData.difference = 0
+						// if (findIndex === 0) el.userData.difference = 0
 					}
 				})
+				newTableTop.userData.difference = 0
 			}
+
 
 			this.scene.add(newTableTop)
 			await this.$nextTick()

@@ -312,7 +312,7 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 		z: 0,
 		commonIndex: 0,
 		index: 0,
-		locked: false,
+		locked: true,
 	}
 	let padding = 0
 	let angularExist = false
@@ -432,6 +432,7 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 				correctLastTableTop()
 
 				if (tableTop.width) {
+					tableTop.locked = false
 					acc.push({ ...tableTop })
 					tableTop.index = 0
 				}
