@@ -190,10 +190,11 @@ const setCasesPosition = (boxes) => {
 	const wallPadding = 0.6
 	const wallSidePadding = 0.02
 	const angularPadding = 1.4
+	const angularSidePadding = 0.6
 
 	if (groupedBoxes.bottomLeft) {
 		const isAngular = groupedBoxes.bottomRight && groupedBoxes.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
-		const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0].userData.depth + (isAngular ? wallPadding : 0) || 0
+		const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0].userData.depth + (isAngular ? wallPadding + angularSidePadding : 0) || 0
 		const angularBox = groupedBoxes.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
 
 		groupedBoxes.bottomLeft.forEach((el) => {
@@ -207,7 +208,7 @@ const setCasesPosition = (boxes) => {
 
 	if (groupedBoxes.bottomRight) {
 		const isAngular = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
-		const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0].userData.depth + (isAngular ? wallPadding : 0) || 0
+		const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0].userData.depth + (isAngular ? wallPadding + angularSidePadding : 0) || 0
 		const angularBox = groupedBoxes.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
 
 		groupedBoxes.bottomRight.forEach((el) => {
@@ -320,7 +321,7 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 	let needAdditionalPadding = true
 	const wallSidePadding = 0.02
 	const penalWidth = 6
-	const tableTopDepth = 5.4
+	const tableTopDepth = 6
 
 	return arr.reduce((acc, el) => {
 		const { side, width, sort, x, z, configType } = el
