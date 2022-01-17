@@ -49,9 +49,9 @@ const camToTableTop = (selectedTableTop) => {
 
 	return {
 		cameraPositionX: 0,
-		cameraPositionY: h2 > 18 ? h2 : 18,
-		cameraPositionZ: h2 > 18 ? h2 : 18,
-		cameraRotationX: threeMath.degToRad(-40),
+		cameraPositionY: h2 * 0.9 > 20 ? h2 * 0.9 : 20,
+		cameraPositionZ: h2 * 0.9 > 18 ? h2 * 0.9 : 18,
+		cameraRotationX: threeMath.degToRad(-45),
 		sceneRotationY: pos === 'right' ? threeMath.degToRad(90) : 0,
 		scenePositionX: pos === 'right' ? -z : -x
 	}
