@@ -101,6 +101,7 @@ export default {
 	},
 	computed: {
 		maxWidthTableTop() {
+			if (!this.sceneObjects.tableTop) return 0
 			const materialMaxWidth = this.tableTopConfig.maxWidth
 			const {
 				userData: {
@@ -119,9 +120,7 @@ export default {
 					width,
 					index,
 					difference,
-					leftDifference,
 					pos,
-					locked
 				}
 			}) => {
 				if (tableTopCommonIndex === commonIndex && pos === TableTopPos) {
@@ -198,6 +197,22 @@ export default {
 			result.length = this.scene.children.length
 			return result
 		},
+		orderList() {
+			let kitchen = {}
+			for (let i in this.sceneObjects) {
+				const cases = ["bottomRight", "bottomLeft", "topRight", "topLeft"]
+				if (i === "tableTop") kitchen["tableTops"] = this.sceneObjects[i].map(({ userData }) => userData)
+				if (cases.includes(i)) {
+					this.sceneObjects[i]
+						.map(({ userData }) => userData)
+						.forEach((el) => {
+							if (!kitchen["cases"]) kitchen["cases"] = []
+							kitchen["cases"].push(el)
+						})
+				}
+			}
+			return kitchen
+		},
 		widthLeftBottom() {
 			return HF.getPlaceWidth({
 				arr: this.sceneObjects.bottomLeft,
@@ -269,6 +284,7 @@ export default {
 			HF.setCasesPosition(this.scene.children)
 			this.setControlsVisible()
 			this.setControlsPosition()
+			this.$emit("setOrderList", this.orderList)
 		},
 		async caseModelCode(v) {
 			await this.$nextTick()

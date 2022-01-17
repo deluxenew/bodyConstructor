@@ -101,6 +101,7 @@ export default {
 	watch: {
 		selectedBox(v) {
 			if (v) this.currentItemModel = v.name.replaceAll("_", "-")
+			this.opened = !!v
 		},
 		value: {
 			handler(v) {

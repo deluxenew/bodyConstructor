@@ -10,6 +10,7 @@
 						@getBoxName="selectedBoxName = $event"
 						@selectBox="selectBox"
 						@removeTableTops="removeAllTableTops"
+						@setOrderList="setOrderList"
 					)
 				div.column.config
 					select-case(
@@ -40,10 +41,10 @@
 			//      @selectChildConfig="selectChildConfig"
 			//    )
 
-			//calculate-order(
-			//  :kitchen="kitchen"
-			//  @removeItem="removeItem"
-			//)
+			calculate-order(
+			  :kitchen="kitchen"
+			  @removeItem="removeItem"
+			)
 </template>
 
 <script>
@@ -83,6 +84,7 @@ export default {
 			// caseConfig: null,
 			// facadeConfig: null,
 			tableTopConfig: null,
+			orderList: null
 		}
 	},
 	computed: {
@@ -103,7 +105,7 @@ export default {
 			return this.config && this.config.tabletop.imgLayers[0].images || null
 		},
 		boxes() {
-			const {cases} = boxes
+			const { cases } = boxes
 			return cases
 		},
 		// parentVariants() {
@@ -142,7 +144,7 @@ export default {
 		//   return colors
 		// },
 		tableTops() {
-			const {colors} = tableTops
+			const { colors } = tableTops
 			return colors
 		},
 	},
@@ -161,6 +163,9 @@ export default {
 		},
 		setControlsVerticalPosition(v) {
 			this.controlsVerticalPosition = v
+		},
+		setOrderList(list) {
+			this.orderList = list
 		},
 		// removeItem({uuid, type}) {
 		//   this.$refs.cancas.removeItem({uuid, type})
@@ -228,10 +233,10 @@ export default {
 			function getImage(url) {
 				return new Promise((resolve, reject) => {
 					const img = new Image()
-					img.onload = function () {
+					img.onload = function() {
 						resolve(url)
 					}
-					img.onerror = function () {
+					img.onerror = function() {
 						reject(url)
 					}
 					img.src = url
