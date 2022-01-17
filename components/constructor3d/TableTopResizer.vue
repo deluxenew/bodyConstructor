@@ -1,10 +1,12 @@
 <template lang="pug">
-	div.tt-resizer
+	div.tt-resizer(:key="currentTableTop.uuid")
+		| diff {{ currentTableTop ? currentTableTop.userData.difference: '' }}
+		| left {{ currentTableTop ? currentTableTop.userData.leftDifference: '' }}
 		div.tt-resizer__ruler
 			resizer(
-				v-model="width"
+				v-model="widthModel"
 				:min="currentTableTop.userData.minWidth"
-				:max="10000"
+				:max="maxWidth"
 				:null-start="false"
 				:only-ruler="false"
 				:spinner-step="1"
@@ -12,13 +14,21 @@
 		div.tt-resizer__controls
 			div.tt-resizer__spinner
 				ui-input-spinner(
-					v-model="width"
+					v-model="widthModel"
 					size="small"
-					:max="currentTableTop.userData.width"
+					:max="maxWidth"
 					:min="currentTableTop.userData.minWidth"
+					:step="1"
 					unit="мм"
 				)
 			div.tt-resizer__buttons
+				ui-button.tt-resizer__button(
+					appearance="secondary"
+					iconPosition="left"
+					size="small"
+					@click="$emit('removeTableTop')"
+				)
+					img(:src="require('./img/trash.svg')")
 				ui-button.tt-resizer__button(
 					appearance="secondary"
 					size="small"
@@ -35,8 +45,11 @@
 
 <script>
 import "@aksonorg/design/lib/index.css"
+import HF from "./HelperFunctions"
 import { UiInputSpinner, UiButton } from "@aksonorg/design"
-import Resizer from "./Resizer";
+import Resizer from "./Resizer"
+import { getTableTop } from "./configs/TableTop"
+
 export default {
 	name: "TableTopResizer",
 	components: {
@@ -48,38 +61,104 @@ export default {
 		currentTableTop: {
 			type: Object,
 			default: () => null
+		},
+		tableTopConfig: {
+			type: Object,
+			default: () => null
+		},
+		maxWidth: {
+			type: Number,
+			default: 0
 		}
 	},
 	data() {
 		return {
-			width: 0
+			width: this.currentTableTop.userData.width * 100,
 		}
+	},
+	watch: {
+		currentTableTop: {
+			immediate: true,
+			handler() {
+				this.width = this.currentTableTop.userData.width * 100
+			},
+		},
 	},
 	computed: {
 		widthModel: {
 			get() {
-
+				return Math.round(this.width)
 			},
 			set(v) {
-				console.log(v)
+				this.width = Math.round(v)
 			}
 		}
 	},
 	methods: {
 		cancelResize() {
-			this.$emit('cancelResize')
+			this.$emit("cancelResize")
 		},
 		applyResize() {
-			this.$emit('replaceTableTop', )
+			const isLeft = this.currentTableTop.userData.pos === "left"
+			const existDepthSize = this.currentTableTop.userData.existDepthSize
+			const { url, height, type, maxWidth, minWidth } = this.tableTopConfig
+
+			const {
+				position: { x, y, z },
+				userData: {
+					width,
+					difference: currentDifference,
+					leftDifference: currentLeftDifference,
+					pos,
+					commonIndex,
+					index,
+					locked
+				}
+			} = this.currentTableTop
+
+			let newTableTop = getTableTop({
+				width: this.widthModel / 100, url, height, type, maxWidth, minWidth
+			}, existDepthSize, isLeft)
+
+			const defaultWidth = width * 100
+			let difference = currentDifference || (defaultWidth - this.widthModel) / 100
+			let leftDifference = currentLeftDifference || 0
+			const diff = (defaultWidth - this.widthModel) / 100
+
+			if (currentLeftDifference > 0 && locked) {
+				const diffPosition = diff / 2 + currentLeftDifference
+				if (!isLeft) newTableTop.position.set(x, y, z - diffPosition)
+				else newTableTop.position.set(x + diffPosition, y, z)
+				difference += leftDifference + diff
+				leftDifference = 0
+			} else {
+				if (!isLeft) newTableTop.position.set(x, y, z - diff / 2)
+				else newTableTop.position.set(x + diff / 2, y, z)
+				if (currentDifference) difference += diff
+			}
+
+
+			if (!isLeft) newTableTop = HF.rotationY(newTableTop)
+
+			newTableTop.userData.pos = pos
+			newTableTop.userData.difference = difference
+			newTableTop.userData.leftDifference = leftDifference
+			newTableTop.userData.existDepthSize = existDepthSize
+			newTableTop.userData.commonIndex = commonIndex
+			newTableTop.userData.index = index
+			newTableTop.userData.locked = locked
+
+
+			this.$emit("replaceTableTop", newTableTop)
 		}
 	}
 }
 </script>
 
 
-
 <style lang="scss" scoped>
 @import "@aksonorg/design/lib/index.css";
+
 .tt-resizer {
 	position: absolute;
 	width: 526px;

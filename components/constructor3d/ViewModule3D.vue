@@ -277,12 +277,12 @@ export default {
 }
 
 .preview {
-	width: 780px;
+	width: 800px;
 }
 
 .config {
-	width: 380px;
-	margin-left: 40px;
+	width: 368px;
+	margin-left: 32px;
 }
 
 .page {

@@ -85,7 +85,7 @@ export default {
 			let { min, max, model } = this
 			if (this.nullStart) min = 0
 			const diff = max - min
-			const roundVal = Math.round(model / 10) * 10
+			const roundVal = model
 			let percents = (roundVal - min) / diff * 100
 			if (this.vertical && this.reverse) percents = 100 - percents
 
@@ -152,7 +152,7 @@ export default {
 				const offsetP = offsetPx / size
 				// scalar
 				const scalarWidth = this.max - this.min
-				const scalarOffset = Math.round(scalarWidth * offsetP / 10) * 10
+				const scalarOffset =scalarWidth * offsetP
 				if (Math.abs(scalarOffset) >= 10) {
 					this.model += scalarOffset
 				}
