@@ -1,4 +1,4 @@
-import { BoxGeometry, Group, Mesh } from "three"
+import { BoxGeometry, Group } from "three"
 import Materials from "../Materials"
 import { constants } from "./constants"
 import { mesh } from "./CustomMesh"

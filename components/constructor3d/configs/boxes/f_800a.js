@@ -15,7 +15,6 @@ const depth = constants.bottomDepth
 
 const { sideDepth } = constants
 const { legsHeight } = constants
-const { scale } = constants
 
 const sideY = (height - legsHeight) / 2 - sideDepth
 
@@ -52,8 +51,7 @@ export const f_800a = () => {
 	// boxGroup.userData['facadeVariants'] = ['397_716_0_solid_2']
 	boxGroup.userData.configType = "angularBox"
 	boxGroup.userData.openedDoors = false
-	// boxGroup.userData['depth'] = depth + 0.6
+	boxGroup.userData.productType = "Напольный угловой"
 
-	boxGroup.scale.set(scale, scale, scale)
 	return boxGroup
 }

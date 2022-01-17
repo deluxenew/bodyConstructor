@@ -1,21 +1,21 @@
 <template lang="pug">
-  div.inner-page
-    component(:is="componentName")
+	div.inner-page
+		component(:is="componentName")
 </template>
 
 <script>
 export default {
-  name: 'Demo',
-  components: {
-    ViewModule3D: () => {
-      if (process.browser) return import('@/components/constructor3d/ViewModule3D');
-    },
-  },
-  computed: {
-    componentName() {
-      if (process.browser) return 'ViewModule3D';
-      return '';
-    },
-  },
-};
+	name: "Demo",
+	components: {
+		ViewModule3D: () => {
+			return import("@/components/constructor3d/ViewModule3D")
+		},
+	},
+	computed: {
+		componentName() {
+			if (process.browser) return "ViewModule3D"
+			return ""
+		},
+	},
+}
 </script>

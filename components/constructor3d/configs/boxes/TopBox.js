@@ -18,10 +18,15 @@ export const topBox = (width, height, depth) => {
 	boxGroup.add(arrows)
 
 	boxGroup.add(sizeMesh)
-	boxGroup.userData.pos = "wall"
+
 
 	boxGroup.position.set(-width / 2, height / 2, depth / 2)
 	boxGroup.position.y = constants.topBound - height + constants.sideDepth
+
+	boxGroup.userData.pos = "wall"
+
+	boxGroup.userData.product = "Шкаф"
+	boxGroup.userData.productType = "Навесной"
 
 	return {
 		boxGroup,

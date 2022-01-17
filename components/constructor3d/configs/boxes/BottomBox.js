@@ -56,6 +56,9 @@ export const bottomBox = (width, height, depth) => {
 
 	caseGroup.name = "caseGroup"
 	boxGroup.userData.pos = "floor"
+	boxGroup.userData.product = "Шкаф"
+	boxGroup.userData.productType = "Напольный"
+
 
 	return {
 		boxGroup,

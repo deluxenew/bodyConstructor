@@ -201,10 +201,10 @@ export default {
 			let kitchen = {}
 			for (let i in this.sceneObjects) {
 				const cases = ["bottomRight", "bottomLeft", "topRight", "topLeft"]
-				if (i === "tableTop") kitchen["tableTops"] = this.sceneObjects[i].map(({ userData }) => userData)
+				if (i === "tableTop") kitchen["tableTops"] = this.sceneObjects[i].map(({ userData }) => HF.setOrderFields(userData))
 				if (cases.includes(i)) {
 					this.sceneObjects[i]
-						.map(({ userData }) => userData)
+						.map(({ userData }) => HF.setOrderFields(userData))
 						.forEach((el) => {
 							if (!kitchen["cases"]) kitchen["cases"] = []
 							kitchen["cases"].push(el)
@@ -640,6 +640,8 @@ export default {
 					newTableTop.userData.commonIndex = commonIndex
 					newTableTop.userData.index = index
 					newTableTop.userData.locked = locked
+
+
 					this.tableTops.left.push({ commonIndex, width, index })
 					this.scene.add(newTableTop)
 				})
@@ -686,10 +688,15 @@ export default {
 			this.replaceTableTops(true)
 		},
 		getTableTopModel(width, needDepthSize, isLeft) {
-			const { url, height, type, maxWidth, minWidth } = this.tableTopConfig
-			return getTableTop({
+			const { url, height, type, maxWidth, minWidth, colorTitle, materialType } = this.tableTopConfig
+			const newTableTop = getTableTop({
 				width, url, height, type, maxWidth, minWidth
 			}, needDepthSize, isLeft)
+			newTableTop.userData.size = `${Math.round(width * 100)}*600*${Math.round(height * 100)}`
+			newTableTop.userData.product = "Столешница"
+			newTableTop.userData.materialType = materialType
+			newTableTop.userData.color = colorTitle
+			return newTableTop
 		},
 		replaceTableTops(onlyRemove) {
 			const tableTops = this.sceneObjects.tableTop
@@ -717,22 +724,18 @@ export default {
 		},
 		async replaceTableTop(newTableTop) {
 			const { userData: { index, commonIndex, pos, difference } } = newTableTop
-			console.log(newTableTop.userData, "newTableTop")
 			if (difference && index === 0) {
-				this.scene.children.forEach((el) => {
+				this.sceneObjects.tableTop.forEach((el) => {
 					const { userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos, leftDifference: findLeftDifference } } = el
 					if (findCommonIndex === commonIndex && findPos === pos) {
 						if (findIndex > index) el.userData.leftDifference = findLeftDifference ? difference + findLeftDifference : difference
-						// if (findIndex === 0) el.userData.difference = 0
 					}
 				})
-				// newTableTop.userData.difference = 0
 			}
 			if (difference && index === 1) {
-				this.scene.children.forEach((el) => {
-					const { userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos, leftDifference: findLeftDifference } } = el
+				this.sceneObjects.tableTop.forEach((el) => {
+					const { userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos } } = el
 					if (findCommonIndex === commonIndex && findPos === pos) {
-						// if (findIndex > index) el.userData.leftDifference = findLeftDifference ? difference + findLeftDifference : difference
 						if (findIndex === 0) el.userData.difference = 0
 					}
 				})

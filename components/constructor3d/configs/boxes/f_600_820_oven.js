@@ -51,8 +51,11 @@ export const f_600_820_oven = () => {
 	boxGroup.name = "f_600_820_oven"
 	boxGroup.userData.code = "f-600-820-oven"
 	// boxGroup.userData['facadeVariants'] = ['397_716_0_solid_2']
+
 	boxGroup.userData.configType = "boxFloor"
 	boxGroup.userData.openedDoors = false
+
+	boxGroup.userData.productType = "Напольный духовой"
 
 	boxGroup.scale.set(scale, scale, scale)
 	return boxGroup

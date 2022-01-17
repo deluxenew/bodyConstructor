@@ -116,7 +116,11 @@ export default {
 					pos,
 					commonIndex,
 					index,
-					locked
+					locked,
+					size,
+					product,
+					materialType,
+					color
 				}
 			} = this.currentTableTop
 
@@ -150,6 +154,11 @@ export default {
 			newTableTop.userData.commonIndex = commonIndex
 			newTableTop.userData.index = index
 			newTableTop.userData.locked = locked
+
+			newTableTop.userData.size = size
+			newTableTop.userData.product = product
+			newTableTop.userData.materialType = materialType
+			newTableTop.userData.color = color
 
 
 			this.$emit("replaceTableTop", newTableTop)

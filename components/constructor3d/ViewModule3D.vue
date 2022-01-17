@@ -42,8 +42,7 @@
 			//    )
 
 			calculate-order(
-			  :kitchen="kitchen"
-			  @removeItem="removeItem"
+			  :orderList="orderList"
 			)
 </template>
 
@@ -245,6 +244,7 @@ export default {
 
 			const {
 				color, type, maxWidth, minWidth, url, height,
+				materialType, colorTitle
 			} = item
 
 			const loadedUrl = await getImage(url)
@@ -256,6 +256,8 @@ export default {
 			this.tableTopConfig.url = loadedUrl
 			this.tableTopConfig.maxWidth = maxWidth
 			this.tableTopConfig.minWidth = minWidth
+			this.tableTopConfig.materialType = materialType
+			this.tableTopConfig.colorTitle = colorTitle
 		},
 		removeCase() {
 			this.$refs.canvas.removeCase(false)

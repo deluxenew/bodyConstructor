@@ -52,8 +52,8 @@ const camToTableTop = (selectedTableTop) => {
 		cameraPositionY: h2 * 0.9 > 20 ? h2 * 0.9 : 20,
 		cameraPositionZ: h2 * 0.9 > 18 ? h2 * 0.9 : 18,
 		cameraRotationX: threeMath.degToRad(-45),
-		sceneRotationY: pos === 'right' ? threeMath.degToRad(90) : 0,
-		scenePositionX: pos === 'right' ? -z : -x
+		sceneRotationY: pos === "right" ? threeMath.degToRad(90) : 0,
+		scenePositionX: pos === "right" ? -z : -x
 	}
 }
 
@@ -377,16 +377,16 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 				acc[acc.length - 1].width -= missing
 
 				if (isLeft) {
-					acc[acc.length - 1].x += missing /2
+					acc[acc.length - 1].x += missing / 2
 				} else {
-					acc[acc.length - 1].z -= missing /2
+					acc[acc.length - 1].z -= missing / 2
 				}
 				tableTop.width = minWidth / 100
 
 				if (isLeft) {
-					tableTop.x += missing /2
+					tableTop.x += missing / 2
 				} else {
-					tableTop.z -= missing /2
+					tableTop.z -= missing / 2
 				}
 			}
 		}
@@ -395,9 +395,9 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 			if (!across && !angularExist) {
 				tableTop.width += wallSidePadding
 				if (isLeft) {
-					tableTop.x += wallSidePadding /2
+					tableTop.x += wallSidePadding / 2
 				} else {
-					tableTop.z -= wallSidePadding /2
+					tableTop.z -= wallSidePadding / 2
 				}
 			}
 		}
@@ -416,7 +416,7 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 				}
 			}
 
-			if (sort === arr.length - 1 && tableTop.width !== 0 && width !==0) {
+			if (sort === arr.length - 1 && tableTop.width !== 0 && width !== 0) {
 				tableTop.width += 0.02
 				if (isLeft) {
 					tableTop.x -= 0.01
@@ -467,6 +467,50 @@ const getTableTops = (arr, across, maxWidth, minWidth) => {
 	}, [])
 }
 
+const setOrderFields = (userData) => {
+	const fieldNames = [
+		{
+			id: "size",
+			title: "Размер",
+			sort: 0
+		},
+		{
+			id: "product",
+			title: "Изделие",
+			sort: 1
+		},
+		{
+			id: "materialType",
+			title: "Материал",
+			sort: 2
+		},
+		{
+			id: "productType",
+			title: "Тип",
+			sort: 3
+		},
+		{
+			id: "color",
+			title: "Цвет",
+			sort: 4
+		},
+		{
+			id: "quantity",
+			title: "Количество",
+			sort: 5,
+			value: 1
+		}
+
+	]
+	for (let field in userData) {
+		if (Object.prototype.hasOwnProperty.call(userData, field)) {
+			const findField = fieldNames.find((el) => el.id === field)
+			if (findField) findField.value = userData[field]
+		}
+	}
+	return fieldNames
+}
+
 export default {
 	animationFromTo,
 	camToTableTop,
@@ -480,4 +524,5 @@ export default {
 	getFacadeGroup,
 	getAddMethodName,
 	getTableTops,
+	setOrderFields
 }

@@ -50,7 +50,7 @@ import HorizontalListItems from "./HorizontalListItems.vue"
 
 export default {
 	name: "SelectTabletop",
-	components: {TransitionExpand, UiInputCheckbox, HorizontalListItems},
+	components: { TransitionExpand, UiInputCheckbox, HorizontalListItems },
 	props: {
 		title: {
 			type: String,
@@ -84,7 +84,7 @@ export default {
 	computed: {
 		materialVariants() {
 			return this.options && this.options
-				.filter(({category}) => category === "material")
+				.filter(({ category }) => category === "material")
 		},
 		thicknessVariants() {
 			return this.options && this.options
@@ -129,18 +129,21 @@ export default {
 				this.currentItem = v
 			},
 		},
+		materialObj() {
+			return this.materialVariants && this.materialVariants.find(({ code }) => code === this.materialModel)
+		},
 		colorObj() {
-			return this.colorVariants && this.colorVariants.find(({code}) => code === this.colorModel)
+			return this.colorVariants && this.colorVariants.find(({ code }) => code === this.colorModel)
 		},
 		imageUrl() {
-			const item = this.textures && this.textures.find(({code}) => this.colorModel === code)
+			const item = this.textures && this.textures.find(({ code }) => this.colorModel === code)
 			if (item) return `https://cdn.akson.ru/webp${item.path}0.png`
 			return ""
 		},
 		materialRestrictions() {
-			const currentMaterial = this.materialVariants.find(({code}) => code === this.materialModel)
+			const currentMaterial = this.materialVariants.find(({ code }) => code === this.materialModel)
 			if (currentMaterial) {
-				const {maxWidth, minWidth} = currentMaterial.restrictions.limitSize
+				const { maxWidth, minWidth } = currentMaterial.restrictions.limitSize
 				return {
 					maxWidth,
 					minWidth
@@ -159,7 +162,8 @@ export default {
 				url: this.imageUrl,
 				maxWidth: this.materialRestrictions.maxWidth,
 				minWidth: this.materialRestrictions.minWidth,
-				colorName: this.colorObj ? this.colorObj.name : "",
+				colorTitle: this.colorObj ? this.colorObj.name : "",
+				materialType: this.materialObj ? this.materialObj.name : ""
 			}
 		},
 	},
@@ -171,10 +175,10 @@ export default {
 			this.opened = !this.opened
 		},
 		removeItem() {
-			this.$emit('remove')
+			this.$emit("remove")
 			this.currentItem = null
 		},
-		selectMaterial({code}) {
+		selectMaterial({ code }) {
 			if (this.materialModel === code) return
 			this.materialModel = code
 			if (this.thicknessVariants && this.thicknessVariants[0]) {
@@ -185,7 +189,7 @@ export default {
 				this.$emit("selectColor", this.config)
 			}
 		},
-		selectThickness({code}) {
+		selectThickness({ code }) {
 			if (this.thicknessModel === code) return
 			this.thicknessModel = code
 			if (this.colorVariants && this.colorVariants[0]) {
