@@ -54,6 +54,10 @@ export default {
 			type: Object,
 			default: null,
 		},
+		selectedTableTop: {
+			type: Object,
+			default: null,
+		},
 		value: {
 			type: String,
 			default: "",
@@ -100,8 +104,13 @@ export default {
 	},
 	watch: {
 		selectedBox(v) {
-			if (v) this.currentItemModel = v.name.replaceAll("_", "-")
-			this.opened = !!v
+			if (v) {
+				this.currentItemModel = v.name.replaceAll("_", "-")
+				this.opened = true
+			}
+		},
+		selectedTableTop(v) {
+			if (v) this.opened = false
 		},
 		value: {
 			handler(v) {

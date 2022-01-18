@@ -73,8 +73,10 @@ export default {
 			return this.orderList && this.orderList.cases && this.orderList.cases
 				.reduce((acc, el) => {
 					const existId = acc.findIndex((it) => it[0].value === el[0].value && it[3].value === el[3].value)
-					if (existId > -1) acc[existId][acc[existId].length -1].value += 1
-					else acc.push(el)
+					if (existId > -1) {
+						const quantityField = acc[existId].find(({ id }) => id === "quantity")
+						if (quantityField) quantityField.value += 1
+					} else acc.push(el.filter((it) => it.title))
 					return acc
 				}, []) || []
 		},

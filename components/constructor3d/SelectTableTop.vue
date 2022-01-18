@@ -68,6 +68,14 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		selectedBox: {
+			type: Object,
+			default: null,
+		},
+		selectedTableTop: {
+			type: Object,
+			default: null,
+		},
 		value: {
 			type: Object,
 			default: () => null,
@@ -80,6 +88,14 @@ export default {
 			currentItem: null,
 			opened: true,
 		}
+	},
+	watch: {
+		selectedBox(v) {
+			if (v) this.opened = false
+		},
+		selectedTableTop(v) {
+			if (v) this.opened = true
+		},
 	},
 	computed: {
 		materialVariants() {

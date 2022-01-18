@@ -499,8 +499,11 @@ const setOrderFields = (userData) => {
 			title: "Количество",
 			sort: 5,
 			value: 1
+		},
+		{
+			id: "code",
+			sort: 6,
 		}
-
 	]
 	for (let field in userData) {
 		if (Object.prototype.hasOwnProperty.call(userData, field)) {

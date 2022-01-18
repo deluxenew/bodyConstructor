@@ -264,6 +264,9 @@ export default {
 			this.$emit("selectBox", v)
 			this.setControlsPosition()
 		},
+		selectedTableTop(v) {
+			this.$emit("selectTableTop", v)
+		},
 		tableTopConfig() {
 			this.replaceTableTops()
 		},

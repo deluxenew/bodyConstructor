@@ -9,6 +9,7 @@
 						ref="canvas"
 						@getBoxName="selectedBoxName = $event"
 						@selectBox="selectBox"
+						@selectTableTop="selectTableTop"
 						@removeTableTops="removeAllTableTops"
 						@setOrderList="setOrderList"
 					)
@@ -17,6 +18,7 @@
 						v-model="selectedBoxName"
 						:options="bodyOptions"
 						:selectedBox="selectedBox"
+						:selectedTableTop="selectedTableTop"
 						:selectedBoxType="selectedBoxType"
 						@selectItem="selectCaseConfig"
 						@remove="removeCase"
@@ -28,6 +30,8 @@
 						:options="tableTopOptions"
 						:textures="tableTopTextures"
 						:elementVariants="tableTops"
+						:selectedBox="selectedBox"
+						:selectedTableTop="selectedTableTop"
 						@remove="removeAllTableTops"
 						@selectColor="selectTableTopConfig"
 					)
@@ -83,6 +87,7 @@ export default {
 			// caseConfig: null,
 			// facadeConfig: null,
 			tableTopConfig: null,
+			selectedTableTop: null,
 			orderList: null
 		}
 	},
@@ -202,6 +207,9 @@ export default {
 			if (v) this.selectedBoxType = v.userData.pos
 			if (v) this.caseModelCode = v.userData.code
 			this.selectedBox = v
+		},
+		selectTableTop(v) {
+			this.selectedTableTop = v
 		},
 		// selectFacadeConfig(v) {
 		//   // this.facadeConfig = v
