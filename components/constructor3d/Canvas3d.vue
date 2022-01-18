@@ -75,6 +75,10 @@ export default {
 			type: String,
 			default: "",
 		},
+    facadeConfig: {
+      type: Object,
+      default: () => null,
+		},
 		tableTopConfig: {
 			type: Object,
 			default: () => null,

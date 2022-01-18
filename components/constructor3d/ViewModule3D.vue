@@ -9,7 +9,6 @@
 						ref="canvas"
 						@getBoxName="selectedBoxName = $event"
 						@selectBox="selectBox"
-						@selectTableTop="selectTableTop"
 						@removeTableTops="removeAllTableTops"
 						@setOrderList="setOrderList"
 					)
@@ -32,6 +31,7 @@
 						:selectedFacadeColor="selectedFacadeColor"
 						:selectedFacadeMaterial="selectedFacadeMaterial"
 						:options="facadeOptions"
+						@selectColor="selectFacadeColor"
 					)
 					select-table-top(
 						v-model="tableTopConfig"
@@ -99,6 +99,7 @@ export default {
 				controlsVerticalPosition: this.controlsVerticalPosition,
 				caseModelCode: this.caseModelCode,
 				tableTopConfig: this.tableTopConfig,
+        facadeConfig: this.facadeConfig
 			}
 		},
 		bodyOptions() {
@@ -149,6 +150,9 @@ export default {
 			if (v) this.selectedBoxType = v.userData.pos
 			if (v) this.caseModelCode = v.userData.code
 			this.selectedBox = v
+		},
+    selectFacadeColor(v) {
+		  this.facadeConfig = v
 		},
 		selectTableTop(v) {
 			this.selectedTableTop = v
