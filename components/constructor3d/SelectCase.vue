@@ -1,11 +1,10 @@
 <template lang="pug">
   div.select-elements(v-if="options")
     div.select-elements__header
-      div.select-elements__title Шкаф
+      div.select-elements__title(@click="toggleOpen") Шкаф
         img.select-elements__chevron(
           :src="require('./img/chevron.svg')"
           :class="{reverse: !opened}"
-          @click="toggleOpen"
         )
       div.select-elements__remove(
         :class="{disabled: !selectedBox}"

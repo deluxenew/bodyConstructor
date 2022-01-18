@@ -41,11 +41,8 @@ const fromTo = (value, from, to, steps) => {
 }
 const camToTableTop = (selectedTableTop) => {
 	const { userData: { width, pos }, position: { x, z } } = selectedTableTop
-	console.log({ width, pos }, { x, z })
 
 	const h2 = Math.tan(threeMath.degToRad(90 - constants.camAngle / 2)) * width / 2 //+ constants.tableTopDepth / 2
-
-	console.log(h2)
 
 	return {
 		cameraPositionX: 0,
@@ -474,11 +471,11 @@ const setOrderFields = (userData) => {
 			title: "Размер",
 			sort: 0
 		},
-		{
-			id: "product",
-			title: "Изделие",
-			sort: 1
-		},
+		// {
+		// 	id: "product",
+		// 	title: "Изделие",
+		// 	sort: 1
+		// },
 		{
 			id: "materialType",
 			title: "Материал",
@@ -501,8 +498,20 @@ const setOrderFields = (userData) => {
 			value: 1
 		},
 		{
-			id: "code",
+			id: "price",
+			title: "Цена",
 			sort: 6,
+			value: "X XXX р"
+		},
+		{
+			id: "priceSum",
+			title: "Сумма",
+			sort: 7,
+			value: "X XXX р"
+		},
+		{
+			id: "code",
+			sort: 8,
 		}
 	]
 	for (let field in userData) {

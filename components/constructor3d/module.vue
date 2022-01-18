@@ -1060,7 +1060,6 @@ export default {
 
 			const rightCount = Math.trunc(rightWidth / maxWidth)
 			const fractionRight = rightWidth - maxWidth * rightCount
-			console.log(rightWidth, maxWidth, rightCount)
 
 			if (rightCount) {
 				for (let i = 0; i <= rightCount - 1; i++) {
@@ -1068,9 +1067,6 @@ export default {
 				}
 				if (fractionRight) addNewTableTopRight(0, fractionRight, height, type, url, rightCount)
 			} else if (fractionRight) {
-				console.log({
-					fractionRight, height, type, url,
-				})
 				addNewTableTopRight(0, fractionRight, height, type, url, 0)
 			}
 

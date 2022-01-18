@@ -2,7 +2,7 @@
 	div.calc-form
 		.calc-form__inner
 			.calc-form__title Расчет стоимости заказа
-			.calc-form__subtitle(v-if="cases.length") Корпуса
+			.calc-form__subtitle(v-if="cases.length") Шкафы
 			.calc-form__table(v-if="cases.length")
 				.calc-form__row.calc-form__row_header
 					.calc-form__col.calc-form__col_number №
@@ -84,7 +84,7 @@ export default {
 			return this.orderList?.order?.facades || []
 		},
 		tableTops() {
-			return this.orderList?.tableTops || []
+			return this.orderList?.tableTops?.map((el) => el.filter((it) => it.title)) || []
 		},
 
 	},
@@ -137,6 +137,7 @@ export default {
 		flex-wrap: nowrap;
 		width: 100%;
 		padding: 8px 0;
+		border-bottom: 1px dotted #e5e5e5;
 
 		&_header {
 			.calc-form__col {

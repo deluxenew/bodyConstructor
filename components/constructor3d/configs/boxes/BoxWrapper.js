@@ -19,7 +19,7 @@ export const boxWrapper = (width, height, depth, isTop) => {
 	boxGroup.userData.height = height
 	boxGroup.userData.depth = depth
 
-	boxGroup.userData.size = `${ Math.round(width * 100) }*${ Math.round(height * 100) }*${Math.round(sideDepth * 100)}`
+	boxGroup.userData.size = `${ Math.round(width * 100) }*${ Math.round(height * 100) } мм`
 	boxGroup.userData.color = "Белый"
 	boxGroup.userData.materialType = "ЛДСП"
 

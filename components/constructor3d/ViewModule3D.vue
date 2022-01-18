@@ -25,6 +25,14 @@
 						@selectType="setControlsVerticalPosition"
 						@discardSelectBox="discardSelectBox"
 					)
+					select-facade(
+						v-model="facadeConfig"
+						:caseModelCode="caseModelCode"
+						:selectedFacadeVariant="selectedFacadeVariant"
+						:selectedFacadeColor="selectedFacadeColor"
+						:selectedFacadeMaterial="selectedFacadeMaterial"
+						:options="facadeOptions"
+					)
 					select-table-top(
 						v-model="tableTopConfig"
 						:options="tableTopOptions"
@@ -35,30 +43,21 @@
 						@remove="removeAllTableTops"
 						@selectColor="selectTableTopConfig"
 					)
-			//    select-facade(
-			//      v-model="kitchen.currentConfig.facadeConfig"
-			//      :parentVariants="parentVariants"
-			//      :elementVariants="facades"
-			//      @remove="$refs.kitchen.removeCase()"
-			//      @selectItem="selectFacadeConfig"
-			//      @selectColor="selectFacadeColor"
-			//      @selectChildConfig="selectChildConfig"
-			//    )
 
 			calculate-order(
-			  :orderList="orderList"
+				:orderList="orderList"
 			)
 </template>
 
 <script>
 import Canvas3d from "./Canvas3d"
 import boxes from "./configs/boxes/BoxesList"
-import facades from "./FacadesListConfig"
+// import facades from "./FacadesListConfig"
 import tableTops from "./configs/TableTop"
 
 import Module from "./module"
 import SelectCase from "./SelectCase.vue"
-// import SelectFacade from './SelectFacade.vue'
+import SelectFacade from "./SelectFacade.vue"
 import SelectTableTop from "./SelectTableTop.vue"
 import CalculateOrder from "./CalculateOrder"
 
@@ -69,7 +68,7 @@ export default {
 		CalculateOrder,
 		Module,
 		SelectCase,
-		// SelectFacade,
+		SelectFacade,
 		SelectTableTop,
 	},
 	data() {
@@ -84,8 +83,11 @@ export default {
 			selectedBoxName: null,
 			selectedBoxType: null,
 
-			// caseConfig: null,
-			// facadeConfig: null,
+			facadeConfig: null,
+			selectedFacadeVariant: null,
+			selectedFacadeColor: null,
+			selectedFacadeMaterial: null,
+
 			tableTopConfig: null,
 			selectedTableTop: null,
 			orderList: null
@@ -105,6 +107,9 @@ export default {
 		tableTopOptions() {
 			return this.config && this.config.tabletop.options || null
 		},
+		facadeOptions() {
+			return this.config && this.config.body.options|| null
+		},
 		tableTopTextures() {
 			return this.config && this.config.tabletop.imgLayers[0].images || null
 		},
@@ -112,41 +117,6 @@ export default {
 			const { cases } = boxes
 			return cases
 		},
-		// parentVariants() {
-		//   const variants = this.caseConfig?.userData?.variants
-		//   const parentId = this.caseConfig?.userData?.parent?.id
-		//
-		//   if (variants && variants.length) {
-		//     let result = []
-		//     variants.forEach((el) => {
-		//       const fn = boxes[el.id]
-		//       result.push(fn)
-		//     })
-		//     return result
-		//   }
-		//
-		//   if (parentId) {
-		//     let result = []
-		//     const parent =  boxes[parentId]
-		//
-		//     if (parent) {
-		//       const parentVariants = parent.userData.variants
-		//
-		//       parentVariants.forEach((el) => {
-		//         const fn = boxes[el.id]
-		//         result.push(fn)
-		//       })
-		//       return result
-		//     }
-		//   }
-		//
-		//   return []
-		// },
-		// facades() {
-		//   const { colors } = facades
-		//
-		//   return colors
-		// },
 		tableTops() {
 			const { colors } = tableTops
 			return colors
@@ -171,35 +141,7 @@ export default {
 		setOrderList(list) {
 			this.orderList = list
 		},
-		// removeItem({uuid, type}) {
-		//   this.$refs.cancas.removeItem({uuid, type})
-		//   const idx = this.kitchen.order[type].findIndex((el) => el.uuid === uuid)
-		//   if (idx > -1) this.kitchen.order[type].splice(idx, 1)
-		// },
-		// selectChildConfig({config, color}) {
-		//   const {id, type, typeName, url, name, variantType, variantTypeName } = color
-		//
-		//   const { userData: {doorWidth, doorHeight} } = config
-		//
-		//   const group = config.children.find(({name}) => name === 'group')
-		//   const doors = group.children.filter(({name}) => name === 'leftDoor' || name === 'rightDoor')
-		//
-		//   doors.forEach((el) => {
-		//     el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
-		//   })
-		//
-		//   this.caseConfig = config
-		//
-		//   this.caseConfig.userData.facadeCount = doors.length
-		//   this.caseConfig.userData.facadeColorName = name
-		//   this.caseConfig.userData.facadeColorId = id
-		//   this.caseConfig.userData.facadeType = type
-		//   this.caseConfig.userData.facadeTypeName = typeName
-		//   this.caseConfig.userData.facadeVariantType = variantType
-		//   this.caseConfig.userData.facadeVariantTypeName = variantTypeName
-		//
-		//   this.kitchen.currentConfig.facadeConfig.name = config && config.userData && config.userData.parent ? config.name : ''
-		// },
+
 		selectCaseConfig(v) {
 			this.caseModelCode = v
 		},
@@ -211,31 +153,6 @@ export default {
 		selectTableTop(v) {
 			this.selectedTableTop = v
 		},
-		// selectFacadeConfig(v) {
-		//   // this.facadeConfig = v
-		// },
-		// selectFacadeColor(color) {
-		//   const { id, type, typeName, url, name, variantType, variantTypeName } = color
-		//   const { userData: { doorWidth, doorHeight } } = this.caseConfig
-		//
-		//   const group = this.caseConfig.children.find(({name}) => name === 'group')
-		//   const doors = group.children.filter(({name}) => name === 'leftDoor' || name === 'rightDoor')
-		//
-		//   doors.forEach((el) => {
-		//     el.children[0].add(facades[type](id, doorWidth, doorHeight, url))
-		//   })
-		//
-		//   const temp = this.caseConfig.clone()
-		//   this.caseConfig = temp
-		//
-		//   this.caseConfig.userData.facadeCount = doors.length
-		//   this.caseConfig.userData.facadeColorName = name
-		//   this.caseConfig.userData.facadeColorId = id
-		//   this.caseConfig.userData.facadeType = type
-		//   this.caseConfig.userData.facadeTypeName = typeName
-		//   this.caseConfig.userData.facadeVariantType = variantType
-		//   this.caseConfig.userData.facadeVariantTypeName = variantTypeName
-		// },
 		async selectTableTopConfig(item) {
 			function getImage(url) {
 				return new Promise((resolve, reject) => {

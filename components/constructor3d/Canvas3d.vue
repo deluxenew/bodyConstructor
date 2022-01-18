@@ -88,12 +88,8 @@ export default {
 			positionNumber: 1,
 			selectedBox: null,
 			selectedTableTop: null,
-			tableTops: {
-				left: [],
-				right: [],
-			},
 			mixer: null,
-			clock: new THREE.Clock(),
+			// clock: new THREE.Clock(),
 			animations: [],
 			isShowSizes: true,
 
@@ -102,7 +98,7 @@ export default {
 	computed: {
 		maxWidthTableTop() {
 			if (!this.sceneObjects.tableTop) return 0
-			const materialMaxWidth = this.tableTopConfig.maxWidth
+			const materialMaxWidth = this.tableTopConfig && this.tableTopConfig.maxWidth || 0
 			const {
 				userData: {
 					commonIndex: tableTopCommonIndex,
@@ -131,7 +127,6 @@ export default {
 						}
 					}
 					if (index === 1 && tableTopIndex === 1) {
-						console.log(	tableTopDifference, tableTopLeftDifference, "difference, leftDifference" )
 						acc += width
 						if (tableTopDifference) acc += tableTopDifference
 						if (tableTopLeftDifference) acc += tableTopLeftDifference
@@ -193,7 +188,6 @@ export default {
 				return acc
 			}, {})
 
-			result.selectedBox = this.selectedBox
 			result.length = this.scene.children.length
 			return result
 		},
@@ -335,11 +329,11 @@ export default {
 
 			vm.renderer.render(vm.scene, vm.camera)
 
-			const delta = vm.clock.getDelta()
-
-			if (vm.mixer) {
-				vm.mixer.update(delta)
-			}
+			// const delta = vm.clock.getDelta()
+			//
+			// if (vm.mixer) {
+			// 	vm.mixer.update(delta)
+			// }
 		}
 
 		render()
@@ -383,18 +377,18 @@ export default {
 			else this.positionNumber = 1
 		},
 		isMoveButtonActive(isLeft) {
-			if (!this.sceneObjects.selectedBox) return false
+			if (!this.selectedBox) return false
 			const {
 				userData: {
 					type, sort: selectedSort, side, configType: selectType,
 				},
-			} = this.sceneObjects.selectedBox
+			} = this.selectedBox
 			if (!["boxFloor", "penalBox", "boxWall"].includes(selectType)) return false
 
-			const currentType = this.sceneObjects.selectedBox.userData.type
+			const currentType = this.selectedBox.userData.type
 			const penalBox = this.sceneObjects[currentType].find(({ userData: { configType } }) => configType === "penalBox")
-			const disableMoveBox = penalBox && penalBox.userData.sort === 1 && selectType === "boxFloor" && this.sceneObjects.selectedBox.userData.sort === 0
-			const disableMovePenalBox = selectType === "penalBox" && this.sceneObjects.selectedBox.userData.sort < 2
+			const disableMoveBox = penalBox && penalBox.userData.sort === 1 && selectType === "boxFloor" && this.selectedBox.userData.sort === 0
+			const disableMovePenalBox = selectType === "penalBox" && this.selectedBox.userData.sort < 2
 			const findAngularRight = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
 			const findAngularLeft = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
 			if (findAngularRight && (isLeft && disableMoveBox || disableMovePenalBox) || (findAngularLeft && (isLeft && disableMovePenalBox || disableMoveBox))) {
@@ -621,8 +615,6 @@ export default {
 		},
 
 		async addTableTop() {
-			this.tableTops.left = []
-			this.tableTops.right = []
 			if (!this.tableTopConfig) return
 			await this.$nextTick()
 			if (this.sceneObjects.leftTableTop) {
@@ -644,8 +636,6 @@ export default {
 					newTableTop.userData.index = index
 					newTableTop.userData.locked = locked
 
-
-					this.tableTops.left.push({ commonIndex, width, index })
 					this.scene.add(newTableTop)
 				})
 			}
@@ -667,7 +657,6 @@ export default {
 					newTableTop.userData.commonIndex = commonIndex
 					newTableTop.userData.index = index
 					newTableTop.userData.locked = locked
-					this.tableTops.right.push({ commonIndex, width, index })
 					this.scene.add(HF.rotationY(newTableTop))
 				})
 			}
@@ -696,9 +685,10 @@ export default {
 				width, url, height, type, maxWidth, minWidth
 			}, needDepthSize, isLeft)
 			newTableTop.userData.size = `${Math.round(width * 100)}*600*${Math.round(height * 100)}`
-			newTableTop.userData.product = "Столешница"
 			newTableTop.userData.materialType = materialType
 			newTableTop.userData.color = colorTitle
+
+
 			return newTableTop
 		},
 		replaceTableTops(onlyRemove) {

@@ -1,11 +1,10 @@
 <template lang="pug">
 	div.select-elements
 		div.select-elements__header
-			div.select-elements__title Столешница
+			div.select-elements__title(@click="toggleOpen") Столешница
 				img.select-elements__chevron(
 					:src="require('./img/chevron.svg')"
 					:class="{reverse: !opened}"
-					@click="toggleOpen"
 				)
 			div.select-elements__remove(
 				v-if="value"
@@ -52,10 +51,6 @@ export default {
 	name: "SelectTabletop",
 	components: { TransitionExpand, UiInputCheckbox, HorizontalListItems },
 	props: {
-		title: {
-			type: String,
-			default: "",
-		},
 		elementVariants: {
 			type: Array,
 			default: () => [],

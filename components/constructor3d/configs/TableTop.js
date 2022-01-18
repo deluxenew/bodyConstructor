@@ -66,6 +66,8 @@ export const getTableTop = ({ width, height, type, url, maxWidth, minWidth }, ne
 	tableTopGroup.userData.material = type
 	tableTopGroup.userData.maxWidth = maxWidth
 	tableTopGroup.userData.minWidth = minWidth
+	tableTopGroup.userData.product = "Столешница"
+	tableTopGroup.userData.priceTitle = "Цена, п.м."
 
 	tableTopBox.dispose()
 
