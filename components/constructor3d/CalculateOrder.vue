@@ -138,6 +138,7 @@ export default {
 		width: 100%;
 		padding: 8px 0;
 		border-bottom: 1px dotted #e5e5e5;
+		gap: 8px;
 
 		&_header {
 			.calc-form__col {
@@ -148,7 +149,7 @@ export default {
 	}
 
 	&__col {
-		flex: 0 0 152px;
+		flex: 1 1 50%;
 		display: flex;
 		align-items: center;
 		line-height: 20px;
@@ -162,7 +163,7 @@ export default {
 		}
 
 		&_name {
-			flex: 1 1 100%;
+			flex: 1 1 50%;
 		}
 
 		&_button {

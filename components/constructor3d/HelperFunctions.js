@@ -510,8 +510,14 @@ const setOrderFields = (userData) => {
 			value: "X XXX р"
 		},
 		{
-			id: "code",
+			id: "spec",
+			title: "Спецификация",
 			sort: 8,
+			value: ""
+		},
+		{
+			id: "code",
+			sort: 9,
 		}
 	]
 	for (let field in userData) {

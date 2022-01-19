@@ -89,8 +89,8 @@ export default {
 		items: {
 			deep: true,
 			immediate: true,
-			async handler(v) {
-				if (v) {
+			async handler(v, old) {
+				if (v && old && JSON.stringify(v) !== JSON.stringify(old)) {
 					await this.getSizes()
 				}
 			},

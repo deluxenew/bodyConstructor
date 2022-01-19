@@ -81,7 +81,7 @@ export default {
 			currentType: null,
 			currentThickness: null,
 			currentItem: null,
-			opened: true,
+			opened: false,
 		}
 	},
 	watch: {
@@ -184,6 +184,9 @@ export default {
 		},
 		toggleOpen() {
 			this.opened = !this.opened
+			if (this.opened && !this.value && this.materialVariants[0]) {
+				this.selectMaterial(this.materialModel)
+			}
 		},
 		removeItem() {
 			this.$emit("remove")
@@ -248,6 +251,7 @@ export default {
 		font-weight: bold;
 		display: flex;
 		align-items: center;
+		cursor: pointer;
 	}
 
 	&__chevron {

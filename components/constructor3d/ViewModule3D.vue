@@ -9,6 +9,7 @@
 						ref="canvas"
 						@getBoxName="selectedBoxName = $event"
 						@selectBox="selectBox"
+						@selectTableTop="selectTableTop"
 						@removeTableTops="removeAllTableTops"
 						@setOrderList="setOrderList"
 					)
@@ -99,7 +100,7 @@ export default {
 				controlsVerticalPosition: this.controlsVerticalPosition,
 				caseModelCode: this.caseModelCode,
 				tableTopConfig: this.tableTopConfig,
-        facadeConfig: this.facadeConfig
+				facadeConfig: this.facadeConfig
 			}
 		},
 		bodyOptions() {
@@ -151,7 +152,7 @@ export default {
 			if (v) this.caseModelCode = v.userData.code
 			this.selectedBox = v
 		},
-    selectFacadeColor(v) {
+		selectFacadeColor(v) {
 		  this.facadeConfig = v
 		},
 		selectTableTop(v) {

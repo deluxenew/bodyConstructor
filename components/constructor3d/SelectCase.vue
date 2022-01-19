@@ -165,6 +165,7 @@ export default {
       font-weight: bold;
       display: flex;
       align-items: center;
+			cursor: pointer;
     }
 
     &__chevron {
