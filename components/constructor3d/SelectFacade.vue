@@ -86,6 +86,10 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		selectedTableTop: {
+			type: Object,
+			default: null
+		},
 		value: {
 			type: Object,
 			default: () => {
@@ -176,6 +180,11 @@ export default {
 			if (this.currentFacade) {
 				this.currentFacade = this.facadeVariants[0]
 				this.opened = true
+			}
+		},
+		selectedTableTop(v) {
+			if (v) {
+				this.opened = false
 			}
 		},
 		value: {

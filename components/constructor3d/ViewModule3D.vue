@@ -15,6 +15,7 @@
 					)
 				div.column.config
 					select-case(
+						ref="cases"
 						v-model="selectedBoxName"
 						:options="bodyOptions"
 						:selectedBox="selectedBox"
@@ -26,11 +27,13 @@
 						@discardSelectBox="discardSelectBox"
 					)
 					select-facade(
+						ref="facades"
 						v-model="facadeConfig"
 						:caseModelCode="caseModelCode"
 						:selectedFacadeVariant="selectedFacadeVariant"
 						:selectedFacadeColor="selectedFacadeColor"
 						:selectedFacadeMaterial="selectedFacadeMaterial"
+						:selectedTableTop="selectedTableTop"
 						:options="facadeOptions"
 						@selectColor="selectFacadeColor"
 					)
@@ -38,7 +41,6 @@
 						v-model="tableTopConfig"
 						:options="tableTopOptions"
 						:textures="tableTopTextures"
-						:elementVariants="tableTops"
 						:selectedBox="selectedBox"
 						:selectedTableTop="selectedTableTop"
 						@remove="removeAllTableTops"
@@ -119,10 +121,6 @@ export default {
 			const { cases } = boxes
 			return cases
 		},
-		tableTops() {
-			const { colors } = tableTops
-			return colors
-		},
 	},
 	async mounted() {
 		const response = await fetch("/kitchen.json")
@@ -188,6 +186,8 @@ export default {
 			this.tableTopConfig.minWidth = minWidth
 			this.tableTopConfig.materialType = materialType
 			this.tableTopConfig.colorTitle = colorTitle
+			this.$refs.cases.opened = false
+			this.$refs.facades.opened = false
 		},
 		removeCase() {
 			this.$refs.canvas.removeCase(false)
