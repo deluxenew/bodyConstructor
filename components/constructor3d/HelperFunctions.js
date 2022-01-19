@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import boxes from "./configs/boxes/BoxesList"
+import * as boxes from "./configs/boxes/BoxesList"
 import { constants } from "./configs/boxes/constants"
 
 const { Math: threeMath } = THREE
@@ -113,7 +113,7 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 const recursiveFindBox = (obj) => {
 	if (!obj || !obj.parent) return null
 	const { parent } = obj
-	if ([...new Set(Object.keys(boxes))].includes(parent.name) || parent.name === "tableTop") return parent
+	if ([...new Set(Object.keys(boxes))].includes(parent.name.replaceAll("_", "")) || parent.name === "tableTop") return parent
 	return recursiveFindBox(parent)
 }
 
@@ -529,6 +529,19 @@ const setOrderFields = (userData) => {
 	return fieldNames
 }
 
+const getImage = (url) => {
+	return new Promise((resolve, reject) => {
+		const img = new Image()
+		img.onload = function() {
+			resolve(url)
+		}
+		img.onerror = function() {
+			reject(url)
+		}
+		img.src = url
+	})
+}
+
 export default {
 	animationFromTo,
 	camToTableTop,
@@ -542,5 +555,6 @@ export default {
 	getFacadeGroup,
 	getAddMethodName,
 	getTableTops,
-	setOrderFields
+	setOrderFields,
+	getImage
 }

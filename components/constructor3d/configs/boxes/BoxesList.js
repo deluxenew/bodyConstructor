@@ -23,29 +23,27 @@ import { w_600_600 } from "./w_600_600"
 import { w_800 } from "./w_800"
 import { w_800a } from "./w_800a"
 
-export default {
-	f_150_820: f_150_820(),
-	f_300_820: f_300_820(),
-	f_400: f_400(),
-	f_400_820_3b: f_400_820_3b(),
-	f_600: f_600(),
-	f_600_820_2b: f_600_820_2b(),
-	f_600_820_3b: f_600_820_3b(),
-	f_600_820_oven: f_600_820_oven(),
-	f_600_2140: f_600_2140(),
-	f_800: f_800(),
-	f_800a: f_800a(),
-	f_800_820_2b: f_800_820_2b(),
-	f_800_820_3b: f_800_820_3b(),
-	f_400_820_1b: f_400_820_1b(),
+export const f150820 = f_150_820
+export const f300820 = f_300_820
+export const f400 = f_400
+export const f4008203b = f_400_820_3b
+export const f600 = f_600
+export const f6008202b = f_600_820_2b
+export const f6008203b = f_600_820_3b
+export const f600820oven = f_600_820_oven
+export const f6002140 = f_600_2140
+export const f800 = f_800
+export const f800a = f_800a
+export const f8008202b = f_800_820_2b
+export const f8008203b = f_800_820_3b
+export const f4008201b = f_400_820_1b
+export const w150720 = w_150_720
+export const w300720 = w_300_720
+export const w400 = w_400
+export const w500360 = w_500_360
+export const w600 = w_600
+export const w600360 = w_600_360
+export const w600600 = w_600_600
+export const w800 = w_800
+export const w800a = w_800a
 
-	w_150_720: w_150_720(),
-	w_300_720: w_300_720(),
-	w_400: w_400(),
-	w_500_360: w_500_360(),
-	w_600: w_600(),
-	w_600_360: w_600_360(),
-	w_600_600: w_600_600(),
-	w_800: w_800(),
-	w_800a: w_800a(),
-}

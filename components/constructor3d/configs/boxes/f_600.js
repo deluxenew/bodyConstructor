@@ -1,4 +1,4 @@
-import { BoxGeometry, Mesh } from "three"
+import { BoxGeometry, Group } from "three"
 import { constants } from "./constants"
 import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
@@ -19,7 +19,61 @@ const { scale } = constants
 
 const sideY = (height - legsHeight) / 2 - sideDepth
 
-export const f_600 = () => {
+const facadeVariant1 = () => {
+	const facadeGroup = new Group()
+	const facadeLeft = new Group()
+	facadeLeft.name = "facadeElement"
+	facadeLeft.userData.facadeWidth = 5.97
+	facadeLeft.userData.facadeHeight = 7.16
+	facadeLeft.userData.facadeOpenDirection = "left"
+
+	facadeGroup.add(facadeLeft)
+	facadeGroup.name = "facade"
+	return facadeGroup
+}
+
+const facadeVariant2 = () => {
+	const facadeGroup = new Group()
+
+	const facadeLeft = new Group()
+	facadeLeft.name = "facadeElement"
+	facadeLeft.userData.facadeWidth = 2.97
+	facadeLeft.userData.facadeHeight = 7.16
+	facadeLeft.userData.facadeOpenDirection = "left"
+
+	facadeGroup.add(facadeLeft)
+
+	const facadeRight = new Group()
+
+	facadeRight.name = "facadeElement"
+	facadeRight.userData.facadeWidth = 2.97
+	facadeRight.userData.facadeHeight = 7.16
+	facadeRight.userData.facadeOpenDirection = "right"
+
+	facadeGroup.add(facadeRight)
+
+	facadeGroup.name = "facade"
+	return facadeGroup
+}
+
+
+export const f_600 = (facadeName, onlyFacade) => {
+	let facadeGroup
+
+	if (facadeName) {
+		if (!["597_716_0_solid_1", "297_716_0_solid_2"].includes(facadeName)) return
+		const facades = {
+			"597_716_0_solid_1": facadeVariant1(),
+			"297_716_0_solid_2": facadeVariant2()
+		}
+		console.log(facadeName, onlyFacade)
+		facadeGroup = facades[facadeName]
+
+		facadeGroup.name = "facade"
+
+		if (onlyFacade) return facadeGroup
+	}
+
 	const beams = bottomBeams(width)
 	const wrap = bottomBox(width, height, depth)
 	const { boxGroup } = wrap
@@ -42,6 +96,8 @@ export const f_600 = () => {
 	caseGroup.add(beams)
 	caseGroup.add(shelf)
 
+	if (facadeName) caseGroup.add(facadeGroup)
+
 	sideRight.position.set(width / 2 - sideDepth / 2, sideY, 0)
 	sideLeft.position.set(-width / 2 + sideDepth / 2, sideY, 0)
 	sideBack.position.set(0, sideY, -depth / 2 + sideDepth)
@@ -49,9 +105,11 @@ export const f_600 = () => {
 
 	boxGroup.name = "f_600"
 	boxGroup.userData.code = "f-600"
-	boxGroup.userData.facadeVariants = ["597_716_0_solid_1"]
+	boxGroup.userData.facadeVariants = ["597_716_0_solid_1", "297_716_0_solid_2"]
 	boxGroup.userData.configType = "boxFloor"
 	boxGroup.userData.openedDoors = false
+	boxGroup.userData.facade = false
+
 
 	boxGroup.scale.set(scale, scale, scale)
 	return boxGroup

@@ -7,7 +7,7 @@
 					:class="{reverse: !opened}"
 				)
 			div.select-elements__remove(
-				:class="{disabled: !selectedFacadeVariant && !currentFacade}"
+				:class="{disabled: !currentFacade}"
 				@click="removeItem"
 			)
 				span Убрать
@@ -70,18 +70,6 @@ export default {
 			type: String,
 			default: "",
 		},
-		selectedFacadeVariant: {
-			type: String,
-			default: "",
-		},
-		selectedFacadeColor: {
-			type: String,
-			default: "",
-		},
-		selectedFacadeMaterial: {
-			type: String,
-			default: "",
-		},
 		options: {
 			type: Array,
 			default: () => [],
@@ -108,14 +96,6 @@ export default {
 		}
 	},
 	computed: {
-		valueModel: {
-			get() {
-				return this.value || null
-			},
-			set(v) {
-				this.$emit("input", v)
-			},
-		},
 		materialVariants() {
 			return this.options && this.options
 				.filter(({ category, code }) => category === "facade_material" && code !== "none") || []
@@ -147,13 +127,16 @@ export default {
 			return this.options && this.options
 				.filter(({ category, code, dependency }) => {
 					const isType = category === "facade_color" && code !== "none"
-					const material = this.currentMaterialType && this.currentMaterialType.code
+					const material = this.currentMaterial && this.currentMaterial.code
+					const materialType = this.currentMaterialType && this.currentMaterialType.code
 					const facade = this.currentFacade && this.currentFacade.code
 					const findFacade = dependency && dependency
 						.find(({ code, values }) => code === "facade_variant" && facade && values.includes(facade))
+					const findMaterial = dependency && dependency
+						.find(({ code, values }) => code === "facade_material" && material && values.includes(material))
 					const findMaterialType = dependency && dependency
-						.find(({ code, values }) => code === "facade_type" && material && values.includes(material))
-					return isType && findMaterialType && findFacade
+						.find(({ code, values }) => code === "facade_type" && material && values.includes(materialType))
+					return isType && (findMaterial || !findMaterial && findMaterialType) && findFacade
 				}) || []
 		},
 		config() {
@@ -166,6 +149,7 @@ export default {
 				materialTypeTitle: this.currentMaterialType && this.currentMaterialType.name || null,
 				colorCode: this.currentColor && this.currentColor.code || null,
 				colorTitle: this.currentColor && this.currentColor.name || null,
+				map: this.currentFacade && this.currentFacade.imageMap || null,
 			}
 		},
 	},
@@ -192,7 +176,7 @@ export default {
 			handler(v) {
 				if (v) {
 					for (let i in v) {
-						if (Object.prototype.hasOwnProperty.call(i, v)) {
+						if (Object.prototype.hasOwnProperty.call(i, v) && !this.opened) {
 							this.opened = true
 						}
 					}
@@ -226,20 +210,20 @@ export default {
 			this.currentMaterial = item
 			await this.$nextTick()
 			const firstFacadeVariant = this.facadeVariants[0]
-			if (firstFacadeVariant) this.selectFacadeVariant(firstFacadeVariant)
+			if (firstFacadeVariant) await this.selectFacadeVariant(firstFacadeVariant)
 		},
 		async selectFacadeVariant(item) {
 			this.currentFacade = item
 			await this.$nextTick()
 			const firstMaterialType = this.materialTypeVariants[0]
-			if (firstMaterialType) this.selectCurrentMaterialType(firstMaterialType)
+			if (firstMaterialType) await this.selectCurrentMaterialType(firstMaterialType)
 		},
 		async selectCurrentMaterialType(item) {
-			if (this.currentMaterialType && this.currentMaterialType.code === item.code) return
+			// if (this.currentMaterialType && this.currentMaterialType.code === item.code) return
 			this.currentMaterialType = item
 			await this.$nextTick()
 			const firstFacadeColor = this.colorVariants[0]
-			if (firstFacadeColor) this.selectFacadeColor(firstFacadeColor)
+			if (firstFacadeColor) await this.selectFacadeColor(firstFacadeColor)
 		},
 		selectFacadeColor(item) {
 			this.currentColor = item

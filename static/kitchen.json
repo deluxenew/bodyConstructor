@@ -2170,6 +2170,7 @@
 				"code": "597_716_0_solid_1",
 				"category": "facade_variant",
 				"constructorCode": "facade",
+				"imageMap": "/test/597x716_normalmap/52e23012-3457-4e86-9335-e0581b4a7619/",
 				"image": "/p/57757575757575/1b900ce9-5fae-4692-b2d3-d6a19aeccae5/",
 				"name": ""
 			},
@@ -2323,6 +2324,7 @@
 				"code": "297_716_0_solid_2",
 				"category": "facade_variant",
 				"constructorCode": "facade",
+				"imageMap": "/test/297x716_normalmap/f1d1f8c7-2cf5-42c2-a4f5-921341e65ebc/",
 				"image": "/p/536464364364364643/c90912de-466a-4640-a4f8-cd7978191981/"
 			},
 			{
@@ -4547,6 +4549,19 @@
 					{
 						"code": "mdf::villagio_cream::397_716_0_solid_2",
 						"path": "/p/6477547547547547575/a267f219-1fa9-4805-9a2e-b8c6446bd543/"
+					}
+				]
+			},
+			{
+				"code": "layer_3",
+				"images": [
+					{
+						"code": "mdf::larch::597_716_0_solid_1",
+						"path": "/test/597_716_0_solid_1/8e082d99-dc40-4d50-b441-02bce138d331/"
+					},
+					{
+						"code": "mdf::larch::297_716_0_solid_2",
+						"path": "/test/297x716/5d8ac738-1649-4eec-9d07-4d241e501b35/"
 					}
 				]
 			}

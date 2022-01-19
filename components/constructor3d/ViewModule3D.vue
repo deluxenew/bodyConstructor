@@ -30,9 +30,6 @@
 						ref="facades"
 						v-model="facadeConfig"
 						:caseModelCode="caseModelCode"
-						:selectedFacadeVariant="selectedFacadeVariant"
-						:selectedFacadeColor="selectedFacadeColor"
-						:selectedFacadeMaterial="selectedFacadeMaterial"
 						:selectedTableTop="selectedTableTop"
 						:options="facadeOptions"
 						@selectColor="selectFacadeColor"
@@ -63,6 +60,8 @@ import SelectCase from "./SelectCase.vue"
 import SelectFacade from "./SelectFacade.vue"
 import SelectTableTop from "./SelectTableTop.vue"
 import CalculateOrder from "./CalculateOrder"
+import HF from "./HelperFunctions"
+const { getImage } = HF
 
 export default {
 	name: "ViewModule3D",
@@ -87,9 +86,6 @@ export default {
 			selectedBoxType: null,
 
 			facadeConfig: null,
-			selectedFacadeVariant: null,
-			selectedFacadeColor: null,
-			selectedFacadeMaterial: null,
 
 			tableTopConfig: null,
 			selectedTableTop: null,
@@ -117,6 +113,9 @@ export default {
 		tableTopTextures() {
 			return this.config && this.config.tabletop.imgLayers[0].images || null
 		},
+		facadeTextures() {
+			return this.config && this.config.body.imgLayers[2].images || null
+		},
 		boxes() {
 			const { cases } = boxes
 			return cases
@@ -141,7 +140,6 @@ export default {
 		setOrderList(list) {
 			this.orderList = list
 		},
-
 		selectCaseConfig(v) {
 			this.caseModelCode = v
 		},
@@ -150,26 +148,24 @@ export default {
 			if (v) this.caseModelCode = v.userData.code
 			this.selectedBox = v
 		},
-		selectFacadeColor(v) {
-		  this.facadeConfig = v
+		async selectFacadeColor(v) {
+			this.facadeConfig = v
+
+			const { materialCode, facadeVariant, colorCode, map } = v
+			const firstFacadeEl = facadeVariant && facadeVariant.split("##")[0]
+			const facadeCode = firstFacadeEl ? firstFacadeEl : facadeVariant
+			const facadeLayerCode = `${materialCode}::${colorCode}::${facadeCode}`
+			const findTexture = this.facadeTextures && this.facadeTextures
+				.find(({ code }) => code === facadeLayerCode)
+			if (findTexture) this.facadeConfig["colorUrl"] = await getImage(`https://cdn.akson.ru/webp${findTexture.path}0.png`)
+			if (!map) return
+			const textureFacadeMap = await getImage(`https://cdn.akson.ru/webp${map}0.png`)
+			if (textureFacadeMap) this.facadeConfig["textureMap"] = textureFacadeMap
 		},
 		selectTableTop(v) {
 			this.selectedTableTop = v
 		},
 		async selectTableTopConfig(item) {
-			function getImage(url) {
-				return new Promise((resolve, reject) => {
-					const img = new Image()
-					img.onload = function() {
-						resolve(url)
-					}
-					img.onerror = function() {
-						reject(url)
-					}
-					img.src = url
-				})
-			}
-
 			const {
 				color, type, maxWidth, minWidth, url, height,
 				materialType, colorTitle

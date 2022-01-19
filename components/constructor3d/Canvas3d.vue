@@ -49,10 +49,16 @@ import {
 } from "three"
 import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
-import boxes from "./configs/boxes/BoxesList"
+
+import * as boxes from "./configs/boxes/BoxesList"
+import * as facades from "./FacadesListConfig"
+
 import { getTableTop } from "./configs/TableTop"
 import TableTopResizer from "./TableTopResizer"
 import { UiButton } from "@aksonorg/design"
+
+import Materials from "./configs/Materials"
+const { textureMappedMaterial } = Materials
 
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,
@@ -75,9 +81,9 @@ export default {
 			type: String,
 			default: "",
 		},
-    facadeConfig: {
-      type: Object,
-      default: () => null,
+		facadeConfig: {
+			type: Object,
+			default: () => null,
 		},
 		tableTopConfig: {
 			type: Object,
@@ -93,7 +99,7 @@ export default {
 			selectedBox: null,
 			selectedTableTop: null,
 			mixer: null,
-			// clock: new THREE.Clock(),
+			clock: new THREE.Clock(),
 			animations: [],
 			isShowSizes: true,
 
@@ -141,12 +147,6 @@ export default {
 			const additional = materialMaxWidth / 100 - TableTopTotalWidth
 			if (!tableTopLocked) TableTopTotalWidth += additional
 			return TableTopTotalWidth * 100
-		},
-		caseModel() {
-			if (this.selectedBox) return boxes[this.selectedBox.userData.code.replaceAll("-", "_")]
-			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "_") || ""
-			const model = boxes[caseModelCodeFormatted]
-			if (model) return model
 		},
 		isMoveLeftActive() {
 			return this.isMoveButtonActive(true)
@@ -230,7 +230,7 @@ export default {
 		widthLeftTop() {
 			const penalBoxes = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft
 				.filter(({ userData: { configType } }) => configType === "penalBox")
-			const modelWidth = this.caseModel && this.caseModel.userData.width || 10
+			const modelWidth = this.caseModel() && this.caseModel().userData.width || 10
 			return HF.getPlaceWidth({
 				arr: this.sceneObjects.topLeft,
 				additionalArr: this.sceneObjects.topRight,
@@ -241,7 +241,7 @@ export default {
 		widthRightTop() {
 			const penalBoxes = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight
 				.filter(({ userData: { configType } }) => configType === "penalBox")
-			const modelWidth = this.caseModel && this.caseModel.userData.width || 10
+			const modelWidth = this.caseModel() && this.caseModel().userData.width || 10
 			return HF.getPlaceWidth({
 				arr: this.sceneObjects.topRight,
 				additionalArr: this.sceneObjects.topLeft,
@@ -286,6 +286,15 @@ export default {
 			this.setControlsVisible()
 			this.setControlsPosition()
 			this.$emit("setOrderList", this.orderList)
+		},
+		async facadeConfig(v) {
+			if (this.selectedBox && v) {
+				await this.$nextTick()
+				if (this.selectedBox && this.selectedBox.userData.facade !== v.facadeVariant) {
+					this.replaceFacade(v)
+				}
+			}
+			if (!v && this.selectedBox) this.removeFacade()
 		},
 		async caseModelCode(v) {
 			await this.$nextTick()
@@ -333,11 +342,11 @@ export default {
 
 			vm.renderer.render(vm.scene, vm.camera)
 
-			// const delta = vm.clock.getDelta()
-			//
-			// if (vm.mixer) {
-			// 	vm.mixer.update(delta)
-			// }
+			const delta = vm.clock.getDelta()
+
+			if (vm.mixer) {
+				vm.mixer.update(delta)
+			}
 		}
 
 		render()
@@ -349,6 +358,13 @@ export default {
 			controlBoxes.forEach((control) => this.scene.add(control))
 			this.$refs.canvas.appendChild(this.renderer.domElement)
 			this.selectCase()
+		},
+		caseModel(isLeft) {
+			if (this.selectedBox) {
+				return boxes[this.selectedBox.userData.code.replaceAll("-", "")]()
+			}
+			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "") || ""
+			if (caseModelCodeFormatted) return boxes[caseModelCodeFormatted]()
 		},
 		clearSelect() {
 			this.selectedBox = null
@@ -375,6 +391,34 @@ export default {
 			this[addMethod](sort)
 			if (!this.tableTopConfig) return
 			this.replaceTableTops()
+		},
+		async replaceFacade(config) {
+			const { caseModelCode, materialCode, facadeVariant, materialTypeCode, colorCode, colorUrl, textureMap } = config
+
+			const getMappedTexture = async (mapUrl, textureUrl, facadeWidth, facadeHeight) => {
+				const loadedMap = await HF.getImage(mapUrl)
+				const loadedTexture = await HF.getImage(textureUrl)
+				const mappedTexture = textureMappedMaterial({ loadedMap, loadedTexture, width: facadeWidth, height: facadeHeight, sideDepth: 0.16 })
+				return mappedTexture
+			}
+
+			const facade = this.selectedBox.children.find(({ name }) => name === "facade")
+			if (facade) {
+				console.log(facade, "facade")
+				facade.children.forEach((el) => {
+					const { userData: { facadeWidth, facadeHeight } } = el
+					console.log(el.uuid, "el.uuid")
+					getMappedTexture(colorUrl, textureMap, facadeWidth, facadeHeight)
+				})
+			}
+			const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](this.facadeConfig.facadeVariant, true)
+			console.log(newFacadeGroup)
+			this.selectedBox.add(newFacadeGroup)
+			const newObjFacade = facades.getFacade(1, 2, 3, "123")
+			// console.log(newObjFacade, "newObjFacade")
+		},
+		removeFacade() {
+
 		},
 		swapCam() {
 			if (this.positionNumber < 3) this.positionNumber += 1
@@ -475,7 +519,7 @@ export default {
 			}
 		},
 		setControlsVisible() {
-			const isAngular = this.caseModel && this.caseModel.userData.configType === "angularBox"
+			const isAngular = this.caseModel() && this.caseModel().userData.configType === "angularBox"
 			this.sceneObjects.control.forEach((el) => {
 				const { userData: { pos, watcher, position } } = el
 				const isExistAngular = this.sceneObjects[pos] && this.sceneObjects[pos].find(({ userData: { configType } }) => configType === "angularBox")
@@ -493,8 +537,8 @@ export default {
 			})
 		},
 		addBoxToScene(pos, side, sort) {
-			if (!this.caseModel) return
-			const box = this.caseModel.clone()
+			if (!this.caseModel()) return
+			const box = this.caseModel().clone()
 			const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
 			const isAngular = box.userData.configType === "angularBox"
 			if (isAngular && this.sceneObjects[pos]) this.sceneObjects[pos].forEach((el) => el.userData.sort++)

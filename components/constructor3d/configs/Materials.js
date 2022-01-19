@@ -1,4 +1,4 @@
-import { MeshStandardMaterial, TextureLoader } from "three"
+import { BoxGeometry, Mesh, MeshStandardMaterial, TextureLoader } from "three"
 
 const defaultMaterial = () => {
 	const material = new MeshStandardMaterial({
@@ -32,6 +32,29 @@ const textureMaterial = (url) => {
 	return facadeMaterials
 }
 
+const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDepth }) => {
+	const geometry = new BoxGeometry(width, height, sideDepth)
+
+	const wallTextureLoader = new TextureLoader()
+	const wallNormalTexture = wallTextureLoader.load(loadedMap)
+	const wallMaterial = new MeshStandardMaterial({
+		color: 0xffedde,
+		map: new TextureLoader(loadedTexture)
+	})
+	wallMaterial.roughness = 1
+	wallMaterial.metalness = 0.2
+	wallMaterial.normalMap = wallNormalTexture
+
+	const wall = new Mesh(geometry, wallMaterial)
+	wall.receiveShadow = true
+
+	wall.material.normalMap.repeat.set(8 * 2, 4 * 2)
+	wall.material.needsUpdate = true
+	wall.name = "texture"
+
+	return wallMaterial
+}
+
 const legMaterial = () => {
 	const leg = new MeshStandardMaterial({ color: 0xffffff })
 	leg.roughness = 0.1
@@ -42,5 +65,6 @@ const legMaterial = () => {
 export default {
 	defaultMaterial,
 	textureMaterial,
+	textureMappedMaterial,
 	legMaterial,
 }

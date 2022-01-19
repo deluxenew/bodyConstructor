@@ -32,7 +32,7 @@ const getMaterial = (url) => {
 	return facadeMaterials
 }
 
-const getFacade = (colorId, width, height, url) => {
+export const getFacade = (colorId, width, height, url) => {
 	const material = getMaterial(url)
 
 	const geometry = new BoxGeometry(width, height, sideDepth)
