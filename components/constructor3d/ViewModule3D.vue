@@ -148,7 +148,7 @@ export default {
 			if (v) this.caseModelCode = v.userData.code
 			this.selectedBox = v
 		},
-		async selectFacadeColor(v) {
+		selectFacadeColor(v) {
 			this.facadeConfig = v
 
 			const { materialCode, facadeVariant, colorCode, map } = v
@@ -157,9 +157,9 @@ export default {
 			const facadeLayerCode = `${materialCode}::${colorCode}::${facadeCode}`
 			const findTexture = this.facadeTextures && this.facadeTextures
 				.find(({ code }) => code === facadeLayerCode)
-			if (findTexture) this.facadeConfig["colorUrl"] = await getImage(`https://cdn.akson.ru/webp${findTexture.path}0.png`)
+			if (findTexture) this.facadeConfig["colorUrl"] = `https://cdn.akson.ru/webp${findTexture.path}0.png`
 			if (!map) return
-			const textureFacadeMap = await getImage(`https://cdn.akson.ru/webp${map}0.png`)
+			const textureFacadeMap = `https://cdn.akson.ru/webp${map}0.png`
 			if (textureFacadeMap) this.facadeConfig["textureMap"] = textureFacadeMap
 		},
 		selectTableTop(v) {

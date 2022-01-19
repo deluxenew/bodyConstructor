@@ -63,7 +63,7 @@ const { textureMappedMaterial } = Materials
 const {
 	scene, renderer, spotLights, camera, walls, controlBoxes,
 } = StartLoader
-const { fromTo, camPos, camToTableTop } = HF
+const { fromTo, camPos, camToTableTop, getImage } = HF
 
 const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 600
@@ -290,9 +290,7 @@ export default {
 		async facadeConfig(v) {
 			if (this.selectedBox && v) {
 				await this.$nextTick()
-				if (this.selectedBox && this.selectedBox.userData.facade !== v.facadeVariant) {
-					this.replaceFacade(v)
-				}
+				await this.replaceFacade(this.facadeConfig)
 			}
 			if (!v && this.selectedBox) this.removeFacade()
 		},
@@ -394,27 +392,36 @@ export default {
 		},
 		async replaceFacade(config) {
 			const { caseModelCode, materialCode, facadeVariant, materialTypeCode, colorCode, colorUrl, textureMap } = config
+			const loadedMap = await getImage(textureMap)
+			// .then((data) => texture = data)
+			const loadedTexture = await getImage(colorUrl)
+			// .then((data) => map = data)
+			// console.log(map, texture)
+			const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](this.facadeConfig.facadeVariant, true)
+			// console.log(newFacadeGroup)
+			this.selectedBox.add(newFacadeGroup)
+			// await this.$nextTick()
 
-			const getMappedTexture = async (mapUrl, textureUrl, facadeWidth, facadeHeight) => {
-				const loadedMap = await HF.getImage(mapUrl)
-				const loadedTexture = await HF.getImage(textureUrl)
-				const mappedTexture = textureMappedMaterial({ loadedMap, loadedTexture, width: facadeWidth, height: facadeHeight, sideDepth: 0.16 })
-				return mappedTexture
-			}
+
+			// console.log(loadedMap, loadedTexture)
+			// const getMappedTexture = async (mapUrl, textureUrl, facadeWidth, facadeHeight) => {
+			// 	//
+			// 	return ""
+			// }
 
 			const facade = this.selectedBox.children.find(({ name }) => name === "facade")
 			if (facade) {
 				console.log(facade, "facade")
 				facade.children.forEach((el) => {
+					console.log(el, "el")
 					const { userData: { facadeWidth, facadeHeight } } = el
-					console.log(el.uuid, "el.uuid")
-					getMappedTexture(colorUrl, textureMap, facadeWidth, facadeHeight)
+					const mappedTexture = textureMappedMaterial({ loadedMap, loadedTexture, width: facadeWidth, height: facadeHeight, sideDepth: 0.16 })
+					console.log(mappedTexture)
+					el.push(mappedTexture)
 				})
 			}
-			const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](this.facadeConfig.facadeVariant, true)
-			console.log(newFacadeGroup)
-			this.selectedBox.add(newFacadeGroup)
-			const newObjFacade = facades.getFacade(1, 2, 3, "123")
+
+			// const newObjFacade = facades.getFacade(1, 2, 3, "123")
 			// console.log(newObjFacade, "newObjFacade")
 		},
 		removeFacade() {

@@ -52,7 +52,7 @@ const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDe
 	wall.material.needsUpdate = true
 	wall.name = "texture"
 
-	return wallMaterial
+	return wall
 }
 
 const legMaterial = () => {
