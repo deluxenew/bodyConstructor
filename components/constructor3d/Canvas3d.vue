@@ -51,13 +51,13 @@ import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
 
 import * as boxes from "./configs/boxes/BoxesList"
-import * as facades from "./FacadesListConfig"
 
 import { getTableTop } from "./configs/TableTop"
 import TableTopResizer from "./TableTopResizer"
 import { UiButton } from "@aksonorg/design"
 
 import Materials from "./configs/Materials"
+
 const { textureMappedMaterial } = Materials
 
 const {
@@ -288,7 +288,6 @@ export default {
 		},
 		async facadeConfig(v) {
 			if (this.selectedBox && v) {
-				await this.$nextTick()
 				await this.replaceFacade(this.facadeConfig)
 			}
 			if (!v && this.selectedBox) this.removeFacade()
@@ -357,12 +356,13 @@ export default {
 			this.$refs.canvas.appendChild(this.renderer.domElement)
 			this.selectCase()
 		},
-		caseModel(isLeft) {
+		caseModel() {
+			const facadeName = this.facadeConfig? this.facadeConfig.facadeVariant : null
 			if (this.selectedBox) {
-				return boxes[this.selectedBox.userData.code.replaceAll("-", "")]()
+				return boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeName)
 			}
 			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "") || ""
-			if (caseModelCodeFormatted) return boxes[caseModelCodeFormatted]()
+			if (caseModelCodeFormatted) return boxes[caseModelCodeFormatted](facadeName)
 		},
 		clearSelect() {
 			this.selectedBox = null
@@ -392,36 +392,48 @@ export default {
 		},
 		async replaceFacade(config) {
 			const { caseModelCode, materialCode, facadeVariant, materialTypeCode, colorCode, colorUrl, textureMap } = config
-			const loadedMap = await getImage(textureMap)
-			// .then((data) => texture = data)
-			const loadedTexture = await getImage(colorUrl)
-			// .then((data) => map = data)
-			// console.log(map, texture)
-			const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](this.facadeConfig.facadeVariant, true)
-			// console.log(newFacadeGroup)
-			this.selectedBox.add(newFacadeGroup)
-			// await this.$nextTick()
-
-
-			// console.log(loadedMap, loadedTexture)
-			// const getMappedTexture = async (mapUrl, textureUrl, facadeWidth, facadeHeight) => {
-			// 	//
-			// 	return ""
-			// }
-
 			const facade = this.selectedBox.children.find(({ name }) => name === "facade")
-			if (facade) {
-				console.log(facade, "facade")
-				facade.children.forEach((el) => {
+			console.log(colorUrl, materialCode, facadeVariant, caseModelCode)
+			if (!colorUrl || !materialCode || !facadeVariant || !caseModelCode) return
+			if (!facade) {
+				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
+				newFacadeGroup.children.forEach((el) => {
 					const { userData: { facadeWidth, facadeHeight, positionX } } = el
-					const mappedTexture = textureMappedMaterial({ loadedMap, loadedTexture, width: facadeWidth, height: facadeHeight, sideDepth: 0.16 })
-					mappedTexture.position.x += positionX
-					el.add(mappedTexture)
+					const facadeTexture = textureMappedMaterial({
+						loadedMap: textureMap,
+						loadedTexture: colorUrl,
+						width: facadeWidth,
+						height: facadeHeight,
+						sideDepth: 0.16
+					})
+					facadeTexture.position.x += positionX
+					el.add(facadeTexture)
 				})
+				if (textureMap) await getImage(textureMap)
+				await getImage(colorUrl)
+				this.selectedBox.add(newFacadeGroup)
 			}
+			if (facade) {
+				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
+				newFacadeGroup.children.forEach((el) => {
+					const { userData: { facadeWidth, facadeHeight, positionX } } = el
+					const facadeTexture = textureMappedMaterial({
+						loadedMap: textureMap,
+						loadedTexture: colorUrl,
+						width: facadeWidth,
+						height: facadeHeight,
+						sideDepth: 0.16
+					})
+					facadeTexture.position.x += positionX
+					el.add(facadeTexture)
+				})
+				if (textureMap) await getImage(textureMap)
+				await getImage(colorUrl)
 
-			// const newObjFacade = facades.getFacade(1, 2, 3, "123")
-			// console.log(newObjFacade, "newObjFacade")
+				this.selectedBox.remove(facade)
+				await this.$nextTick()
+				this.selectedBox.add(newFacadeGroup)
+			}
 		},
 		removeFacade() {
 
@@ -499,8 +511,6 @@ export default {
 					const clip = new AnimationClip("Action", 1, [anim])
 					const mixer = new AnimationMixer(el)
 
-					// this.mixer = new AnimationMixer(el)
-
 					const clipAction = mixer.clipAction(clip)
 					clipAction.loop = THREE.LoopOnce
 					clipAction.clampWhenFinished = true
@@ -558,9 +568,29 @@ export default {
 				el.position.set(...getCoords(x, y, z, this[watcher]))
 			})
 		},
-		addBoxToScene(pos, side, sort) {
+		async addBoxToScene(pos, side, sort) {
 			if (!this.caseModel()) return
 			const box = this.caseModel()
+			const facade = box.children.find(({ name }) => name === "facade")
+			if (facade) {
+				const { caseModelCode, materialCode, facadeVariant, materialTypeCode, colorCode, colorUrl, textureMap } = this.facadeConfig
+				if (colorUrl && materialCode && facadeVariant && caseModelCode && colorCode && materialTypeCode) {
+					facade.children.forEach((el) => {
+						const { userData: { facadeWidth, facadeHeight, positionX } } = el
+						const facadeTexture = textureMappedMaterial({
+							loadedMap: textureMap,
+							loadedTexture: colorUrl,
+							width: facadeWidth,
+							height: facadeHeight,
+							sideDepth: 0.16
+						})
+						facadeTexture.position.x += positionX
+						el.add(facadeTexture)
+					})
+					if (textureMap) await getImage(textureMap)
+					await getImage(colorUrl)
+				}
+			}
 			const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
 			const isAngular = box.userData.configType === "angularBox"
 			if (isAngular && this.sceneObjects[pos]) this.sceneObjects[pos].forEach((el) => el.userData.sort++)
@@ -573,11 +603,11 @@ export default {
 			arrows.visible = this.isShowSizes
 			return box
 		},
-		addBottomLeftToScene(sort) {
-			this.scene.add(this.addBoxToScene("bottomLeft", "left", sort))
+		async addBottomLeftToScene(sort) {
+			this.scene.add(await this.addBoxToScene("bottomLeft", "left", sort))
 		},
-		addBottomRightToScene(sort) {
-			this.scene.add(HF.rotationY(this.addBoxToScene("bottomRight", "right", sort)))
+		async addBottomRightToScene(sort) {
+			this.scene.add(HF.rotationY(await this.addBoxToScene("bottomRight", "right", sort)))
 		},
 		addTopLeftToScene(sort) {
 			this.scene.add(this.addBoxToScene("topLeft", "left", sort))
@@ -789,7 +819,14 @@ export default {
 			const { userData: { index, commonIndex, pos, difference } } = newTableTop
 			if (difference && index === 0) {
 				this.sceneObjects.tableTop.forEach((el) => {
-					const { userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos, leftDifference: findLeftDifference } } = el
+					const {
+						userData: {
+							index: findIndex,
+							commonIndex: findCommonIndex,
+							pos: findPos,
+							leftDifference: findLeftDifference
+						}
+					} = el
 					if (findCommonIndex === commonIndex && findPos === pos) {
 						if (findIndex > index) el.userData.leftDifference = findLeftDifference ? difference + findLeftDifference : difference
 					}
@@ -810,7 +847,13 @@ export default {
 			this.scene.remove(this.selectedTableTop)
 
 			this.selectedTableTop = this.scene.children
-				.find(({ userData: { index: findIndex, commonIndex: findCommonIndex, pos: findPos } }) => index === findIndex && commonIndex === findCommonIndex && findPos === pos)
+				.find(({
+								 userData: {
+									 index: findIndex,
+									 commonIndex: findCommonIndex,
+									 pos: findPos
+								 }
+							 }) => index === findIndex && commonIndex === findCommonIndex && findPos === pos)
 		},
 		showSizes() {
 			this.isShowSizes = !this.isShowSizes

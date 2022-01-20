@@ -225,8 +225,9 @@ export default {
 			const firstFacadeColor = this.colorVariants[0]
 			if (firstFacadeColor) await this.selectFacadeColor(firstFacadeColor)
 		},
-		selectFacadeColor(item) {
+		async selectFacadeColor(item) {
 			this.currentColor = item
+			await this.$nextTick()
 			this.$emit("selectColor", this.config)
 		},
 	},

@@ -1,4 +1,5 @@
-import { BoxGeometry, Mesh, MeshStandardMaterial, TextureLoader, Group } from "three"
+import { BoxGeometry, Mesh, MeshStandardMaterial, TextureLoader } from "three"
+import HF from "../HelperFunctions"
 
 const defaultMaterial = () => {
 	const material = new MeshStandardMaterial({
@@ -34,7 +35,6 @@ const textureMaterial = (url) => {
 
 const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDepth }) => {
 	const geometry = new BoxGeometry(width, height, sideDepth)
-
 	const wallTextureLoader = new TextureLoader()
 	const wallNormalTexture = wallTextureLoader.load(loadedMap)
 	const wallMaterial = new MeshStandardMaterial({

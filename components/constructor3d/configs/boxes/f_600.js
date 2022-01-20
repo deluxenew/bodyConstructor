@@ -33,7 +33,7 @@ const facadeVariant1 = () => {
 	let qInitial = new Quaternion().setFromAxisAngle(xAxis, 0)
 	let qFinal = new Quaternion().setFromAxisAngle(xAxis, Math.PI / 2)
 
-	facadeLeft.position.set(-3, legsHeight / 2, depth /2)
+	facadeLeft.position.set(-2.99, legsHeight / 2, depth /2)
 
 	facadeLeft.userData.qFinal = qFinal
 	facadeLeft.userData.qInitial = qInitial
@@ -51,7 +51,7 @@ const facadeVariant2 = () => {
 	facadeLeft.userData.facadeWidth = 2.97
 	facadeLeft.userData.facadeHeight = 7.16
 	facadeLeft.userData.facadeOpenDirection = "left"
-	facadeLeft.userData.positionX = 1.5
+	facadeLeft.userData.positionX = 1.47
 
 	const xAxis = new Vector3(0, -1, 0)
 
@@ -71,7 +71,7 @@ const facadeVariant2 = () => {
 	facadeRight.userData.facadeWidth = 2.97
 	facadeRight.userData.facadeHeight = 7.16
 	facadeRight.userData.facadeOpenDirection = "right"
-	facadeRight.userData.positionX = -1.5
+	facadeRight.userData.positionX = -1.47
 
 	const qFinalR = new Quaternion().setFromAxisAngle(xAxis, -Math.PI / 2)
 
@@ -126,7 +126,7 @@ export const f_600 = (facadeName, onlyFacade) => {
 	caseGroup.add(beams)
 	caseGroup.add(shelf)
 
-	if (facadeName) caseGroup.add(facadeGroup)
+	if (facadeName) boxGroup.add(facadeGroup)
 
 	sideRight.position.set(width / 2 - sideDepth / 2, sideY, 0)
 	sideLeft.position.set(-width / 2 + sideDepth / 2, sideY, 0)
