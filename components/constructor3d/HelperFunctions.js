@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import * as boxes from "./configs/boxes/BoxesList"
 import { constants } from "./configs/boxes/constants"
 
 const { Math: threeMath } = THREE
@@ -109,11 +108,33 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 	}
 	return cameraPositions[`pos${position}`]
 }
-
+const cases = ["f150820",
+	"f300820",
+	"f400",
+	"f4008203b",
+	"f600",
+	"f6008202b",
+	"f6008203b",
+	"f600820oven",
+	"f6002140",
+	"f800",
+	"f800a",
+	"f8008202b",
+	"f8008203b",
+	"f4008201b",
+	"w150720",
+	"w300720",
+	"w400",
+	"w500360",
+	"w600",
+	"w600360",
+	"w600600",
+	"w800",
+	"w800a"]
 const recursiveFindBox = (obj) => {
 	if (!obj || !obj.parent) return null
 	const { parent } = obj
-	if ([...new Set(Object.keys(boxes))].includes(parent.name.replaceAll("_", "")) || parent.name === "tableTop") return parent
+	if (cases.includes(parent.name.replaceAll("_", "")) || parent.name === "tableTop") return parent
 	return recursiveFindBox(parent)
 }
 
@@ -189,7 +210,7 @@ const setCasesPosition = (boxes) => {
 	const angularPadding = 1.4
 	const angularSidePadding = 0.6
 
-	if (groupedBoxes.bottomLeft) {
+	if (!!groupedBoxes.bottomLeft) {
 		const isAngular = groupedBoxes.bottomRight && groupedBoxes.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
 		const padding = groupedBoxes.bottomRight && groupedBoxes.bottomRight[0].userData.depth + (isAngular ? wallPadding + angularSidePadding : 0) || 0
 		const angularBox = groupedBoxes.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
@@ -203,7 +224,7 @@ const setCasesPosition = (boxes) => {
 		})
 	}
 
-	if (groupedBoxes.bottomRight) {
+	if (!!groupedBoxes.bottomRight) {
 		const isAngular = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
 		const padding = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft[0].userData.depth + (isAngular ? wallPadding + angularSidePadding : 0) || 0
 		const angularBox = groupedBoxes.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
@@ -217,7 +238,7 @@ const setCasesPosition = (boxes) => {
 		})
 	}
 
-	if (groupedBoxes.topLeft) {
+	if (!!groupedBoxes.topLeft) {
 		const padding = groupedBoxes.topRight && groupedBoxes.topRight[0].userData.depth || 0
 		const angularBox = groupedBoxes.topLeft.find(({ userData: { configType } }) => configType === "angularBox")
 		const penalBoxes = groupedBoxes.bottomLeft && groupedBoxes.bottomLeft.filter(({ userData: { configType } }) => configType === "penalBox")
@@ -237,7 +258,7 @@ const setCasesPosition = (boxes) => {
 		})
 	}
 
-	if (groupedBoxes.topRight) {
+	if (!!groupedBoxes.topRight) {
 		const padding = groupedBoxes.topLeft && groupedBoxes.topLeft[0].userData.depth || 0
 		const angularBox = groupedBoxes.topRight.find(({ userData: { configType } }) => configType === "angularBox")
 		const penalBoxes = groupedBoxes.bottomRight && groupedBoxes.bottomRight.filter(({ userData: { configType } }) => configType === "penalBox")
@@ -260,15 +281,15 @@ const setCasesPosition = (boxes) => {
 
 const getPlaceWidth = function({ arr, additionalArr, penalBoxes, modelWidth }) {
 	let padding = 0
-	if (additionalArr && !(arr && arr.find(({ userData: { configType } }) => configType === "angularBox"))) {
-		padding = additionalArr[0].userData.depth
+	if (additionalArr && !(arr && arr.find(({ configType }) => configType === "angularBox"))) {
+		padding = additionalArr[0].depth
 	}
 
 	let currentPadding = 0
 	let fullWidth = 0
 
 	if (arr) {
-		arr.forEach(({ userData: { width, configType, penalPadding } }) => {
+		arr.forEach(({ width, penalPadding }) => {
 			fullWidth += width
 			if (penalPadding && currentPadding !== penalPadding) {
 				currentPadding = penalPadding

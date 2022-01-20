@@ -16,6 +16,7 @@ const facadeTextureLoader = new TextureLoader()
 const add = require("../img/add.png")
 
 const boxControl = (name, pos) => {
+	console.log("boxControl")
 	function createButton() {
 		const f_rect = function roundedRect(ctx, x, y, width, height, radius) {
 			ctx.moveTo(x, y + radius)

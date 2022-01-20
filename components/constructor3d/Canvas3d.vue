@@ -96,12 +96,12 @@ export default {
 			scene: scene(),
 			camera: camera(CANVAS_WIDTH, CANVAS_HEIGHT),
 			positionNumber: 1,
-			selectedBox: null,
 			selectedTableTop: null,
 			mixer: null,
 			clock: new THREE.Clock(),
 			animations: [],
 			isShowSizes: true,
+			selectedUuid: null,
 		}
 	},
 	computed: {
@@ -212,16 +212,16 @@ export default {
 		},
 		widthLeftBottom() {
 			return HF.getPlaceWidth({
-				arr: this.sceneObjects.bottomLeft,
-				additionalArr: this.sceneObjects.bottomRight,
+				arr: !!this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.map(({ userData }) => userData),
+				additionalArr: !!this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.map(({ userData }) => userData),
 				penalBoxes: null,
 				modelWidth: null
 			})
 		},
 		widthRightBottom() {
 			return HF.getPlaceWidth({
-				arr: this.sceneObjects.bottomRight,
-				additionalArr: this.sceneObjects.bottomLeft,
+				arr: !!this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.map(({ userData }) => userData),
+				additionalArr: !!this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.map(({ userData }) => userData),
 				penalBoxes: null,
 				modelWidth: null
 			})
@@ -229,23 +229,21 @@ export default {
 		widthLeftTop() {
 			const penalBoxes = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft
 				.filter(({ userData: { configType } }) => configType === "penalBox")
-			const modelWidth = this.caseModel() && this.caseModel().userData.width || 10
 			return HF.getPlaceWidth({
-				arr: this.sceneObjects.topLeft,
-				additionalArr: this.sceneObjects.topRight,
+				arr: !!this.sceneObjects.topLeft && this.sceneObjects.topLeft.map(({ userData }) => userData),
+				additionalArr: !!this.sceneObjects.topRight && this.sceneObjects.topRight.map(({ userData }) => userData),
 				penalBoxes,
-				modelWidth
+				modelWidth: this.modelWidth
 			})
 		},
 		widthRightTop() {
 			const penalBoxes = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight
 				.filter(({ userData: { configType } }) => configType === "penalBox")
-			const modelWidth = this.caseModel() && this.caseModel().userData.width || 10
 			return HF.getPlaceWidth({
-				arr: this.sceneObjects.topRight,
-				additionalArr: this.sceneObjects.topLeft,
+				arr: !!this.sceneObjects.topRight && this.sceneObjects.topRight.map(({ userData }) => userData),
+				additionalArr: !!this.sceneObjects.topLeft && this.sceneObjects.topLeft.map(({ userData }) => userData),
 				penalBoxes,
-				modelWidth
+				modelWidth: this.modelWidth
 			})
 		},
 		camPosition() {
@@ -255,10 +253,17 @@ export default {
 				return camToTableTop(this.selectedTableTop)
 			}
 		},
+		modelWidth() {
+			return 10
+		},
+		selectedBox() {
+			if (!this.selectedUuid) return null
+			return this.scene.children.find(({ uuid }) => uuid === this.selectedUuid)
+		}
 	},
 	watch: {
 		selectedBox(v) {
-			this.$emit("selectBox", v ? { name: v.name, userData: v.userData } : null)
+			this.$emit("selectBox", v)
 			this.setControlsPosition()
 		},
 		selectedTableTop(v) {
@@ -357,7 +362,7 @@ export default {
 			this.selectCase()
 		},
 		caseModel() {
-			const facadeName = this.facadeConfig? this.facadeConfig.facadeVariant : null
+			const facadeName = this.facadeConfig ? this.facadeConfig.facadeVariant : null
 			if (this.selectedBox) {
 				return boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeName)
 			}
@@ -365,7 +370,7 @@ export default {
 			if (caseModelCodeFormatted) return boxes[caseModelCodeFormatted](facadeName)
 		},
 		clearSelect() {
-			this.selectedBox = null
+			this.selectedUuid = null
 			const vm = this
 
 			function clearHelpers() {
@@ -539,7 +544,7 @@ export default {
 			if (selectedObject) {
 				const { userData: { type, sort } } = selectedObject
 				this.scene.remove(selectedObject)
-				this.selectedBox = null
+				this.selectedUuid = null
 				if (isReplace) return
 
 				if (!this.sceneObjects[type]) return
@@ -573,7 +578,15 @@ export default {
 			const box = this.caseModel()
 			const facade = box.children.find(({ name }) => name === "facade")
 			if (facade) {
-				const { caseModelCode, materialCode, facadeVariant, materialTypeCode, colorCode, colorUrl, textureMap } = this.facadeConfig
+				const {
+					caseModelCode,
+					materialCode,
+					facadeVariant,
+					materialTypeCode,
+					colorCode,
+					colorUrl,
+					textureMap
+				} = this.facadeConfig
 				if (colorUrl && materialCode && facadeVariant && caseModelCode && colorCode && materialTypeCode) {
 					facade.children.forEach((el) => {
 						const { userData: { facadeWidth, facadeHeight, positionX } } = el
@@ -620,13 +633,8 @@ export default {
 			const mouse = new THREE.Vector2()
 			const raycaster = new THREE.Raycaster()
 
-			window.addEventListener("click", onOuterClickHandler)
 			this.$refs.canvas.addEventListener("pointerdown", onPointerDown)
 			this.$refs.canvas.addEventListener("pointermove", onSelectGroup)
-
-			function onOuterClickHandler(event) {
-				// canvas
-			}
 
 			function clearHelpers(clearEdges, clearTransparent) {
 				vm.scene.children.forEach((el) => {
@@ -663,7 +671,7 @@ export default {
 				}
 			}
 
-			function onPointerDown(event) {
+			async function onPointerDown(event) {
 				if (event.target.className !== "controls") return
 				const canvasPos = vm.$refs.canvas.getBoundingClientRect()
 				mouse.x = ((event.clientX - canvasPos.x) / CANVAS_WIDTH) * 2 - 1
@@ -676,8 +684,6 @@ export default {
 					const { object } = intersects[0]
 					const controlActionName = HF.findActionName(object)
 
-					vm.$emit("setConfigName", "")
-
 					if (controlActionName) {
 						vm[controlActionName]()
 					} else {
@@ -689,15 +695,16 @@ export default {
 							edges.visible = true
 							transparent.visible = true
 							vm.selectedTableTop = findTableTop
-							vm.selectedBox = null
+							vm.selectedUuid = null
 							return
 						}
 						const findBox = HF.recursiveFindBox(object)
+						console.log("onPointerDown")
 
-						vm.selectedBox = findBox
 						vm.selectedTableTop = null
 
 						if (findBox) {
+							vm.selectedUuid = findBox.uuid
 							clearHelpers(true, true)
 							vm.$emit("getBoxName", vm.selectedBox?.name || null)
 

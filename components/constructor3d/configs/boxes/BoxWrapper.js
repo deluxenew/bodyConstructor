@@ -1,6 +1,4 @@
 import { Group } from "three"
-import { constants } from "./constants"
-const { sideDepth } = constants
 
 import { edgesHelper } from "../EdgesHelper"
 

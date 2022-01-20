@@ -36,6 +36,7 @@
 					)
 						div.tab__title {{item.name}}
 				horizontal-list-items(
+					:key="opened"
 					:items="colorVariants"
 					:currentItemCode="colorModel"
 					@selectItem="selectItem"

@@ -7,7 +7,6 @@
 					canvas3d(
 						v-bind="canvas3DBind"
 						ref="canvas"
-						@getBoxName="selectedBoxName = $event"
 						@selectBox="selectBox"
 						@selectTableTop="selectTableTop"
 						@removeTableTops="removeAllTableTops"
@@ -51,10 +50,6 @@
 
 <script>
 import Canvas3d from "./Canvas3d"
-import boxes from "./configs/boxes/BoxesList"
-// import facades from "./FacadesListConfig"
-import tableTops from "./configs/TableTop"
-
 import Module from "./module"
 import SelectCase from "./SelectCase.vue"
 import SelectFacade from "./SelectFacade.vue"
@@ -116,10 +111,6 @@ export default {
 		facadeTextures() {
 			return this.config && this.config.body.imgLayers[2].images || null
 		},
-		boxes() {
-			const { cases } = boxes
-			return cases
-		},
 	},
 	async mounted() {
 		const response = await fetch("/kitchen.json")
@@ -147,6 +138,7 @@ export default {
 			if (v) this.selectedBoxType = v.userData.pos
 			if (v) this.caseModelCode = v.userData.code
 			this.selectedBox = v
+			if (v) this.selectedBoxName = v.name
 		},
 		selectFacadeColor(v) {
 			this.facadeConfig = v
