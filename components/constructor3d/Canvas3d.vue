@@ -609,11 +609,11 @@ export default {
 		async addBottomRightToScene(sort) {
 			this.scene.add(HF.rotationY(await this.addBoxToScene("bottomRight", "right", sort)))
 		},
-		addTopLeftToScene(sort) {
-			this.scene.add(this.addBoxToScene("topLeft", "left", sort))
+		async addTopLeftToScene(sort) {
+			this.scene.add(await this.addBoxToScene("topLeft", "left", sort))
 		},
-		addTopRightToScene(sort) {
-			this.scene.add(HF.rotationY(this.addBoxToScene("topRight", "right", sort)))
+		async addTopRightToScene(sort) {
+			this.scene.add(HF.rotationY(await this.addBoxToScene("topRight", "right", sort)))
 		},
 		selectCase() {
 			const vm = this

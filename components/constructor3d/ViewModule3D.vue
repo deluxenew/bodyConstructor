@@ -151,16 +151,17 @@ export default {
 		selectFacadeColor(v) {
 			this.facadeConfig = v
 
-			const { materialCode, facadeVariant, colorCode, map } = v
+			const { materialCode, facadeVariant, colorCode } = v
 			const firstFacadeEl = facadeVariant && facadeVariant.split("##")[0]
 			const facadeCode = firstFacadeEl ? firstFacadeEl : facadeVariant
 			const facadeLayerCode = `${materialCode}::${colorCode}::${facadeCode}`
 			const findTexture = this.facadeTextures && this.facadeTextures
 				.find(({ code }) => code === facadeLayerCode)
 			if (findTexture) this.facadeConfig["colorUrl"] = `https://cdn.akson.ru/webp${findTexture.path}0.png`
-			if (!map) return
-			const textureFacadeMap = `https://cdn.akson.ru/webp${map}0.png`
-			if (textureFacadeMap) this.facadeConfig["textureMap"] = textureFacadeMap
+			if (findTexture && findTexture.pathMap) {
+				const textureFacadeMap = `https://cdn.akson.ru/webp${findTexture.pathMap}0.png`
+				if (textureFacadeMap) this.facadeConfig["textureMap"] = textureFacadeMap
+			}
 		},
 		selectTableTop(v) {
 			this.selectedTableTop = v

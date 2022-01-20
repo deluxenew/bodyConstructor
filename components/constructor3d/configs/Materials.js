@@ -44,7 +44,7 @@ const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDe
 
 	wallMaterial.roughness = 1
 	wallMaterial.metalness = 0.2
-	wallMaterial.normalMap = wallNormalTexture
+	if (loadedMap) wallMaterial.normalMap = wallNormalTexture
 
 	const facadeMaterials = [
 		wallMaterial,
@@ -57,10 +57,12 @@ const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDe
 
 	const wall = new Mesh(geometry, facadeMaterials)
 	wall.receiveShadow = true
-	wall.material.forEach((el) => {
-		if (el.normalMap && el.normalMap.repeat) el.normalMap.repeat.set(8 * 2, 4 * 2)
-		el.needsUpdate = true
-	})
+	if (loadedMap) {
+		wall.material.forEach((el) => {
+			if (el.normalMap && el.normalMap.repeat) el.normalMap.repeat.set(8 * 2, 4 * 2)
+			el.needsUpdate = true
+		})
+	}
 	wall.name = "texture"
 
 	return wall
