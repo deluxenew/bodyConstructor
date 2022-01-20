@@ -1,4 +1,4 @@
-import { BoxGeometry, Mesh, MeshStandardMaterial, TextureLoader } from "three"
+import { BoxGeometry, Mesh, MeshStandardMaterial, TextureLoader, Group } from "three"
 
 const defaultMaterial = () => {
 	const material = new MeshStandardMaterial({
@@ -39,7 +39,7 @@ const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDe
 	const wallNormalTexture = wallTextureLoader.load(loadedMap)
 	const wallMaterial = new MeshStandardMaterial({
 		color: 0xffedde,
-		map: new TextureLoader(loadedTexture)
+		map: wallTextureLoader.load(loadedTexture)
 	})
 	wallMaterial.roughness = 1
 	wallMaterial.metalness = 0.2

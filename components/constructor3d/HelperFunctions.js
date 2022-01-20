@@ -288,9 +288,10 @@ const getPlaceWidth = function({ arr, additionalArr, penalBoxes, modelWidth }) {
 
 const getFacadeGroup = (obj) => {
 	if (!obj) return null
-	const caseGroup = obj.children.find(({ name }) => name === "caseGroup")
+	const caseGroup = obj.children.find(({ name }) => name === "facade")
 	if (caseGroup) {
-		const facade = caseGroup.children.find(({ name }) => name === "facade")
+		const facade = caseGroup.children.filter(({ name }) => name === "facadeElement")
+		console.log(facade)
 		if (facade) return facade
 	}
 

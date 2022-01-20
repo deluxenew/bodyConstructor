@@ -102,7 +102,6 @@ export default {
 			clock: new THREE.Clock(),
 			animations: [],
 			isShowSizes: true,
-
 		}
 	},
 	computed: {
@@ -259,7 +258,7 @@ export default {
 	},
 	watch: {
 		selectedBox(v) {
-			this.$emit("selectBox", v)
+			this.$emit("selectBox", v ? { name: v.name, userData: v.userData } : null)
 			this.setControlsPosition()
 		},
 		selectedTableTop(v) {
@@ -341,9 +340,10 @@ export default {
 			vm.renderer.render(vm.scene, vm.camera)
 
 			const delta = vm.clock.getDelta()
-
-			if (vm.mixer) {
-				vm.mixer.update(delta)
+			if (vm.animations.length) {
+				vm.animations.forEach((el) => {
+					el.mixer.update(delta)
+				})
 			}
 		}
 
@@ -413,11 +413,10 @@ export default {
 			if (facade) {
 				console.log(facade, "facade")
 				facade.children.forEach((el) => {
-					console.log(el, "el")
-					const { userData: { facadeWidth, facadeHeight } } = el
+					const { userData: { facadeWidth, facadeHeight, positionX } } = el
 					const mappedTexture = textureMappedMaterial({ loadedMap, loadedTexture, width: facadeWidth, height: facadeHeight, sideDepth: 0.16 })
-					console.log(mappedTexture)
-					el.push(mappedTexture)
+					mappedTexture.position.x += positionX
+					el.add(mappedTexture)
 				})
 			}
 
@@ -482,31 +481,47 @@ export default {
 		},
 		openDoors() {
 			if (this.selectedBox) {
-				const { userData: { openedDoors } } = this.selectedBox
+				const { userData: { openedDoors }, uuid: boxUuid } = this.selectedBox
 
-				const facade = HF.getFacadeGroup(this.selectedBox)
-				if (!facade) return
-				const xAxis = new Vector3(0, -1, 0)
+				const facades = HF.getFacadeGroup(this.selectedBox)
 
-				const qInitial = new Quaternion().setFromAxisAngle(xAxis, 0)
-				const qFinal = new Quaternion().setFromAxisAngle(xAxis, THREE.Math.PI / 2)
-				const quaternionKF = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w])
-				const quaternionKFR = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w])
-				const anim = openedDoors ? quaternionKFR : quaternionKF
+				if (!facades) return
 
-				const clip = new AnimationClip("Action", 1, [anim])
-				this.mixer = new AnimationMixer(facade)
+				this.animations = this.animations.filter((el) => el.boxUuid !== boxUuid)
 
-				const clipAction = this.mixer.clipAction(clip)
-				clipAction.loop = THREE.LoopOnce
-				clipAction.clampWhenFinished = true
+				facades.forEach((el) => {
+					const { userData: { qInitial, qFinal }, uuid } = el
 
-				clipAction.play()
-				this.mixer.addEventListener("finished", (e) => {
-					// console.log(e)
+					const quaternionKF = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w])
+					const quaternionKFR = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w])
+					const anim = openedDoors ? quaternionKFR : quaternionKF
+
+					const clip = new AnimationClip("Action", 1, [anim])
+					const mixer = new AnimationMixer(el)
+
+					// this.mixer = new AnimationMixer(el)
+
+					const clipAction = mixer.clipAction(clip)
+					clipAction.loop = THREE.LoopOnce
+					clipAction.clampWhenFinished = true
+					clipAction.play()
+
+					this.selectedBox.userData.openedDoors = !openedDoors
+
+					this.animations.push({
+						mixer: mixer,
+						uuid,
+						boxUuid
+					})
 				})
-
-				this.selectedBox.userData.openedDoors = !openedDoors
+				this.animations.forEach((el) => {
+					const findBoxUuid = el.boxUuid
+					el.mixer.addEventListener("finished", (e) => {
+						const findIdx = this.animations
+							.findIndex(({ boxUuid }) => findBoxUuid === boxUuid)
+						this.animations.splice(findIdx, 1)
+					})
+				})
 			}
 		},
 		removeCase(isReplace = false) {
@@ -545,7 +560,7 @@ export default {
 		},
 		addBoxToScene(pos, side, sort) {
 			if (!this.caseModel()) return
-			const box = this.caseModel().clone()
+			const box = this.caseModel()
 			const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
 			const isAngular = box.userData.configType === "angularBox"
 			if (isAngular && this.sceneObjects[pos]) this.sceneObjects[pos].forEach((el) => el.userData.sort++)
