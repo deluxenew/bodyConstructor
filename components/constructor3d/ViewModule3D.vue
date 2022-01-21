@@ -56,6 +56,7 @@ import SelectFacade from "./SelectFacade.vue"
 import SelectTableTop from "./SelectTableTop.vue"
 import CalculateOrder from "./CalculateOrder"
 import HF from "./HelperFunctions"
+
 const { getImage } = HF
 
 export default {
@@ -87,6 +88,34 @@ export default {
 			orderList: null
 		}
 	},
+	watch: {
+		async isOnlyAngularBoxes(v) {
+			if (v) {
+				await this.$nextTick()
+				this.selectNextBox()
+			}
+		},
+		controlsVerticalPosition(v) {
+			if (v === "floor" && this.isAngularBottomBox ) {
+				this.selectedBoxName = "f-800-820-3b"
+				this.caseModelCode = "f-800-820-3b"
+			}
+			if ((v === "wall" && this.isAngularTopBox) || this.isFirstPenalBox) {
+				this.selectedBoxName = "w-800"
+				this.caseModelCode = "w-800"
+			}
+		},
+		isAngularBottomBox(v) {
+			if (v) {
+				this.selectNextBox()
+			}
+		},
+		isAngularTopBox(v) {
+			if (v) {
+				this.selectNextBox()
+			}
+		},
+	},
 	computed: {
 		canvas3DBind() {
 			return {
@@ -96,14 +125,50 @@ export default {
 				facadeConfig: this.facadeConfig
 			}
 		},
+		isAngularBottomBox() {
+			const cases = this.orderList && this.orderList.cases
+			const angularExist = cases && cases.find((el) => {
+				const field = el.find(({ id }) => id === "code")
+				if (field) return field.value === "f-800a"
+			})
+			return cases && !!angularExist
+		},
+		isAngularTopBox() {
+			const cases = this.orderList && this.orderList.cases
+			const angularExist = cases && cases.find((el) => {
+				const field = el.find(({ id }) => id === "code")
+				if (field) return field.value === "w-800a"
+			})
+			return cases && !!angularExist
+		},
+		isOnlyAngularBoxes() {
+			const cases = this.orderList && this.orderList.cases
+			const onlyAngularList = cases && cases.filter((el) => {
+				const field = el.find(({ id }) => id === "code")
+				if (field) return field.value.indexOf("a") > -1
+			})
+			return cases && onlyAngularList && cases.length === onlyAngularList.length && !this.selectedBox
+		},
+		isFirstPenalBox() {
+			const cases = this.orderList && this.orderList.cases
+			const bottomBoxes = cases && cases.filter((el) => {
+				const field = el.find(({ id }) => id === "code")
+				if (field) return field.value.indexOf("f-") > -1
+			})
+			return bottomBoxes && bottomBoxes[0] && bottomBoxes[0].find(({ id }) => id === "code").value === "f-600-2140"
+		},
 		bodyOptions() {
-			return this.config && this.config.body.options || null
+			return this.config && this.config.body.options
+				.map((el) => {
+					el.disabled = (el.code === "f-600-2140" && this.isOnlyAngularBoxes) || (this.isFirstPenalBox && el.code === "w-800a")
+					return el
+				}) || null
 		},
 		tableTopOptions() {
 			return this.config && this.config.tabletop.options || null
 		},
 		facadeOptions() {
-			return this.config && this.config.body.options|| null
+			return this.config && this.config.body.options || null
 		},
 		tableTopTextures() {
 			return this.config && this.config.tabletop.imgLayers[0].images || null
@@ -122,6 +187,17 @@ export default {
 		}
 	},
 	methods: {
+		selectNextBox() {
+			if (this.controlsVerticalPosition === "floor") {
+				if (this.caseModelCode !== "f-800a") return
+				this.selectedBoxName = "f-800-820-3b"
+				this.caseModelCode = "f-800-820-3b"
+			} else {
+				if (this.caseModelCode !== "w-800a") return
+				this.selectedBoxName = "w-800"
+				this.caseModelCode = "w-800"
+			}
+		},
 		discardSelectBox() {
 			this.$refs.canvas.clearSelect()
 		},
@@ -135,10 +211,13 @@ export default {
 			this.caseModelCode = v
 		},
 		selectBox(v) {
-			if (v) this.selectedBoxType = v.userData.pos
-			if (v) this.caseModelCode = v.userData.code
 			this.selectedBox = v
-			if (v) this.selectedBoxName = v.name
+			if (v) {
+				this.selectedBoxType = v.userData.pos
+				this.caseModelCode = v.userData.code
+				this.selectedBoxName = v.name
+				this.facadeConfig = v.userData.facadeConfig
+			}
 		},
 		selectFacadeColor(v) {
 			this.facadeConfig = v

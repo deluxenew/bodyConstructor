@@ -120,7 +120,7 @@ export default {
 	},
 	methods: {
 		isDisabled(item) {
-			return (this.selectedBox && item.code.indexOf("a") > -1) || (this.selectedBox && this.currentItemCode.indexOf("a") > -1 && item.code.indexOf("a") === -1)
+			return ( item.disabled)
 		},
 
 		async getSizes() {

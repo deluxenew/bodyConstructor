@@ -172,22 +172,32 @@ export default {
 		},
 		value: {
 			deep: true,
-			handler(v) {
+			async handler(v) {
 				if (v) {
-					for (let i in v) {
-						if (Object.prototype.hasOwnProperty.call(i, v) && !this.opened) {
-							this.opened = true
-						}
-					}
+					this.opened = true
+					// for (let i in v) {
+					// 	if (Object.prototype.hasOwnProperty.call(i, v) && !this.opened) {
+					//
+					// 	}
+					// }
 
 					const material = this.materialVariants.find(({ code }) => code === v.materialCode)
 					if (material) this.currentMaterial = material
+					await this.$nextTick()
 					const facadeVariant = this.facadeVariants.find(({ code }) => code === v.facadeVariant)
 					if (facadeVariant) this.currentFacade = facadeVariant
+					await this.$nextTick()
 					const materialType = this.materialTypeVariants.find(({ code }) => code === v.materialTypeCode)
 					if (materialType) this.currentMaterialType = materialType
+					await this.$nextTick()
 					const color = this.colorVariants.find(({ code }) => code === v.colorCode)
 					if (color) this.currentColor = color
+				} else {
+					this.currentMaterial = null
+					this.currentFacade = null
+					this.currentMaterialType = null
+					this.currentColor = null
+					this.opened = false
 				}
 			},
 		},
