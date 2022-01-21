@@ -23,7 +23,7 @@
 				div.select-elements__tabs
 					div.select-elements__tabs-item(
 						v-for="item in materialVariants"
-						:class="{active: item.code === materialModel}"
+						:class="{active: currentMaterial && item.code === currentMaterial.code}"
 						@click="selectMaterial(item)"
 					)
 						div.tab__title {{item.name}}
@@ -31,13 +31,13 @@
 					| Толщина:
 					div.select-elements__tabs-item.select-elements__buttons-item(
 						v-for="item in thicknessVariants"
-						:class="{active: item.code === thicknessModel}"
+						:class="{active: currentThickness &&  item.code === currentThickness.code}"
 						@click="selectThickness(item)"
 					)
 						div.tab__title {{item.name}}
 				horizontal-list-items(
 					:items="colorVariants"
-					:currentItemCode="colorModel"
+					:currentItemCode="currentColor && currentColor.code"
 					@selectItem="selectItem"
 				)
 </template>
@@ -78,9 +78,9 @@ export default {
 	},
 	data() {
 		return {
-			currentType: null,
+			currentMaterial: null,
 			currentThickness: null,
-			currentItem: null,
+			currentColor: null,
 			opened: false,
 		}
 	},
@@ -99,60 +99,39 @@ export default {
 		},
 		thicknessVariants() {
 			return this.options && this.options
-				.filter(({
-									 dependency,
-									 category
-								 }) => category === "thickness" && dependency[0].code === "material" && dependency[0].values.includes(this.materialModel))
+				.filter(({ dependency, category, code }) => {
+					const isType = category === "thickness"
+					const material = this.currentMaterial && this.currentMaterial.code
+					const findMaterial = dependency && dependency
+						.find(({ code, values }) => code === "material" && material && values.includes(material))
+
+					return isType && findMaterial
+				})
 		},
 		colorVariants() {
 			return this.options && this.options
-				.filter(({
-									 category,
-									 dependency
-								 }) => category === "color" && dependency[0] && dependency[0].values.includes(this.thicknessModel))
-				.sort((a, b) => {
-					if (a.code > b.code) return -1
-					if (a.code < b.code) return 1
-					if (a.code === b.code) return 0
+				.filter(({ dependency, category, code }) => {
+					const isType = category === "color"
+					const thickness = this.currentThickness && this.currentThickness.code
+					const findThickness = dependency && dependency
+						.find(({ code, values }) => code === "thickness" && thickness && values.includes(thickness))
+
+					return isType && findThickness
 				})
 		},
-		materialModel: {
-			get() {
-				return this.currentType || this.selectedBoxType || this.materialVariants && this.materialVariants[0].code
-			},
-			set(v) {
-				this.currentType = v
-			},
-		},
-		thicknessModel: {
-			get() {
-				return this.currentThickness || this.thicknessVariants[0]?.code
-			},
-			set(v) {
-				this.currentThickness = v
-			},
-		},
-		colorModel: {
-			get() {
-				return this.currentItem || this.colorVariants && this.colorVariants[0] && this.colorVariants[0].code || null
-			},
-			set(v) {
-				this.currentItem = v
-			},
-		},
 		materialObj() {
-			return this.materialVariants && this.materialVariants.find(({ code }) => code === this.materialModel)
+			return this.materialVariants && this.materialVariants.find(({ code }) => code === this.currentMaterial.code)
 		},
 		colorObj() {
-			return this.colorVariants && this.colorVariants.find(({ code }) => code === this.colorModel)
+			return this.colorVariants && this.colorVariants.find(({ code }) => code === this.currentColor.code)
 		},
 		imageUrl() {
-			const item = this.textures && this.textures.find(({ code }) => this.colorModel === code)
+			const item = this.textures && this.textures.find(({ code }) => this.currentColor.code === code)
 			if (item) return `https://cdn.akson.ru/webp${item.path}0.png`
 			return ""
 		},
 		materialRestrictions() {
-			const currentMaterial = this.materialVariants.find(({ code }) => code === this.materialModel)
+			const currentMaterial = this.materialVariants.find(({ code }) => code === this.currentMaterial.code)
 			if (currentMaterial) {
 				const { maxWidth, minWidth } = currentMaterial.restrictions.limitSize
 				return {
@@ -167,9 +146,9 @@ export default {
 		},
 		config() {
 			return {
-				type: this.materialModel,
-				height: this.thicknessModel / 100,
-				color: this.colorModel,
+				type: this.currentMaterial.code,
+				height: this.currentThickness.code / 100,
+				color: this.currentColor.code,
 				url: this.imageUrl,
 				maxWidth: this.materialRestrictions.maxWidth,
 				minWidth: this.materialRestrictions.minWidth,
@@ -179,41 +158,36 @@ export default {
 		},
 	},
 	methods: {
-		addTableTop() {
-			this.$emit("selectColor", this.config)
+		async addTableTop() {
+			await this.selectMaterial(this.materialVariants[0])
+			this.opened = true
 		},
-		toggleOpen() {
+		async toggleOpen() {
 			this.opened = !this.opened
 			if (this.opened && !this.value && this.materialVariants[0]) {
-				this.selectMaterial(this.materialModel)
+				await this.selectMaterial(this.materialVariants[0])
 			}
 		},
 		removeItem() {
 			this.$emit("remove")
-			this.currentItem = null
+			this.currentColor = null
 		},
-		selectMaterial({ code }) {
-			if (this.materialModel === code) return
-			this.materialModel = code
-			if (this.thicknessVariants && this.thicknessVariants[0]) {
-				this.thicknessModel = this.thicknessVariants[0].code
-			}
-			if (this.colorVariants && this.colorVariants[0]) {
-				this.colorModel = this.colorVariants[0].code
-				this.$emit("selectColor", this.config)
-			}
+		async selectMaterial(item) {
+			if (this.currentMaterial && this.currentMaterial.code === item.code) return
+			this.currentMaterial = item
+			await this.$nextTick()
+			const firstThicknessVariant = this.thicknessVariants[0]
+			if (firstThicknessVariant) await this.selectThickness(firstThicknessVariant)
 		},
-		selectThickness({ code }) {
-			if (this.thicknessModel === code) return
-			this.thicknessModel = code
-			if (this.colorVariants && this.colorVariants[0]) {
-				this.colorModel = this.colorVariants[0].code
-				this.$emit("selectColor", this.config)
-			}
+		async selectThickness(item) {
+			this.currentThickness = item
+			await this.$nextTick()
+			const firstColor = this.colorVariants[0]
+			if (firstColor) await this.selectItem(firstColor)
 		},
 		selectItem(item) {
 			if (!item) return
-			this.colorModel = item.code
+			this.currentColor = item
 			this.$emit("selectColor", this.config)
 		},
 	},
