@@ -149,7 +149,6 @@ export default {
 				materialTypeTitle: this.currentMaterialType && this.currentMaterialType.name || null,
 				colorCode: this.currentColor && this.currentColor.code || null,
 				colorTitle: this.currentColor && this.currentColor.name || null,
-				// map: this.currentColor && this.currentColor.pathMap || null,
 			}
 		},
 	},

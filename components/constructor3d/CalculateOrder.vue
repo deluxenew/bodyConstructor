@@ -17,27 +17,20 @@
 						:class="{'calc-form__col_name': field.id === 'size'}"
 					) {{field.value}}
 
-			//.calc-form__subtitle(v-if="facades.length") Фасады
-			//.calc-form__table(v-if="facades.length")
-			//  .calc-form__row.calc-form__row_header
-			//    .calc-form__col.calc-form__col_number №
-			//    .calc-form__col.calc-form__col_name Название
-			//    .calc-form__col Материал
-			//    .calc-form__col Размер
-			//    .calc-form__col Цвет
-			//    .calc-form__col Кол-во
-			//    .calc-form__col Цена, шт
-			//    .calc-form__col.calc-form__col_button
-			//  .calc-form__row(v-for="(item, index) in facades" :key="item.uuid")
-			//    .calc-form__col.calc-form__col_number {{index + 1}}
-			//    .calc-form__col.calc-form__col_name {{item.form}}
-			//    .calc-form__col {{item.material}}
-			//    .calc-form__col {{item.size}}
-			//    .calc-form__col {{item.color}}
-			//    .calc-form__col {{item.value}}
-			//    .calc-form__col {{item.price}}
-			//    .calc-form__col.calc-form__col_button
-			//      img.delete(:src="require('./img/delete.svg')" @click="removeItem({uuid: item.uuid, type: 'facades'})")
+			.calc-form__subtitle(v-if="facades.length") Фасады
+			.calc-form__table(v-if="facades.length")
+				.calc-form__row.calc-form__row_header
+					.calc-form__col.calc-form__col_number №
+					.calc-form__col(
+						v-for="field in facades[0]"
+						:class="{'calc-form__col_name': field.id === 'size'}"
+					) {{field.value ? field.title : ''}}
+				.calc-form__row(v-for="(item, index) in facades" :key="item.uuid")
+					.calc-form__col.calc-form__col_number {{index + 1}}
+					.calc-form__col(
+						v-for="field in item"
+						:class="{'calc-form__col_name': field.id === 'size'}"
+					) {{field.value}}
 
 			.calc-form__subtitle(v-if="tableTops.length") Столешницы
 			.calc-form__table(v-if="tableTops.length")
@@ -81,7 +74,15 @@ export default {
 				}, []) || []
 		},
 		facades() {
-			return this.orderList?.order?.facades || []
+			return this.orderList?.facades?.reduce((acc, el) => {
+				const existId = acc.findIndex((it) => it[0].value === el[0].value && it[3].value === el[3].value)
+				if (existId > -1) {
+					const quantityField = acc[existId].find(({ id }) => id === "quantity")
+					const elQuantityField = el.find(({ id }) => id === "quantity")
+					if (quantityField) quantityField.value += elQuantityField.value
+				} else acc.push(el.filter((it) => it.title))
+				return acc
+			}, []) || []
 		},
 		tableTops() {
 			return this.orderList?.tableTops?.map((el) => el.filter((it) => it.title)) || []

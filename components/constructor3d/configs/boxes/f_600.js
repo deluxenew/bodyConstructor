@@ -40,6 +40,7 @@ const facadeVariant1 = () => {
 
 	facadeGroup.add(facadeLeft)
 	facadeGroup.name = "facade"
+	facadeGroup.userData.facadeQuantity = 1
 	return facadeGroup
 }
 
@@ -83,6 +84,7 @@ const facadeVariant2 = () => {
 	facadeGroup.add(facadeRight)
 
 	facadeGroup.name = "facade"
+	facadeGroup.userData.facadeQuantity = 2
 	return facadeGroup
 }
 

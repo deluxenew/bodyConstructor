@@ -187,6 +187,13 @@ export default {
 				if (type) {
 					if (!acc[type]) acc[type] = []
 					acc[type].push(el)
+					if (el.userData.facadeConfig && el.userData.facadeQuantity) {
+						if (!acc["facades"]) acc["facades"] = []
+						acc["facades"].push({
+							...el.userData.facadeConfig,
+							quantity: el.userData.facadeQuantity
+						})
+					}
 				}
 				return acc
 			}, {})
@@ -198,7 +205,24 @@ export default {
 			let kitchen = {}
 			for (let i in this.sceneObjects) {
 				const cases = ["bottomRight", "bottomLeft", "topRight", "topLeft"]
-				if (i === "tableTop") kitchen["tableTops"] = this.sceneObjects[i].map(({ userData }) => HF.setOrderFields(userData))
+				if (i === "tableTop") {
+					kitchen["tableTops"] = this.sceneObjects[i]
+						.map(({ userData }) => HF.setOrderFields(userData))
+				}
+				if (i === "facades") {
+					kitchen["facades"] = this.sceneObjects[i]
+						.map(({ facadeVariant, materialTitle, materialTypeTitle, colorTitle, quantity }) => {
+							const sizeSplit = facadeVariant.split("_")
+							const size = `${sizeSplit[0]}x${sizeSplit[0]} мм`
+							return HF.setOrderFields({
+								size,
+								materialType: materialTitle,
+								productType: materialTypeTitle,
+								color: colorTitle,
+								quantity,
+							})
+						})
+				}
 				if (cases.includes(i)) {
 					this.sceneObjects[i]
 						.map(({ userData }) => HF.setOrderFields(userData))
@@ -296,6 +320,7 @@ export default {
 				await this.replaceFacade(this.facadeConfig)
 			}
 			if (!v && this.selectedBox) this.removeFacade()
+			this.$emit("setOrderList", this.orderList)
 		},
 		async caseModelCode(v) {
 			await this.$nextTick()
@@ -396,9 +421,8 @@ export default {
 			this.replaceTableTops()
 		},
 		async replaceFacade(config) {
-			const { caseModelCode, materialCode, facadeVariant, materialTypeCode, colorCode, colorUrl, textureMap } = config
+			const { caseModelCode, materialCode, facadeVariant, colorUrl, textureMap } = config
 			const facade = this.selectedBox.children.find(({ name }) => name === "facade")
-			console.log(colorUrl, materialCode, facadeVariant, caseModelCode)
 			if (!colorUrl || !materialCode || !facadeVariant || !caseModelCode) return
 			if (!facade) {
 				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
@@ -418,6 +442,8 @@ export default {
 				await getImage(colorUrl)
 				await this.$nextTick()
 				this.selectedBox.add(newFacadeGroup)
+				this.selectedBox.userData.facadeConfig = this.facadeConfig
+				this.selectedBox.userData.facadeQuantity = newFacadeGroup.userData.facadeQuantity
 			}
 			if (facade) {
 				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
@@ -437,8 +463,12 @@ export default {
 				await getImage(colorUrl)
 
 				this.selectedBox.remove(facade)
+				this.selectedBox.userData.facadeConfig = null
+				this.selectedBox.userData.facadeQuantity = 0
 
 				this.selectedBox.add(newFacadeGroup)
+				this.selectedBox.userData.facadeConfig = this.facadeConfig
+				this.selectedBox.userData.facadeQuantity = newFacadeGroup.userData.facadeQuantity
 			}
 		},
 		removeFacade() {
@@ -604,6 +634,8 @@ export default {
 					if (textureMap) await getImage(textureMap)
 					await getImage(colorUrl)
 				}
+				box.userData.facadeConfig = this.facadeConfig
+				box.userData.facadeQuantity = facade.userData.facadeQuantity
 			}
 			const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
 			const isAngular = box.userData.configType === "angularBox"
@@ -731,6 +763,7 @@ export default {
 					.sort((a, b) => a.sort - b.sort)
 
 				const leftTableTops = HF.getTableTops(leftSorted, isRightTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
+				await getImage(this.tableTopConfig.url)
 				leftTableTops.forEach(({ width, x, z, commonIndex, index, locked }, i) => {
 					const needDepthSize = (isExistAngular || !isRightTableTop) && i === 0 && this.isShowSizes
 					const newTableTop = this.getTableTopModel(width, needDepthSize, true)
@@ -745,7 +778,6 @@ export default {
 
 					this.scene.add(newTableTop)
 				})
-				await getImage(this.tableTopConfig.url)
 			}
 			if (this.sceneObjects.rightTableTop) {
 				const isLeftTableTop = !!this.sceneObjects.leftTableTop
@@ -779,8 +811,14 @@ export default {
 				this.scene.remove(selectedTableTop)
 				return
 			}
-			const selectedTableTop = this.scene.getObjectByProperty("uuid", this.selectedTableTop.uuid)
-			this.scene.remove(selectedTableTop)
+			// const selectedTableTop = this.scene.getObjectByProperty("uuid", this.selectedTableTop.uuid)
+			const { userData: { commonIndex, index } } = this.selectedTableTop
+			if (index === 1) {
+				const editedTableTop = this.sceneObjects.tableTop.find(({ userData: { commonIndex: findCommonIndex } }) => findCommonIndex === commonIndex )
+				if (editedTableTop) editedTableTop.userData.locked =false
+			}
+
+			this.scene.remove(this.selectedTableTop)
 			await this.$nextTick()
 			if (!this.sceneObjects.tableTop) this.$emit("removeTableTops")
 			this.selectedTableTop = null

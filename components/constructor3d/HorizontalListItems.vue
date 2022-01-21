@@ -64,6 +64,7 @@ export default {
 			handleHold: false,
 			itemsTranslate: [],
 			cbDeferTs: null,
+			posY: 0,
 		}
 	},
 	computed: {
@@ -108,12 +109,14 @@ export default {
 	mounted() {
 		window.addEventListener("mousedown", this.onHold)
 		window.addEventListener("mouseup", this.offHold)
-		window.addEventListener("mousewheel", this.onWheel)
+		this.$refs.list.addEventListener("wheel", this.onWheel, { passive: false, capture: true })
+		window.addEventListener("mouseenter", this.onEnter)
 		this.$emit("selectItem", this.currentItemCode)
 	},
 	beforeUnmount() {
 		window.removeEventListener("mousedown", this.onHold)
 		window.removeEventListener("mouseup", this.offHold)
+		this.$refs.list.removeEventListener("wheel", this.onWheel)
 	},
 	methods: {
 		isDisabled(item) {
@@ -158,11 +161,15 @@ export default {
 		},
 		onWheel(event) {
 			if (this.$refs.list && this.$refs.list.contains(event.target)) {
+				event.preventDefault()
 				const newPos = this.scroll + event.deltaY + event.deltaX
 				if (newPos > this.maxScroll) this.scroll = this.maxScroll
 				else if (newPos < 0) this.scroll = 0
 				else this.scroll = newPos
 			}
+		},
+		onEnter() {
+			this.posY = document.documentElement.scrollTop
 		},
 		onHold(event) {
 			if (this.$refs.list && this.$refs.list.contains(event.target) || (this.$refs.scroll && this.$refs.scroll.contains(event.target))) {
