@@ -8,14 +8,14 @@
 						div.item(v-for="item in 3")
 							svg(width="7" height="4" viewBox="0 0 7 4" fill="none")
 								path(d="M0 2C0 0.895431 0.89543 0 2 0H4.66667C5.77124 0 6.66667 0.895431 6.66667 2C6.66667 3.10457 5.77124 4 4.66667 4H2C0.895429 4 0 3.10457 0 2Z" :fill="item <= positionNumber ? '#5C6270' : '#E3E5E8'")
-				div.box-control(:class="{active: selectedBox}")
-					button.button.left(:disabled="!selectedBox || !isMoveLeftActive" @click="moveLeft")
+				div.box-control(:class="{active: selectedUuid}")
+					button.button.left(:disabled="!selectedUuid || !isMoveLeftActive" @click="moveLeft")
 						img(:src="require('./img/arrow.svg')")
-					button.button.right(:disabled="!selectedBox || !isMoveRightActive" @click="moveRight")
+					button.button.right(:disabled="!selectedUuid || !isMoveRightActive" @click="moveRight")
 						img(:src="require('./img/arrow.svg')")
-					button.button.open(:disabled="!selectedBox" @click="openDoors")
+					button.button.open(:disabled="!selectedUuid" @click="openDoors")
 						img(:src="require('./img/doors.svg')")
-					button.button.remove(:disabled="!selectedBox" @click="removeCase(false)")
+					button.button.remove(:disabled="!selectedUuid" @click="removeCase(false)")
 						img(:src="require('./img/trash.svg')")
 				//div.box-control.tabletop(v-if="selectedTableTop")
 				//	//button.button(:disabled="!selectedTableTop" @click="changeTableTopSize")
@@ -45,7 +45,7 @@
 
 import * as THREE from "three"
 import {
-	AnimationClip, AnimationMixer, Quaternion, QuaternionKeyframeTrack, Vector3
+	AnimationClip, AnimationMixer, QuaternionKeyframeTrack
 } from "three"
 import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
@@ -416,6 +416,7 @@ export default {
 				})
 				if (textureMap) await getImage(textureMap)
 				await getImage(colorUrl)
+				await this.$nextTick()
 				this.selectedBox.add(newFacadeGroup)
 			}
 			if (facade) {
@@ -436,7 +437,7 @@ export default {
 				await getImage(colorUrl)
 
 				this.selectedBox.remove(facade)
-				await this.$nextTick()
+
 				this.selectedBox.add(newFacadeGroup)
 			}
 		},
@@ -448,7 +449,7 @@ export default {
 			else this.positionNumber = 1
 		},
 		isMoveButtonActive(isLeft) {
-			if (!this.selectedBox) return false
+			if (!this.selectedUuid) return false
 			const {
 				userData: {
 					type, sort: selectedSort, side, configType: selectType,
@@ -723,10 +724,9 @@ export default {
 
 		async addTableTop() {
 			if (!this.tableTopConfig) return
-			await this.$nextTick()
 			if (this.sceneObjects.leftTableTop) {
 				const isRightTableTop = !!this.sceneObjects.rightTableTop
-				const isExistAngular = this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
+				const isExistAngular = !!this.sceneObjects.bottomLeft && this.sceneObjects.bottomLeft.find(({ userData: { configType } }) => configType === "angularBox")
 				const leftSorted = this.sceneObjects.leftTableTop
 					.sort((a, b) => a.sort - b.sort)
 
@@ -745,14 +745,16 @@ export default {
 
 					this.scene.add(newTableTop)
 				})
+				await getImage(this.tableTopConfig.url)
 			}
 			if (this.sceneObjects.rightTableTop) {
 				const isLeftTableTop = !!this.sceneObjects.leftTableTop
-				const isExistAngular = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
+				const isExistAngular = !!this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
 				const leftSorted = this.sceneObjects.rightTableTop
 					.sort((a, b) => a.sort - b.sort)
 
 				const leftTableTops = HF.getTableTops(leftSorted, isLeftTableTop, this.tableTopConfig.maxWidth, this.tableTopConfig.minWidth)
+				await getImage(this.tableTopConfig.url)
 				leftTableTops.forEach(({ width, x, z, commonIndex, index, locked }, i) => {
 					const needDepthSize = (isExistAngular || !isLeftTableTop) && i === 0 && this.isShowSizes
 					const newTableTop = this.getTableTopModel(width, needDepthSize)
@@ -794,7 +796,6 @@ export default {
 			newTableTop.userData.size = `${Math.round(width * 100)}*600*${Math.round(height * 100)}`
 			newTableTop.userData.materialType = materialType
 			newTableTop.userData.color = colorTitle
-
 
 			return newTableTop
 		},

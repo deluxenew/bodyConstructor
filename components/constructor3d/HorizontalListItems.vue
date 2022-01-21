@@ -108,6 +108,7 @@ export default {
 	mounted() {
 		window.addEventListener("mousedown", this.onHold)
 		window.addEventListener("mouseup", this.offHold)
+		window.addEventListener("mousewheel", this.onWheel)
 		this.$emit("selectItem", this.currentItemCode)
 	},
 	beforeUnmount() {
@@ -154,6 +155,14 @@ export default {
 					callback()
 				}
 			}, ms)
+		},
+		onWheel(event) {
+			if (this.$refs.list && this.$refs.list.contains(event.target)) {
+				const newPos = this.scroll + event.deltaY + event.deltaX
+				if (newPos > this.maxScroll) this.scroll = this.maxScroll
+				else if (newPos < 0) this.scroll = 0
+				else this.scroll = newPos
+			}
 		},
 		onHold(event) {
 			if (this.$refs.list && this.$refs.list.contains(event.target) || (this.$refs.scroll && this.$refs.scroll.contains(event.target))) {

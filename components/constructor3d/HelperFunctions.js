@@ -88,6 +88,7 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 			cameraPositionZ = camZ
 		}
 		//console.log(threeMath.degToRad(45 * 2) - Math.atan(Math.sqrt((h2 + h) * 2 + heightForCam ** 2) / (h2 + h)) * 2)
+
 		return {
 			cameraPositionX: 0,
 			cameraPositionY: 13,
@@ -100,6 +101,7 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 
 	const wr = Math.max(wrb, wrt)
 	const wl = Math.max(wlb, wlt)
+	console.log(wr, "wr", wl, "wl")
 
 	const cameraPositions = {
 		pos1: povSet(wl, wr, constants.camAngle, constants.camPositionZ, position),
