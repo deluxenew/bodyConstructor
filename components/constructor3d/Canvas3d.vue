@@ -325,7 +325,7 @@ export default {
 		async caseModelCode(v) {
 			await this.$nextTick()
 			this.setControlsVisible()
-			if (this.selectedBox && this.selectedBox.userData.code !== v) {
+			if (this.selectedBox && this.selectedBox.userData.code !== v && this.selectedBox.userData.pos === this.controlsVerticalPosition) {
 				const { userData: { sort, type } } = this.selectedBox
 				this.replaceBox(sort, type)
 				HF.setCasesPosition(this.scene.children)

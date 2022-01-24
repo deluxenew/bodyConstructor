@@ -20,6 +20,7 @@
 						:selectedBox="selectedBox"
 						:selectedTableTop="selectedTableTop"
 						:selectedBoxType="selectedBoxType"
+						:isOnlyAngularBoxes="isOnlyAngularBoxes"
 						@selectItem="selectCaseConfig"
 						@remove="removeCase"
 						@selectType="setControlsVerticalPosition"
@@ -96,14 +97,14 @@ export default {
 			}
 		},
 		controlsVerticalPosition(v) {
-			if (v === "floor" && this.isAngularBottomBox ) {
-				this.selectedBoxName = "f-800-820-3b"
-				this.caseModelCode = "f-800-820-3b"
-			}
-			if ((v === "wall" && this.isAngularTopBox) || this.isFirstPenalBox) {
-				this.selectedBoxName = "w-800"
-				this.caseModelCode = "w-800"
-			}
+			// if (v === "floor" && this.isAngularBottomBox ) {
+			// 	this.selectedBoxName = "f-800-820-3b"
+			// 	this.caseModelCode = "f-800-820-3b"
+			// }
+			// if ((v === "wall" && this.isAngularTopBox) || this.isFirstPenalBox) {
+			// 	this.selectedBoxName = "w-800"
+			// 	this.caseModelCode = "w-800"
+			// }
 		},
 		isAngularBottomBox(v) {
 			if (v) {
@@ -158,11 +159,7 @@ export default {
 			return bottomBoxes && bottomBoxes[0] && bottomBoxes[0].find(({ id }) => id === "code").value === "f-600-2140"
 		},
 		bodyOptions() {
-			return this.config && this.config.body.options
-				.map((el) => {
-					el.disabled = (el.code === "f-600-2140" && this.isOnlyAngularBoxes) || (this.isFirstPenalBox && el.code === "w-800a")
-					return el
-				}) || null
+			return this.config && this.config.body.options || null
 		},
 		tableTopOptions() {
 			return this.config && this.config.tabletop.options || null

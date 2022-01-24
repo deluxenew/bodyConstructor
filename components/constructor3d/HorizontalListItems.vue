@@ -120,7 +120,7 @@ export default {
 	},
 	methods: {
 		isDisabled(item) {
-			return ( item.disabled)
+			return item.disabled
 		},
 
 		async getSizes() {
@@ -142,7 +142,6 @@ export default {
 			else if (scroll < 0) this.scroll = 0
 			else this.scroll = this.maxScroll
 			if (Math.abs(this.scroll - this.positionX) > 0) this.hold = true
-
 
 			const cb = () => {
 				this.hold = false
@@ -173,7 +172,6 @@ export default {
 		},
 		onHold(event) {
 			if (this.$refs.list && this.$refs.list.contains(event.target) || (this.$refs.scroll && this.$refs.scroll.contains(event.target))) {
-				// if (this.$refs.scroll && this.$refs.scroll.contains(event.target)) this.handleHold = true
 				this.startScroll = event.clientX
 				window.addEventListener("mousemove", this.calcPositionMouse)
 			}

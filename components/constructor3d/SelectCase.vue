@@ -57,6 +57,10 @@ export default {
 			type: Object,
 			default: null,
 		},
+		isOnlyAngularBoxes: {
+			type: Boolean,
+			default: false,
+		},
 		value: {
 			type: String,
 			default: "",
@@ -74,11 +78,20 @@ export default {
 			return this.options && this.options.filter(({ category }) => category === "type")
 		},
 		bodyVariants() {
-			return this.options && this.options.filter(({ category, restrictions }) => category === "body" && restrictions.type.includes(this.currentTypeModel)).sort((a, b) => {
-				if (a.code > b.code) return -1
-				if (a.code < b.code) return 1
-				if (a.code === b.code) return 0
-			})
+			return this.options && this.options
+				.filter(({ category, restrictions }) => category === "body" && restrictions.type.includes(this.currentTypeModel))
+				.sort((a, b) => {
+					if (a.code > b.code) return -1
+					if (a.code < b.code) return 1
+					if (a.code === b.code) return 0
+				})
+				// .map((el) => {
+				// 	if (el.code === "f-600-2140" && this.isOnlyAngularBoxes) el.disabled = true
+				// 	if (this.selectedBox && this.selectedBox.name === "f_600_2140") {
+				// 		if (el.code === "w-800a" || el.code === "f-800a") el.disabled = false
+				// 	}
+				// 	return el
+				// })
 		},
 		selectedCase() {
 			return this.value
@@ -130,8 +143,9 @@ export default {
 			if (this.value && this.selectedBox) this.$emit("remove")
 		},
 		selectCurrentType(item) {
+			const notDisabled = this.bodyVariants && this.bodyVariants.find((el) => el.disabled === undefined).code && this.selectedBox && this.selectedBox.name !== "f_600_2140"
 			this.currentTypeModel = item.code
-			this.currentItemModel = this.bodyVariants && this.bodyVariants[0].code.replaceAll("_", "-")
+			this.currentItemModel = item.disabled ? notDisabled :this.bodyVariants && this.bodyVariants[0].code.replaceAll("_", "-")
 			this.$emit("selectType", item.code)
 			this.$emit("discardSelectBox")
 			this.$emit("selectItem", this.currentItemModel)
