@@ -538,11 +538,9 @@ export default {
 				this.animations = this.animations.filter((el) => el.boxUuid !== boxUuid)
 
 				facades.forEach((el) => {
-					const { userData: { qInitial, qFinal }, uuid } = el
+					const { userData: { quaternionOpen, quaternionClose }, uuid } = el
 
-					const quaternionKF = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w])
-					const quaternionKFR = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w])
-					const anim = openedDoors ? quaternionKFR : quaternionKF
+					const anim = openedDoors ? quaternionClose : quaternionOpen
 
 					const clip = new AnimationClip("Action", 1, [anim])
 					const mixer = new AnimationMixer(el)

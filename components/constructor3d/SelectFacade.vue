@@ -174,7 +174,7 @@ export default {
 			deep: true,
 			async handler(v) {
 				if (v) {
-					this.opened = true
+					if (v.caseModelCode) this.opened = true
 					// for (let i in v) {
 					// 	if (Object.prototype.hasOwnProperty.call(i, v) && !this.opened) {
 					//

@@ -1,8 +1,9 @@
-import { BoxGeometry, Group, Quaternion, Vector3 } from "three"
+import { BoxGeometry, Group } from "three"
 import { constants } from "./constants"
 import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
 import { mesh } from "./CustomMesh"
+import { getFacadeLeft, getFacadeRight } from "./FacadeAnimation"
 
 import Materials from "../Materials"
 
@@ -19,24 +20,18 @@ const { scale } = constants
 
 const sideY = (height - legsHeight) / 2 - sideDepth
 
+
 const facadeVariant1 = () => {
 	const facadeGroup = new Group()
-	const facadeLeft = new Group()
-	facadeLeft.name = "facadeElement"
-	facadeLeft.userData.facadeWidth = 5.97
-	facadeLeft.userData.facadeHeight = 7.16
-	facadeLeft.userData.facadeOpenDirection = "left"
-	facadeLeft.userData.positionX = 3
 
-	const xAxis = new Vector3(0, -1, 0)
-
-	let qInitial = new Quaternion().setFromAxisAngle(xAxis, 0)
-	let qFinal = new Quaternion().setFromAxisAngle(xAxis, Math.PI / 2)
+	const facadeLeft = getFacadeLeft({
+		width: 5.97,
+		height: 7.16,
+		positionX: 3,
+		direction: "left"
+	})
 
 	facadeLeft.position.set(-2.99, legsHeight / 2, depth /2)
-
-	facadeLeft.userData.qFinal = qFinal
-	facadeLeft.userData.qInitial = qInitial
 
 	facadeGroup.add(facadeLeft)
 	facadeGroup.name = "facade"
@@ -47,47 +42,31 @@ const facadeVariant1 = () => {
 const facadeVariant2 = () => {
 	const facadeGroup = new Group()
 
-	const facadeLeft = new Group()
-	facadeLeft.name = "facadeElement"
-	facadeLeft.userData.facadeWidth = 2.97
-	facadeLeft.userData.facadeHeight = 7.16
-	facadeLeft.userData.facadeOpenDirection = "left"
-	facadeLeft.userData.positionX = 1.47
-
-	const xAxis = new Vector3(0, -1, 0)
-
-	let qInitial = new Quaternion().setFromAxisAngle(xAxis, 0)
-	let qFinal = new Quaternion().setFromAxisAngle(xAxis, Math.PI / 2)
-
-	facadeLeft.userData.qFinal = qFinal
-	facadeLeft.userData.qInitial = qInitial
+	const facadeLeft = getFacadeLeft({
+		width: 2.97,
+		height: 7.16,
+		positionX: 1.47,
+		direction: "left"
+	})
 
 	facadeLeft.position.set(-2.97, legsHeight / 2, depth /2)
 
 	facadeGroup.add(facadeLeft)
 
-	const facadeRight = new Group()
-
-	facadeRight.name = "facadeElement"
-	facadeRight.userData.facadeWidth = 2.97
-	facadeRight.userData.facadeHeight = 7.16
-	facadeRight.userData.facadeOpenDirection = "right"
-	facadeRight.userData.positionX = -1.47
-
-	const qFinalR = new Quaternion().setFromAxisAngle(xAxis, -Math.PI / 2)
-
-	facadeRight.userData.qFinal = qFinalR
-	facadeRight.userData.qInitial = qInitial
+	const facadeRight = getFacadeRight({
+		width: 2.97,
+		height: 7.16,
+		positionX: -1.47,
+		direction: "right"
+	})
 
 	facadeRight.position.set(2.97, legsHeight / 2, depth /2)
 
 	facadeGroup.add(facadeRight)
-
 	facadeGroup.name = "facade"
 	facadeGroup.userData.facadeQuantity = 2
 	return facadeGroup
 }
-
 
 export const f_600 = (facadeName, onlyFacade) => {
 	let facadeGroup
