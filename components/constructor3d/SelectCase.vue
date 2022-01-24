@@ -6,12 +6,12 @@
           :src="require('./img/chevron.svg')"
           :class="{reverse: !opened}"
         )
-      div.select-elements__remove(
-        :class="{disabled: !selectedBox}"
-        @click="removeItem"
-      )
-        span Убрать
-        img(:src="require('./img/close.svg')")
+      //div.select-elements__remove(
+      //  :class="{disabled: !selectedBox}"
+      //  @click="removeItem"
+      //)
+      //  span Убрать
+      //  img(:src="require('./img/close.svg')")
     transition-expand
       div.select-elements__group(v-show="opened")
         div.select-elements__tabs

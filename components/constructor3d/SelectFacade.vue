@@ -6,12 +6,12 @@
 					:src="require('./img/chevron.svg')"
 					:class="{reverse: !opened}"
 				)
-			div.select-elements__remove(
-				:class="{disabled: !currentFacade}"
-				@click="removeItem"
-			)
-				span Убрать
-				img(:src="require('./img/close.svg')")
+			//div.select-elements__remove(
+			//	:class="{disabled: !currentFacade}"
+			//	@click="removeItem"
+			//)
+			//	span Убрать
+			//	img(:src="require('./img/close.svg')")
 		transition-expand
 			div.select-elements__group(v-show="opened")
 
@@ -175,11 +175,6 @@ export default {
 			async handler(v) {
 				if (v) {
 					if (v.caseModelCode) this.opened = true
-					// for (let i in v) {
-					// 	if (Object.prototype.hasOwnProperty.call(i, v) && !this.opened) {
-					//
-					// 	}
-					// }
 
 					const material = this.materialVariants.find(({ code }) => code === v.materialCode)
 					if (material) this.currentMaterial = material

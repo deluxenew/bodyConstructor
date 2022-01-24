@@ -6,18 +6,18 @@
 					:src="require('./img/chevron.svg')"
 					:class="{reverse: !opened}"
 				)
-			div.select-elements__remove(
-				v-if="value"
-				@click="removeItem"
-			)
-				span Убрать столешницы
-				img.select-elements__icon(:src="require('./img/close.svg')")
-			div.select-elements__remove(
-				v-else
-				@click="addTableTop"
-			)
-				span Добавить
-				img.select-elements__icon.select-elements__icon-add(:src="require('./img/close.svg')")
+			//div.select-elements__remove(
+			//	v-if="value"
+			//	@click="removeItem"
+			//)
+			//	span Убрать столешницы
+			//	img.select-elements__icon(:src="require('./img/close.svg')")
+			//div.select-elements__remove(
+			//	v-else
+			//	@click="addTableTop"
+			//)
+			//	span Добавить
+			//	img.select-elements__icon.select-elements__icon-add(:src="require('./img/close.svg')")
 		transition-expand
 			div.select-elements__group(v-show="opened")
 				div.select-elements__tabs

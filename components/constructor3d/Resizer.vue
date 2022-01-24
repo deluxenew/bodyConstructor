@@ -192,7 +192,7 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	height: 40px;
+	height: 56px;
 
 	&__scale {
 		position: relative;
@@ -278,8 +278,8 @@ export default {
 
 .handler {
 
-	width: 11px;
-	height: 13px;
+	width: 15px;
+	height: 24px;
 
 	&__img {
 		display: block;

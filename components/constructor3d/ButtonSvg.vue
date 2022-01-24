@@ -31,7 +31,8 @@ export default {
 	computed: {
 		classes() {
 			return {
-				disabled: this.disabled,
+				"disabled": this.disabled,
+				"text": this.text,
 				[this.appearance]: this.appearance,
 				[this.customClass]: this.customClass
 			}
@@ -45,7 +46,6 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	flex-direction: column;
 	padding: 4px;
 	width: 40px;
 	height: 40px;
@@ -57,6 +57,12 @@ export default {
 
 	svg path {
 		transition: .2s ease-in-out;
+	}
+
+	&.text {
+		width: auto;
+		padding: 4px 16px;
+		font-size: 14px;
 	}
 
 	&:disabled {

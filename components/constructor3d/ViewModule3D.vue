@@ -43,6 +43,11 @@
 						@remove="removeAllTableTops"
 						@selectColor="selectTableTopConfig"
 					)
+					ui-button(
+						style="width: 100%; margin-top: 24px"
+						text="Рассчитать стоимость"
+						@click="sendCalculate"
+					)
 
 			calculate-order(
 				:orderList="orderList"
@@ -57,6 +62,7 @@ import SelectFacade from "./SelectFacade.vue"
 import SelectTableTop from "./SelectTableTop.vue"
 import CalculateOrder from "./CalculateOrder"
 import HF from "./HelperFunctions"
+import { UiButton } from "@aksonorg/design"
 
 const { getImage } = HF
 
@@ -68,6 +74,7 @@ export default {
 		Module,
 		SelectCase,
 		SelectFacade,
+		UiButton,
 		SelectTableTop,
 	},
 	data() {
@@ -184,6 +191,9 @@ export default {
 		}
 	},
 	methods: {
+		sendCalculate() {
+
+		},
 		selectNextBox() {
 			if (this.controlsVerticalPosition === "floor") {
 				if (this.caseModelCode !== "f-800a") return
@@ -220,12 +230,53 @@ export default {
 			this.facadeConfig = v
 
 			const { materialCode, facadeVariant, colorCode } = v
-			const firstFacadeEl = facadeVariant && facadeVariant.split("##")[0]
-			const facadeCode = firstFacadeEl ? firstFacadeEl : facadeVariant
+			const firstFacadeEl1 = facadeVariant && facadeVariant.split("##")[0]
+			const firstFacadeEl1Q = firstFacadeEl1 && firstFacadeEl1[firstFacadeEl1.length -1]
+			const firstFacadeEl2 = facadeVariant && facadeVariant.split("##")[1]
+			const firstFacadeEl2Q = firstFacadeEl2 && firstFacadeEl2[firstFacadeEl2.length -1]
+			const firstFacadeEl3 = facadeVariant && facadeVariant.split("##")[2]
+			const firstFacadeEl3Q = firstFacadeEl3 && firstFacadeEl3[firstFacadeEl3.length -1]
+
+			const facadeCode = firstFacadeEl1 ? firstFacadeEl1.replace("_2", "_1") : facadeVariant
+			console.log(facadeCode, "facadeCode")
+			const colorUrls = []
 			const facadeLayerCode = `${materialCode}::${colorCode}::${facadeCode}`
+
 			const findTexture = this.facadeTextures && this.facadeTextures
 				.find(({ code }) => code === facadeLayerCode)
-			if (findTexture) this.facadeConfig["colorUrl"] = `https://cdn.akson.ru/webp${findTexture.path}0.png`
+
+			if (findTexture) {
+				colorUrls.push({
+					url: `https://cdn.akson.ru/webp${findTexture.path}0.png`,
+					quantity: firstFacadeEl1Q
+				})
+			}
+
+			if (firstFacadeEl2) {
+				const facadeLayerCode2 = `${materialCode}::${colorCode}::${firstFacadeEl2.replace("_2", "_1")}`
+				const findTexture2 = this.facadeTextures && this.facadeTextures
+					.find(({ code }) => code === facadeLayerCode2)
+				if (findTexture2) {
+					colorUrls.push({
+						url: `https://cdn.akson.ru/webp${findTexture2.path}0.png`,
+						quantity: firstFacadeEl2Q
+					})
+				}
+			}
+
+			if (firstFacadeEl3) {
+				const facadeLayerCode3 = `${materialCode}::${colorCode}::${firstFacadeEl3}`
+				const findTexture3 = this.facadeTextures && this.facadeTextures
+					.find(({ code }) => code === facadeLayerCode3)
+				if (findTexture3) {
+					colorUrls.push({
+						url: `https://cdn.akson.ru/webp${findTexture3.path}0.png`,
+						quantity: firstFacadeEl3Q
+					})
+				}
+			}
+
+			this.facadeConfig["colorUrls"] = colorUrls
 			if (findTexture && findTexture.pathMap) {
 				const textureFacadeMap = `https://cdn.akson.ru/webp${findTexture.pathMap}0.png`
 				if (textureFacadeMap) this.facadeConfig["textureMap"] = textureFacadeMap
@@ -266,6 +317,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@aksonorg/design/lib/index.css";
 
 .column {
 	display: flex;

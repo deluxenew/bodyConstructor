@@ -33,11 +33,17 @@
 			)
 				svg(width='5', height='8', viewbox='0 0 5 8', fill='none', xmlns='http://www.w3.org/2000/svg')
 					path(fill-rule='evenodd', clip-rule='evenodd', d='M0.666826 4C0.666826 3.82934 0.732159 3.65867 0.862159 3.52867L3.52883 0.862004C3.78949 0.601337 4.21083 0.601337 4.47149 0.862004C4.73216 1.12267 4.73216 1.544 4.47149 1.80467L2.26816 4.008L4.38816 6.20334C4.64349 6.46934 4.63616 6.89 4.37149 7.146C4.10683 7.402 3.68416 7.39467 3.42883 7.13L0.854159 4.46334C0.728826 4.33334 0.666826 4.16667 0.666826 4', fill='#E3E5E8')
+		color-choice(v-if="showMoreOptions" :openInfo="openInfo" :colorKey="Number(colorKey)" v-bind="optionsModalBinds" from="configurators" @save="optionSave")
+		button(@click="openColorChoiceModal") 123123
 </template>
 
 <script>
+import ColorChoice from "./ColorChoice/ColorChoice"
 export default {
 	name: "HorizontalListItems",
+	components: {
+		ColorChoice
+	},
 	props: {
 		items: {
 			type: Array,
@@ -65,10 +71,34 @@ export default {
 			itemsTranslate: [],
 			cbDeferTs: null,
 			posY: 0,
+			openInfo: "showActive",
+			colorKey: 1
 		}
 	},
 	computed: {
-
+		showMoreOptions() {
+			return true
+		},
+		optionsModalBinds() {
+			const items = this.items && this.items.map(({ code, image, active, name, color, imageDetail }, i) => {
+				return {
+					id: code,
+					img: image,
+					colorKey: i,
+					active,
+					name,
+					color,
+					imageDetail
+				}
+			}) || []
+			return {
+				title: "Все варианты",
+				items,
+				preview: false,
+				modalName: "OtherOptions",
+				// constructorCode: this.constructorCode,
+			}
+		},
 		lines() {
 			const result = []
 			const countItems = this.items && this.items.length || 0
@@ -119,6 +149,20 @@ export default {
 		this.$refs.list.removeEventListener("wheel", this.onWheel)
 	},
 	methods: {
+		openColorChoiceModal(codeClick, button) {
+			// this.colorKey = this.items.findIndex(({ code }) => code === codeClick)
+			// this.openInfo = button
+			// this.$_sh_lockBody(true)
+			this.$modal.show(this.optionsModalBinds.modalName)
+		},
+		optionSave({ id }) {
+			this.setOption(id)
+		},
+		setOption(option) {
+			console.log(option)
+			// const { code } = this.property
+			// this.$emit("set-option", { code, option })
+		},
 		isDisabled(item) {
 			return item.disabled
 		},

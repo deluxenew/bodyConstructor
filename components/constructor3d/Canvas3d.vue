@@ -23,11 +23,11 @@
 				//	ui-button.size(:class="{active: isShowSizes}" size="small" appearance="secondary" @click="" text="Редактировать")
 				//	button.button(:disabled="!selectedTableTop" @click="removeTableTop()")
 				//		img(:src="require('./img/trash.svg')")
-				div.box-control.sizes
-					button.button.size(:class="{active: isShowSizes}" @click="showSizes")
-						svg( width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg")
-							path(d="M28.0001 10.6034C27.7991 11.1093 27.4252 11.2788 26.8872 11.2781C18.3108 11.2679 9.73375 11.2651 1.15738 11.2802C0.324765 11.2815 0.0362889 10.7887 0.041074 10.1755C0.0608983 7.40146 0.0492772 4.62675 0.0499608 1.85205C0.0499608 1.11377 0.374668 0.789058 1.11705 0.789058C9.72076 0.788375 18.3245 0.790425 26.9289 0.784273C27.458 0.783589 27.8203 0.979097 28.0007 1.48427C28.0001 4.5249 28.0001 7.56416 28.0001 10.6034ZM1.80543 9.50214C9.96686 9.50214 18.1023 9.50214 26.2357 9.50214C26.2357 7.17451 26.2357 4.86806 26.2357 2.55957C25.3607 2.55957 24.5035 2.55957 23.6223 2.55957C23.6223 4.0163 23.6223 5.4498 23.6223 6.89013C23.0372 6.89013 22.4766 6.89013 21.8819 6.89013C21.8819 5.43818 21.8819 3.99785 21.8819 2.55205C20.996 2.55205 20.1456 2.55205 19.261 2.55205C19.261 3.425 19.261 4.28291 19.261 5.14082C18.667 5.14082 18.1064 5.14082 17.511 5.14082C17.511 4.26923 17.511 3.41201 17.511 2.55341C16.6251 2.55341 15.774 2.55341 14.8894 2.55341C14.8894 4.01015 14.8894 5.45048 14.8894 6.88603C14.2954 6.88603 13.7355 6.88603 13.151 6.88603C13.151 5.43613 13.151 4.00263 13.151 2.55546C12.2685 2.55546 11.4099 2.55546 10.5281 2.55546C10.5281 3.425 10.5281 4.27675 10.5281 5.13671C9.93746 5.13671 9.37145 5.13671 8.78014 5.13671C8.78014 4.26718 8.78014 3.41611 8.78014 2.55683C7.89693 2.55683 7.03834 2.55683 6.15719 2.55683C6.15719 4.01084 6.15719 5.44501 6.15719 6.88193C5.56725 6.88193 5.00055 6.88193 4.40924 6.88193C4.40924 5.42793 4.40924 3.99511 4.40924 2.55957C3.52604 2.55957 2.66881 2.55957 1.80611 2.55957C1.80543 4.88242 1.80543 7.18271 1.80543 9.50214Z" fill="none")
-							path(d="M28 20.4661C27.8373 20.6801 27.6958 20.9153 27.5085 21.1053C26.2158 22.4116 24.9129 23.7077 23.6147 25.0086C23.5443 25.079 23.4883 25.1638 23.4466 25.2151C23.0173 24.7851 22.616 24.3831 22.1963 23.9634C23.0952 23.0638 24.0304 22.1286 25.0038 21.1545C17.6688 21.1545 10.3906 21.1545 3.08778 21.1545C4.04413 22.1006 4.98817 23.0344 5.91717 23.9525C5.46258 24.4105 5.06747 24.809 4.65663 25.2226C4.60262 25.1734 4.53563 25.1166 4.47342 25.0551C3.13495 23.718 1.79647 22.3802 0.45868 21.0417C-0.0929805 20.4901 -0.0929806 20.0505 0.456629 19.5002C1.80057 18.1556 3.1452 16.811 4.48846 15.465C4.53973 15.4137 4.57665 15.3488 4.59921 15.3187C5.02645 15.7466 5.42772 16.1486 5.84676 16.569C4.95741 17.4576 4.02225 18.3921 3.0454 19.3676C10.3845 19.3676 17.6613 19.3676 24.9512 19.3676C24.0016 18.4256 23.0624 17.4939 22.1375 16.5765C22.5887 16.1246 22.9913 15.7206 23.4329 15.2784C23.5067 15.3679 23.5847 15.4814 23.6797 15.5764C24.932 16.8328 26.1898 18.0838 27.4388 19.3444C27.6459 19.5529 27.8134 19.8003 27.9993 20.03C28 20.1749 28 20.3205 28 20.4661Z" fill="none")
+				//div.box-control.sizes
+				//	button.button.size(:class="{active: isShowSizes}" @click="showSizes")
+				//		svg( width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg")
+				//			path(d="M28.0001 10.6034C27.7991 11.1093 27.4252 11.2788 26.8872 11.2781C18.3108 11.2679 9.73375 11.2651 1.15738 11.2802C0.324765 11.2815 0.0362889 10.7887 0.041074 10.1755C0.0608983 7.40146 0.0492772 4.62675 0.0499608 1.85205C0.0499608 1.11377 0.374668 0.789058 1.11705 0.789058C9.72076 0.788375 18.3245 0.790425 26.9289 0.784273C27.458 0.783589 27.8203 0.979097 28.0007 1.48427C28.0001 4.5249 28.0001 7.56416 28.0001 10.6034ZM1.80543 9.50214C9.96686 9.50214 18.1023 9.50214 26.2357 9.50214C26.2357 7.17451 26.2357 4.86806 26.2357 2.55957C25.3607 2.55957 24.5035 2.55957 23.6223 2.55957C23.6223 4.0163 23.6223 5.4498 23.6223 6.89013C23.0372 6.89013 22.4766 6.89013 21.8819 6.89013C21.8819 5.43818 21.8819 3.99785 21.8819 2.55205C20.996 2.55205 20.1456 2.55205 19.261 2.55205C19.261 3.425 19.261 4.28291 19.261 5.14082C18.667 5.14082 18.1064 5.14082 17.511 5.14082C17.511 4.26923 17.511 3.41201 17.511 2.55341C16.6251 2.55341 15.774 2.55341 14.8894 2.55341C14.8894 4.01015 14.8894 5.45048 14.8894 6.88603C14.2954 6.88603 13.7355 6.88603 13.151 6.88603C13.151 5.43613 13.151 4.00263 13.151 2.55546C12.2685 2.55546 11.4099 2.55546 10.5281 2.55546C10.5281 3.425 10.5281 4.27675 10.5281 5.13671C9.93746 5.13671 9.37145 5.13671 8.78014 5.13671C8.78014 4.26718 8.78014 3.41611 8.78014 2.55683C7.89693 2.55683 7.03834 2.55683 6.15719 2.55683C6.15719 4.01084 6.15719 5.44501 6.15719 6.88193C5.56725 6.88193 5.00055 6.88193 4.40924 6.88193C4.40924 5.42793 4.40924 3.99511 4.40924 2.55957C3.52604 2.55957 2.66881 2.55957 1.80611 2.55957C1.80543 4.88242 1.80543 7.18271 1.80543 9.50214Z" fill="none")
+				//			path(d="M28 20.4661C27.8373 20.6801 27.6958 20.9153 27.5085 21.1053C26.2158 22.4116 24.9129 23.7077 23.6147 25.0086C23.5443 25.079 23.4883 25.1638 23.4466 25.2151C23.0173 24.7851 22.616 24.3831 22.1963 23.9634C23.0952 23.0638 24.0304 22.1286 25.0038 21.1545C17.6688 21.1545 10.3906 21.1545 3.08778 21.1545C4.04413 22.1006 4.98817 23.0344 5.91717 23.9525C5.46258 24.4105 5.06747 24.809 4.65663 25.2226C4.60262 25.1734 4.53563 25.1166 4.47342 25.0551C3.13495 23.718 1.79647 22.3802 0.45868 21.0417C-0.0929805 20.4901 -0.0929806 20.0505 0.456629 19.5002C1.80057 18.1556 3.1452 16.811 4.48846 15.465C4.53973 15.4137 4.57665 15.3488 4.59921 15.3187C5.02645 15.7466 5.42772 16.1486 5.84676 16.569C4.95741 17.4576 4.02225 18.3921 3.0454 19.3676C10.3845 19.3676 17.6613 19.3676 24.9512 19.3676C24.0016 18.4256 23.0624 17.4939 22.1375 16.5765C22.5887 16.1246 22.9913 15.7206 23.4329 15.2784C23.5067 15.3679 23.5847 15.4814 23.6797 15.5764C24.932 16.8328 26.1898 18.0838 27.4388 19.3444C27.6459 19.5529 27.8134 19.8003 27.9993 20.03C28 20.1749 28 20.3205 28 20.4661Z" fill="none")
 				table-top-resizer(
 					v-if="selectedTableTop"
 					:currentTableTop="selectedTableTop"
@@ -421,16 +421,16 @@ export default {
 			this.replaceTableTops()
 		},
 		async replaceFacade(config) {
-			const { caseModelCode, materialCode, facadeVariant, colorUrl, textureMap } = config
+			const { caseModelCode, materialCode, facadeVariant, colorUrls, textureMap } = config
 			const facade = this.selectedBox.children.find(({ name }) => name === "facade")
-			if (!colorUrl || !materialCode || !facadeVariant || !caseModelCode) return
+			if (!colorUrls || !materialCode || !facadeVariant || !caseModelCode) return
 			if (!facade) {
 				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
-				newFacadeGroup.children.forEach((el) => {
+				newFacadeGroup.children.forEach((el, index) => {
 					const { userData: { facadeWidth, facadeHeight, positionX } } = el
 					const facadeTexture = textureMappedMaterial({
 						loadedMap: textureMap,
-						loadedTexture: colorUrl,
+						loadedTexture: colorUrls[index].url,
 						width: facadeWidth,
 						height: facadeHeight,
 						sideDepth: 0.16
@@ -439,7 +439,7 @@ export default {
 					el.add(facadeTexture)
 				})
 				if (textureMap) await getImage(textureMap)
-				await getImage(colorUrl)
+				if (colorUrls[0]) await getImage(colorUrls[0].url)
 				await this.$nextTick()
 				this.selectedBox.add(newFacadeGroup)
 				this.selectedBox.userData.facadeConfig = this.facadeConfig
@@ -447,11 +447,11 @@ export default {
 			}
 			if (facade) {
 				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
-				newFacadeGroup.children.forEach((el) => {
+				newFacadeGroup.children.forEach((el, index) => {
 					const { userData: { facadeWidth, facadeHeight, positionX } } = el
 					const facadeTexture = textureMappedMaterial({
 						loadedMap: textureMap,
-						loadedTexture: colorUrl,
+						loadedTexture: colorUrls[index].url,
 						width: facadeWidth,
 						height: facadeHeight,
 						sideDepth: 0.16
@@ -460,7 +460,7 @@ export default {
 					el.add(facadeTexture)
 				})
 				if (textureMap) await getImage(textureMap)
-				await getImage(colorUrl)
+				if (colorUrls[0]) await getImage(colorUrls[0].url)
 
 				this.selectedBox.remove(facade)
 				this.selectedBox.userData.facadeConfig = null
@@ -637,15 +637,15 @@ export default {
 					facadeVariant,
 					materialTypeCode,
 					colorCode,
-					colorUrl,
+					colorUrls,
 					textureMap
 				} = this.facadeConfig
-				if (colorUrl && materialCode && facadeVariant && caseModelCode && colorCode && materialTypeCode) {
-					facade.children.forEach((el) => {
+				if (colorUrls && materialCode && facadeVariant && caseModelCode && colorCode && materialTypeCode) {
+					facade.children.forEach((el, index) => {
 						const { userData: { facadeWidth, facadeHeight, positionX } } = el
 						const facadeTexture = textureMappedMaterial({
 							loadedMap: textureMap,
-							loadedTexture: colorUrl,
+							loadedTexture: colorUrls[index].url,
 							width: facadeWidth,
 							height: facadeHeight,
 							sideDepth: 0.16
@@ -654,7 +654,7 @@ export default {
 						el.add(facadeTexture)
 					})
 					if (textureMap) await getImage(textureMap)
-					await getImage(colorUrl)
+					if (colorUrls[0]) await getImage(colorUrls[0].url)
 				}
 				box.userData.facadeConfig = this.facadeConfig
 				box.userData.facadeQuantity = facade.userData.facadeQuantity
