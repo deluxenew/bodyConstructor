@@ -20,6 +20,7 @@ const { scale } = constants
 
 const sideY = (height - legsHeight) / 2 - sideDepth
 
+const variants = ["597_716_0_solid_1", "297_716_0_solid_2"]
 
 const facadeVariant1 = () => {
 	const facadeGroup = new Group()
@@ -51,8 +52,6 @@ const facadeVariant2 = () => {
 
 	facadeLeft.position.set(-2.97, legsHeight / 2, depth /2)
 
-	facadeGroup.add(facadeLeft)
-
 	const facadeRight = getFacadeRight({
 		width: 2.97,
 		height: 7.16,
@@ -62,6 +61,7 @@ const facadeVariant2 = () => {
 
 	facadeRight.position.set(2.97, legsHeight / 2, depth /2)
 
+	facadeGroup.add(facadeLeft)
 	facadeGroup.add(facadeRight)
 	facadeGroup.name = "facade"
 	facadeGroup.userData.facadeQuantity = 2
@@ -116,7 +116,7 @@ export const f_600 = (facadeName, onlyFacade) => {
 
 	boxGroup.name = "f_600"
 	boxGroup.userData.code = "f-600"
-	boxGroup.userData.facadeVariants = ["597_716_0_solid_1", "297_716_0_solid_2"]
+	boxGroup.userData.facadeVariants = variants
 	boxGroup.userData.configType = "boxFloor"
 	boxGroup.userData.openedDoors = false
 	boxGroup.userData.facade = false

@@ -1,4 +1,7 @@
-import { Group, Quaternion, QuaternionKeyframeTrack, Vector3 } from "three"
+import { Group, Quaternion, QuaternionKeyframeTrack, Vector3, VectorKeyframeTrack } from "three"
+import { constants } from "./constants"
+const depth = constants.bottomDepth
+const legsHeight = constants.legsHeight
 
 const getQuaternion = (angular) => {
 	const xAxis = new Vector3(0, -1, 0)
@@ -40,6 +43,11 @@ export const getFacadeRight = ({ width, height, positionX }) => {
 	return facadeGroup
 }
 
-export const getFacadeFront = ({ width, height, positionX }) => {
-	return "123"
+export const getFacadeFront = ({ width, height, positionX, positionY }) => {
+	const posY = positionY ? positionY : legsHeight /2
+	const positionOpen = new VectorKeyframeTrack( ".position", [0, 1], [0, posY, depth /2, 0, posY, depth /2 + 4] )
+	const positionClose = new VectorKeyframeTrack( ".position", [0, 1], [0, posY, depth /2 + 4, 0, posY, depth /2] )
+	const facadeGroup = getUserData( width, height, positionX, positionOpen, positionClose )
+	facadeGroup.userData.facadeOpenDirection = "front"
+	return facadeGroup
 }

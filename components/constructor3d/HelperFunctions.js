@@ -309,12 +309,22 @@ const getPlaceWidth = function({ arr, additionalArr, penalBoxes, modelWidth }) {
 	return fullWidth + padding
 }
 
+const getDrawerGroup = (obj) => {
+	if (!obj) return null
+	const caseGroup = obj.children.find(({ name }) => name === "caseGroup")
+	if (caseGroup) {
+		const drawer = caseGroup.children.filter(({ name }) => name === "drawer")
+		if (drawer) return drawer
+	}
+
+	return null
+}
+
 const getFacadeGroup = (obj) => {
 	if (!obj) return null
 	const caseGroup = obj.children.find(({ name }) => name === "facade")
 	if (caseGroup) {
 		const facade = caseGroup.children.filter(({ name }) => name === "facadeElement")
-		console.log(facade)
 		if (facade) return facade
 	}
 
@@ -576,6 +586,7 @@ export default {
 	setCasesPosition,
 	rotationY,
 	getPlaceWidth,
+	getDrawerGroup,
 	getFacadeGroup,
 	getAddMethodName,
 	getTableTops,

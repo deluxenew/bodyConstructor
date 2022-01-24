@@ -1,8 +1,9 @@
-import { BoxGeometry } from "three"
+import { BoxGeometry, Group } from "three"
 import { constants } from "./constants"
 import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
 import { mesh } from "./CustomMesh"
+import { getFacadeLeft, getFacadeRight } from "./FacadeAnimation"
 
 import Materials from "../Materials"
 
@@ -18,7 +19,42 @@ const { legsHeight } = constants
 
 const sideY = (height - legsHeight) / 2 - sideDepth
 
-export const f_800a = () => {
+const variants = ["397_716_0_solid_1##147_716_0_solid_1##40_716_0_solid_1"]
+
+const facadeVariant1 = () => {
+	const facadeGroup = new Group()
+
+	const facadeLeft = getFacadeLeft({
+		width: 3.97,
+		height: 7.16,
+		positionX: 2,
+		direction: "left"
+	})
+
+	facadeLeft.position.set(0, legsHeight / 2, depth /2)
+
+	facadeGroup.add(facadeLeft)
+	facadeGroup.name = "facade"
+	facadeGroup.userData.facadeQuantity = 1
+	return facadeGroup
+}
+
+export const f_800a = (facadeName, onlyFacade) => {
+	let facadeGroup
+
+	if (facadeName) {
+		if (!variants.includes(facadeName)) return
+		const facades = {
+			"397_716_0_solid_1##147_716_0_solid_1##40_716_0_solid_1": facadeVariant1(),
+		}
+		console.log(facadeName, onlyFacade)
+		facadeGroup = facades[facadeName]
+
+		facadeGroup.name = "facade"
+
+		if (onlyFacade) return facadeGroup
+	}
+
 	const beams = bottomBeams(width)
 	const wrap = bottomBox(width, height, depth)
 	const { boxGroup } = wrap
@@ -41,6 +77,8 @@ export const f_800a = () => {
 	caseGroup.add(beams)
 	caseGroup.add(shelf)
 
+	if (facadeName) boxGroup.add(facadeGroup)
+
 	sideRight.position.set(width / 2 - sideDepth / 2, sideY, 0)
 	sideLeft.position.set(-width / 2 + sideDepth / 2, sideY, 0)
 	sideBack.position.set(0, sideY, -depth / 2 + sideDepth)
@@ -48,10 +86,11 @@ export const f_800a = () => {
 
 	boxGroup.name = "f_800a"
 	boxGroup.userData.code = "f-800a"
-	// boxGroup.userData['facadeVariants'] = ['397_716_0_solid_2']
+	boxGroup.userData.facadeVariants = variants
 	boxGroup.userData.configType = "angularBox"
 	boxGroup.userData.openedDoors = false
 	boxGroup.userData.productType = "Напольный угловой"
+	boxGroup.userData.facade = false
 
 	return boxGroup
 }

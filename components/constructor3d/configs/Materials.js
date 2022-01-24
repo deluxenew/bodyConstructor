@@ -42,8 +42,8 @@ const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDe
 		map: wallTextureLoader.load(loadedTexture)
 	})
 
-	wallMaterial.roughness = 1
-	wallMaterial.metalness = 0.2
+	wallMaterial.roughness = 2
+	// wallMaterial.metalness = 1
 	if (loadedMap) wallMaterial.normalMap = wallNormalTexture
 
 	const facadeMaterials = [

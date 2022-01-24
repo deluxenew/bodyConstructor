@@ -171,7 +171,7 @@ export default {
 			return this.config && this.config.tabletop.imgLayers[0].images || null
 		},
 		facadeTextures() {
-			return this.config && this.config.body.imgLayers[2].images || null
+			return this.config && this.config.body.imgLayers[1].images || null
 		},
 	},
 	async mounted() {

@@ -45,7 +45,7 @@
 
 import * as THREE from "three"
 import {
-	AnimationClip, AnimationMixer, QuaternionKeyframeTrack
+	AnimationClip, AnimationMixer
 } from "three"
 import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
@@ -530,12 +530,36 @@ export default {
 		openDoors() {
 			if (this.selectedBox) {
 				const { userData: { openedDoors }, uuid: boxUuid } = this.selectedBox
-
+				const drawers = HF.getDrawerGroup(this.selectedBox)
 				const facades = HF.getFacadeGroup(this.selectedBox)
 
-				if (!facades) return
-
 				this.animations = this.animations.filter((el) => el.boxUuid !== boxUuid)
+
+				if (drawers) {
+					drawers.forEach((el) => {
+						const { userData: { open, close }, uuid } = el
+
+						const anim = openedDoors ? close : open
+
+						const clip = new AnimationClip("Action", 1, [anim])
+						const mixer = new AnimationMixer(el)
+
+						const clipAction = mixer.clipAction(clip)
+						clipAction.loop = THREE.LoopOnce
+						clipAction.clampWhenFinished = true
+						clipAction.play()
+
+						this.selectedBox.userData.openedDoors = !openedDoors
+
+						this.animations.push({
+							mixer: mixer,
+							uuid,
+							boxUuid
+						})
+					})
+				}
+
+				if (!facades) return
 
 				facades.forEach((el) => {
 					const { userData: { quaternionOpen, quaternionClose }, uuid } = el
