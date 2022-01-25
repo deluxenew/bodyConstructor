@@ -698,8 +698,9 @@ export default {
 			await this.addFacadeToBox(uuid)
 		},
 		async addFacadeToBox(uuid) {
+			if (!this.facadeConfig) return
 			const box = this.scene.getObjectByProperty("uuid", uuid)
-			const { caseModelCode, materialCode, facadeVariant, colorUrls, textureMap } = this.selectedBox.userData.facadeConfig
+			const { caseModelCode, materialCode, facadeVariant, colorUrls, textureMap } = this.facadeConfig
 			if (colorUrls && materialCode && facadeVariant && caseModelCode) {
 				const facade = box.children.find(({ name }) => name === "facade")
 				if (!colorUrls || !materialCode || !facadeVariant || !caseModelCode) return

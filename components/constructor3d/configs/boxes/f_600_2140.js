@@ -124,15 +124,81 @@ const facadeVariant5 = () => {
 
 	const facadeLeft2 = getFacadeLeft({
 		width: 5.97,
+		height: 6.02,
+		positionX: 3,
+		direction: "left"
+	})
+
+	facadeLeft2.position.set(-2.99, legsHeight / 2, depth /2)
+
+	const facadeLeft3 = getFacadeLeft({
+		width: 5.97,
 		height: 7.16,
 		positionX: 3,
 		direction: "left"
 	})
 
-	facadeLeft2.position.set(-2.99, -height / 2 + 3.58 + legsHeight, depth /2)
+	facadeLeft3.position.set(-2.99, -height / 2 + 3.58 + legsHeight, depth /2)
 
 	facadeGroup.add(facadeLeft1)
 	facadeGroup.add(facadeLeft2)
+	facadeGroup.add(facadeLeft3)
+	facadeGroup.name = "facade"
+	facadeGroup.userData.facadeQuantity = 1
+	return facadeGroup
+}
+
+const facadeVariant6 = () => {
+	const facadeGroup = new Group()
+
+	const facadeLeft = getFacadeLeft({
+		width: 5.97,
+		height: 13.2,
+		positionX: 3,
+		direction: "left"
+	})
+
+	facadeLeft.position.set(-2.99, height / 2 - 6.6, depth /2)
+
+	const facadeLeft1 = getFacadeLeft({
+		width: 5.97,
+		height: 7.16,
+		positionX: 3,
+		direction: "left"
+	})
+
+	facadeLeft1.position.set(-2.99, -height / 2 + 3.58 + legsHeight, depth /2)
+
+	facadeGroup.add(facadeLeft)
+	facadeGroup.add(facadeLeft1)
+	facadeGroup.name = "facade"
+	facadeGroup.userData.facadeQuantity = 1
+	return facadeGroup
+}
+
+const facadeVariant7 = () => {
+	const facadeGroup = new Group()
+
+	const facadeLeft = getFacadeRight({
+		width: 5.97,
+		height: 13.2,
+		positionX: -3,
+		direction: "right"
+	})
+
+	facadeLeft.position.set(2.99, height / 2 - 6.6, depth /2)
+
+	const facadeLeft1 = getFacadeRight({
+		width: 5.97,
+		height: 7.16,
+		positionX: -3,
+		direction: "left"
+	})
+
+	facadeLeft1.position.set(2.99, -height / 2 + 3.58 + legsHeight, depth /2)
+
+	facadeGroup.add(facadeLeft)
+	facadeGroup.add(facadeLeft1)
 	facadeGroup.name = "facade"
 	facadeGroup.userData.facadeQuantity = 1
 	return facadeGroup
@@ -149,6 +215,8 @@ export const f_600_2140 = (facadeName, onlyFacade) => {
 			"597_602_0_solid_1": facadeVariant3(),
 			"597_716_0_solid_2": facadeVariant4(),
 			"597_716_0_solid_2##597_602_0_solid_1": facadeVariant5(),
+			"597_1320_0_left_1##597_716_0_solid_1": facadeVariant6(),
+			"597_1320_0_right_1##597_716_0_solid_1": facadeVariant7()
 		}
 		facadeGroup = facades[facadeName]
 

@@ -54,6 +54,7 @@ export default {
 	transition: .2s ease-in-out;
 	border: none;
 	outline: none;
+	user-select: none;
 
 	svg path {
 		transition: .2s ease-in-out;
@@ -65,15 +66,13 @@ export default {
 		font-size: 14px;
 	}
 
-	&:disabled {
-		opacity: 0;
-	}
+
 
 	&.primary {
 		background: #0099dc;
 		color: #ffffff;
 
-		&:hover:not(:disabled) {
+		&:hover:not(&.disabled) {
 			background-color: #007ab0;
 		}
 	}
@@ -82,7 +81,18 @@ export default {
 		background-color: #ffffff;
 		color: #5C6270;
 
-		&:hover:not(:disabled) {
+		&:hover:not(&.disabled) {
+			color: #ffffff;
+			background-color: #e3e5e8;
+		}
+	}
+
+	&.disabled {
+		background-color: #ffffff;
+		color: #adadad;
+		cursor: default;
+
+		&:hover:not(&.disabled) {
 			color: #ffffff;
 			background-color: #e3e5e8;
 		}
