@@ -13,7 +13,7 @@
 						img(:src="require('./img/arrow.svg')")
 					button.button.right(:disabled="!selectedUuid || !isMoveRightActive" @click="moveRight")
 						img(:src="require('./img/arrow.svg')")
-					button.button.open(:disabled="!selectedUuid" @click="openDoors")
+					button.button.open(:disabled="!selectedUuid || !facades" @click="openDoors")
 						img(:src="require('./img/doors.svg')")
 					button.button.remove(:disabled="!selectedUuid" @click="removeCase(false)")
 						img(:src="require('./img/trash.svg')")
@@ -45,7 +45,7 @@
 
 import * as THREE from "three"
 import {
-	AnimationClip, AnimationMixer
+	AnimationClip, AnimationMixer, VectorKeyframeTrack
 } from "three"
 import StartLoader from "./configs/Init"
 import HF from "./HelperFunctions"
@@ -105,6 +105,13 @@ export default {
 		}
 	},
 	computed: {
+		facades() {
+			if (this.selectedBox) {
+				const facades = HF.getFacadeGroup(this.selectedBox)
+				return !!facades
+			}
+			return false
+		},
 		maxWidthTableTop() {
 			if (!this.sceneObjects.tableTop) return 0
 			const materialMaxWidth = this.tableTopConfig && this.tableTopConfig.maxWidth || 0
@@ -283,7 +290,19 @@ export default {
 		selectedBox() {
 			if (!this.selectedUuid) return null
 			return this.scene.children.find(({ uuid }) => uuid === this.selectedUuid)
-		}
+		},
+		caseModel() {
+			const facadeName = this.facadeConfig ? this.facadeConfig.facadeVariant : null
+			// if (this.selectedBox) {
+			// 	return boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeName)
+			// }
+			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "") || ""
+
+			if (caseModelCodeFormatted) {
+				if (facadeName) return boxes[caseModelCodeFormatted](facadeName)
+				return boxes[caseModelCodeFormatted]()
+			}
+		},
 	},
 	watch: {
 		selectedBox(v) {
@@ -309,14 +328,18 @@ export default {
 			await this.$nextTick()
 			this.replaceTableTops()
 		},
-		"sceneObjects.length": function() {
-			HF.setCasesPosition(this.scene.children)
+		"sceneObjects.length": async function() {
+			await HF.setCasesPosition(this.scene.children)
 			this.setControlsVisible()
 			this.setControlsPosition()
 			this.$emit("setOrderList", this.orderList)
 		},
 		async facadeConfig(v) {
 			if (this.selectedBox && v) {
+				const stringBox = JSON.stringify(this.selectedBox.userData.facadeConfig)
+				const stringConfig = JSON.stringify(v)
+				if (stringBox === stringConfig) return
+				await this.$nextTick()
 				await this.replaceFacade(this.facadeConfig)
 			}
 			if (!v && this.selectedBox) this.removeFacade()
@@ -327,7 +350,7 @@ export default {
 			this.setControlsVisible()
 			if (this.selectedBox && this.selectedBox.userData.code !== v && this.selectedBox.userData.pos === this.controlsVerticalPosition) {
 				const { userData: { sort, type } } = this.selectedBox
-				this.replaceBox(sort, type)
+				await this.replaceBox(sort, type)
 				HF.setCasesPosition(this.scene.children)
 			}
 			this.setControlsPosition()
@@ -386,14 +409,7 @@ export default {
 			this.$refs.canvas.appendChild(this.renderer.domElement)
 			this.selectCase()
 		},
-		caseModel() {
-			const facadeName = this.facadeConfig ? this.facadeConfig.facadeVariant : null
-			if (this.selectedBox) {
-				return boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeName)
-			}
-			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "") || ""
-			if (caseModelCodeFormatted) return boxes[caseModelCodeFormatted](facadeName)
-		},
+
 		clearSelect() {
 			this.selectedUuid = null
 			const vm = this
@@ -401,17 +417,17 @@ export default {
 			function clearHelpers() {
 				vm.scene.children.forEach((el) => {
 					const edges = el.children.find(({ name }) => name === "edges")
-					const transparent = el.children.find(({ name }) => name === "transparent")
+					// const transparent = el.children.find(({ name }) => name === "transparent")
 					if (edges) {
 						edges.visible = false
-						transparent.visible = false
+						// transparent.visible = false
 					}
 				})
 			}
 
 			clearHelpers()
 		},
-		replaceBox(sort, type) {
+		async replaceBox(sort, type) {
 			if (!this.selectedBox) return
 			const arrAddMethods = ["addBottomLeftToScene", "addBottomRightToScene", "addTopLeftToScene", "addTopRightToScene"]
 			const addMethod = HF.getAddMethodName(arrAddMethods, type)
@@ -421,16 +437,28 @@ export default {
 			this.replaceTableTops()
 		},
 		async replaceFacade(config) {
+			await this.$nextTick()
+			if (!this.selectedBox) return
+
 			const { caseModelCode, materialCode, facadeVariant, colorUrls, textureMap } = config
 			const facade = this.selectedBox.children.find(({ name }) => name === "facade")
 			if (!colorUrls || !materialCode || !facadeVariant || !caseModelCode) return
+			const drawers = HF.getDrawerGroup(this.selectedBox)
+			if (drawers && this.selectedBox.userData.openedDoors) {
+				this.animations = []
+				drawers.forEach((el) => {
+					const { userData: { posY } } = el
+					el.position.set(0, posY, 0)
+				})
+				this.selectedBox.userData.openedDoors = false
+			}
 			if (!facade) {
 				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
 				newFacadeGroup.children.forEach((el, index) => {
 					const { userData: { facadeWidth, facadeHeight, positionX } } = el
 					const facadeTexture = textureMappedMaterial({
 						loadedMap: textureMap,
-						loadedTexture: colorUrls[index].url,
+						loadedTexture: colorUrls[index],
 						width: facadeWidth,
 						height: facadeHeight,
 						sideDepth: 0.16
@@ -439,7 +467,7 @@ export default {
 					el.add(facadeTexture)
 				})
 				if (textureMap) await getImage(textureMap)
-				if (colorUrls[0]) await getImage(colorUrls[0].url)
+				if (colorUrls[0]) await getImage(colorUrls[0])
 				await this.$nextTick()
 				this.selectedBox.add(newFacadeGroup)
 				this.selectedBox.userData.facadeConfig = this.facadeConfig
@@ -451,7 +479,7 @@ export default {
 					const { userData: { facadeWidth, facadeHeight, positionX } } = el
 					const facadeTexture = textureMappedMaterial({
 						loadedMap: textureMap,
-						loadedTexture: colorUrls[index].url,
+						loadedTexture: colorUrls[index],
 						width: facadeWidth,
 						height: facadeHeight,
 						sideDepth: 0.16
@@ -460,7 +488,7 @@ export default {
 					el.add(facadeTexture)
 				})
 				if (textureMap) await getImage(textureMap)
-				if (colorUrls[0]) await getImage(colorUrls[0].url)
+				if (colorUrls[0]) await getImage(colorUrls[0])
 
 				this.selectedBox.remove(facade)
 				this.selectedBox.userData.facadeConfig = null
@@ -488,7 +516,7 @@ export default {
 			if (!["boxFloor", "penalBox", "boxWall"].includes(selectType)) return false
 
 			const currentType = this.selectedBox.userData.type
-			const penalBox = this.sceneObjects[currentType].find(({ userData: { configType } }) => configType === "penalBox")
+			const penalBox = this.sceneObjects[currentType] && this.sceneObjects[currentType].find(({ userData: { configType } }) => configType === "penalBox")
 			const disableMoveBox = penalBox && penalBox.userData.sort === 1 && selectType === "boxFloor" && this.selectedBox.userData.sort === 0
 			const disableMovePenalBox = selectType === "penalBox" && this.selectedBox.userData.sort < 2
 			const findAngularRight = this.sceneObjects.bottomRight && this.sceneObjects.bottomRight.find(({ userData: { configType } }) => configType === "angularBox")
@@ -498,13 +526,9 @@ export default {
 			}
 
 			const increment = (side === "left" && isLeft) || (side !== "left" && !isLeft) ? 1 : -1
-			const obj = this.sceneObjects[type].find(({ userData: { sort } }) => sort - increment === selectedSort)
+			const obj = this.sceneObjects[type] && this.sceneObjects[type].find(({ userData: { sort } }) => sort - increment === selectedSort)
 			if (!obj) return false
 			const { userData: { configType } } = obj
-			const isPenalBox = configType === "penalBox"
-			if (isPenalBox) {
-
-			}
 			return obj && ["boxFloor", "penalBox", "boxWall"].includes(configType)
 		},
 		moveBox(toLeft) {
@@ -527,19 +551,22 @@ export default {
 		moveRight() {
 			this.moveBox(false)
 		},
-		openDoors() {
+		async openDoors() {
 			if (this.selectedBox) {
+				await this.$nextTick()
 				const { userData: { openedDoors }, uuid: boxUuid } = this.selectedBox
 				const drawers = HF.getDrawerGroup(this.selectedBox)
 				const facades = HF.getFacadeGroup(this.selectedBox)
 
-				this.animations = this.animations.filter((el) => el.boxUuid !== boxUuid)
-
+				// this.animations = this.animations.filter((el) => el.boxUuid !== boxUuid)
+				if (!facades) return
 				if (drawers) {
 					drawers.forEach((el) => {
-						const { userData: { open, close }, uuid } = el
+						const { userData: { posY }, uuid } = el
+						const positionOpen = new VectorKeyframeTrack( ".position", [0, 1], [0, posY, 0, 0, posY, 4] )
+						const positionClose = new VectorKeyframeTrack( ".position", [0, 1], [0, posY, 4, 0, posY, 0] )
 
-						const anim = openedDoors ? close : open
+						const anim = openedDoors ? positionClose : positionOpen
 
 						const clip = new AnimationClip("Action", 1, [anim])
 						const mixer = new AnimationMixer(el)
@@ -559,7 +586,6 @@ export default {
 					})
 				}
 
-				if (!facades) return
 
 				facades.forEach((el) => {
 					const { userData: { quaternionOpen, quaternionClose }, uuid } = el
@@ -582,6 +608,7 @@ export default {
 						boxUuid
 					})
 				})
+				if (!drawers && !facades) return
 				this.animations.forEach((el) => {
 					const findBoxUuid = el.boxUuid
 					el.mixer.addEventListener("finished", (e) => {
@@ -609,7 +636,7 @@ export default {
 			}
 		},
 		setControlsVisible() {
-			const isAngular = this.caseModel() && this.caseModel().userData.configType === "angularBox"
+			const isAngular = this.caseModel && this.caseModel.userData.configType === "angularBox"
 			this.sceneObjects.control.forEach((el) => {
 				const { userData: { pos, watcher, position } } = el
 				const isExistAngular = this.sceneObjects[pos] && this.sceneObjects[pos].find(({ userData: { configType } }) => configType === "angularBox")
@@ -627,38 +654,12 @@ export default {
 			})
 		},
 		async addBoxToScene(pos, side, sort) {
-			if (!this.caseModel()) return
-			const box = this.caseModel()
-			const facade = box.children.find(({ name }) => name === "facade")
-			if (facade) {
-				const {
-					caseModelCode,
-					materialCode,
-					facadeVariant,
-					materialTypeCode,
-					colorCode,
-					colorUrls,
-					textureMap
-				} = this.facadeConfig
-				if (colorUrls && materialCode && facadeVariant && caseModelCode && colorCode && materialTypeCode) {
-					facade.children.forEach((el, index) => {
-						const { userData: { facadeWidth, facadeHeight, positionX } } = el
-						const facadeTexture = textureMappedMaterial({
-							loadedMap: textureMap,
-							loadedTexture: colorUrls[index].url,
-							width: facadeWidth,
-							height: facadeHeight,
-							sideDepth: 0.16
-						})
-						facadeTexture.position.x += positionX
-						el.add(facadeTexture)
-					})
-					if (textureMap) await getImage(textureMap)
-					if (colorUrls[0]) await getImage(colorUrls[0].url)
-				}
-				box.userData.facadeConfig = this.facadeConfig
-				box.userData.facadeQuantity = facade.userData.facadeQuantity
-			}
+			await this.$nextTick()
+			if (!this.caseModel) return
+			const facadeName = this.facadeConfig ? this.facadeConfig.facadeVariant : null
+			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "") || ""
+
+			const box = boxes[caseModelCodeFormatted](facadeName)
 			const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
 			const isAngular = box.userData.configType === "angularBox"
 			if (isAngular && this.sceneObjects[pos]) this.sceneObjects[pos].forEach((el) => el.userData.sort++)
@@ -667,21 +668,67 @@ export default {
 			box.userData.sort = isAngular ? 0 : (sort !== undefined ? sort : count)
 			const text = box.children.find(({ name }) => name === "text")
 			const arrows = box.children.find(({ name }) => name === "arrows")
-			text.visible = this.isShowSizes
-			arrows.visible = this.isShowSizes
+			text.visible = true
+			arrows.visible = true
+
 			return box
 		},
 		async addBottomLeftToScene(sort) {
-			this.scene.add(await this.addBoxToScene("bottomLeft", "left", sort))
+			const newBox = await this.addBoxToScene("bottomLeft", "left", sort)
+			const uuid = newBox.uuid
+			this.scene.add(newBox)
+			await this.addFacadeToBox(uuid)
 		},
 		async addBottomRightToScene(sort) {
-			this.scene.add(HF.rotationY(await this.addBoxToScene("bottomRight", "right", sort)))
+			const newBox = await this.addBoxToScene("bottomRight", "right", sort)
+			const uuid = newBox.uuid
+			this.scene.add(HF.rotationY(newBox))
+			await this.addFacadeToBox(uuid)
 		},
 		async addTopLeftToScene(sort) {
-			this.scene.add(await this.addBoxToScene("topLeft", "left", sort))
+			const newBox = await this.addBoxToScene("topLeft", "left", sort)
+			const uuid = newBox.uuid
+			this.scene.add(newBox)
+			await this.addFacadeToBox(uuid)
 		},
 		async addTopRightToScene(sort) {
-			this.scene.add(HF.rotationY(await this.addBoxToScene("topRight", "right", sort)))
+			const newBox = await this.addBoxToScene("topRight", "right", sort)
+			const uuid = newBox.uuid
+			this.scene.add(HF.rotationY(newBox))
+			await this.addFacadeToBox(uuid)
+		},
+		async addFacadeToBox(uuid) {
+			const box = this.scene.getObjectByProperty("uuid", uuid)
+			const { caseModelCode, materialCode, facadeVariant, colorUrls, textureMap } = this.selectedBox.userData.facadeConfig
+			if (colorUrls && materialCode && facadeVariant && caseModelCode) {
+				const facade = box.children.find(({ name }) => name === "facade")
+				if (!colorUrls || !materialCode || !facadeVariant || !caseModelCode) return
+				if (facade) {
+					const newFacadeGroup = boxes[box.userData.code.replaceAll("-", "")](facadeVariant, true)
+					newFacadeGroup.children.forEach((el, index) => {
+						const { userData: { facadeWidth, facadeHeight, positionX } } = el
+						const facadeTexture = textureMappedMaterial({
+							loadedMap: textureMap,
+							loadedTexture: colorUrls[index],
+							width: facadeWidth,
+							height: facadeHeight,
+							sideDepth: 0.16
+						})
+						facadeTexture.position.x += positionX
+						el.add(facadeTexture)
+					})
+					if (textureMap) await getImage(textureMap)
+					if (colorUrls[0]) await getImage(colorUrls[0])
+
+					box.remove(facade)
+					box.userData.facadeConfig = null
+					box.userData.facadeQuantity = 0
+
+					box.add(newFacadeGroup)
+					box.userData.facadeConfig = this.facadeConfig
+					box.userData.facadeQuantity = newFacadeGroup.userData.facadeQuantity
+				}
+			}
 		},
 		selectCase() {
 			const vm = this
@@ -694,10 +741,10 @@ export default {
 			function clearHelpers(clearEdges, clearTransparent) {
 				vm.scene.children.forEach((el) => {
 					const edges = el.children.find(({ name }) => name === "edges")
-					const transparent = el.children.find(({ name }) => name === "transparent")
-					if (edges && transparent) {
-						if (clearEdges) edges.visible = false
-						if (clearTransparent) transparent.visible = false
+					// const transparent = el.children.find(({ name }) => name === "transparent")
+					if (edges ) {
+						if (el.uuid !== vm.selectedUuid)	if (clearEdges) edges.visible = false
+						// if (clearTransparent) transparent.visible = false
 					}
 				})
 			}
@@ -716,17 +763,17 @@ export default {
 					const { object } = intersects[0]
 					const obj = HF.recursiveFindBox(object)
 					if (obj) {
-						clearHelpers(true, false)
+						 clearHelpers(true, false)
 						const edges = obj.children.find(({ name }) => name === "edges")
 						edges.visible = true
 					}
 					if (!obj) {
-						clearHelpers(true, false)
+						clearHelpers(false, false)
 					}
 				}
 			}
 
-			async function onPointerDown(event) {
+			function onPointerDown(event) {
 				if (event.target.className !== "controls") return
 				const canvasPos = vm.$refs.canvas.getBoundingClientRect()
 				mouse.x = ((event.clientX - canvasPos.x) / CANVAS_WIDTH) * 2 - 1
@@ -746,28 +793,27 @@ export default {
 						if (findTableTop && findTableTop.name === "tableTop") {
 							clearHelpers(true, true)
 							const edges = findTableTop.children.find(({ name }) => name === "edges")
-							const transparent = findTableTop.children.find(({ name }) => name === "transparent")
+							// const transparent = findTableTop.children.find(({ name }) => name === "transparent")
 							edges.visible = true
-							transparent.visible = true
+							// transparent.visible = true
 							vm.selectedTableTop = findTableTop
 							vm.selectedUuid = null
 							return
 						}
 						const findBox = HF.recursiveFindBox(object)
-						console.log("onPointerDown")
 
 						vm.selectedTableTop = null
 
 						if (findBox) {
 							vm.selectedUuid = findBox.uuid
 							clearHelpers(true, true)
-							vm.$emit("getBoxName", vm.selectedBox?.name || null)
+							// vm.$emit("getBoxName", vm.selectedBox?.name || null)
 
 							const edges = findBox.children.find(({ name }) => name === "edges")
-							const transparent = findBox.children.find(({ name }) => name === "transparent")
+							// const transparent = findBox.children.find(({ name }) => name === "transparent")
 
 							edges.visible = true
-							transparent.visible = true
+							// transparent.visible = true
 						} else {
 							vm.clearSelect()
 						}
@@ -876,10 +922,10 @@ export default {
 		},
 		cancelResize() {
 			const edges = this.selectedTableTop.children.find(({ name }) => name === "edges")
-			const transparent = this.selectedTableTop.children.find(({ name }) => name === "transparent")
-			if (edges && transparent) {
+			// const transparent = this.selectedTableTop.children.find(({ name }) => name === "transparent")
+			if (edges) {
 				edges.visible = false
-				transparent.visible = false
+				// transparent.visible = false
 			}
 			this.selectedTableTop = null
 		},
@@ -1062,7 +1108,7 @@ export default {
 		}
 
 		&.active {
-			.left, .right {
+			.left, .right, .open{
 				&:disabled {
 					opacity: 0.4;
 				}

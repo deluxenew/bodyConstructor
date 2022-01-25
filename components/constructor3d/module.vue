@@ -879,7 +879,6 @@ export default {
 		addAngularCaseBottom(body, isReplace) {
 			if (body.userData.type !== "bottom") return
 			if (this.bottomAngularCaseExist && !isReplace) {
-				console.log("Хватит угловых шкафов снизу")
 				return
 			}
 			body.rotation.y = threeMath.degToRad(-90)

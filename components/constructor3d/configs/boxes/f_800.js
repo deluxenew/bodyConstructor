@@ -59,7 +59,6 @@ export const f_800 = (facadeName, onlyFacade) => {
 		const facades = {
 			"397_716_0_solid_2": facadeVariant1(),
 		}
-		console.log(facadeName, onlyFacade)
 		facadeGroup = facades[facadeName]
 
 		facadeGroup.name = "facade"

@@ -1,4 +1,4 @@
-import { BoxGeometry, Group, Mesh } from "three"
+import { BoxGeometry, Group } from "three"
 import { constants } from "./constants"
 import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
@@ -51,13 +51,13 @@ export const f_800_820_2b = (facadeName, onlyFacade) => {
 		const facades = {
 			"797_716_2_solid_1": facadeVariant1(),
 		}
-		console.log(facadeName, onlyFacade)
 		facadeGroup = facades[facadeName]
 
 		facadeGroup.name = "facade"
 
 		if (onlyFacade) return facadeGroup
 	}
+
 	const beams = bottomBeams(width)
 	const wrap = bottomBox(width, height, depth)
 	const { boxGroup } = wrap

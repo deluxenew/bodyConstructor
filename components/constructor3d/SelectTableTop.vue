@@ -1,7 +1,11 @@
 <template lang="pug">
 	div.select-elements
 		div.select-elements__header
-			div.select-elements__title(@click="toggleOpen") Столешница
+			div.select-elements__title(
+				:class="{'select-elements__title_disabled':!isExistBox}"
+				@click="toggleOpen"
+
+				) Столешница
 				img.select-elements__chevron(
 					:src="require('./img/chevron.svg')"
 					:class="{reverse: !opened}"
@@ -54,6 +58,10 @@ export default {
 		elementVariants: {
 			type: Array,
 			default: () => [],
+		},
+		isExistBox: {
+			type: Boolean,
+			default: false
 		},
 		options: {
 			type: Array,
@@ -163,6 +171,7 @@ export default {
 			this.opened = true
 		},
 		async toggleOpen() {
+			if (!this.isExistBox) return
 			this.opened = !this.opened
 			if (this.opened && !this.value && this.materialVariants[0]) {
 				await this.selectMaterial(this.materialVariants[0])
@@ -226,6 +235,11 @@ export default {
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+
+		&_disabled {
+			opacity: 0.4;
+			cursor: default;
+		}
 	}
 
 	&__chevron {

@@ -203,7 +203,7 @@ export default {
 			}, ms)
 		},
 		onWheel(event) {
-			if (this.$refs.list && this.$refs.list.contains(event.target)) {
+			if (this.$refs.list && this.$refs.list.contains(event.target) && this.items && this.items.length > 4) {
 				event.preventDefault()
 				const newPos = this.scroll + event.deltaY + event.deltaX
 				if (newPos > this.maxScroll) this.scroll = this.maxScroll

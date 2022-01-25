@@ -1,7 +1,10 @@
 <template lang="pug">
 	div.select-elements
 		div.select-elements__header
-			div.select-elements__title(@click="toggleOpen") Фасад
+			div.select-elements__title(
+				:class="{'select-elements__title_disabled': !selectedUuid}"
+				@click="toggleOpen"
+				) Фасад
 				img.select-elements__chevron(
 					:src="require('./img/chevron.svg')"
 					:class="{reverse: !opened}"
@@ -78,6 +81,10 @@ export default {
 			type: Object,
 			default: null
 		},
+		selectedBox: {
+			type: Object,
+			default: null
+		},
 		value: {
 			type: Object,
 			default: () => {
@@ -151,8 +158,15 @@ export default {
 				colorTitle: this.currentColor && this.currentColor.name || null,
 			}
 		},
+		selectedUuid() {
+			if (this.selectedBox) return this.selectedBox.uuid
+			return null
+		}
 	},
 	watch: {
+		selectedBox(v) {
+			if (!v) this.opened = false
+		},
 		opened(v) {
 			if (v && !this.currentMaterial) {
 				this.selectCurrentMaterial(this.materialVariants[0])
@@ -199,7 +213,7 @@ export default {
 	},
 	methods: {
 		toggleOpen() {
-			this.opened = !this.opened
+			if (!!this.selectedBox) this.opened = !this.opened
 		},
 		removeItem() {
 			this.currentMaterial = null
@@ -262,6 +276,12 @@ export default {
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+		user-select: none;
+
+		&_disabled {
+			opacity: 0.4;
+			cursor: default;
+		}
 	}
 
 	&__chevron {

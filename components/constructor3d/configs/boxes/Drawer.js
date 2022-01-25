@@ -39,9 +39,6 @@ export const Drawer = (bodyWidth, boxHeight, bodyDepth, drawerHeight, posY) => {
 	drawer0.add(drawerSideBack)
 
 	drawer0.position.z = sideDepth / 2
-	const positionOpen = new VectorKeyframeTrack( ".position", [0, 1], [0, posY, 0, 0, posY, 4] )
-	const positionClose = new VectorKeyframeTrack( ".position", [0, 1], [0, posY, 4, 0, posY, 0] )
-	drawer0.userData.open = positionOpen
-	drawer0.userData.close = positionClose
+	drawer0.userData.posY = posY
 	return drawer0
 }

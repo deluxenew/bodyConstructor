@@ -101,7 +101,6 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 
 	const wr = Math.max(wrb, wrt)
 	const wl = Math.max(wlb, wlt)
-	console.log(wr, "wr", wl, "wl")
 
 	const cameraPositions = {
 		pos1: povSet(wl, wr, constants.camAngle, constants.camPositionZ, position),

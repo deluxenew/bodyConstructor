@@ -30,12 +30,14 @@
 						ref="facades"
 						v-model="facadeConfig"
 						:caseModelCode="caseModelCode"
+						:selectedBox="selectedBox"
 						:selectedTableTop="selectedTableTop"
 						:options="facadeOptions"
 						@selectColor="selectFacadeColor"
 					)
 					select-table-top(
 						v-model="tableTopConfig"
+						:isExistBox="isExistBox"
 						:options="tableTopOptions"
 						:textures="tableTopTextures"
 						:selectedBox="selectedBox"
@@ -97,6 +99,9 @@ export default {
 		}
 	},
 	watch: {
+		selectedBox(v) {
+			if (!v) this.facadeConfig = null
+		},
 		async isOnlyAngularBoxes(v) {
 			if (v) {
 				await this.$nextTick()
@@ -125,6 +130,9 @@ export default {
 		},
 	},
 	computed: {
+		isExistBox() {
+			return this.orderList && !!this.orderList.cases
+		},
 		canvas3DBind() {
 			return {
 				controlsVerticalPosition: this.controlsVerticalPosition,
@@ -237,8 +245,7 @@ export default {
 			const firstFacadeEl3 = facadeVariant && facadeVariant.split("##")[2]
 			const firstFacadeEl3Q = firstFacadeEl3 && firstFacadeEl3[firstFacadeEl3.length -1]
 
-			const facadeCode = firstFacadeEl1 ? firstFacadeEl1.replace("_2", "_1") : facadeVariant
-			console.log(facadeCode, "facadeCode")
+			const facadeCode = firstFacadeEl1 ? firstFacadeEl1.slice(0, -1) + "1" : facadeVariant
 			const colorUrls = []
 			const facadeLayerCode = `${materialCode}::${colorCode}::${facadeCode}`
 
@@ -246,10 +253,7 @@ export default {
 				.find(({ code }) => code === facadeLayerCode)
 
 			if (findTexture) {
-				colorUrls.push({
-					url: `https://cdn.akson.ru/webp${findTexture.path}0.png`,
-					quantity: firstFacadeEl1Q
-				})
+				for (let i=0; i < firstFacadeEl1Q; i++) colorUrls.push(`https://cdn.akson.ru/webp${findTexture.path}0.png`)
 			}
 
 			if (firstFacadeEl2) {
@@ -257,10 +261,7 @@ export default {
 				const findTexture2 = this.facadeTextures && this.facadeTextures
 					.find(({ code }) => code === facadeLayerCode2)
 				if (findTexture2) {
-					colorUrls.push({
-						url: `https://cdn.akson.ru/webp${findTexture2.path}0.png`,
-						quantity: firstFacadeEl2Q
-					})
+					for (let i=0; i < firstFacadeEl2Q; i++) colorUrls.push(`https://cdn.akson.ru/webp${findTexture2.path}0.png`)
 				}
 			}
 
@@ -269,10 +270,7 @@ export default {
 				const findTexture3 = this.facadeTextures && this.facadeTextures
 					.find(({ code }) => code === facadeLayerCode3)
 				if (findTexture3) {
-					colorUrls.push({
-						url: `https://cdn.akson.ru/webp${findTexture3.path}0.png`,
-						quantity: firstFacadeEl3Q
-					})
+					for (let i=0; i < firstFacadeEl3Q; i++) colorUrls.push(`https://cdn.akson.ru/webp${findTexture3.path}0.png`)
 				}
 			}
 
