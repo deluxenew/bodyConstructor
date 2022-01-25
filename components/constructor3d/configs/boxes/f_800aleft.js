@@ -3,7 +3,7 @@ import { constants } from "./constants"
 import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
 import { mesh } from "./CustomMesh"
-import { getFacadeLeft, getFacadeRight } from "./FacadeAnimation"
+import { getFacadeRight } from "./FacadeAnimation"
 
 import Materials from "../Materials"
 
@@ -24,11 +24,11 @@ const variants = ["397_716_0_solid_1##147_716_0_solid_1##40_716_0_solid_1"]
 const facadeVariant1 = () => {
 	const facadeGroup = new Group()
 
-	const facadeLeft = getFacadeLeft({
+	const facadeLeft = getFacadeRight({
 		width: 3.97,
 		height: 7.16,
-		positionX: 2,
-		direction: "left"
+		positionX: -2,
+		direction: "right"
 	})
 
 	facadeLeft.position.set(0, legsHeight / 2, depth /2)
@@ -36,15 +36,15 @@ const facadeVariant1 = () => {
 	const facade1 = new Group()
 	facade1.userData.facadeWidth = 1.47
 	facade1.userData.facadeHeight = 7.16
-	facade1.userData.positionX = -0.74
+	facade1.userData.positionX = 0.74
 	facade1.position.set(0, legsHeight / 2, depth /2)
 
 	const facade2 = new Group()
 	facade2.userData.facadeWidth = .4
 	facade2.userData.facadeHeight = 7.16
-	facade2.userData.positionX = -0.7
-	facade2.rotation.y = Math.degToRad(90)
-	facade2.position.set(-0.6, legsHeight / 2, depth /2 - 0.3)
+	facade2.userData.positionX = 0.74
+	facade2.rotation.y = Math.degToRad(-90)
+	facade2.position.set(0.6, legsHeight / 2, depth /2 - 0.3)
 
 	facadeGroup.add(facadeLeft)
 	facadeGroup.add(facade1)
@@ -54,7 +54,7 @@ const facadeVariant1 = () => {
 	return facadeGroup
 }
 
-export const f_800a = (facadeName, onlyFacade) => {
+export const f_800aleft = (facadeName, onlyFacade) => {
 	let facadeGroup
 
 	if (facadeName) {

@@ -14,7 +14,18 @@ const getQuaternion = (angular) => {
 	return { quaternionOpen, quaternionClose }
 }
 
-const getUserData = (width, height, positionX, quaternionOpen, quaternionClose ) => {
+const getQuaternionTop = (angular) => {
+	const xAxis = new Vector3(-1, 0, 0)
+	const qInitial = new Quaternion().setFromAxisAngle(xAxis, 0)
+	const qFinal = new Quaternion().setFromAxisAngle(xAxis, angular)
+
+	const quaternionOpen = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w])
+	const quaternionClose = new QuaternionKeyframeTrack(".quaternion", [0, 1], [qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w])
+
+	return { quaternionOpen, quaternionClose }
+}
+
+const getUserData = (width, height, positionX, quaternionOpen, quaternionClose, positionY ) => {
 	const facadeGroup = new Group()
 	facadeGroup.name = "facadeElement"
 	facadeGroup.userData.quaternionOpen = quaternionOpen
@@ -22,6 +33,7 @@ const getUserData = (width, height, positionX, quaternionOpen, quaternionClose )
 	facadeGroup.userData.facadeWidth = width
 	facadeGroup.userData.facadeHeight = height
 	facadeGroup.userData.positionX = positionX
+	if (positionY) facadeGroup.userData.positionY = positionY
 	return facadeGroup
 }
 
@@ -49,5 +61,14 @@ export const getFacadeFront = ({ width, height, positionX, positionY }) => {
 	const positionClose = new VectorKeyframeTrack( ".position", [0, 1], [0, posY, depth /2 + 4, 0, posY, depth /2] )
 	const facadeGroup = getUserData( width, height, positionX, positionOpen, positionClose )
 	facadeGroup.userData.facadeOpenDirection = "front"
+	return facadeGroup
+}
+
+export const getFacadeTop = ({ width, height, positionX, positionY }) => {
+	const { quaternionOpen, quaternionClose } = getQuaternionTop(Math.PI / 2)
+	const facadeGroup = getUserData( width, height, positionX, quaternionOpen, quaternionClose, positionY )
+
+	facadeGroup.userData.facadeOpenDirection = "top"
+
 	return facadeGroup
 }

@@ -52,6 +52,7 @@
 					)
 
 			calculate-order(
+				v-if="showCalc"
 				:orderList="orderList"
 			)
 </template>
@@ -95,7 +96,9 @@ export default {
 
 			tableTopConfig: null,
 			selectedTableTop: null,
-			orderList: null
+			orderList: null,
+
+			showCalc: false
 		}
 	},
 	watch: {
@@ -200,7 +203,7 @@ export default {
 	},
 	methods: {
 		sendCalculate() {
-
+			this.showCalc = true
 		},
 		selectNextBox() {
 			if (this.controlsVerticalPosition === "floor") {

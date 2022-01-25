@@ -296,6 +296,8 @@ export default {
 			// if (this.selectedBox) {
 			// 	return boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeName)
 			// }
+			const isAngular = this.caseModelCode === "f-800a" && this.controlsVerticalPosition === "floor"
+
 			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "") || ""
 
 			if (caseModelCodeFormatted) {
@@ -453,9 +455,11 @@ export default {
 				this.selectedBox.userData.openedDoors = false
 			}
 			if (!facade) {
-				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
+				const isAngularBox = this.caseModel.userData.configType === "angularBox" && this.caseModel.userData.pos === "floor"
+
+				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "") + (isAngularBox ? this.selectedBox.userData.side : "")](facadeVariant, true)
 				newFacadeGroup.children.forEach((el, index) => {
-					const { userData: { facadeWidth, facadeHeight, positionX } } = el
+					const { userData: { facadeWidth, facadeHeight, positionX, positionY } } = el
 					const facadeTexture = textureMappedMaterial({
 						loadedMap: textureMap,
 						loadedTexture: colorUrls[index],
@@ -463,6 +467,7 @@ export default {
 						height: facadeHeight,
 						sideDepth: 0.16
 					})
+					if (positionY) facadeTexture.position.y += positionY
 					facadeTexture.position.x += positionX
 					el.add(facadeTexture)
 				})
@@ -474,9 +479,10 @@ export default {
 				this.selectedBox.userData.facadeQuantity = newFacadeGroup.userData.facadeQuantity
 			}
 			if (facade) {
-				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "")](facadeVariant, true)
+				const isAngularBox = this.caseModel.userData.configType === "angularBox" && this.caseModel.userData.pos === "floor"
+				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "") + (isAngularBox ? this.selectedBox.userData.side : "")](facadeVariant, true)
 				newFacadeGroup.children.forEach((el, index) => {
-					const { userData: { facadeWidth, facadeHeight, positionX } } = el
+					const { userData: { facadeWidth, facadeHeight, positionX, positionY } } = el
 					const facadeTexture = textureMappedMaterial({
 						loadedMap: textureMap,
 						loadedTexture: colorUrls[index],
@@ -484,12 +490,13 @@ export default {
 						height: facadeHeight,
 						sideDepth: 0.16
 					})
+					if (positionY) facadeTexture.position.y += positionY
 					facadeTexture.position.x += positionX
 					el.add(facadeTexture)
 				})
 				if (textureMap) await getImage(textureMap)
 				if (colorUrls[0]) await getImage(colorUrls[0])
-
+				if (!this.selectedBox) return
 				this.selectedBox.remove(facade)
 				this.selectedBox.userData.facadeConfig = null
 				this.selectedBox.userData.facadeQuantity = 0
@@ -589,7 +596,7 @@ export default {
 
 				facades.forEach((el) => {
 					const { userData: { quaternionOpen, quaternionClose }, uuid } = el
-
+					if (!quaternionOpen || !quaternionClose) return
 					const anim = openedDoors ? quaternionClose : quaternionOpen
 
 					const clip = new AnimationClip("Action", 1, [anim])
@@ -657,9 +664,10 @@ export default {
 			await this.$nextTick()
 			if (!this.caseModel) return
 			const facadeName = this.facadeConfig ? this.facadeConfig.facadeVariant : null
+			const isAngularBox = this.caseModel.userData.configType === "angularBox" && this.caseModel.userData.pos === "floor"
 			const caseModelCodeFormatted = this.caseModelCode && this.caseModelCode.replaceAll("-", "") || ""
 
-			const box = boxes[caseModelCodeFormatted](facadeName)
+			const box = boxes[caseModelCodeFormatted + (isAngularBox ? side : "")](facadeName)
 			const count = this.sceneObjects[pos] ? this.sceneObjects[pos].length : 0
 			const isAngular = box.userData.configType === "angularBox"
 			if (isAngular && this.sceneObjects[pos]) this.sceneObjects[pos].forEach((el) => el.userData.sort++)
@@ -705,9 +713,10 @@ export default {
 				const facade = box.children.find(({ name }) => name === "facade")
 				if (!colorUrls || !materialCode || !facadeVariant || !caseModelCode) return
 				if (facade) {
-					const newFacadeGroup = boxes[box.userData.code.replaceAll("-", "")](facadeVariant, true)
+					const isAngularBox = this.caseModel.userData.configType === "angularBox" && this.caseModel.userData.pos === "floor"
+					const newFacadeGroup = boxes[box.userData.code.replaceAll("-", "") + (isAngularBox ? box.userData.side : "")](facadeVariant, true)
 					newFacadeGroup.children.forEach((el, index) => {
-						const { userData: { facadeWidth, facadeHeight, positionX } } = el
+						const { userData: { facadeWidth, facadeHeight, positionX, positionY } } = el
 						const facadeTexture = textureMappedMaterial({
 							loadedMap: textureMap,
 							loadedTexture: colorUrls[index],
@@ -715,6 +724,7 @@ export default {
 							height: facadeHeight,
 							sideDepth: 0.16
 						})
+						if (positionY) facadeTexture.position.y += positionY
 						facadeTexture.position.x += positionX
 						el.add(facadeTexture)
 					})

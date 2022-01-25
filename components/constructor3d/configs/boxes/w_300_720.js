@@ -1,9 +1,10 @@
-import { BoxGeometry, Mesh } from "three"
+import { BoxGeometry, Group } from "three"
 import { constants } from "./constants"
 import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
 
 import Materials from "../Materials"
+import { getFacadeLeft } from "./FacadeAnimation"
 
 const { defaultMaterial } = Materials
 
@@ -13,11 +14,44 @@ const height = constants.topHeight
 const depth = constants.topDepth
 
 const { sideDepth } = constants
-const { scale } = constants
 
 const sideY = (height) / 2 - sideDepth
 
-export const w_300_720 = () => {
+const variants = ["297_716_0_solid_1"]
+
+const facadeVariant1 = () => {
+	const facadeGroup = new Group()
+
+	const facadeLeft = getFacadeLeft({
+		width: 2.97,
+		height: 7.16,
+		positionX: 1.47,
+		direction: "left"
+	})
+
+	facadeLeft.position.set(-1.47, sideY, depth /2)
+
+	facadeGroup.add(facadeLeft)
+	facadeGroup.name = "facade"
+	facadeGroup.userData.facadeQuantity = 2
+	return facadeGroup
+}
+
+
+export const w_300_720 = (facadeName, onlyFacade) => {
+	let facadeGroup
+
+	if (facadeName) {
+		if (!variants.includes(facadeName)) return
+		const facades = {
+			"297_716_0_solid_1": facadeVariant1(),
+		}
+		facadeGroup = facades[facadeName]
+
+		facadeGroup.name = "facade"
+
+		if (onlyFacade) return facadeGroup
+	}
 	const wrap = topBox(width, height, depth)
 	const { boxGroup } = wrap
 	const { caseGroup } = wrap
@@ -40,6 +74,7 @@ export const w_300_720 = () => {
 	caseGroup.add(shelf)
 	caseGroup.add(sideTop)
 	caseGroup.add(sideBottom)
+	if (facadeName) boxGroup.add(facadeGroup)
 
 	sideTop.position.y = height - sideDepth * 1.5
 	sideBottom.position.y = 0 - sideDepth / 2
@@ -50,24 +85,12 @@ export const w_300_720 = () => {
 
 	shelf.position.set(0, sideY, 0)
 
-	/*
-  const facadeGroup = new Group()
-  facadeGroup.position.set(-width / 2 - sideDepth /2, sideY, depth / 2)
-  const facadeGeometry = new BoxGeometry(width - sideDepth /4, height - legsHeight, sideDepth )
-  const facade = mesh(facadeGeometry, defaultMaterial());
-  facade.position.x = (width / 2 + sideDepth / 8)
-  facadeGroup.name = 'facade'
-  facadeGroup.code = '397_716_0_solid_1'
-  facadeGroup.visible = true
-  facadeGroup.add(facade)
-  caseGroup.add(facadeGroup)
-*/
 	boxGroup.name = "w_300_720"
 	boxGroup.userData.code = "w-300-720"
-	// boxGroup.userData['facadeVariants'] = ['397_716_0_solid_1']
+	boxGroup.userData.facadeVariants = variants
 	boxGroup.userData.configType = "boxWall"
 	boxGroup.userData.openedDoors = false
+	boxGroup.userData.facade = false
 
-	boxGroup.scale.set(scale, scale, scale)
 	return boxGroup
 }

@@ -12,6 +12,7 @@ import { GetTextMesh } from "../Text"
 
 import Materials from "../Materials"
 import { GetArrows } from "../Arrows"
+import { getFacadeLeft } from "./FacadeAnimation"
 
 const { defaultMaterial } = Materials
 
@@ -22,7 +23,44 @@ const height = constants.topHeight
 const { sideDepth } = constants
 const { scale } = constants
 
-export const w_800a = () => {
+
+const variants = ["407_716_0_solid_1"]
+
+const facadeVariant1 = () => {
+	const facadeGroup = new Group()
+
+	const facadeLeft = getFacadeLeft({
+		width: 4.07,
+		height: 7.16,
+		positionX: 2,
+		direction: "left"
+	})
+
+	facadeLeft.position.set(-2, height / 2 - sideDepth, 2.2 /2)
+
+	facadeGroup.add(facadeLeft)
+	facadeGroup.name = "facade"
+	facadeGroup.userData.facadeQuantity = 2
+	facadeGroup.rotation.y = Math.degToRad(45)
+	facadeGroup.position.x += .6
+	facadeGroup.position.z += .6
+	return facadeGroup
+}
+
+export const w_800a = (facadeName, onlyFacade) => {
+	let facadeGroup
+
+	if (facadeName) {
+		if (!variants.includes(facadeName)) return
+		const facades = {
+			"407_716_0_solid_1": facadeVariant1(),
+		}
+		facadeGroup = facades[facadeName]
+
+		facadeGroup.name = "facade"
+
+		if (onlyFacade) return facadeGroup
+	}
 	const wrap = topBox(width, height, width)
 	const { boxGroup } = wrap
 	const { caseGroup } = wrap
@@ -245,9 +283,7 @@ export const w_800a = () => {
 
 	group.position.y = boxHeight / 2 - sideDepth
 
-	/* boxGroup.userData.width = bodyWidth
-  boxGroup.userData.depth = bodyDepth
-  boxGroup.userData.height = bodyHeight */
+	if (facadeName) boxGroup.add(facadeGroup)
 
 	boxGroup.scale.set(scale, scale, scale)
 
@@ -261,6 +297,8 @@ export const w_800a = () => {
 	boxGroup.userData.code = "w-800a"
 	boxGroup.userData.configType = "angularBox"
 	boxGroup.userData.openedDoors = false
+	boxGroup.userData.facadeVariants = variants
+	boxGroup.userData.facade = false
 
 	boxGroup.userData.productType = "Навесной угловой"
 

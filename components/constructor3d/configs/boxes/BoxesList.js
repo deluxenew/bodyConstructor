@@ -9,6 +9,7 @@ import { f_600_820_oven } from "./f_600_820_oven"
 import { f_600_2140 } from "./f_600_2140"
 import { f_800 } from "./f_800"
 import { f_800a } from "./f_800a"
+import { f_800aleft } from "./f_800aleft"
 import { f_800_820_2b } from "./f_800_820_2b"
 import { f_800_820_3b } from "./f_800_820_3b"
 import { f_400_820_1b } from "./f_400_820_1b"
@@ -34,6 +35,8 @@ export const f600820oven = f_600_820_oven
 export const f6002140 = f_600_2140
 export const f800 = f_800
 export const f800a = f_800a
+export const f800aleft = f_800aleft
+export const f800aright = f_800a
 export const f8008202b = f_800_820_2b
 export const f8008203b = f_800_820_3b
 export const f4008201b = f_400_820_1b
