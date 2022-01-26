@@ -1,4 +1,4 @@
-import { BoxGeometry, Mesh, MeshStandardMaterial, MeshBasicMaterial, TextureLoader } from "three"
+import { BoxGeometry, Mesh, MeshStandardMaterial, MeshBasicMaterial, TextureLoader, Math } from "three"
 import HF from "../HelperFunctions"
 import { constants } from "./boxes/constants"
 
@@ -20,6 +20,9 @@ const textureMaterial = (url, width, height) => {
 		//scaleY = height * 100 / (texture.image.height /** constants.textureScale*/)
 		texture.repeat.x = scaleX
 		//texture.repeat.y = scaleY
+		texture.rotation = Math.degToRad(180)
+		texture.offset.x = 1
+		texture.offset.y = 1
 	} )
 
 	const facadeMaterial = new MeshStandardMaterial({
