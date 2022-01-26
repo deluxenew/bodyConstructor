@@ -43,7 +43,7 @@ const spotLight_4 = () => {
 	// spotLight.target.position.set(-60 * n, 55 * n, 60 * n);
 	spotLight.intensity = 0.1
 
-	const res = 256 * 2
+	const res = 256 * 2 
 	// spotLight.shadow.bias = -0.0001;
 	spotLight.shadow.bias = 0
 	spotLight.shadow.mapSize.width = res

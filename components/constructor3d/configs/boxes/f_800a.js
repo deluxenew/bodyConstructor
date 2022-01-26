@@ -79,12 +79,19 @@ export const f_800a = (facadeName, onlyFacade) => {
 	const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth)
 	const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth)
 
+	const angBottomGeometry = new BoxGeometry(sideDepth, legsHeight, 1.5)
+	const angBottom = mesh(angBottomGeometry, defaultMaterial())
+	angBottom.position.x = (depth - width/2 - constants.legFrontMargin) - 1.4 - sideDepth
+	angBottom.position.z = depth/2
+	angBottom.position.y = -constants.legsHeight/2 - sideDepth - sideDepth/2
+
 	const sideRight = mesh(sideGeometry, defaultMaterial())
 	const sideLeft = mesh(sideGeometry, defaultMaterial())
 	const sideBack = mesh(sideBackGeometry, defaultMaterial())
 
 	const shelf = mesh(shelfGeometry, defaultMaterial())
 
+	caseGroup.add(angBottom)
 	caseGroup.add(sideRight)
 	caseGroup.add(sideLeft)
 	caseGroup.add(sideBack)
