@@ -14,7 +14,7 @@ const depth = constants.tableTopDepth
 
 export const getTableTop = ({ width, height, type, url, maxWidth, minWidth }, needDepthSize, isLeft) => {
 	const tableTopBox = new BoxGeometry(width, height, depth)
-	const tableTop = new Mesh(tableTopBox, textureMaterial(url))
+	const tableTop = new Mesh(tableTopBox, textureMaterial(url, width, height))
 	const tableTopGroup = new Group()
 	tableTop.castShadow = true
 	tableTop.receiveShadow = true

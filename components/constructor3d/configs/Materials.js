@@ -1,5 +1,6 @@
 import { BoxGeometry, Mesh, MeshStandardMaterial, MeshBasicMaterial, TextureLoader } from "three"
 import HF from "../HelperFunctions"
+import { constants } from "./boxes/constants"
 
 const defaultMaterial = () => {
 	const material = new MeshStandardMaterial({
@@ -8,12 +9,22 @@ const defaultMaterial = () => {
 	return material
 }
 
-const textureMaterial = (url) => {
+const textureMaterial = (url, width, height) => {
 	const facadeTextureLoader = new TextureLoader()
+
+	let scaleX = 1
+	let scaleY = 1
+
+	const texture = facadeTextureLoader.load(url, function () {
+		scaleX = width * 100 / (texture.image.width * constants.textureScale)
+		//scaleY = height * 100 / (texture.image.height /** constants.textureScale*/)
+		texture.repeat.x = scaleX
+		//texture.repeat.y = scaleY
+	} )
 
 	const facadeMaterial = new MeshStandardMaterial({
 		color: 0xffffff,
-		map: facadeTextureLoader.load(url),
+		map: texture,
 	})
 
 	const defaultTexture = defaultMaterial()
