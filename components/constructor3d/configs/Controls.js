@@ -43,15 +43,15 @@ const boxControl = (name, pos) => {
 		const mesh = new Mesh(geometry, material)
 
 		mesh.scale.set(s, s, s)
-
+		//mesh.castShadow = true
 		const button = new Group()
 		button.add(mesh)
 		return button
 	}
 
-	const geometry = new BoxGeometry(2, .5, 0.01)
+	const geometry = new BoxGeometry(2, .5, 0.1)
 	const material = new MeshStandardMaterial({
-		color: 0xcccccc,
+		color: 0x9DA2AE,
 		transparent: true,
 		//map: facadeTextureLoader.load(add),
 	})
@@ -66,6 +66,8 @@ const boxControl = (name, pos) => {
 	const addBtn = createButton()
 	addBtn.add(addSvg)
 	addBtn.add(addSvg1)
+
+
 
 	addBtn.position.set(0, 0, 0)
 	addBtn.name = "control"
