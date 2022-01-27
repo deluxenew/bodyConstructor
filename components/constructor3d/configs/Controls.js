@@ -13,7 +13,7 @@ import {
 
 const facadeTextureLoader = new TextureLoader()
 
-const add = require("../img/add.png")
+//const add = require("../img/add.png")
 
 const boxControl = (name, pos) => {
 	function createButton() {
@@ -49,18 +49,23 @@ const boxControl = (name, pos) => {
 		return button
 	}
 
-	const geometry = new BoxGeometry(2, 2, 0.01)
+	const geometry = new BoxGeometry(2, .5, 0.01)
 	const material = new MeshStandardMaterial({
 		color: 0xcccccc,
 		transparent: true,
-		map: facadeTextureLoader.load(add),
+		//map: facadeTextureLoader.load(add),
 	})
 
 	const addSvg = new Mesh(geometry, material)
 	addSvg.position.set(0, 0, 0.1)
 
+	const addSvg1 = new Mesh(geometry, material)
+	addSvg1.position.set(0, 0, 0.1)
+	addSvg1.rotation.z =  Math.degToRad(-90)
+
 	const addBtn = createButton()
 	addBtn.add(addSvg)
+	addBtn.add(addSvg1)
 
 	addBtn.position.set(0, 0, 0)
 	addBtn.name = "control"
