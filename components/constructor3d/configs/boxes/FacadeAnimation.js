@@ -1,5 +1,7 @@
 import { Group, Quaternion, QuaternionKeyframeTrack, Vector3, VectorKeyframeTrack } from "three"
 import { constants } from "./constants"
+import { handle } from "./Handle"
+
 const depth = constants.bottomDepth
 const legsHeight = constants.legsHeight
 
@@ -42,6 +44,10 @@ export const getFacadeLeft = ({ width, height, positionX }) => {
 	const facadeGroup = getUserData( width, height, positionX, quaternionOpen, quaternionClose )
 
 	facadeGroup.userData.facadeOpenDirection = "left"
+	const hndl = handle()
+	facadeGroup.add(hndl)
+	hndl.position.y = height/2 - constants.handleGap
+	hndl.position.x = width/2
 
 	return facadeGroup
 }
@@ -51,6 +57,10 @@ export const getFacadeRight = ({ width, height, positionX }) => {
 	const facadeGroup = getUserData( width, height, positionX, quaternionOpen, quaternionClose )
 
 	facadeGroup.userData.facadeOpenDirection = "right"
+	const hndl = handle()
+	facadeGroup.add(hndl)
+	hndl.position.y = height/2 - constants.handleGap
+	hndl.position.x = -width/2
 
 	return facadeGroup
 }
@@ -61,6 +71,7 @@ export const getFacadeFront = ({ width, height, positionX, positionY }) => {
 	const positionClose = new VectorKeyframeTrack( ".position", [0, 1], [0, posY, depth /2 + 4, 0, posY, depth /2] )
 	const facadeGroup = getUserData( width, height, positionX, positionOpen, positionClose )
 	facadeGroup.userData.facadeOpenDirection = "front"
+
 	return facadeGroup
 }
 

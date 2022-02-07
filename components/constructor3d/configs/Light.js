@@ -56,7 +56,7 @@ const spotLight_4 = () => {
 
 const spotLight_5 = () => {
 	const spotLight = new PointLight(0xffffff)
-	spotLight.position.set(-1, 17, 30)
+	spotLight.position.set(-10, 30, 30)
 	// spotLight.target.position.set(-60 * n, 55 * n, 60 * n);
 	spotLight.intensity = 0.2
 	return spotLight

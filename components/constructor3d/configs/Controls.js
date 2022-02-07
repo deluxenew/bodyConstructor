@@ -37,7 +37,10 @@ const boxControl = (name, pos) => {
 		const extrudeSettings = {
 			depth: 1, bevelEnabled: false, bevelSegments: 0, steps: 5, bevelSize: 2, bevelThickness: 2,
 		}
-		const geometry = new ExtrudeBufferGeometry(roundedRectShape, extrudeSettings)
+		var widthSegments = 128;
+		var heightSegments = 128;
+		const geometry = new ExtrudeBufferGeometry(roundedRectShape, extrudeSettings, widthSegments, heightSegments)
+
 
 		const s = 0.1
 		const mesh = new Mesh(geometry, material)
@@ -49,7 +52,7 @@ const boxControl = (name, pos) => {
 		return button
 	}
 
-	const geometry = new BoxGeometry(2, .5, 0.1)
+	const geometry = new BoxGeometry(2, .42, 0.1)
 	const material = new MeshStandardMaterial({
 		color: 0x9DA2AE,
 		transparent: true,

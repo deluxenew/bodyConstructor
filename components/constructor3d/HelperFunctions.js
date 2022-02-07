@@ -3,6 +3,22 @@ import { constants } from "./configs/boxes/constants"
 
 const { Math: threeMath } = THREE
 
+const textureScale = (url, width, height, textureScale, rotate) => {
+	const textureLoader = new THREE.TextureLoader()
+	const texture = textureLoader.load(url, function () {
+		texture.repeat.x = width * 100 / (texture.image.width * textureScale)
+		texture.repeat.y = height * 100 / (texture.image.height * textureScale)
+	} )
+	
+	if (rotate){
+		texture.rotation = threeMath.degToRad(180)
+		texture.offset.x = 1
+		texture.offset.y = 1
+	}
+	
+	return texture
+} 
+
 const animationFromTo = (scene) => {
 	const xAxis = new THREE.Vector3(-1, 1, 1)
 	const qInitial = new THREE.Quaternion().setFromAxisAngle(xAxis, 0)
@@ -577,6 +593,7 @@ const getImage = (url) => {
 
 export default {
 	animationFromTo,
+	textureScale,
 	camToTableTop,
 	fromTo,
 	camPos,

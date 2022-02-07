@@ -6,6 +6,7 @@ export const constants = {
 	sideTop: 0.8,
 	scale: 1,
 	textureScale: 5,
+	handleGap: 0.8,
 
 	drawerTopGap: 0.48, // верхний отступ выдвижного ящика
 	drawerTopGapBig: 0.64, // верхний бОльший отступ выдвижного ящика

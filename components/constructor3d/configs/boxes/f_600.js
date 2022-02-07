@@ -4,6 +4,7 @@ import { bottomBox } from "./BottomBox"
 import { bottomBeams } from "./BottomBeams"
 import { mesh } from "./CustomMesh"
 import { getFacadeLeft, getFacadeRight } from "./FacadeAnimation"
+import { handle } from "./Handle"
 
 import Materials from "../Materials"
 
@@ -32,7 +33,7 @@ const facadeVariant1 = () => {
 		direction: "left"
 	})
 
-	facadeLeft.position.set(-2.99, legsHeight / 2, depth /2)
+	facadeLeft.position.set(-2.99, legsHeight / 2, depth /2 + sideDepth/2)
 
 	facadeGroup.add(facadeLeft)
 	facadeGroup.name = "facade"
@@ -105,6 +106,10 @@ export const f_600 = (facadeName, onlyFacade) => {
 	caseGroup.add(sideBack)
 	caseGroup.add(beams)
 	caseGroup.add(shelf)
+
+	const hndl = handle()
+	caseGroup.add(hndl)
+	hndl.position.y = height/2 - constants.handleGap
 
 	if (facadeName) boxGroup.add(facadeGroup)
 

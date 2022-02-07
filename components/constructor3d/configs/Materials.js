@@ -2,6 +2,8 @@ import { BoxGeometry, Mesh, MeshStandardMaterial, MeshBasicMaterial, TextureLoad
 import HF from "../HelperFunctions"
 import { constants } from "./boxes/constants"
 
+const { textureScale } = HF
+
 const defaultMaterial = () => {
 	const material = new MeshStandardMaterial({
 		color: 0xffffff,
@@ -10,20 +12,8 @@ const defaultMaterial = () => {
 }
 
 const textureMaterial = (url, width, height) => {
-	const facadeTextureLoader = new TextureLoader()
 
-	let scaleX = 1
-	let scaleY = 1
-
-	const texture = facadeTextureLoader.load(url, function () {
-		scaleX = width * 100 / (texture.image.width * constants.textureScale)
-		//scaleY = height * 100 / (texture.image.height /** constants.textureScale*/)
-		texture.repeat.x = scaleX
-		//texture.repeat.y = scaleY
-		texture.rotation = Math.degToRad(180)
-		texture.offset.x = 1
-		texture.offset.y = 1
-	} )
+	const texture = textureScale(url, width, constants.tableTopDepth, constants.textureScale, true)
 
 	const facadeMaterial = new MeshStandardMaterial({
 		color: 0xffffff,
@@ -51,13 +41,13 @@ const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDe
 	const geometry = new BoxGeometry(width, height, sideDepth)
 	const wallTextureLoader = new TextureLoader()
 	const wallNormalTexture = wallTextureLoader.load(loadedMap)
-	const wallMaterial = new MeshBasicMaterial({
+	const wallMaterial = new MeshStandardMaterial({
 		color: 0xffffff,
 		map: wallTextureLoader.load(loadedTexture)
 	})
 
 	wallMaterial.roughness = 1.0
-	//wallMaterial.metalness = 0.1
+	wallMaterial.metalness = 0
 
 	if (loadedMap) wallMaterial.normalMap = wallNormalTexture
 

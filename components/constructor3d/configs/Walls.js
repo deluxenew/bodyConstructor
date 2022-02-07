@@ -2,13 +2,23 @@ import {
 	PlaneGeometry, MeshStandardMaterial, TextureLoader, Mesh, RepeatWrapping, Math,
 } from "three"
 
+import HF from "../HelperFunctions"
+
+const { textureScale } = HF
+
 const wallWidth = 60 * 2
-const wallHeight = 35
+const wallHeight = 40
 
 const wallGeometry = new PlaneGeometry(wallWidth, wallHeight)
 const floorGeometry = new PlaneGeometry(wallWidth, wallWidth)
+
+const texture1 = textureScale(require("../img/mm1.png"), wallWidth, wallWidth, 1, false)
+texture1.wrapS = RepeatWrapping
+texture1.wrapT = RepeatWrapping
+
 const floorMaterial = new MeshStandardMaterial({
-	color: 0xd2b8a3/* af9182 */,
+	color: 0xffffff/* 0xd2b8a3/* af9182 */,
+	map: texture1
 })
 floorMaterial.roughness = 0.8
 floorMaterial.metalness = 0.1
@@ -18,8 +28,13 @@ const wallTextureLoader = new TextureLoader()
 const wallNormalTexture = wallTextureLoader.load(require("../img/wall.jpg"))
 const floorNormalTexture = floorTextureLoader.load(require("../img/floor.jpg"))
 
+const texture = textureScale(require("../img/mm.png"), wallWidth, wallHeight, 1, false)
+texture.wrapS = RepeatWrapping
+texture.wrapT = RepeatWrapping
+
 const wallMaterial = new MeshStandardMaterial({
-	color: 0xffedde/* c8b7ae */,
+	color: 0xffffff/*0xffedde/* c8b7ae */,
+	map: texture
 })
 wallMaterial.roughness = 1
 wallMaterial.metalness = 0.2
