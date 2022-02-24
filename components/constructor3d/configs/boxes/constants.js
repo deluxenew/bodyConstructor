@@ -1,6 +1,6 @@
 export const constants = {
 	sideDepth: 0.16,
-	legsHeight: 1,
+	legsHeight: 0.64,
 	legsRad: 0.3,
 	legFrontMargin: 0.38,
 	sideTop: 0.8,

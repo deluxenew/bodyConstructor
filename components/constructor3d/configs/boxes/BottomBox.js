@@ -1,4 +1,4 @@
-import { BoxGeometry, CylinderGeometry, Group } from "three"
+import { BoxGeometry, CylinderGeometry, Group,Math } from "three"
 import { boxWrapper } from "./BoxWrapper"
 import Materials from "../Materials"
 import { mesh } from "./CustomMesh"
@@ -44,14 +44,20 @@ export const bottomBox = (width, height, depth) => {
 	arrows.position.z = depth / 2 + 0.02
 	boxGroup.add(arrows)
 
+	sizeMesh.rotation.x = Math.degToRad(-90)
+	arrows.rotation.x = Math.degToRad(-90)
+	sizeMesh.position.y += 0.02
+	arrows.position.y += 0.02
+	sizeMesh.position.z += 1
+	arrows.position.z += 1
 	boxGroup.add(sizeMesh)
-	boxGroup.add(sideBottom)
-	boxGroup.add(legFront)
-	boxGroup.add(legLeft)
-	boxGroup.add(legRight)
+	//boxGroup.add(sideBottom)
+	//boxGroup.add(legFront)
+	//boxGroup.add(legLeft)
+	//boxGroup.add(legRight)
 
 	const caseGroup = new Group()
-	caseGroup.position.y = -height / 2 + legsHeight + sideDepth
+	caseGroup.position.y = -height / 2 + legsHeight 
 	boxGroup.position.set(-width / 2, height / 2, depth / 2)
 
 	caseGroup.name = "caseGroup"

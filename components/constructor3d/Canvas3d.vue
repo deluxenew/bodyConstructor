@@ -459,9 +459,11 @@ export default {
 
 				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "") + (isAngularBox ? this.selectedBox.userData.side : "")](facadeVariant, true)
 				newFacadeGroup.children.forEach((el, index) => {
-					const { userData: { facadeWidth, facadeHeight, positionX, positionY } } = el
+					const { userData: { facadeWidth, facadeHeight, positionX, positionY, mirror } } = el
 					const facadeTexture = textureMappedMaterial({
 						loadedMap: textureMap,
+						mirror,
+						//loadedTexture: colorUrls[index],
 						loadedTexture: colorUrls[index],
 						width: facadeWidth,
 						height: facadeHeight,
@@ -482,9 +484,11 @@ export default {
 				const isAngularBox = this.caseModel.userData.configType === "angularBox" && this.caseModel.userData.pos === "floor"
 				const newFacadeGroup = boxes[this.selectedBox.userData.code.replaceAll("-", "") + (isAngularBox ? this.selectedBox.userData.side : "")](facadeVariant, true)
 				newFacadeGroup.children.forEach((el, index) => {
-					const { userData: { facadeWidth, facadeHeight, positionX, positionY } } = el
+					const { userData: { facadeWidth, facadeHeight, positionX, positionY, mirror } } = el
+					//console.log(mirror)
 					const facadeTexture = textureMappedMaterial({
 						loadedMap: textureMap,
+						mirror,
 						loadedTexture: colorUrls[index],
 						width: facadeWidth,
 						height: facadeHeight,
@@ -716,9 +720,11 @@ export default {
 					const isAngularBox = this.caseModel.userData.configType === "angularBox" && this.caseModel.userData.pos === "floor"
 					const newFacadeGroup = boxes[box.userData.code.replaceAll("-", "") + (isAngularBox ? box.userData.side : "")](facadeVariant, true)
 					newFacadeGroup.children.forEach((el, index) => {
-						const { userData: { facadeWidth, facadeHeight, positionX, positionY } } = el
+						const { userData: { facadeWidth, facadeHeight, positionX, positionY, mirror } } = el
+						//console.log(mirror, "addFacadeToBox")
 						const facadeTexture = textureMappedMaterial({
 							loadedMap: textureMap,
+							mirror,
 							loadedTexture: colorUrls[index],
 							width: facadeWidth,
 							height: facadeHeight,

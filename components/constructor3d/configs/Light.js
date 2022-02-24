@@ -56,9 +56,9 @@ const spotLight_4 = () => {
 
 const spotLight_5 = () => {
 	const spotLight = new PointLight(0xffffff)
-	spotLight.position.set(-10, 30, 30)
+	spotLight.position.set(-60, 30, 60)
 	// spotLight.target.position.set(-60 * n, 55 * n, 60 * n);
-	spotLight.intensity = 0.2
+	spotLight.intensity = 2.2
 	return spotLight
 }
 
@@ -68,7 +68,7 @@ const spotLights = [
 	spotLight_2(),
 	spotLight_3(),
 	spotLight_4(),
-	// spotLight_5()
+	//spotLight_5()
 ]
 
 export default {

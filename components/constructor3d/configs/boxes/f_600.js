@@ -10,10 +10,10 @@ import Materials from "../Materials"
 
 const { defaultMaterial } = Materials
 
-const width = 6
+const width = 12
 
-const height = constants.bottomHeight
-const depth = constants.bottomDepth
+const height = 5.12
+const depth = 4.17
 
 const { sideDepth } = constants
 const { legsHeight } = constants
@@ -91,24 +91,32 @@ export const f_600 = (facadeName, onlyFacade) => {
 	const { caseGroup } = wrap
 	boxGroup.add(caseGroup)
 
-	const sideGeometry = new BoxGeometry(sideDepth, height - legsHeight, depth)
-	const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight, sideDepth)
-	const shelfGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, depth)
+	const sideGeometry = new BoxGeometry(sideDepth, height - legsHeight- sideDepth*2, depth)
+	const sideBTGeometry = new BoxGeometry(width, sideDepth, depth)
+	const sideBackGeometry = new BoxGeometry(width - sideDepth * 2, height - legsHeight- sideDepth*2, sideDepth)
+	const shelfGeometry = new BoxGeometry(sideDepth,height- legsHeight - sideDepth*2, depth)
 
+	const sideBottom = mesh(sideBTGeometry, defaultMaterial())
 	const sideRight = mesh(sideGeometry, defaultMaterial())
 	const sideLeft = mesh(sideGeometry, defaultMaterial())
 	const sideBack = mesh(sideBackGeometry, defaultMaterial())
-
+	const sideTop = mesh(sideBTGeometry, defaultMaterial())
+	
+	//sideBottom.position.y = (height- legsHeight + sideDepth)/2
+	sideTop.position.y = height- legsHeight - sideDepth -sideDepth/2
+	
 	const shelf = mesh(shelfGeometry, defaultMaterial())
 
+	caseGroup.add(sideTop)
+	caseGroup.add(sideBottom)
 	caseGroup.add(sideRight)
 	caseGroup.add(sideLeft)
 	caseGroup.add(sideBack)
-	caseGroup.add(beams)
+	//caseGroup.add(beams)
 	caseGroup.add(shelf)
 
 	const hndl = handle()
-	caseGroup.add(hndl)
+	//caseGroup.add(hndl)
 	hndl.position.y = height/2 - constants.handleGap
 
 	if (facadeName) boxGroup.add(facadeGroup)

@@ -1,4 +1,4 @@
-import { PCFSoftShadowMap, WebGLRenderer } from "three"
+import { PCFSoftShadowMap, WebGLRenderer, sRGBEncoding } from "three"
 
 const options = {
 	alpha: true,
@@ -11,6 +11,8 @@ const renderer = (width, height) => {
 	commonRenderer.shadowMapSoft = true
 	commonRenderer.shadowMap.type = PCFSoftShadowMap
 	commonRenderer.setSize(width, height)
+
+	//commonRenderer.outputEncoding = sRGBEncoding;
 	return commonRenderer
 }
 

@@ -103,11 +103,12 @@ const camPos = (position, wrb, wlb, wrt, wlt) => {
 		} else {
 			cameraPositionZ = camZ
 		}
+		cameraPositionZ = 42
 		//console.log(threeMath.degToRad(45 * 2) - Math.atan(Math.sqrt((h2 + h) * 2 + heightForCam ** 2) / (h2 + h)) * 2)
 
 		return {
 			cameraPositionX: 0,
-			cameraPositionY: 13,
+			cameraPositionY: 12,
 			cameraPositionZ,
 			cameraRotationX: threeMath.degToRad(0),
 			sceneRotationY: threeMath.degToRad(90) - alfa,
@@ -275,7 +276,7 @@ const setCasesPosition = (boxes) => {
 		})
 	}
 
-	if (!!groupedBoxes.topRight) {
+	if (!!groupedBoxes.topRight) {	
 		const padding = groupedBoxes.topLeft && groupedBoxes.topLeft[0].userData.depth || 0
 		const angularBox = groupedBoxes.topRight.find(({ userData: { configType } }) => configType === "angularBox")
 		const penalBoxes = groupedBoxes.bottomRight && groupedBoxes.bottomRight.filter(({ userData: { configType } }) => configType === "penalBox")

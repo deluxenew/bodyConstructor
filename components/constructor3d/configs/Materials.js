@@ -1,4 +1,4 @@
-import { BoxGeometry, Mesh, MeshStandardMaterial, MeshBasicMaterial, TextureLoader, Math } from "three"
+import { BoxGeometry, CubeTextureLoader,  Mesh, MeshStandardMaterial, EquirectangularReflectionMapping, sRGBEncoding, MeshLambertMaterial, MeshBasicMaterial, TextureLoader, Math, Vector2 } from "three"
 import HF from "../HelperFunctions"
 import { constants } from "./boxes/constants"
 
@@ -10,7 +10,18 @@ const defaultMaterial = () => {
 	})
 	return material
 }
-
+const metalMaterial = () => {
+	const material = new MeshStandardMaterial({ color: 0xffffff })
+	material.roughness = 0.1
+	material.metalness = 0.5
+	return material
+}
+const darkMaterial = () => {
+	const material = new MeshStandardMaterial({ color: 0x0f0f0f })
+	material.roughness = 1
+	material.metalness = 0
+	return material
+}
 const textureMaterial = (url, width, height) => {
 
 	const texture = textureScale(url, width, constants.tableTopDepth, constants.textureScale, true)
@@ -37,25 +48,40 @@ const textureMaterial = (url, width, height) => {
 	return facadeMaterials
 }
 
-const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDepth }) => {
-	const geometry = new BoxGeometry(width, height, sideDepth)
+const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDepth, mirror }) => {
+	const geometry = new BoxGeometry(width, height, sideDepth, 64,64)
 	const wallTextureLoader = new TextureLoader()
 	const wallNormalTexture = wallTextureLoader.load(loadedMap)
-	const wallMaterial = new MeshStandardMaterial({
-		color: 0xffffff,
-		map: wallTextureLoader.load(loadedTexture)
-	})
+	const textureEquirec = wallTextureLoader.load(require("../img/eq1.jpg"));
 
-	wallMaterial.roughness = 1.0
-	wallMaterial.metalness = 0
+	/*const loader = new CubeTextureLoader();
+	let textureCube
+	//loader.setPath( '../img/' );
+	textureCube = loader.load( [ require("../img/mmW.png"), require("../img/mmW.png"), require("../img/mmF.png"), require("../img/mmF.png"), require("../img/mmW.png"), require("../img/mmW.png") ] );
+	//textureCube.encoding = sRGBEncoding;*/
+	textureEquirec.mapping = EquirectangularReflectionMapping;
+	//textureEquirec.encoding = sRGBEncoding;
+	textureEquirec.center = new Vector2(0, 10)
+	textureEquirec.flipY
+
+
+	let wallMaterial
+	wallMaterial = new MeshLambertMaterial({
+		color: 0xeeeeee,
+		envMap: textureEquirec,
+	})
+	wallMaterial.needsUpdate = true;
 
 	if (loadedMap) wallMaterial.normalMap = wallNormalTexture
-
+		
 	const facadeMaterials = [
-		wallMaterial,
-		wallMaterial,
-		wallMaterial,
-		wallMaterial,
+		defaultMaterial(),
+		
+		defaultMaterial(),
+
+		defaultMaterial(),
+		
+		defaultMaterial(),
 		wallMaterial,
 		defaultMaterial(),
 	]
@@ -70,7 +96,7 @@ const textureMappedMaterial = ({ loadedMap, loadedTexture, width, height, sideDe
 	}
 	wall.name = "texture"
 
-	return wall
+	return wall	
 }
 
 const legMaterial = () => {
@@ -85,4 +111,6 @@ export default {
 	textureMaterial,
 	textureMappedMaterial,
 	legMaterial,
+	metalMaterial,
+	darkMaterial,
 }

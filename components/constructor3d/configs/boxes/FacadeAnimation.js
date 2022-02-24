@@ -45,7 +45,7 @@ export const getFacadeLeft = ({ width, height, positionX }) => {
 
 	facadeGroup.userData.facadeOpenDirection = "left"
 	const hndl = handle()
-	facadeGroup.add(hndl)
+	//facadeGroup.add(hndl)
 	hndl.position.y = height/2 - constants.handleGap
 	hndl.position.x = width/2
 
@@ -80,6 +80,6 @@ export const getFacadeTop = ({ width, height, positionX, positionY }) => {
 	const facadeGroup = getUserData( width, height, positionX, quaternionOpen, quaternionClose, positionY )
 
 	facadeGroup.userData.facadeOpenDirection = "top"
-
+	
 	return facadeGroup
 }
