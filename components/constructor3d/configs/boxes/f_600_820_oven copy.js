@@ -1,7 +1,6 @@
 import { BoxGeometry, Group } from "three"
 import { constants } from "./constants"
 import { bottomBox } from "./BottomBox"
-import { Drawer } from "./Drawer"
 import { mesh } from "./CustomMesh"
 
 import Materials from "../Materials"
@@ -70,22 +69,9 @@ export const f_600_820_oven = (facadeName, onlyFacade) => {
 	const sideLeft = mesh(sideGeometry, defaultMaterial())
 	const shelf = mesh(shelfGeometry, defaultMaterial())
 
-	const drawer = Drawer(width, height, depth, drawerHeight, constants.drawerBottomGap)
-	drawer.position.y = constants.drawerBottomGap
-	caseGroup.add(drawer)
-
 	caseGroup.add(sideRight)
 	caseGroup.add(sideLeft)
 	caseGroup.add(shelf)
-
-	const { sideTop } = constants
-	const sideTopGeometry = new BoxGeometry(width - sideDepth * 2, sideDepth, sideTop)
-	const sideTopBack = mesh(sideTopGeometry, defaultMaterial())
-
-	sideTopGeometry.dispose()
-	sideTopBack.position.set(0, height - legsHeight - sideDepth * 1.5, -depth / 2 + sideTop / 2)
-
-	caseGroup.add(sideTopBack)
 
 	if (facadeName) boxGroup.add(facadeGroup)
 
