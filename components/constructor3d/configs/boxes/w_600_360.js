@@ -4,13 +4,13 @@ import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
 
 import Materials from "../Materials"
-import { getFacadeTop } from "./FacadeAnimation"
+import { getFacadeLeft } from "./FacadeAnimation"
 
 const { defaultMaterial } = Materials
 
-const width = 6
+const width = 4.5
 
-const height = 3.6
+const height = constants.topHeightL
 const depth = constants.topDepth
 
 const { sideDepth } = constants
@@ -23,15 +23,14 @@ const variants = ["596_357_0_solid_1"]
 const facadeVariant1 = () => {
 	const facadeGroup = new Group()
 
-	const facadeLeft = getFacadeTop({
-		width: 5.96,
-		height: 3.57,
-		positionX: 0,
-		positionY: -sideY,
-		direction: "top"
+	const facadeLeft = getFacadeLeft({
+		width: 4.47,
+		height: 9.56,
+		positionX: 1.98,
+		direction: "left"
 	})
 
-	facadeLeft.position.set(0, sideY * 2, depth /2)
+	facadeLeft.position.set(-1.98, sideY, depth /2)
 
 	facadeGroup.add(facadeLeft)
 	facadeGroup.name = "facade"
@@ -66,12 +65,16 @@ export const w_600_360 = (facadeName, onlyFacade) => {
 	const sideRight = mesh(sideGeometry, defaultMaterial())
 	const sideLeft = mesh(sideGeometry, defaultMaterial())
 	const sideBack = mesh(sideBackGeometry, defaultMaterial())
+	const shelf = mesh(shelfGeometry, defaultMaterial())
+	const shelf1 = mesh(shelfGeometry, defaultMaterial())
 	const sideTop = mesh(shelfGeometry, defaultMaterial())
 	const sideBottom = mesh(shelfGeometry, defaultMaterial())
 
 	caseGroup.add(sideRight)
 	caseGroup.add(sideLeft)
 	caseGroup.add(sideBack)
+	caseGroup.add(shelf)	
+	caseGroup.add(shelf1)
 	caseGroup.add(sideTop)
 	caseGroup.add(sideBottom)
 
@@ -81,6 +84,9 @@ export const w_600_360 = (facadeName, onlyFacade) => {
 	sideRight.position.set(width / 2 - sideDepth / 2, sideY, 0)
 	sideLeft.position.set(-width / 2 + sideDepth / 2, sideY, 0)
 	sideBack.position.set(0, sideY, -depth / 2 + sideDepth)
+
+	shelf.position.set(0, (height) / 3 - sideDepth, 0)
+	shelf1.position.set(0, (height*2) / 3 - sideDepth, 0)
 
 	if (facadeName) boxGroup.add(facadeGroup)
 

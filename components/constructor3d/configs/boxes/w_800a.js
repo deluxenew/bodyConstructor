@@ -18,7 +18,7 @@ const { defaultMaterial } = Materials
 
 const width = constants.topDepth * 2
 
-const height = constants.topHeight
+const height = constants.topHeightL
 
 const { sideDepth } = constants
 const { scale } = constants
@@ -31,7 +31,7 @@ const facadeVariant1 = () => {
 
 	const facadeLeft = getFacadeLeft({
 		width: 4.07,
-		height: 7.16,
+		height: 9.56,
 		positionX: 2,
 		direction: "left"
 	})
@@ -204,7 +204,7 @@ export const w_800a = (facadeName, onlyFacade) => {
 	)
 
 	const sideV = mesh(geometry, defaultMaterial())
-
+	const sideV1 = mesh(geometry, defaultMaterial())
 	const sideLeft = mesh(gSideLR, defaultMaterial())
 	const sideRight = mesh(gSideLR, defaultMaterial())
 	const sideBackR = mesh(gSideBack, defaultMaterial())
@@ -233,12 +233,13 @@ export const w_800a = (facadeName, onlyFacade) => {
 
 	const group = mesh()
 
-	sideV.position.y = 0
+	sideV.position.set(0, (height) / 6, 0)
+	sideV1.position.set(0, (-height) / 6, 0)
 	// sideV.position.x = sideDepth / 2;
 	// sideV.position.z = sideDepth / 2;
 	// sideV.rotation.y = Math.degToRad(90);
 	group.add(sideV)
-
+	group.add(sideV1)
 	// sideLeft.rotation.y = Math.degToRad(-90);
 	sideLeft.position.z = (boxDepth / 2 - sideDepth / 2)
 	sideLeft.position.x = -(boxDepth / 4 /* - sideDepth / 2 */)

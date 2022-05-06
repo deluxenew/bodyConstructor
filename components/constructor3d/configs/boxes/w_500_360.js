@@ -8,9 +8,9 @@ import { getFacadeTop } from "./FacadeAnimation"
 
 const { defaultMaterial } = Materials
 
-const width = 5
+const width = 6
 
-const height = 3.6
+const height = 2.4
 const depth = constants.topDepth
 
 const { sideDepth } = constants
@@ -24,8 +24,8 @@ const facadeVariant1 = () => {
 	const facadeGroup = new Group()
 
 	const facadeLeft = getFacadeTop({
-		width: 4.96,
-		height: 3.57,
+		width: 5.97,
+		height: 2.38,
 		positionX: 0,
 		positionY: -sideY,
 		direction: "top"

@@ -19,6 +19,7 @@ export const constants = {
 	bottomDepth: 4.8,
 
 	topHeight: 7.2,
+	topHeightL: 9.6,
 	topDepth: 3,
 	topBound: 21.40,
 

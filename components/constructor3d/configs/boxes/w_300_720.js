@@ -10,7 +10,7 @@ const { defaultMaterial } = Materials
 
 const width = 3
 
-const height = constants.topHeight
+const height = constants.topHeightL
 const depth = constants.topDepth
 
 const { sideDepth } = constants
@@ -24,7 +24,7 @@ const facadeVariant1 = () => {
 
 	const facadeLeft = getFacadeLeft({
 		width: 2.97,
-		height: 7.16,
+		height: 9.56,
 		positionX: 1.47,
 		direction: "left"
 	})
@@ -65,6 +65,7 @@ export const w_300_720 = (facadeName, onlyFacade) => {
 	const sideLeft = mesh(sideGeometry, defaultMaterial())
 	const sideBack = mesh(sideBackGeometry, defaultMaterial())
 	const shelf = mesh(shelfGeometry, defaultMaterial())
+	const shelf1 = mesh(shelfGeometry, defaultMaterial())
 	const sideTop = mesh(shelfGeometry, defaultMaterial())
 	const sideBottom = mesh(shelfGeometry, defaultMaterial())
 
@@ -72,6 +73,7 @@ export const w_300_720 = (facadeName, onlyFacade) => {
 	caseGroup.add(sideLeft)
 	caseGroup.add(sideBack)
 	caseGroup.add(shelf)
+	caseGroup.add(shelf1)
 	caseGroup.add(sideTop)
 	caseGroup.add(sideBottom)
 	if (facadeName) boxGroup.add(facadeGroup)
@@ -83,7 +85,8 @@ export const w_300_720 = (facadeName, onlyFacade) => {
 	sideLeft.position.set(-width / 2 + sideDepth / 2, sideY, 0)
 	sideBack.position.set(0, sideY, -depth / 2 + sideDepth)
 
-	shelf.position.set(0, sideY, 0)
+	shelf.position.set(0, (height) / 3 - sideDepth, 0)
+	shelf1.position.set(0, (height*2) / 3 - sideDepth, 0)
 
 	boxGroup.name = "w_300_720"
 	boxGroup.userData.code = "w-300-720"

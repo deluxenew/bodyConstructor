@@ -10,7 +10,7 @@ const { defaultMaterial } = Materials
 
 const width = 6
 
-const height = constants.topHeight
+const height = constants.topHeightL
 const depth = constants.topDepth
 
 const { sideDepth } = constants
@@ -26,7 +26,7 @@ const facadeVariant1 = () => {
 
 	const facadeLeft = getFacadeLeft({
 		width: 2.45,
-		height: 7.16,
+		height: 9.56,
 		positionX: 2.45/2,//2.45/2 + 1.1/2,
 		direction: "left"
 	})
@@ -35,13 +35,13 @@ const facadeVariant1 = () => {
 
 	const facade1 = new Group()
 	facade1.userData.facadeWidth = 1.1
-	facade1.userData.facadeHeight = 7.16
+	facade1.userData.facadeHeight = 9.56
 	facade1.userData.positionX = 0
 	facade1.position.set(0, sideY, depth /2 + sideDepth/2)
 
 	const facade2 = new Group()
 	facade2.userData.facadeWidth = .4
-	facade2.userData.facadeHeight = 7.16
+	facade2.userData.facadeHeight = 9.56
 	facade2.userData.positionX = -1.1/2
 	facade2.rotation.y = Math.degToRad(90)
 	facade2.position.set(0, sideY, depth /2 - 0.3)
@@ -59,7 +59,7 @@ const facadeVariant2 = () => {
 
 	const facadeLeft = getFacadeLeft({
 		width: 2.97,
-		height: 7.16,
+		height: 9.56,
 		positionX: 1.47,
 		direction: "left"
 	})
@@ -68,7 +68,7 @@ const facadeVariant2 = () => {
 
 	const facadeRight = getFacadeRight({
 		width: 2.97,
-		height: 7.16,
+		height: 9.56,
 		positionX: -1.47,
 		direction: "right"
 	})
@@ -113,6 +113,7 @@ export const w_600 = (facadeName, onlyFacade) => {
 	const sideBack = mesh(sideBackGeometry, defaultMaterial())
 	const sideFront = mesh(sideFrontGeometry, defaultMaterial())
 	const shelf = mesh(shelfGeometry, defaultMaterial())
+	const shelf1 = mesh(shelfGeometry, defaultMaterial())
 	const sideTop = mesh(shelfGeometry, defaultMaterial())
 	const sideBottom = mesh(shelfGeometry, defaultMaterial())
 
@@ -124,7 +125,8 @@ export const w_600 = (facadeName, onlyFacade) => {
 	caseGroup.add(sideLeft)
 	caseGroup.add(sideBack)
 	caseGroup.add(sideFront)
-	caseGroup.add(shelf)
+	caseGroup.add(shelf)	
+	caseGroup.add(shelf1)
 	caseGroup.add(sideTop)
 	caseGroup.add(sideBottom)
 
@@ -136,7 +138,8 @@ export const w_600 = (facadeName, onlyFacade) => {
 	sideBack.position.set(0, sideY, -depth / 2 + sideDepth)
 	sideFront.position.set(-2.45/2 - 1.1/2, sideY, depth / 2  + sideDepth)
 
-	shelf.position.set(0, sideY, 0)
+	shelf.position.set(0, (height) / 3 - sideDepth, 0)
+	shelf1.position.set(0, (height*2) / 3 - sideDepth, 0)
 
 	if (facadeName) boxGroup.add(facadeGroup)
 

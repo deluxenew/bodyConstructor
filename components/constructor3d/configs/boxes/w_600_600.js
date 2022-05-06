@@ -4,13 +4,13 @@ import { mesh } from "./CustomMesh"
 import { topBox } from "./TopBox"
 
 import Materials from "../Materials"
-import { getFacadeLeft } from "./FacadeAnimation"
+import { getFacadeLeft,  getFacadeRight } from "./FacadeAnimation"
 
 const { defaultMaterial } = Materials
 
 const width = 6
 
-const height = width
+const height = constants.topHeightL
 const depth = constants.topDepth
 
 const { sideDepth } = constants
@@ -23,15 +23,25 @@ const facadeVariant1 = () => {
 	const facadeGroup = new Group()
 
 	const facadeLeft = getFacadeLeft({
-		width: 5.97,
-		height: 5.96,
-		positionX: 3,
+		width: 2.97,
+		height: 9.56,
+		positionX: 1.47,
 		direction: "left"
 	})
 
-	facadeLeft.position.set(-3, sideY, depth /2)
+	facadeLeft.position.set(-2.97, sideY, depth /2)
+
+	const facadeRight = getFacadeRight({
+		width: 2.97,
+		height: 9.56,
+		positionX: -1.47,
+		direction: "right"
+	})
+
+	facadeRight.position.set(2.97, sideY, depth /2)
 
 	facadeGroup.add(facadeLeft)
+	facadeGroup.add(facadeRight)
 	facadeGroup.name = "facade"
 	facadeGroup.userData.facadeQuantity = 2
 	return facadeGroup
@@ -66,6 +76,7 @@ export const w_600_600 = (facadeName, onlyFacade) => {
 	const sideLeft = mesh(sideGeometry, defaultMaterial())
 	const sideBack = mesh(sideBackGeometry, defaultMaterial())
 	const shelf = mesh(shelfGeometry, defaultMaterial())
+	const shelf1 = mesh(shelfGeometry, defaultMaterial())
 	const sideTop = mesh(shelfGeometry, defaultMaterial())
 	const sideBottom = mesh(shelfGeometry, defaultMaterial())
 
@@ -73,6 +84,7 @@ export const w_600_600 = (facadeName, onlyFacade) => {
 	caseGroup.add(sideLeft)
 	caseGroup.add(sideBack)
 	caseGroup.add(shelf)
+	caseGroup.add(shelf1)
 	caseGroup.add(sideTop)
 	caseGroup.add(sideBottom)
 
@@ -85,7 +97,8 @@ export const w_600_600 = (facadeName, onlyFacade) => {
 	sideLeft.position.set(-width / 2 + sideDepth / 2, sideY, 0)
 	sideBack.position.set(0, sideY, -depth / 2 + sideDepth)
 
-	shelf.position.set(0, sideY, 0)
+	shelf.position.set(0, (height) / 3 - sideDepth, 0)
+	shelf1.position.set(0, (height*2) / 3 - sideDepth, 0)
 
 	boxGroup.name = "w_600_600"
 	boxGroup.userData.code = "w-600-600"

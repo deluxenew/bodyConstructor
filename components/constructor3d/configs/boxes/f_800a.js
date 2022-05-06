@@ -9,7 +9,7 @@ import Materials from "../Materials"
 
 const { defaultMaterial } = Materials
 
-const width = 8
+const width = 10
 
 const height = constants.bottomHeight
 const depth = constants.bottomDepth
@@ -32,7 +32,7 @@ const facadeVariant1 = () => {
 	})
 
 	facadeLeft.position.set(0, legsHeight / 2, depth /2)
-
+	facadeGroup.position.set(1,0,0)
 	const facade1 = new Group()
 	facade1.userData.facadeWidth = 1.47
 	facade1.userData.facadeHeight = 7.16
@@ -81,7 +81,7 @@ export const f_800a = (facadeName, onlyFacade) => {
 
 	const angBottomGeometry = new BoxGeometry(sideDepth, legsHeight, 1.5)
 	const angBottom = mesh(angBottomGeometry, defaultMaterial())
-	angBottom.position.x = (depth - width/2 - constants.legFrontMargin) - 1.4 - sideDepth
+	angBottom.position.x = (depth - width/2 - constants.legFrontMargin) - 1.4 - sideDepth + 2
 	angBottom.position.z = depth/2
 	angBottom.position.y = -constants.legsHeight/2 - sideDepth - sideDepth/2
 
